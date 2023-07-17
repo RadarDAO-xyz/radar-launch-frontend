@@ -1999,7 +1999,7 @@
 
 "@webflow/webflow-cli@^1.5.1":
   version "1.5.1"
-  resolved "https://registry.npmjs.org/@webflow/webflow-cli/-/webflow-cli-1.5.1.tgz"
+  resolved "https://registry.yarnpkg.com/@webflow/webflow-cli/-/webflow-cli-1.5.1.tgz#8830142c5bd578f4fc8fcb18d4b39d0aff222174"
   integrity sha512-9Wvn7gqzLcpTuQfAXebdAYf+xM911B5R/KTITyN/+zRRiuis0lgMglty7lKZrsfvADj5YvziCTWwRiUU+hYOFg==
   dependencies:
     commander "^10.0.0"
