@@ -26,7 +26,16 @@ const HomePage = () => {
       <Banner />
       <HeaderHero visionOfTheWeekSlot={<VisionOfTheWeekProject />} />
       <ProjectDivWithNoSSR
-        allProjectsWrapperSlotWeek2={<ProjectBlock />}
+        allProjectsWrapperSlotWeek2={
+          <>
+            <ProjectBlock />
+            <ProjectBlock />
+            <ProjectBlock />
+            <ProjectBlock />
+            <ProjectBlock />
+            <ProjectBlock />
+          </>
+        }
         allprojectswrapperSlotweek1={<ProjectBlock />}
       />
       <FundingPoolsHome />

@@ -29,14 +29,7 @@ export function ProjectDiv({
       </_Builtin.Block>
       <_Builtin.Block className="month-curated" tag="div">
         <_Builtin.Block className="allprojectsweeklywrapper" tag="div">
-          {allProjectsWrapperSlotWeek2 ?? (
-            <>
-              <ProjectBlock />
-              <ProjectBlock />
-              <ProjectBlock />
-              <ProjectBlock />
-            </>
-          )}
+          {allProjectsWrapperSlotWeek2}
         </_Builtin.Block>
         <_Builtin.Block className="div-block-101 top" tag="div">
           <_Builtin.Paragraph className="curator-text">
@@ -54,15 +47,11 @@ export function ProjectDiv({
       </_Builtin.Block>
       <_Builtin.Block className="_50px" tag="div" />
       <_Builtin.Block className="month-curated" tag="div">
-        <_Builtin.Block className="allprojectsweeklywrapper" tag="div">
-          {allprojectswrapperSlotweek1 ?? (
-            <>
-              <ProjectBlock />
-              <ProjectBlock />
-              <ProjectBlock />
-              <ProjectBlock />
-            </>
-          )}
+        <_Builtin.Block
+          className="allprojectsweeklywrapper overflow-auto whitespace-nowrap"
+          tag="div"
+        >
+          {allprojectswrapperSlotweek1}
         </_Builtin.Block>
         <_Builtin.Block className="div-block-101 top" tag="div">
           <_Builtin.Paragraph className="curator-text">
