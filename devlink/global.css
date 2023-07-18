@@ -5150,7 +5150,6 @@ blockquote {
 
   display: block;
   overflow: visible;
-  width: 100vw;
   height: 85vh;
   margin-top: 0vh;
   margin-bottom: 0px;
@@ -8105,7 +8104,7 @@ blockquote {
 
 .allprojectsweeklywrapper {
   display: flex;
-  overflow: visible;
+  overflow: auto;
   width: 100%;
   height: auto;
   margin-top: 0vh;
@@ -16865,7 +16864,6 @@ blockquote {
   z-index: 10;
 
   display: flex;
-  width: 100vw;
   margin-top: 80px;
   margin-bottom: 0px;
   padding-top: 10px;
