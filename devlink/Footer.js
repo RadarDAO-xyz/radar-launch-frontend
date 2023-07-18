@@ -1,18 +1,13 @@
 import React from "react";
 import * as _Builtin from "./_Builtin";
-import * as _utils from "./utils";
-import _styles from "./Footer.module.css";
 
 export function Footer({ as: _Component = _Builtin.Section }) {
   return (
-    <_Component className={_utils.cx(_styles, "footer")} tag="section">
+    <_Component className="footer" tag="section">
       <_Builtin.Block tag="div">
-        <_Builtin.Block
-          className={_utils.cx(_styles, "logo-wrapper")}
-          tag="div"
-        >
+        <_Builtin.Block className="logo-wrapper" tag="div">
           <_Builtin.Image
-            className={_utils.cx(_styles, "image-5")}
+            className="image-5"
             loading="lazy"
             width="auto"
             height="auto"
@@ -20,12 +15,10 @@ export function Footer({ as: _Component = _Builtin.Section }) {
           />
         </_Builtin.Block>
       </_Builtin.Block>
-      <_Builtin.Block className={_utils.cx(_styles, "_20px-div")} tag="div" />
+      <_Builtin.Block className="_20px-div" tag="div" />
       <_Builtin.Row tag="div">
-        <_Builtin.Column className={_utils.cx(_styles, "column-28")} tag="div">
-          <_Builtin.Paragraph
-            className={_utils.cx(_styles, "body-text", "white")}
-          >
+        <_Builtin.Column className="column-28" tag="div">
+          <_Builtin.Paragraph className="body-text white">
             {"RADAR "}
             <_Builtin.Span>{"Launch"}</_Builtin.Span>
             {
@@ -40,25 +33,17 @@ export function Footer({ as: _Component = _Builtin.Section }) {
                 href: "#",
               }}
             >
-              <_Builtin.Span
-                className={_utils.cx(_styles, "underline", "white")}
-              >
+              <_Builtin.Span className="underline white">
                 {"multiplayer mode."}
               </_Builtin.Span>
             </_Builtin.Link>
           </_Builtin.Paragraph>
         </_Builtin.Column>
-        <_Builtin.Column className={_utils.cx(_styles, "column-36")} tag="div">
-          <_Builtin.List
-            className={_utils.cx(_styles, "footer-list")}
-            tag="ul"
-            unstyled={false}
-          >
-            <_Builtin.ListItem
-              className={_utils.cx(_styles, "footer-list-item")}
-            >
+        <_Builtin.Column className="column-36" tag="div">
+          <_Builtin.List className="footer-list" tag="ul" unstyled={false}>
+            <_Builtin.ListItem className="footer-list-item">
               <_Builtin.Link
-                className={_utils.cx(_styles, "black-link")}
+                className="black-link"
                 button={false}
                 options={{
                   href: "#",
@@ -67,11 +52,9 @@ export function Footer({ as: _Component = _Builtin.Section }) {
                 {"Read the FAQs"}
               </_Builtin.Link>
             </_Builtin.ListItem>
-            <_Builtin.ListItem
-              className={_utils.cx(_styles, "footer-list-item")}
-            >
+            <_Builtin.ListItem className="footer-list-item">
               <_Builtin.Link
-                className={_utils.cx(_styles, "black-link")}
+                className="black-link"
                 button={false}
                 options={{
                   href: "#",
@@ -80,11 +63,9 @@ export function Footer({ as: _Component = _Builtin.Section }) {
                 {"Read the briefs"}
               </_Builtin.Link>
             </_Builtin.ListItem>
-            <_Builtin.ListItem
-              className={_utils.cx(_styles, "footer-list-item")}
-            >
+            <_Builtin.ListItem className="footer-list-item">
               <_Builtin.Link
-                className={_utils.cx(_styles, "black-link")}
+                className="black-link"
                 button={false}
                 options={{
                   href: "#",
@@ -93,11 +74,9 @@ export function Footer({ as: _Component = _Builtin.Section }) {
                 {"Submit a proposal"}
               </_Builtin.Link>
             </_Builtin.ListItem>
-            <_Builtin.ListItem
-              className={_utils.cx(_styles, "footer-list-item")}
-            >
+            <_Builtin.ListItem className="footer-list-item">
               <_Builtin.Link
-                className={_utils.cx(_styles, "black-link")}
+                className="black-link"
                 button={false}
                 options={{
                   href: "#",
@@ -108,17 +87,11 @@ export function Footer({ as: _Component = _Builtin.Section }) {
             </_Builtin.ListItem>
           </_Builtin.List>
         </_Builtin.Column>
-        <_Builtin.Column className={_utils.cx(_styles, "column-37")} tag="div">
-          <_Builtin.List
-            className={_utils.cx(_styles, "footer-list")}
-            tag="ul"
-            unstyled={false}
-          >
-            <_Builtin.ListItem
-              className={_utils.cx(_styles, "footer-list-item")}
-            >
+        <_Builtin.Column className="column-37" tag="div">
+          <_Builtin.List className="footer-list" tag="ul" unstyled={false}>
+            <_Builtin.ListItem className="footer-list-item">
               <_Builtin.Link
-                className={_utils.cx(_styles, "black-link")}
+                className="black-link"
                 button={false}
                 options={{
                   href: "#",
@@ -127,11 +100,9 @@ export function Footer({ as: _Component = _Builtin.Section }) {
                 {"Apply to RADAR"}
               </_Builtin.Link>
             </_Builtin.ListItem>
-            <_Builtin.ListItem
-              className={_utils.cx(_styles, "footer-list-item")}
-            >
+            <_Builtin.ListItem className="footer-list-item">
               <_Builtin.Link
-                className={_utils.cx(_styles, "black-link")}
+                className="black-link"
                 button={false}
                 options={{
                   href: "#",
@@ -140,11 +111,9 @@ export function Footer({ as: _Component = _Builtin.Section }) {
                 {"Work with RADAR"}
               </_Builtin.Link>
             </_Builtin.ListItem>
-            <_Builtin.ListItem
-              className={_utils.cx(_styles, "footer-list-item")}
-            >
+            <_Builtin.ListItem className="footer-list-item">
               <_Builtin.Link
-                className={_utils.cx(_styles, "black-link")}
+                className="black-link"
                 button={false}
                 options={{
                   href: "#",
@@ -156,52 +125,48 @@ export function Footer({ as: _Component = _Builtin.Section }) {
           </_Builtin.List>
         </_Builtin.Column>
       </_Builtin.Row>
-      <_Builtin.Block className={_utils.cx(_styles, "_20px-div")} tag="div" />
-      <_Builtin.Block className={_utils.cx(_styles, "text-block-23")} tag="div">
+      <_Builtin.Block className="_20px-div" tag="div" />
+      <_Builtin.Block className="text-block-23" tag="div">
         {"A More Play-Full Future is partnered with:"}
       </_Builtin.Block>
-      <_Builtin.Block className={_utils.cx(_styles, "_20px-div")} tag="div" />
-      <_Builtin.Row className={_utils.cx(_styles, "columns-12")} tag="div">
-        <_Builtin.Column className={_utils.cx(_styles, "column-42")} tag="div">
-          <_Builtin.Block className={_utils.cx(_styles, "logo")} tag="div">
+      <_Builtin.Block className="_20px-div" tag="div" />
+      <_Builtin.Row className="columns-12" tag="div">
+        <_Builtin.Column className="column-42" tag="div">
+          <_Builtin.Block className="logo" tag="div">
             {"LOGO"}
           </_Builtin.Block>
         </_Builtin.Column>
         <_Builtin.Column tag="div">
-          <_Builtin.Block className={_utils.cx(_styles, "logo")} tag="div">
+          <_Builtin.Block className="logo" tag="div">
             {"LOGO"}
           </_Builtin.Block>
         </_Builtin.Column>
         <_Builtin.Column tag="div">
-          <_Builtin.Block className={_utils.cx(_styles, "logo")} tag="div">
+          <_Builtin.Block className="logo" tag="div">
             {"LOGO"}
           </_Builtin.Block>
         </_Builtin.Column>
         <_Builtin.Column tag="div">
-          <_Builtin.Block className={_utils.cx(_styles, "logo")} tag="div">
+          <_Builtin.Block className="logo" tag="div">
             {"LOGO"}
           </_Builtin.Block>
         </_Builtin.Column>
         <_Builtin.Column tag="div">
-          <_Builtin.Block className={_utils.cx(_styles, "logo")} tag="div">
+          <_Builtin.Block className="logo" tag="div">
             {"LOGO"}
           </_Builtin.Block>
         </_Builtin.Column>
         <_Builtin.Column tag="div">
-          <_Builtin.Block className={_utils.cx(_styles, "logo")} tag="div">
+          <_Builtin.Block className="logo" tag="div">
             {"LOGO"}
           </_Builtin.Block>
         </_Builtin.Column>
       </_Builtin.Row>
-      <_Builtin.Block className={_utils.cx(_styles, "div-block-16")} tag="div">
-        <_Builtin.Paragraph
-          className={_utils.cx(_styles, "body-text", "white")}
-        >
+      <_Builtin.Block className="div-block-16" tag="div">
+        <_Builtin.Paragraph className="body-text white">
           {"© 2023 RADARCommunity Labs. All rights reserved"}
         </_Builtin.Paragraph>
-        <_Builtin.Paragraph
-          className={_utils.cx(_styles, "body-text", "white")}
-        >
+        <_Builtin.Paragraph className="body-text white">
           {"Terms of Service"}
         </_Builtin.Paragraph>
       </_Builtin.Block>

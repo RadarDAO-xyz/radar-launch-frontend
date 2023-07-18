@@ -1,17 +1,11 @@
 import React from "react";
 import * as _Builtin from "./_Builtin";
-import * as _utils from "./utils";
-import _styles from "./PreLaunchNav.module.css";
 
 export function PreLaunchNav({ as: _Component = _Builtin.Section }) {
   return (
-    <_Component className={_utils.cx(_styles, "navbar-logo-center")} tag="div">
+    <_Component className="navbar-logo-center" tag="div">
       <_Builtin.NavbarWrapper
-        className={_utils.cx(
-          _styles,
-          "navbar-logo-center-container",
-          "shadow-three"
-        )}
+        className="navbar-logo-center-container shadow-three"
         tag="div"
         config={{
           animation: "default",
@@ -23,19 +17,16 @@ export function PreLaunchNav({ as: _Component = _Builtin.Section }) {
           noScroll: false,
         }}
       >
-        <_Builtin.Block
-          className={_utils.cx(_styles, "logo-wrapper")}
-          tag="div"
-        >
+        <_Builtin.Block className="logo-wrapper" tag="div">
           <_Builtin.Link
-            className={_utils.cx(_styles, "link-block")}
+            className="link-block"
             button={false}
             options={{
               href: "#",
             }}
           >
             <_Builtin.Image
-              className={_utils.cx(_styles, "image-9")}
+              className="image-9"
               loading="lazy"
               width={161}
               height="auto"
@@ -43,62 +34,46 @@ export function PreLaunchNav({ as: _Component = _Builtin.Section }) {
             />
           </_Builtin.Link>
         </_Builtin.Block>
-        <_Builtin.Block
-          className={_utils.cx(_styles, "navbar-wrapper-three")}
-          tag="div"
-        >
+        <_Builtin.Block className="navbar-wrapper-three" tag="div">
           <_Builtin.NavbarMenu
-            className={_utils.cx(_styles, "nav-menu-wrapper-three")}
+            className="nav-menu-wrapper-three"
             tag="nav"
             role="navigation"
           >
-            <_Builtin.Block
-              className={_utils.cx(_styles, "nav-menu-three")}
-              tag="div"
-            >
+            <_Builtin.Block className="nav-menu-three" tag="div">
               <_Builtin.List
-                className={_utils.cx(_styles, "nav-menu-block")}
+                className="nav-menu-block"
                 tag="ul"
                 unstyled={true}
               >
-                <_Builtin.ListItem
-                  className={_utils.cx(_styles, "list-item-5")}
-                >
+                <_Builtin.ListItem className="list-item-5">
                   <_Builtin.DropdownWrapper
-                    className={_utils.cx(_styles, "nav-dropdown")}
+                    className="nav-dropdown"
                     tag="div"
                     delay={0}
                     hover={false}
                   >
                     <_Builtin.DropdownToggle
-                      className={_utils.cx(_styles, "nav-dropdown-toggle")}
+                      className="nav-dropdown-toggle"
                       tag="div"
                     >
                       <_Builtin.Icon
-                        className={_utils.cx(_styles, "nav-dropdown-icon")}
+                        className="nav-dropdown-icon"
                         widget={{
                           type: "icon",
                           icon: "dropdown-toggle",
                         }}
                       />
-                      <_Builtin.Block
-                        className={_utils.cx(_styles, "text-block-5")}
-                        tag="div"
-                      >
+                      <_Builtin.Block className="text-block-5" tag="div">
                         {"Inspiration"}
                       </_Builtin.Block>
                     </_Builtin.DropdownToggle>
                     <_Builtin.DropdownList
-                      className={_utils.cx(
-                        _styles,
-                        "nav-dropdown-list",
-                        "shadow-three",
-                        "mobile-shadow-hide"
-                      )}
+                      className="nav-dropdown-list shadow-three mobile-shadow-hide"
                       tag="nav"
                     >
                       <_Builtin.DropdownLink
-                        className={_utils.cx(_styles, "nav-dropdown-link")}
+                        className="nav-dropdown-link"
                         options={{
                           href: "#",
                         }}
@@ -106,7 +81,7 @@ export function PreLaunchNav({ as: _Component = _Builtin.Section }) {
                         {"Creative Briefs"}
                       </_Builtin.DropdownLink>
                       <_Builtin.DropdownLink
-                        className={_utils.cx(_styles, "nav-dropdown-link")}
+                        className="nav-dropdown-link"
                         options={{
                           href: "#",
                         }}
@@ -116,11 +91,9 @@ export function PreLaunchNav({ as: _Component = _Builtin.Section }) {
                     </_Builtin.DropdownList>
                   </_Builtin.DropdownWrapper>
                 </_Builtin.ListItem>
-                <_Builtin.ListItem
-                  className={_utils.cx(_styles, "list-item-5")}
-                >
+                <_Builtin.ListItem className="list-item-5">
                   <_Builtin.Link
-                    className={_utils.cx(_styles, "nav-link-2")}
+                    className="nav-link-2"
                     button={false}
                     options={{
                       href: "#",
@@ -129,11 +102,9 @@ export function PreLaunchNav({ as: _Component = _Builtin.Section }) {
                     {"FAQs"}
                   </_Builtin.Link>
                 </_Builtin.ListItem>
-                <_Builtin.ListItem
-                  className={_utils.cx(_styles, "list-item-5")}
-                >
+                <_Builtin.ListItem className="list-item-5">
                   <_Builtin.Link
-                    className={_utils.cx(_styles, "nav-link-2")}
+                    className="nav-link-2"
                     button={false}
                     options={{
                       href: "https://lu.ma/radarlaunch",
@@ -143,11 +114,9 @@ export function PreLaunchNav({ as: _Component = _Builtin.Section }) {
                     {"EVENTS"}
                   </_Builtin.Link>
                 </_Builtin.ListItem>
-                <_Builtin.ListItem
-                  className={_utils.cx(_styles, "list-item-5")}
-                >
+                <_Builtin.ListItem className="list-item-5">
                   <_Builtin.Link
-                    className={_utils.cx(_styles, "nav-link-2")}
+                    className="nav-link-2"
                     button={false}
                     options={{
                       href: "https://discord.gg/vTwJ9cAgxg",
@@ -159,7 +128,7 @@ export function PreLaunchNav({ as: _Component = _Builtin.Section }) {
                 </_Builtin.ListItem>
               </_Builtin.List>
               <_Builtin.Link
-                className={_utils.cx(_styles, "button")}
+                className="button"
                 button={true}
                 options={{
                   href: "https://airtable.com/appGvDqIhUSP0caqo/shrvi09PTUP5mTSHN",
@@ -169,12 +138,9 @@ export function PreLaunchNav({ as: _Component = _Builtin.Section }) {
               </_Builtin.Link>
             </_Builtin.Block>
           </_Builtin.NavbarMenu>
-          <_Builtin.NavbarButton
-            className={_utils.cx(_styles, "menu-button")}
-            tag="div"
-          >
+          <_Builtin.NavbarButton className="menu-button" tag="div">
             <_Builtin.Icon
-              className={_utils.cx(_styles, "icon")}
+              className="icon"
               widget={{
                 type: "icon",
                 icon: "nav-menu",

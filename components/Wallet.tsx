@@ -74,7 +74,7 @@ function Wallet() {
             tickerName: "OP",
           },
           uiConfig: {
-            theme: "dark",
+            // theme: "dark",
             loginMethodsOrder: ["google", "email_passwordless"],
           },
         },
@@ -134,27 +134,19 @@ function Wallet() {
     setSafeAuthSignInResponse(null);
   };
 
-  if (provider) {
-    return (
-      <button
-        id="walletButton"
-        onClick={() => {
-          void onLogout();
-        }}
-      >
-        Log Out
-      </button>
-    );
-  }
-
   return (
     <button
       id="walletButton"
+      className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-gray-100 hover:bg-gray-200"
       onClick={() => {
-        void onLogin();
+        if (provider) {
+          void onLogout();
+        } else {
+          void onLogin();
+        }
       }}
     >
-      Login
+      {provider ? "LOG OUT" : "LOG IN"}
     </button>
   );
 }
