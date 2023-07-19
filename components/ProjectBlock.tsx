@@ -33,7 +33,7 @@ export function ProjectBlock({
     <div
       className={cn(
         "flex w-auto h-auto min-w-[22%] mr-4 mb-1 flex-col",
-        isDisabled ? "opacity-70" : ""
+        isDisabled ? "opacity-70 cursor-default" : ""
       )}
     >
       <div className="top-half-of-content">
@@ -47,7 +47,7 @@ export function ProjectBlock({
         </div>
         <div className="_10px-div" />
         <div className="project-image">
-          <div className="video-html">
+          <div className={cn("video-html", isDisabled ? "cursor-default" : "")}>
             <div className="wrapper">
               <div className="youtube" data-embed="FFvIb1gQYa8">
                 <div className="play-button"></div>
@@ -56,9 +56,12 @@ export function ProjectBlock({
           </div>
         </div>
         <div className="_20px-div" />
-        <a className="project-copy" href="#">
+        <a
+          className={cn("project-copy", isDisabled ? "cursor-default" : "")}
+          href="#"
+        >
           <div className="div-block-96">
-            <p className="project-title">{projectTitle}</p>
+            <p className="project-title ">{projectTitle}</p>
             <div className="arrow-diagonal">{"↗"}</div>
           </div>
           <div className="featured-project-bio">
