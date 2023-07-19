@@ -53,6 +53,7 @@ function Wallet() {
           whiteLabel: {
             name: "Safe",
           },
+          // TODO: add social login info here
         },
       });
 
