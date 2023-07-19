@@ -23,7 +23,7 @@ export function NavBar({ as: _Component = _Builtin.Section }) {
             <_Builtin.Link
               button={false}
               options={{
-                href: "#",
+                href: "/",
               }}
             >
               <_Builtin.Image
