@@ -9,10 +9,7 @@ import {
 import dynamic from "next/dynamic";
 import { ProjectBlock } from "@/components/ProjectBlock";
 
-const NavBarWithNoSSR = dynamic(
-  () => import("@/devlink/NavBar").then((res) => res.NavBar),
-  { ssr: false }
-);
+
 
 const ProjectDivWithNoSSR = dynamic(
   () => import("@/components/ProjectDiv").then((res) => res.ProjectDiv),
@@ -22,11 +19,10 @@ const ProjectDivWithNoSSR = dynamic(
 const HomePage = () => {
   return (
     <div>
-      <NavBarWithNoSSR />
       <Banner />
       <HeaderHero visionOfTheWeekSlot={<VisionOfTheWeekProject />} />
       <ProjectDivWithNoSSR
-        projectSectionName="August"
+        projectSectionCurationName="August"
         projectSectionTitle="curated visions"
         projectSectionDescription="every month we invite a guest curator to support 4 projects"
         showCreateProjectButton
@@ -60,7 +56,7 @@ const HomePage = () => {
         }
       />
       <ProjectDivWithNoSSR
-        projectSectionName="July"
+        projectSectionCurationName="July"
         curator={<span>gary sheng</span>}
         projects={
           <>
@@ -84,7 +80,6 @@ const HomePage = () => {
       />
       <FundingPoolsHome />
       <InspirationFooter />
-      <PreLaunchFooter />
     </div>
   );
 };

@@ -4,7 +4,7 @@ import React from "react";
 interface ProjectDivProps {
   projects: React.ReactNode;
   curator: React.ReactNode;
-  projectSectionName?: string;
+  projectSectionCurationName?: string;
   projectSectionTitle?: string;
   projectSectionDescription?: string;
   showCreateProjectButton?: boolean;
@@ -12,7 +12,7 @@ interface ProjectDivProps {
 
 export function ProjectDiv({
   projects,
-  projectSectionName,
+  projectSectionCurationName,
   projectSectionDescription,
   projectSectionTitle,
   showCreateProjectButton,
@@ -30,7 +30,7 @@ export function ProjectDiv({
         {projectSectionDescription && (
           <div className="div-block-103">
             <p className="body-text left">
-              {"every month we invite a guest curator to support 4 projects"}
+              {projectSectionDescription}
               <br />
             </p>
             {showCreateProjectButton && (
@@ -48,7 +48,7 @@ export function ProjectDiv({
         <div className="flex overflow-auto ">{projects}</div>
         <div className="div-block-101 top">
           <p className="curator-text">
-            {projectSectionName} curated by
+            {projectSectionCurationName} curated by
             <br />
           </p>
           {curator}
