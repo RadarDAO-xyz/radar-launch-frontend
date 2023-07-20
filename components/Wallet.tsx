@@ -12,13 +12,14 @@ import {
 } from "@web3auth/base";
 import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
 import { useEffect, useState } from "react";
+import { Button } from "./ui/button";
 
 const connectedHandler: Web3AuthEventListener = (data) =>
   console.log("CONNECTED", data);
 const disconnectedHandler: Web3AuthEventListener = (data) =>
   console.log("DISCONNECTED", data);
 
-function Wallet() {
+export function Wallet() {
   const [web3AuthModalPack, setWeb3AuthModalPack] =
     useState<Web3AuthModalPack>();
   const [safeAuthSignInResponse, setSafeAuthSignInResponse] =
@@ -136,9 +137,7 @@ function Wallet() {
   };
 
   return (
-    <button
-      id="walletButton"
-      className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-gray-100 hover:bg-gray-200"
+    <Button
       onClick={() => {
         if (provider) {
           void onLogout();
@@ -148,8 +147,6 @@ function Wallet() {
       }}
     >
       {provider ? "LOG OUT" : "LOG IN"}
-    </button>
+    </Button>
   );
 }
-
-export default Wallet;

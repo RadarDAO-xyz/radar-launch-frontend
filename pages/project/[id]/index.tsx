@@ -1,6 +1,49 @@
+import {
+  Table,
+  TableCaption,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "@/components/ui/table";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+
+enum Tab {
+  ONE = "ONE",
+  TWO = "TWO",
+}
+
+const milestones = [
+  {
+    name: "Milestone 1",
+    amount: 0,
+  },
+  {
+    name: "Milestone 2",
+    amount: 0,
+  },
+  {
+    name: "Milestone 3",
+    amount: 0,
+  },
+  {
+    name: "Milestone 4",
+    amount: 0,
+  },
+  {
+    name: "Milestone 5",
+    amount: 0,
+  },
+  {
+    name: "Milestone 6",
+    amount: 0,
+  },
+];
+
 export default function IndividualProjectPage() {
   return (
-    <div className="grid grid-cols-6 mt-20 px-[5%] bg-white">
+    <div className="grid grid-cols-6 mt-20 px-[5%] bg-white py-12">
       <div className="col-span-4 overflow-y-scroll pr-10">
         <div>
           <iframe
@@ -17,7 +60,51 @@ export default function IndividualProjectPage() {
         </div>
         <h2 className="text-3xl">Heading</h2>
         <hr />
-        <p className="text-lg pt-6">This is some text inside of a div block.</p>
+        <p className="text-lg py-6">This is some text inside of a div block.</p>
+        <Tabs defaultValue={Tab.ONE} className="border py-6">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value={Tab.ONE}>PROJECT DETAILS</TabsTrigger>
+            <TabsTrigger value={Tab.TWO}>PROJECT UPDATES</TabsTrigger>
+          </TabsList>
+          <TabsContent value={Tab.ONE} className="p-8">
+            <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16">
+              Project TLDR
+            </h3>
+            <hr />
+            <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16 pt-10">
+              Who is the team executing on this vision
+            </h3>
+            <hr />
+            <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16 pt-10">
+              This project is looking for:
+            </h3>
+            <hr />
+            <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16 pt-10">
+              Funding Goals
+            </h3>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[100px]">Invoice</TableHead>
+                  <TableHead className="text-right">Amount</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {milestones.map((milestone) => (
+                  <TableRow key={milestone.name}>
+                    <TableCell className="font-medium">
+                      {milestone.amount}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {milestone.name}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TabsContent>
+          <TabsContent value={Tab.TWO}></TabsContent>
+        </Tabs>
       </div>
       <div className="col-span-2 overflow-y-scroll">buttons</div>
     </div>

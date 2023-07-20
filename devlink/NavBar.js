@@ -1,5 +1,6 @@
 import React from "react";
-import Wallet from "@/components/Wallet";
+import { Wallet } from "@/components/Wallet";
+import { Button } from "@/components/ui/button";
 import * as _Builtin from "./_Builtin";
 
 export function NavBar({ as: _Component = _Builtin.Section }) {
@@ -187,15 +188,7 @@ export function NavBar({ as: _Component = _Builtin.Section }) {
                   <_Builtin.Block className="submit-subtitle-mobile" tag="div">
                     {"Submit your vision"}
                   </_Builtin.Block>
-                  <_Builtin.Link
-                    className="button"
-                    button={true}
-                    options={{
-                      href: "#",
-                    }}
-                  >
-                    {"SUBMIT"}
-                  </_Builtin.Link>
+                  <Button>{"SUBMIT"}</Button>
                 </_Builtin.Block>
               </_Builtin.Block>
             </_Builtin.Block>

@@ -162,11 +162,11 @@ export function Footer({ as: _Component = _Builtin.Section }) {
           </_Builtin.Block>
         </_Builtin.Column>
       </_Builtin.Row>
-      <_Builtin.Block className="div-block-16" tag="div">
+      <_Builtin.Block className="div-block-16 justify-between" tag="div">
         <_Builtin.Paragraph className="body-text white">
           {"© 2023 RADARCommunity Labs. All rights reserved"}
         </_Builtin.Paragraph>
-        <_Builtin.Paragraph className="body-text white">
+        <_Builtin.Paragraph className="body-text white text-right">
           {"Terms of Service"}
         </_Builtin.Paragraph>
       </_Builtin.Block>

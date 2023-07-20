@@ -1,5 +1,5 @@
-import "@/styles/globals.css";
 import "@/devlink/global.css";
+import "@/styles/globals.css";
 
 import type { AppProps } from "next/app";
 import { DevLinkProvider, PreLaunchFooter } from "@/devlink";
