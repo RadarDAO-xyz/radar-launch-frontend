@@ -1,5 +1,10 @@
+import { FundingPoolTabs, FundingPoolsHome } from '@/devlink'
+
 export default function Pools() {
     return(
-        <p>Pools</p>
+        <>
+            <FundingPoolTabs />
+            <FundingPoolsHome />
+        </>
     )
 }

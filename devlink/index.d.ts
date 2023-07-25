@@ -22,3 +22,5 @@ export * from "./ProjectBlock";
 export * from "./ProjectDiv";
 export * from "./ProjectWrapper";
 export * from "./VisionOfTheWeekProject";
+export * from "./FundingPoolTabs";
+export * from "./FundingPoolProjectsGrid";
