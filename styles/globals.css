@@ -76,3 +76,9 @@
     @apply bg-background text-foreground;
   }
 }
+h1 {
+  font-size: 2rem;
+}
+.columns-27 img {
+  width: 4rem;
+}
