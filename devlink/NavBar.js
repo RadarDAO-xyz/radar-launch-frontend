@@ -55,7 +55,7 @@ export function NavBar({ as: _Component = _Builtin.Section }) {
                       href: "#",
                     }}
                   >
-                    {"SEEFUNDINGPOOLS"}
+                    {"SEE FUNDING POOLS"}
                   </_Builtin.Link>
                 </_Builtin.ListItem>
                 <_Builtin.ListItem className="mobile-menu">
@@ -66,7 +66,7 @@ export function NavBar({ as: _Component = _Builtin.Section }) {
                       href: "#",
                     }}
                   >
-                    {"HOWITWORKS"}
+                    {"HOW IT WORKS"}
                   </_Builtin.Link>
                 </_Builtin.ListItem>
                 <_Builtin.ListItem className="mobile-menu">
