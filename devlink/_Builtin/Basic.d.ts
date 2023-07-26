@@ -119,6 +119,7 @@ declare type IconProps = Props<
   "div",
   {
     widget: {
+      type: string;
       icon: string;
     };
   }

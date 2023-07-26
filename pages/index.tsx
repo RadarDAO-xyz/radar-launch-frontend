@@ -8,7 +8,7 @@ import {
 } from "@/devlink";
 import type { GetStaticProps, InferGetStaticPropsType } from "next";
 import dynamic from "next/dynamic";
-import { Project } from "../lib/types";
+import { Project } from "../types/mongo";
 
 const ProjectDivWithNoSSR = dynamic(
   () => import("@/components/ProjectDiv").then((res) => res.ProjectDiv),
