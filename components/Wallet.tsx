@@ -34,12 +34,8 @@ export function Wallet() {
   useEffect(() => {
     void (async () => {
       const modalConfig = {
-        [WALLET_ADAPTERS.TORUS_EVM]: {
-          label: "torus",
-          showOnModal: false,
-        },
         [WALLET_ADAPTERS.METAMASK]: {
-          label: "metamask",
+          label: "MetaMask",
           showOnDesktop: true,
           showOnMobile: false,
         },
@@ -59,7 +55,7 @@ export function Wallet() {
       });
 
       const web3AuthModalPack = new Web3AuthModalPack({
-        txServiceUrl: "https://safe-transaction-goerli.safe.global",
+        txServiceUrl: "https://safe-transaction-optimism.safe.global",
       });
 
       await web3AuthModalPack.init({
