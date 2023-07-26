@@ -1,10 +1,10 @@
-import { _Builtin } from "@/devlink";
+import { FundingPoolTabs, _Builtin } from "@/devlink";
 import Link from "next/link";
 import { Button } from "./ui/button";
 
 export function FundingPoolHome() {
   return (
-    <section className="funding-pool-menu-section">
+    <section className="container pt-16 mt-[80px]">
       <div className="funding-pool-title">
         <h1 className="feature-heading pb-4">{"Funding Pools"}</h1>
         <p className="body-text larger">
@@ -89,12 +89,16 @@ export function FundingPoolHome() {
             </div>
           </div>
           <div className="w-full px-6 pt-6">
-            <Button className="w-full bg-gray-100 hover:bg-gray-200" variant={"ghost"}>
+            <Button
+              className="w-full bg-gray-100 hover:bg-gray-200"
+              variant={"ghost"}
+            >
               FUND A BRIEF
             </Button>
           </div>
         </div>
       </div>
+      <FundingPoolTabs />
     </section>
   );
 }
