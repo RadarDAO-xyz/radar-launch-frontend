@@ -39,38 +39,40 @@ export function NavBar() {
                     delay={0}
                     hover={false}
                   >
-                    <_Builtin.DropdownToggle className="nav-dropdown-toggle">
-                      <_Builtin.Icon
-                        className="nav-dropdown-icon"
-                        widget={{
-                          type: "icon",
-                          icon: "dropdown-toggle",
-                        }}
-                      />
-                      <div className="text-block-5">{"INSPIRATION"}</div>
-                    </_Builtin.DropdownToggle>
-                    <_Builtin.DropdownList
-                      className="nav-dropdown-list shadow-three mobile-shadow-hide"
-                      tag="nav"
-                    >
-                      <_Builtin.DropdownLink
-                        className="nav-dropdown-link"
-                        options={{
-                          href: "#",
-                          target: "_blank",
-                        }}
+                    <>
+                      <_Builtin.DropdownToggle className="nav-dropdown-toggle">
+                        <_Builtin.Icon
+                          className="nav-dropdown-icon"
+                          widget={{
+                            type: "icon",
+                            icon: "dropdown-toggle",
+                          }}
+                        />
+                        <div className="text-block-5">{"INSPIRATION"}</div>
+                      </_Builtin.DropdownToggle>
+                      <_Builtin.DropdownList
+                        className="nav-dropdown-list shadow-three mobile-shadow-hide"
+                        tag="nav"
                       >
-                        {"About RADAR"}
-                      </_Builtin.DropdownLink>
-                      <_Builtin.DropdownLink
-                        className="nav-dropdown-link"
-                        options={{
-                          href: "#",
-                        }}
-                      >
-                        {"Read the report"}
-                      </_Builtin.DropdownLink>
-                    </_Builtin.DropdownList>
+                        <_Builtin.DropdownLink
+                          className="nav-dropdown-link"
+                          options={{
+                            href: "#",
+                            target: "_blank",
+                          }}
+                        >
+                          {"About RADAR"}
+                        </_Builtin.DropdownLink>
+                        <_Builtin.DropdownLink
+                          className="nav-dropdown-link"
+                          options={{
+                            href: "#",
+                          }}
+                        >
+                          {"Read the report"}
+                        </_Builtin.DropdownLink>
+                      </_Builtin.DropdownList>
+                    </>
                   </_Builtin.DropdownWrapper>
                 </li>
                 <li className="mobile-menu">
