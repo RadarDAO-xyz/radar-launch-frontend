@@ -1,5 +1,5 @@
-import { FundingPoolTabs, _Builtin } from "@/devlink";
 import Link from "next/link";
+import { FundingPoolTabs } from "./FundingPoolTabs";
 import { Button } from "./ui/button";
 
 export function FundingPoolHome() {
@@ -56,7 +56,7 @@ export function FundingPoolHome() {
               <Link href="/pool">SEE POOL</Link>
             </Button>
           </div>
-          <_Builtin.Image
+          <img
             className="sponsor-image _50 floating"
             loading="lazy"
             width={94}

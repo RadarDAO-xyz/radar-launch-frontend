@@ -59,6 +59,7 @@ export default function HomePage() {
               .map((project) => (
                 <ProjectBlock
                   key={project._id.toString()}
+                  id={project._id.toString()}
                   briefName={project.brief}
                   projectByline={project.description}
                   projectTitle={project.title}
