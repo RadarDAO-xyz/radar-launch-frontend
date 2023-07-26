@@ -55,16 +55,16 @@ export default function IndividualProjectPage() {
             title="Embedded youtube"
           />
         </div>
-        <div className="text-lg pt-10">
+        <div className="text-lg pt-10 pb-4">
           The Brief: <span className="font-semibold">Brief Name</span>
         </div>
-        <h2 className="text-3xl">Heading</h2>
+        <h2 className="text-3xl pb-4">Heading</h2>
         <hr />
         <p className="text-lg py-6">This is some text inside of a div block.</p>
         <Tabs defaultValue={Tab.ONE} className="border py-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value={Tab.ONE}>PROJECT DETAILS</TabsTrigger>
-            <TabsTrigger value={Tab.TWO}>PROJECT UPDATES</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-6">
+            <TabsTrigger value={Tab.ONE}>DETAILS</TabsTrigger>
+            <TabsTrigger value={Tab.TWO}>UPDATES</TabsTrigger>
           </TabsList>
           <TabsContent value={Tab.ONE} className="p-8">
             <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16">
@@ -83,19 +83,16 @@ export default function IndividualProjectPage() {
               Funding Goals
             </h3>
             <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[100px]">Invoice</TableHead>
-                  <TableHead className="text-right">Amount</TableHead>
-                </TableRow>
-              </TableHeader>
               <TableBody>
                 {milestones.map((milestone) => (
                   <TableRow key={milestone.name}>
-                    <TableCell className="font-medium">
-                      {milestone.amount}
+                    <TableCell className="font-medium text-xl w-[200px]">
+                      ${" "}
+                      <span className="text-gray-400 text">
+                        {milestone.amount.toFixed(2)}
+                      </span>
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="border-l" >
                       {milestone.name}
                     </TableCell>
                   </TableRow>
