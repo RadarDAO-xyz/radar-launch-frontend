@@ -4,7 +4,8 @@ const nextConfig = {
   env: {
     VITE_WEB3AUTH_CLIENT_ID: process.env.VITE_WEB3AUTH_CLIENT_ID,
     VITE_INFURA_KEY: process.env.VITE_INFURA_KEY,
-  }
-}
+    BACKEND_URL: process.env.BACKEND_URL,
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

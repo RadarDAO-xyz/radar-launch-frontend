@@ -5,6 +5,7 @@ export type Project = {
   brief: string;
   inspiration: string;
   team: Team[];
+  description: string;
   collaborators: string;
   waitlist: boolean;
   milestones: AmountText[];
@@ -12,6 +13,11 @@ export type Project = {
   mint_end_date: string;
   benefits: AmountText[];
   admin_address: string;
+  supporter_count: number;
+  curation: {
+    start: string; // ISO Datestring
+    end: string; // ISO Datestring
+  };
 };
 
 export type Pool = {
