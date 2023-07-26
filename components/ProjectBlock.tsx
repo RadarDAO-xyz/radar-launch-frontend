@@ -5,8 +5,10 @@ import {
   differenceInHours,
   differenceInMinutes,
 } from "date-fns";
+import Link from "next/link";
 
 interface ProjectBlockProps {
+  id: string;
   briefName: string;
   projectTitle: string;
   projectByline: string;
@@ -16,6 +18,7 @@ interface ProjectBlockProps {
 }
 
 export function ProjectBlock({
+  id,
   briefName,
   isDisabled,
   supporters,
@@ -56,9 +59,9 @@ export function ProjectBlock({
           </div>
         </div>
         <div className="_20px-div" />
-        <a
+        <Link
           className={cn("project-copy", isDisabled ? "cursor-default" : "")}
-          href="#"
+          href={`/project/${id}`}
         >
           <div className="div-block-96">
             <p className="project-title ">{projectTitle}</p>
@@ -67,7 +70,7 @@ export function ProjectBlock({
           <div className="featured-project-bio">
             <p className="project-byline">{projectByline}</p>
           </div>
-        </a>
+        </Link>
       </div>
       <div className="bottom-half-of-content">
         <div className="collect-wrapper">

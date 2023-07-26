@@ -6,26 +6,30 @@ import {
   InspirationFooter,
   VisionOfTheWeekProject,
 } from "@/devlink";
-import type { GetStaticProps, InferGetStaticPropsType } from "next";
 import dynamic from "next/dynamic";
-import { Project } from "../types/mongo";
+import { FundingPoolHome } from "@/components/FundingPoolHome";
+import { useQuery } from "wagmi";
+import { data } from "autoprefixer";
+import { Project } from "@/types/mongo";
+import { WithId } from "mongodb";
 
 const ProjectDivWithNoSSR = dynamic(
   () => import("@/components/ProjectDiv").then((res) => res.ProjectDiv),
   { ssr: false }
 );
 
-export const getStaticProps: GetStaticProps<{
-  projects: Project[];
-}> = async () => {
-  const response = await fetch("http://localhost:3000/api/getProjects");
-  const projects = await response.json();
-  return { props: { projects } };
-};
+async function getProjects() {
+  return fetch(`${process.env.BACKEND_URL}/api/getProjects`).then((res) =>
+    res.json()
+  );
+}
 
-export default function Page({
-  projects,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
+export default function HomePage() {
+  const { data, error } = useQuery<WithId<Project>[]>(
+    ["projects"],
+    getProjects
+  );
+  console.log(data, error);
   return (
     <div>
       <Banner />
@@ -46,21 +50,23 @@ export default function Page({
         }
         projects={
           <>
-            <ProjectBlock
-              briefName="Brief Name"
-              projectByline="Project Brief"
-              projectTitle="Project asd"
-              supporters={100}
-              projectDate={new Date(new Date().getTime() + 1000 * 60 * 60 * 25)}
-              isDisabled
-            />
-            <ProjectBlock
-              briefName="Brief Name"
-              projectByline="Project Brief"
-              projectTitle="Project asd"
-              supporters={100}
-              projectDate={new Date(new Date().getTime() + 1000 * 60 * 60 * 25)}
-            />
+            {data
+              ?.filter(
+                (project) =>
+                  project?.curation?.start &&
+                  new Date(project.curation.start) > new Date()
+              )
+              .map((project) => (
+                <ProjectBlock
+                  key={project._id.toString()}
+                  id={project._id.toString()}
+                  briefName={project.brief}
+                  projectByline={project.description}
+                  projectTitle={project.title}
+                  supporters={project.supporter_count}
+                  projectDate={new Date(project.mint_end_date)}
+                />
+              ))}
           </>
         }
       />
@@ -69,25 +75,28 @@ export default function Page({
         curator={<span>gary sheng</span>}
         projects={
           <>
-            <ProjectBlock
-              briefName="Brief Name"
-              projectByline="Project Brief"
-              projectTitle="Project asd"
-              supporters={100}
-              projectDate={new Date(new Date().getTime() + 1000 * 60 * 60 * 25)}
-              isDisabled
-            />
-            <ProjectBlock
-              briefName="Brief Name"
-              projectByline="Project Brief"
-              projectTitle="Project asd"
-              supporters={100}
-              projectDate={new Date(new Date().getTime() + 1000 * 60 * 60 * 25)}
-            />
+            {data
+              ?.filter(
+                (project) =>
+                  project?.curation?.start === undefined ||
+                  project?.curation?.end === undefined ||
+                  new Date(project.curation.end) < new Date()
+              )
+              .map((project) => (
+                <ProjectBlock
+                  key={project._id.toString()}
+                  id={project._id.toString()}
+                  briefName={project.brief}
+                  projectByline={project.description}
+                  projectTitle={project.title}
+                  supporters={project.supporter_count}
+                  projectDate={new Date(project.mint_end_date)}
+                />
+              ))}
           </>
         }
       />
-      <FundingPoolsHome />
+      <FundingPoolHome />
       <InspirationFooter />
     </div>
   );

@@ -1,5 +1,5 @@
-import { FundingPoolTabs, _Builtin } from "@/devlink";
 import Link from "next/link";
+import { FundingPoolTabs } from "./FundingPoolTabs";
 import { Button } from "./ui/button";
 
 export function FundingPoolHome() {
@@ -23,7 +23,10 @@ export function FundingPoolHome() {
       <div className="_20px-div" />
       <div className="funding-pool-wrapper">
         <div className="funding-pool-block">
-          <div className="what-if-block-image-header" />
+          <img
+            src="/background1.png"
+            className="what-if-block-image-header object-cover"
+          />
           <div className="what-if-title">
             {"What if NPCs were autonomous beings?"}
             <br />
@@ -49,9 +52,11 @@ export function FundingPoolHome() {
             </div>
           </div>
           <div className="w-full px-6 pt-6">
-            <Button className="w-full">SEE POOL</Button>
+            <Button className="w-full" asChild>
+              <Link href="/pool">SEE POOL</Link>
+            </Button>
           </div>
-          <_Builtin.Image
+          <img
             className="sponsor-image _50 floating"
             loading="lazy"
             width={94}
@@ -60,12 +65,12 @@ export function FundingPoolHome() {
           />
         </div>
         <div className="funding-pool-block">
-          <div className="what-if-block-image-header" />
+          <img
+            src="/background2.png"
+            className="what-if-block-image-header object-cover"
+          />
           <p className="what-if-title">
             {"What if you funded a pool to inspire builders?"}
-            <Link href="#" target="_blank">
-              <span className="underline">{""}</span>
-            </Link>
             <br />
           </p>
           <div className="flex justify-between w-full space-x-2 px-6 pt-6">
@@ -80,9 +85,6 @@ export function FundingPoolHome() {
             <div className="border rounded p-4 w-full">
               <div className="small-text">
                 {"Projects Submitted "}
-                <Link href="#" target="_blank">
-                  <span className="underline">{""}</span>
-                </Link>
                 <br />
               </div>
               <div className="funding-pool-numbers pt-1">{"172"}</div>
@@ -92,8 +94,9 @@ export function FundingPoolHome() {
             <Button
               className="w-full bg-gray-100 hover:bg-gray-200"
               variant={"ghost"}
+              asChild
             >
-              FUND A BRIEF
+              <Link href="/brief">FUND A BRIEF</Link>
             </Button>
           </div>
         </div>
