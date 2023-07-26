@@ -6,17 +6,27 @@ import {
   PreLaunchFooter,
   VisionOfTheWeekProject,
 } from "@/devlink";
+import { MongoClient } from "mongodb";
+import type { InferGetStaticPropsType, GetStaticProps } from 'next';
 import dynamic from "next/dynamic";
 import { ProjectBlock } from "@/components/ProjectBlock";
-
-
+import { Project } from "../lib/types"
 
 const ProjectDivWithNoSSR = dynamic(
   () => import("@/components/ProjectDiv").then((res) => res.ProjectDiv),
   { ssr: false }
 );
 
-const HomePage = () => {
+export const getStaticProps: GetStaticProps<{projects: Project[]}> = async () => {  
+  const response = await fetch('http://localhost:3000/api/getProjects');
+  const projects = await response.json()
+  return { props: { projects } }
+}
+
+export default function Page({
+  projects
+}: InferGetStaticPropsType<typeof getStaticProps>) {
+  console.log(projects)
   return (
     <div>
       <Banner />
@@ -83,5 +93,3 @@ const HomePage = () => {
     </div>
   );
 };
-
-export default HomePage;
