@@ -1,32 +1,31 @@
+import { ProjectBlock } from "@/components/ProjectBlock";
 import {
   Banner,
   FundingPoolsHome,
   HeaderHero,
   InspirationFooter,
-  PreLaunchFooter,
   VisionOfTheWeekProject,
 } from "@/devlink";
-import { MongoClient } from "mongodb";
-import type { InferGetStaticPropsType, GetStaticProps } from 'next';
+import type { GetStaticProps, InferGetStaticPropsType } from "next";
 import dynamic from "next/dynamic";
-import { ProjectBlock } from "@/components/ProjectBlock";
-import { Project } from "../lib/types"
+import { Project } from "../lib/types";
 
 const ProjectDivWithNoSSR = dynamic(
   () => import("@/components/ProjectDiv").then((res) => res.ProjectDiv),
   { ssr: false }
 );
 
-export const getStaticProps: GetStaticProps<{projects: Project[]}> = async () => {  
-  const response = await fetch('http://localhost:3000/api/getProjects');
-  const projects = await response.json()
-  return { props: { projects } }
-}
+export const getStaticProps: GetStaticProps<{
+  projects: Project[];
+}> = async () => {
+  const response = await fetch("http://localhost:3000/api/getProjects");
+  const projects = await response.json();
+  return { props: { projects } };
+};
 
 export default function Page({
-  projects
+  projects,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  console.log(projects)
   return (
     <div>
       <Banner />
@@ -92,4 +91,4 @@ export default function Page({
       <InspirationFooter />
     </div>
   );
-};
+}
