@@ -2,6 +2,7 @@ import { _Builtin } from "@/devlink";
 import { Wallet } from "./Wallet";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 
 export function NavBar() {
   return (
@@ -23,14 +24,14 @@ export function NavBar() {
             <div className="nav-menu-three">
               <ul className="nav-menu-block">
                 <li className="mobile-menu">
-                  <a className="nav-link-2" href="#">
-                    {"SEEFUNDINGPOOLS"}
-                  </a>
+                  <Link className="nav-link-2" href="/pool">
+                    {"FUNDING POOLS"}
+                  </Link>
                 </li>
                 <li className="mobile-menu">
-                  <a className="nav-link-2" href="#">
-                    {"HOWITWORKS"}
-                  </a>
+                  <Link className="nav-link-2" href="#">
+                    {"HOW IT WORKS"}
+                  </Link>
                 </li>
                 <li className="mobile-menu">
                   <_Builtin.DropdownWrapper

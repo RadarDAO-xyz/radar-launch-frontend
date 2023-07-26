@@ -1,10 +1,11 @@
-import { FundingPoolTabs, FundingPoolsHome } from '@/devlink'
+import { FundingPoolHome } from "@/components/FundingPoolHome";
+import { FundingPoolTabs } from "@/devlink";
 
 export default function Pools() {
-    return(
-        <>
-            <FundingPoolTabs />
-            <FundingPoolsHome />
-        </>
-    )
+  return (
+    <div className="pt-16">
+      <FundingPoolHome />
+      <FundingPoolTabs />
+    </div>
+  );
 }

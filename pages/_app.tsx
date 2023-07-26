@@ -3,17 +3,12 @@ import "@/styles/globals.css";
 
 import type { AppProps } from "next/app";
 import { DevLinkProvider, PreLaunchFooter } from "@/devlink";
-import dynamic from "next/dynamic";
-
-const NavBarWithNoSSR = dynamic(
-  () => import("@/devlink/NavBar").then((res) => res.NavBar),
-  { ssr: false }
-);
+import { NavBar } from "@/components/NavBar";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <DevLinkProvider>
-      <NavBarWithNoSSR />
+      <NavBar />
       <Component {...pageProps} />
       <PreLaunchFooter />
     </DevLinkProvider>
