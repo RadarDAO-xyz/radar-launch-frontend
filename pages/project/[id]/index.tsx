@@ -1,13 +1,9 @@
-import {
-  Table,
-  TableCaption,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-} from "@/components/ui/table";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { MoveDown } from "lucide-react";
 
 enum Tab {
   ONE = "ONE",
@@ -38,6 +34,37 @@ const milestones = [
   {
     name: "Milestone 6",
     amount: 0,
+  },
+];
+
+const benefits = [
+  {
+    amountRequired: 0,
+    benefitTitle: "Benefit 1",
+  },
+  {
+    amountRequired: 0,
+    benefitTitle: "Benefit 2",
+  },
+  {
+    amountRequired: 0,
+    benefitTitle: "Benefit 3",
+  },
+  {
+    amountRequired: 0,
+    benefitTitle: "Benefit 4",
+  },
+  {
+    amountRequired: 0,
+    benefitTitle: "Benefit 5",
+  },
+  {
+    amountRequired: 0,
+    benefitTitle: "Benefit 6",
+  },
+  {
+    amountRequired: 0,
+    benefitTitle: "Benefit 7",
   },
 ];
 
@@ -92,9 +119,7 @@ export default function IndividualProjectPage() {
                         {milestone.amount.toFixed(2)}
                       </span>
                     </TableCell>
-                    <TableCell className="border-l" >
-                      {milestone.name}
-                    </TableCell>
+                    <TableCell className="border-l">{milestone.name}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -103,7 +128,52 @@ export default function IndividualProjectPage() {
           <TabsContent value={Tab.TWO}></TabsContent>
         </Tabs>
       </div>
-      <div className="col-span-2 overflow-y-scroll">buttons</div>
+      <div className="col-span-2 overflow-y-scroll px-4 pt-6">
+        <div className="flex space-x-2 pb-4">
+          <Avatar className="w-12 h-12">
+            <AvatarImage src="/default-avatar.png" alt="@shadcn" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          <div>
+            <p className="pb-1">Founder Name</p>
+            <p className="font-mono text-gray-600">
+              0x7730B4Cdc1B1E7a33A309AB7205411faD009C106
+            </p>
+          </div>
+        </div>
+        <hr />
+
+        <div className="pt-8 pb-4">
+          <div className="flex space-x-2 w-full">
+            <Button className="w-full" variant={"ghost"}>
+              Collect <MoveDown className="ml-1 w-3 h-3" />
+            </Button>
+            <Button className="w-full" variant={"ghost"}>
+              Sign Up <MoveDown className="ml-1 w-3 h-3" />
+            </Button>
+            <Button className="w-full" variant={"ghost"}>
+              Contribute <MoveDown className="ml-1 w-3 h-3" />
+            </Button>
+          </div>
+          <Button
+            className="w-full mt-2 bg-gray-300 hover:bg-gray-200"
+            variant={"ghost"}
+          >
+            Benefits <MoveDown className="ml-1 w-3 h-3" />
+          </Button>
+        </div>
+
+        <hr />
+        {benefits.map((benefit) => (
+          <div key={benefit.benefitTitle} className="mt-4 border rounded">
+            <h3 className="p-4">
+              Collect {benefit.amountRequired} or more editions and get
+            </h3>
+            <hr />
+            <p className="p-4">{benefit.benefitTitle}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
