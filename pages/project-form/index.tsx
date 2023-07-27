@@ -30,7 +30,13 @@ const formSchema = z.object({
   tldr: z.string(),
   brief: z.string(),
   inspiration: z.string(),
-  team: z.array(z.string()),
+  team: z.array(
+    z.object({
+      name: z.string(),
+      bio: z.string(),
+      email: z.string(),
+    })
+  ),
   collaborators: z.string(),
   waitlist: z.boolean(),
   milestones: z.array(z.string()),
