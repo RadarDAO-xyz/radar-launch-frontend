@@ -31,7 +31,6 @@ export default function ProjectForm() {
         watch,
         formState: { errors },
       } = methods
-    const [teamCount, setTeamCount] = useState()
     
     const onSubmit: SubmitHandler<Project> = (data) => console.log(data)
 
@@ -113,7 +112,7 @@ export default function ProjectForm() {
                             <p>Do you want to find collaborators on your project? This will appear in your project description for people to apply to help you build, leave blank if you are not looking for collaborators</p>
                         </div>
                         <div className="w-1/2">
-                            <input className="w-full input-field mb-2" placeholder="Collaborators" />
+                            <input {...register(`collaborators`)} className="w-full input-field mb-2" placeholder="Collaborators" />
                         </div>
                     </div>
                 </div>
@@ -144,8 +143,8 @@ export default function ProjectForm() {
                             <p>At est rutrum at. Curabitur at auctor quam. Vivamus pellentesque pellentesque orci, in blandit nisi finibus pellentesque.</p>
                         </div>
                         <div className="w-1/2">
-                            <input id="authorize" type="checkbox" />
-                            <label htmlFor="authorize">I want to set benefits and crowdfund on Launch</label>
+                            <input {...register(`waitlist`)} id="waitlist" type="checkbox" />
+                            <label htmlFor="waitlist">I want to set benefits and crowdfund on Launch</label>
                         </div>
                     </div>
                     <hr className="border-b-1 border-slate-200 my-8" />
@@ -155,8 +154,8 @@ export default function ProjectForm() {
                             <p>At est rutrum at. Curabitur at auctor quam. Vivamus pellentesque pellentesque orci, in blandit nisi finibus pellentesque.</p>
                         </div>
                         <div className="w-1/2">
-                            <input className="w-full input-field mb-2" type="number" /> ETH
-                            <input className="w-full input-field mb-2" placeholder="End Date" />
+                            <input {...register(`edition_price`)} className="w-full input-field mb-2" type="number" /> ETH
+                            <input {...register(`mint_end_date`)} className="w-full input-field mb-2" placeholder="End Date" />
                         </div>
                     </div>
                     <hr className="border-b-1 border-slate-200 my-8" />
@@ -176,7 +175,7 @@ export default function ProjectForm() {
                             <p>Please share an address which can withdraw your crowdfunded money. Make sure you have access to this address. In the current version this cannot be a safe address.</p>
                         </div>
                         <div className="w-1/2">
-                            <input className="w-full input-field mb-2" placeholder="Your ETH / ENS address" />
+                            <input {...register(`admin_address`)} className="w-full input-field mb-2" placeholder="Your ETH / ENS address" />
                         </div>
                     </div>
                 </div>
