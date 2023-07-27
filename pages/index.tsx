@@ -31,8 +31,8 @@ export default function HomePage() {
   );
   console.log({ data });
   return (
-    <div>
-      <Banner />
+    <div className="mt-[80px]">
+      {/* <Banner /> */}
       <HeaderHero visionOfTheWeekSlot={<VisionOfTheWeekProject />} />
       <ProjectDivWithNoSSR
         projectSectionCurationName="August"
