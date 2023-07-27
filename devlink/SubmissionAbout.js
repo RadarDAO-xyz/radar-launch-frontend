@@ -2,8 +2,11 @@ import React from "react";
 import * as _Builtin from "./_Builtin";
 import * as _utils from "./utils";
 import _styles from "./SubmissionAbout.module.css";
+import { useFormContext } from "react-hook-form";
 
 export function SubmissionAbout({ as: _Component = _Builtin.Block }) {
+  const { register, formState: { errors } } = useFormContext();
+
   return (
     <_Component className={_utils.cx(_styles, "about-your-vision")} tag="div">
       <_Builtin.Block className={_utils.cx(_styles, "header-div")} tag="div">
@@ -75,6 +78,7 @@ export function SubmissionAbout({ as: _Component = _Builtin.Block }) {
                 disabled={false}
                 required={false}
                 id="title"
+                {...register(`title`)}
               />
               <_Builtin.Block
                 className={_utils.cx(_styles, "_30px-div")}
@@ -111,6 +115,7 @@ export function SubmissionAbout({ as: _Component = _Builtin.Block }) {
                 disabled={false}
                 required={false}
                 id="description"
+                {...register(`description`)}
               />
             </_Builtin.Block>
           </_Builtin.Column>
@@ -181,6 +186,7 @@ export function SubmissionAbout({ as: _Component = _Builtin.Block }) {
                   disabled={false}
                   required={false}
                   id="video_url"
+                  {...register(`video_url`)}
                 />
                 <_Builtin.Block
                   className={_utils.cx(_styles, "_10px-div")}
@@ -221,6 +227,7 @@ export function SubmissionAbout({ as: _Component = _Builtin.Block }) {
                 required={false}
                 autoFocus={false}
                 id="tldr"
+                {...register(`tldr`)}
               />
             </_Builtin.Block>
           </_Builtin.Column>
@@ -346,6 +353,7 @@ export function SubmissionAbout({ as: _Component = _Builtin.Block }) {
                   required={false}
                   multiple={false}
                   id="brief"
+                  {...register(`brief`)}
                   options={[
                     {
                       t: "Select a brief",
@@ -399,6 +407,7 @@ export function SubmissionAbout({ as: _Component = _Builtin.Block }) {
                   required={false}
                   autoFocus={false}
                   id="inspiration-2"
+                  {...register(`inspiration`)}
                 />
               </_Builtin.Block>
             </_Builtin.Block>
