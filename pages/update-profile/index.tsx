@@ -1,5 +1,5 @@
 import { AdminNav } from "@/devlink"
-import { useForm, SubmitHandler, FormProvider } from "react-hook-form"
+import { useForm, SubmitHandler } from "react-hook-form"
 import { User } from "@/types/mongo"
 
 export default function UpdateProfile() {
@@ -8,12 +8,12 @@ export default function UpdateProfile() {
         handleSubmit,
         watch,
         formState: { errors },
-      } = useForm()
+      } = useForm<User>()
     const onSubmit: SubmitHandler<User> = (data) => console.log(data)
 
 
     return (
-        <div className="mt-24 max-w-screen-lg mx-auto">
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-24 max-w-screen-lg mx-auto">
             <AdminNav />
             <div className="border border-slate-200 rounded p-10 mb-10">
                 <div className="flex">
@@ -37,6 +37,6 @@ export default function UpdateProfile() {
                 <hr className="border-b-1 border-slate-200 my-8" />
                 <button className="bg-black text-white rounded leading-10 px-5" type="submit">Update Your Bio</button>
             </div>
-        </div>
+        </form>
     )
 }
