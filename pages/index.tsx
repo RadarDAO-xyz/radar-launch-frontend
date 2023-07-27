@@ -10,7 +10,7 @@ import dynamic from "next/dynamic";
 import { FundingPoolHome } from "@/components/FundingPoolHome";
 import { useQuery } from "wagmi";
 import { data } from "autoprefixer";
-import { Project } from "@/types/mongo";
+import { Project, ProjectStatus } from "@/types/mongo";
 import { WithId } from "mongodb";
 
 const ProjectDivWithNoSSR = dynamic(
@@ -29,7 +29,7 @@ export default function HomePage() {
     ["projects"],
     getProjects
   );
-  console.log(data, error);
+  console.log({ data });
   return (
     <div>
       <Banner />
@@ -65,6 +65,7 @@ export default function HomePage() {
                   projectTitle={project.title}
                   supporters={project.supporter_count}
                   projectDate={new Date(project.mint_end_date)}
+                  isDisabled={project.status === ProjectStatus["IN_REVIEW"]}
                 />
               ))}
           </>
@@ -91,6 +92,7 @@ export default function HomePage() {
                   projectTitle={project.title}
                   supporters={project.supporter_count}
                   projectDate={new Date(project.mint_end_date)}
+                  isDisabled={project.status === ProjectStatus["IN_REVIEW"]}
                 />
               ))}
           </>

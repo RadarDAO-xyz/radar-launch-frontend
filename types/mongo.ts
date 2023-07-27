@@ -1,3 +1,12 @@
+export enum ProjectStatus {
+  IN_REVIEW,
+  APPROVED,
+  LIVE,
+  BUILDING,
+  REJECTED,
+  CANCELLED,
+}
+
 export type Project = {
   title: string;
   video_url: string;
@@ -14,6 +23,7 @@ export type Project = {
   benefits: AmountText[];
   admin_address: string;
   supporter_count: number;
+  status: ProjectStatus;
   curation: {
     start: string; // ISO Datestring
     end: string; // ISO Datestring
