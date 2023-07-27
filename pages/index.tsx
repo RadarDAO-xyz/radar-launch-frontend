@@ -1,17 +1,14 @@
+import { FundingPoolHome } from "@/components/FundingPoolHome";
 import { ProjectBlock } from "@/components/ProjectBlock";
 import {
-  Banner,
-  FundingPoolsHome,
   HeaderHero,
   InspirationFooter,
-  VisionOfTheWeekProject,
+  VisionOfTheWeekProject
 } from "@/devlink";
-import dynamic from "next/dynamic";
-import { FundingPoolHome } from "@/components/FundingPoolHome";
-import { useQuery } from "wagmi";
-import { data } from "autoprefixer";
 import { Project, ProjectStatus } from "@/types/mongo";
 import { WithId } from "mongodb";
+import dynamic from "next/dynamic";
+import { useQuery } from "wagmi";
 
 const ProjectDivWithNoSSR = dynamic(
   () => import("@/components/ProjectDiv").then((res) => res.ProjectDiv),
@@ -29,7 +26,6 @@ export default function HomePage() {
     ["projects"],
     getProjects
   );
-  console.log({ data });
   return (
     <div className="mt-[80px]">
       {/* <Banner /> */}
