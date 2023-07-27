@@ -14,8 +14,9 @@ export function Wallet() {
           void onLogin?.();
         }
       }}
+      variant={"ghost"}
     >
-      {provider ? "LOG OUT" : "LOG IN"}
+      {provider ? "Logout" : "Login ⚙"}
     </Button>
   );
 }
