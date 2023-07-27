@@ -81,7 +81,7 @@ export function NavBar() {
                   </a>
                 </li>
               </ul>
-              <div className="div-block-35 space-x-2">
+              <div className="div-block-35 space-x-3">
                 <div className="admin-divider">
                   <div className="submit-subtitle-mobile">{"Admin"}</div>
                   <div className="div-block-5">
@@ -109,7 +109,14 @@ export function NavBar() {
                   <div className="submit-subtitle-mobile">
                     {"Submit your vision"}
                   </div>
-                  <Button>{"SUBMIT"}</Button>
+                  <Button asChild>
+                    <Link
+                      href="https://airtable.com/shrvi09PTUP5mTSHN"
+                      target="_blank"
+                    >
+                      {"SUBMIT"}
+                    </Link>
+                  </Button>
                 </div>
               </div>
             </div>

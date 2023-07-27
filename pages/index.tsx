@@ -1,17 +1,14 @@
+import { FundingPoolHome } from "@/components/FundingPoolHome";
 import { ProjectBlock } from "@/components/ProjectBlock";
 import {
-  Banner,
-  FundingPoolsHome,
   HeaderHero,
   InspirationFooter,
-  VisionOfTheWeekProject,
+  VisionOfTheWeekProject
 } from "@/devlink";
-import dynamic from "next/dynamic";
-import { FundingPoolHome } from "@/components/FundingPoolHome";
-import { useQuery } from "wagmi";
-import { data } from "autoprefixer";
-import { Project } from "@/types/mongo";
+import { Project, ProjectStatus } from "@/types/mongo";
 import { WithId } from "mongodb";
+import dynamic from "next/dynamic";
+import { useQuery } from "wagmi";
 
 const ProjectDivWithNoSSR = dynamic(
   () => import("@/components/ProjectDiv").then((res) => res.ProjectDiv),
@@ -29,10 +26,9 @@ export default function HomePage() {
     ["projects"],
     getProjects
   );
-  console.log(data, error);
   return (
-    <div>
-      <Banner />
+    <div className="mt-[80px]">
+      {/* <Banner /> */}
       <HeaderHero visionOfTheWeekSlot={<VisionOfTheWeekProject />} />
       <ProjectDivWithNoSSR
         projectSectionCurationName="August"
@@ -65,6 +61,7 @@ export default function HomePage() {
                   projectTitle={project.title}
                   supporters={project.supporter_count}
                   projectDate={new Date(project.mint_end_date)}
+                  isDisabled={project.status === ProjectStatus["IN_REVIEW"]}
                 />
               ))}
           </>
@@ -91,6 +88,7 @@ export default function HomePage() {
                   projectTitle={project.title}
                   supporters={project.supporter_count}
                   projectDate={new Date(project.mint_end_date)}
+                  isDisabled={project.status === ProjectStatus["IN_REVIEW"]}
                 />
               ))}
           </>
