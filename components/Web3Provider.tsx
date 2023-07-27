@@ -1,3 +1,4 @@
+import isTestnet from "@/lib/utils/isTestnet";
 import {
   Web3AuthEventListener,
   Web3AuthModalPack,
@@ -11,11 +12,11 @@ import {
 import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
 import { ReactNode, createContext, useEffect, useState } from "react";
 import { WagmiConfig, configureChains, createConfig } from "wagmi";
-import { optimism } from "wagmi/chains";
+import { optimism, optimismGoerli } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 
 const { publicClient, webSocketPublicClient } = configureChains(
-  [optimism],
+  [isTestnet() ? optimismGoerli : optimism],
   [publicProvider()]
 );
 
@@ -29,7 +30,7 @@ const modalConfig = {
   [WALLET_ADAPTERS.METAMASK]: {
     label: "MetaMask",
     showOnDesktop: true,
-    showOnMobile: false,
+    showOnMobile: true,
   },
 };
 
@@ -75,10 +76,12 @@ export const Web3Provider = ({ children }: { children?: ReactNode }) => {
           web3AuthNetwork: "cyan",
           chainConfig: {
             chainNamespace: CHAIN_NAMESPACES.EIP155,
-            chainId: "0xA",
+            chainId: isTestnet() ? "0x1a4" : "0xA",
             rpcTarget: `https://optimism-mainnet.infura.io/v3/${process.env.VITE_INFURA_KEY}`,
-            displayName: "Optimism Mainnet",
-            blockExplorer: "https://optimistic.etherscan.io",
+            displayName: isTestnet() ? "Optimism Testnet" : "Optimism Mainnet",
+            blockExplorer: isTestnet()
+              ? "https://goerli-optimistic.etherscan.io"
+              : "https://optimistic.etherscan.io",
             ticker: "OP",
             tickerName: "OP",
           },
@@ -87,7 +90,7 @@ export const Web3Provider = ({ children }: { children?: ReactNode }) => {
             loginMethodsOrder: ["google", "email_passwordless"],
           },
         },
-        // @ts-ignore
+        // @ts-expect-error Type 'OpenloginAdapter' is not assignable to type 'IAdapter<unknown>'.
         adapters: [openloginAdapter],
         modalConfig,
       })
