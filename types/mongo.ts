@@ -55,3 +55,12 @@ type AmountText = {
   amount: number;
   text: string;
 };
+
+export enum Brief {
+  THE_ENCHANTRESS = "The Enchantress",
+  THE_HEALER = "The Healer",
+  THE_MEDIATOR = "The Mediator",
+  THE_TEACHER = "The Teacher",
+  THE_ARTIST = "The Artist",
+  OTHER = "Other",
+}

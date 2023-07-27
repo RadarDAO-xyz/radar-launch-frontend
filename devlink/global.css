@@ -2316,7 +2316,7 @@ label {
   display: block;
   margin-bottom: 10px;
 
-  font-family: "Space Grotesk";
+  /* font-family: "Space Grotesk"; */
   color: var(--backgroundsBlack-4be50407);
   font-size: 16px;
   font-weight: 400;

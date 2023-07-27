@@ -14,7 +14,6 @@ import { ReactNode, createContext, useEffect, useState } from "react";
 import { WagmiConfig, configureChains, createConfig } from "wagmi";
 import { optimism, optimismGoerli } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
-
 const { publicClient, webSocketPublicClient } = configureChains(
   [isTestnet() ? optimismGoerli : optimism],
   [publicProvider()]

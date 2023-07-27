@@ -1,11 +1,48 @@
 import { MilestoneFields } from "@/components/MilestoneFields";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { SubmissionReadytoSubmit } from "@/devlink/SubmissionReadytoSubmit";
-import { Project } from "@/types/mongo";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 import { TeamFields } from "../../components/TeamFields";
+import { Brief } from "@/types/mongo";
+
+const formSchema = z.object({
+  title: z.string(),
+  video_url: z.string(),
+  tldr: z.string(),
+  brief: z.string(),
+  inspiration: z.string(),
+  team: z.array(z.string()),
+  collaborators: z.string(),
+  waitlist: z.boolean(),
+  milestones: z.array(z.string()),
+  edition_price: z.number(),
+  mint_end_date: z.string(),
+  benefits: z.array(z.string()),
+  admin_address: z.string(),
+});
 
 export default function ProjectForm() {
-  const methods = useForm<Project>({
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     mode: "onBlur",
     defaultValues: {
       title: "",
@@ -28,12 +65,16 @@ export default function ProjectForm() {
     handleSubmit,
     watch,
     formState: { errors },
-  } = methods;
+  } = form;
 
-  const onSubmit: SubmitHandler<Project> = (data) => console.log(data);
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
+    console.log(values);
+  }
 
   return (
-    <FormProvider {...methods}>
+    <Form {...form}>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="max-w-screen-md mx-auto mt-40"
@@ -46,82 +87,189 @@ export default function ProjectForm() {
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="flex">
             <div className="w-1/2 pr-4">
-              <h2>Title</h2>
+              <h2 className="text-xl">Basic Info</h2>
               <p>
-                At est rutrum at. Curabitur at auctor quam. Vivamus pellentesque
-                pellentesque orci, in blandit nisi finibus pellentesque. Nam nec
-                suscipit elit, a imperdiet nisi. Cras hendrerit in lectus nec
-                volutpat. Orci varius natoque penatibus et magnis dis parturient
-                montes, nascetur ridiculus mus.
+                Write a clear, brief title and subtitle to help people quickly
+                understand your project. Both will appear on your project and
+                pre-launch pages.
+                <br />
+                <br />
+                Potential supporters will also see them if your project appears
+                on category pages, search results, or in emails we send to our
+                community.
               </p>
             </div>
             <div className="w-1/2">
-              <input
-                {...register(`title`)}
-                className="w-full input-field mb-2"
-                placeholder="Title"
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem className="pb-4">
+                    <FormLabel>What is the name of your project?</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormDescription></FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-              <textarea
-                className="w-full input-field mb-2"
-                placeholder="Description"
+              <FormField
+                control={form.control}
+                name="brief"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Describe your idea in a sentence</FormLabel>
+                    <FormDescription className="text-xs">
+                      This will be featured on homepage alongside your video
+                    </FormDescription>
+                    <FormControl>
+                      <Textarea {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
           </div>
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="flex">
             <div className="w-1/2 pr-4">
-              <h2>Summary</h2>
+              <h2 className="text-xl">Summary</h2>
               <p>
-                At est rutrum at. Curabitur at auctor quam. Vivamus pellentesque
-                pellentesque orci, in blandit nisi finibus pellentesque. Nam nec
-                suscipit elit, a imperdiet nisi. Cras hendrerit in lectus nec
-                volutpat. Orci varius natoque penatibus et magnis dis parturient
-                montes, nascetur ridiculus mus.
+                Please give us a TLDR that will inspire supporters of your
+                vision, make it authentic rather than polished!
+                <br />
+                <br />
+                Tell people what you&apos;re raising funds to do, how you plan
+                to make it happen, who you are, and why you care about this
+                project, demos and walkthroughs are great!
               </p>
             </div>
             <div className="w-1/2">
-              <input
-                {...register(`video_url`)}
-                className="w-full input-field mb-2"
-                placeholder="Video URL"
+              <FormField
+                control={form.control}
+                name="video_url"
+                render={({ field }) => (
+                  <FormItem className="pb-4">
+                    <FormLabel>
+                      Please share a video introducing your vision for a better
+                      future
+                    </FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      This should be a maximum of 3 minutes; this must be a URL,
+                      you can use vimeo or youtube
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-              <input
-                {...register(`tldr`)}
-                className="w-full input-field mb-2"
-                placeholder="tldr"
+              <FormField
+                control={form.control}
+                name="tldr"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Describe your idea in a sentence</FormLabel>
+                    <FormControl>
+                      <Textarea {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
           </div>
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="flex">
             <div className="w-1/2 pr-4">
-              <h2>Video Image</h2>
+              <h2 className="text-xl">Video Image</h2>
               <p>
                 This thumbnail is taken from the first slide of your uploaded
-                video. This will appear for collectors in their wallet and on
-                their profile.
+                video. <br />
+                <br />
+                This will appear for collectors in their wallet and on their
+                profile.
               </p>
             </div>
-            <div className="w-1/2">video upload btn</div>
+            <FormField
+              control={form.control}
+              name="tldr"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      type="file"
+                      className="h-full"
+                      accept="video/mp4,video/x-m4v,video/*"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="flex">
             <div className="w-1/2 pr-4">
-              <h2>Inspiration</h2>
+              <h2 className="text-xl">Inspiration</h2>
               <p>
-                At est rutrum at. Curabitur at auctor quam. Vivamus pellentesque
-                pellentesque orci, in blandit nisi finibus pellentesque.
+                Select a brief inspired a More Play-Full Future, or one of our
+                partner briefs and tells us more about why you&apos;re building
+                this, we&apos;ll use this in communications to help share your
+                vision.
               </p>
             </div>
             <div className="w-1/2">
-              <select {...register(`brief`)} placeholder="Select a brief">
-                <option>The Enchantress</option>
-                <option>The Enchantress</option>
-                <option>The Enchantress</option>
-              </select>
-              <input
-                className="w-full input-field mb-2"
-                placeholder="Inspiration"
+              <FormField
+                control={form.control}
+                name="brief"
+                render={({ field }) => (
+                  <FormItem className="pb-4">
+                    <FormLabel>Select a brief you are answering:</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a Brief" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Object.values(Brief).map((brief) => (
+                          <SelectItem key={brief} value={brief}>
+                            {brief}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      {
+                        "Chose 'other' if you've been inspired by A More Play-Full Future outside of the briefs"
+                      }
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="inspiration"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      What was the inspiration for this idea?
+                    </FormLabel>
+                    <FormControl>
+                      <Textarea {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
           </div>
@@ -273,6 +421,6 @@ export default function ProjectForm() {
         <SubmissionReadytoSubmit />
         <button type="submit">Submit</button>
       </form>
-    </FormProvider>
+    </Form>
   );
 }
