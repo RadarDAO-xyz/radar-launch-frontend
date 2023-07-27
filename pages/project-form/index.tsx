@@ -1,4 +1,5 @@
 import { MilestoneFields } from "@/components/MilestoneFields";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -18,11 +19,21 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { SubmissionReadytoSubmit } from "@/devlink/SubmissionReadytoSubmit";
+import {
+  usePrepareRadarEditionsCreateEdition,
+  useRadarEditionsCreateEdition,
+} from "@/lib/generated";
+import isTestnet from "@/lib/utils/isTestnet";
+import { Brief } from "@/types/mongo";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useAccount, useWaitForTransaction } from "wagmi";
 import * as z from "zod";
 import { TeamFields } from "../../components/TeamFields";
-import { Brief } from "@/types/mongo";
+import {
+  GOERLI_CONTRACT_ADDRESS,
+  MAINNET_CONTRACT_ADDRESS,
+} from "@/constants/address";
 
 const formSchema = z.object({
   title: z.string(),
@@ -41,7 +52,7 @@ const formSchema = z.object({
   waitlist: z.boolean(),
   milestones: z.array(z.string()),
   edition_price: z.number(),
-  mint_end_date: z.string(),
+  mint_end_date: z.date(),
   benefits: z.array(z.string()),
   admin_address: z.string(),
 });
@@ -61,11 +72,12 @@ export default function ProjectForm() {
       waitlist: true,
       milestones: [],
       edition_price: 0,
-      mint_end_date: "",
+      mint_end_date: new Date(),
       benefits: [],
       admin_address: "",
     },
   });
+
   const {
     register,
     handleSubmit,
@@ -73,11 +85,30 @@ export default function ProjectForm() {
     formState: { errors },
   } = form;
 
+  const fee = watch("edition_price");
+
+  const { address } = useAccount();
+
+  const { config, error } = usePrepareRadarEditionsCreateEdition({
+    account: address,
+    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    args: [BigInt(1000)],
+  });
+  const {
+    data,
+    write,
+    error: writeError,
+  } = useRadarEditionsCreateEdition(config);
+  const { data: txReceipt } = useWaitForTransaction({
+    hash: data?.hash,
+    enabled: Boolean(data?.hash),
+  });
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+    write?.();
   }
+
+  console.log({ data, txReceipt, error, writeError, address });
 
   return (
     <Form {...form}>
@@ -286,7 +317,7 @@ export default function ProjectForm() {
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="flex">
             <div className="w-1/2 pr-4">
-              <h2>Team</h2>
+              <h2 className="text-xl">Team</h2>
               <p>
                 Add your team members and a short bio, your email will not be
                 visible on the platform.
@@ -303,18 +334,33 @@ export default function ProjectForm() {
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="flex">
             <div className="w-1/2 pr-4">
-              <h2>Collaborators</h2>
+              <h2 className="text-xl">Collaborators</h2>
               <p>
-                Do you want to find collaborators on your project? This will
-                appear in your project description for people to apply to help
-                you build, leave blank if you are not looking for collaborators
+                Do you want to find collaborators on your project? <br />
+                <br />
+                This will appear in your project description for people to apply
+                to help you build, leave blank if you are not looking for
+                collaborators
               </p>
             </div>
             <div className="w-1/2">
-              <input
-                {...register(`collaborators`)}
-                className="w-full input-field mb-2"
-                placeholder="Collaborators"
+              <FormField
+                control={form.control}
+                name="collaborators"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      {"List the collaborators you're looking for"}
+                    </FormLabel>
+                    <FormControl>
+                      <Textarea {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      {"Leave blank if you don't need any collaborators"}
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
           </div>
@@ -387,11 +433,12 @@ export default function ProjectForm() {
                 {...register(`edition_price`)}
                 className="w-full input-field mb-2"
                 type="number"
-              />{" "}
+              />
               ETH
               <input
                 {...register(`mint_end_date`)}
                 className="w-full input-field mb-2"
+                type="date"
                 placeholder="End Date"
               />
             </div>
@@ -425,7 +472,11 @@ export default function ProjectForm() {
         </div>
 
         <SubmissionReadytoSubmit />
-        <button type="submit">Submit</button>
+        <div className="w-full px-16 pb-12">
+          <Button className="w-full" type="submit">
+            Submit
+          </Button>
+        </div>
       </form>
     </Form>
   );
