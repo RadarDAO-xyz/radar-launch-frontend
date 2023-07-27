@@ -1,5 +1,4 @@
 "use client";
-
 import { MilestoneFields } from "@/components/MilestoneFields";
 import { SubmissionReadytoSubmit } from "@/devlink/SubmissionReadytoSubmit";
 import { Project } from "@/types/mongo";

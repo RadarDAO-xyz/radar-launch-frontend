@@ -51,7 +51,7 @@ export const MilestoneFields = ({children}:Props) => {
                     />
                 </div>
             ))}
-            <button type="button" onClick={addRow}>+ add another</button>
+            <button className="bg-black text-white rounded leading-10 px-5" type="button" onClick={addRow}>+ add another</button>
         </fieldset>
     )
 }

@@ -39,6 +39,16 @@ export type Pool = {
   video: string;
 };
 
+export type User = {
+  name: string;
+  profile?: string;
+  bio?: string;
+  socials?: string;
+  wallet_address: string;
+  email?: string;
+  session_cookie: string;
+}
+
 type Sponsor = {
   logo: string;
   name: string;
