@@ -35,10 +35,11 @@ export function FundingPoolHome() {
       </div>
       <div className="_20px-div" />
       <div className="funding-pool-wrapper">
-        {data?.map((pool) => (
+        {data?.map((pool, index) => (
           <PoolBlock
             title={pool.title}
             pool_amount={pool.pool_amount}
+            key={index}
           />
         ))}
       </div>
