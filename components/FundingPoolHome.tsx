@@ -6,16 +6,12 @@ import { Pool } from "@/types/mongo";
 import { PoolBlock } from "./PoolBlock";
 
 async function getPools() {
-  return fetch(`${process.env.BACKEND_URL}/api/getPools`).then((res) =>
-    res.json()
-  );
+  return fetch(`${process.env.BACKEND_URL}/pools`).then((res) => res.json());
 }
 
 export function FundingPoolHome() {
-  const { data, error } = useQuery<WithId<Pool>[]>(
-    ["pools"],
-    getPools
-  );
+  const { data, error } = useQuery<WithId<Pool>[]>(["pools"], getPools);
+  console.log({ data });
   return (
     <section className="container pt-16 mt-[80px]">
       <div className="funding-pool-title">
