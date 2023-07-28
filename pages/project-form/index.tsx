@@ -1,5 +1,8 @@
 import { MilestoneFields } from "@/components/MilestoneFields";
+import { RepeatingField } from "@/components/RepeatingField";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -11,6 +14,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -18,22 +26,25 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  GOERLI_CONTRACT_ADDRESS,
+  MAINNET_CONTRACT_ADDRESS,
+} from "@/constants/address";
 import { SubmissionReadytoSubmit } from "@/devlink/SubmissionReadytoSubmit";
 import {
   usePrepareRadarEditionsCreateEdition,
   useRadarEditionsCreateEdition,
 } from "@/lib/generated";
+import { cn } from "@/lib/utils";
 import isTestnet from "@/lib/utils/isTestnet";
 import { Brief } from "@/types/mongo";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { useAccount, useWaitForTransaction } from "wagmi";
+import { useAccount, useNetwork, useWaitForTransaction } from "wagmi";
 import * as z from "zod";
 import { TeamFields } from "../../components/TeamFields";
-import {
-  GOERLI_CONTRACT_ADDRESS,
-  MAINNET_CONTRACT_ADDRESS,
-} from "@/constants/address";
 
 const formSchema = z.object({
   title: z.string(),
@@ -50,10 +61,20 @@ const formSchema = z.object({
   ),
   collaborators: z.string(),
   waitlist: z.boolean(),
-  milestones: z.array(z.string()),
+  milestones: z.array(
+    z.object({
+      amount: z.number(),
+      text: z.string(),
+    })
+  ),
   edition_price: z.number(),
   mint_end_date: z.date(),
-  benefits: z.array(z.string()),
+  benefits: z.array(
+    z.object({
+      amount: z.number(),
+      text: z.string(),
+    })
+  ),
   admin_address: z.string(),
 });
 
@@ -88,11 +109,14 @@ export default function ProjectForm() {
   const fee = watch("edition_price");
 
   const { address } = useAccount();
+  const { chain } = useNetwork();
 
   const { config, error } = usePrepareRadarEditionsCreateEdition({
     account: address,
+    chainId: chain?.id,
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
     args: [BigInt(1000)],
+    enabled: Boolean(chain),
   });
   const {
     data,
@@ -108,13 +132,13 @@ export default function ProjectForm() {
     write?.();
   }
 
-  console.log({ data, txReceipt, error, writeError, address });
+  console.log({ data, txReceipt, error, writeError, address, config });
 
   return (
     <Form {...form}>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="max-w-screen-md mx-auto mt-40"
+        className="max-w-4xl mx-auto mt-40"
       >
         <div className="border border-slate-200 rounded p-10 mb-10">
           <h1>The Vision</h1>
@@ -375,19 +399,22 @@ export default function ProjectForm() {
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="flex">
             <div className="w-1/2 pr-4">
-              <h2>Funding Milestones</h2>
+              <h2 className="text-xl">Funding Milestones</h2>
               <p>
                 We believe that building is an evolutionary process. Roadmaps
                 are important, but we also want to set achievable milestones.
               </p>
+              <br />
               <p>
                 Fill out milestones you&apos;re hoping to achieve in your
                 projects, big or small.
               </p>
+              <br />
               <p>
                 Leave the funding amount blank if you&apos;re not looking to
                 crowdfund.
               </p>
+              <br />
               <p>
                 Note: you will have to reach milestone 1 to unlock your funds
               </p>
@@ -406,73 +433,222 @@ export default function ProjectForm() {
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="flex">
             <div className="w-1/2 pr-4">
-              <h2>Crowdfunding</h2>
+              <h2 className="text-xl">Crowdfunding</h2>
               <p>
-                At est rutrum at. Curabitur at auctor quam. Vivamus pellentesque
-                pellentesque orci, in blandit nisi finibus pellentesque.
+                We know how hard it is for projects to get the resources they
+                need to build outside of the current broken funding systems.
+                <br />
+                <br />
+                On Launch, we do crowdfunding a bit differently. We encourage
+                you to set realistic crowdfunding goals to reach smaller
+                milestones and then come back to raise again.
               </p>
             </div>
             <div className="w-1/2">
-              <input {...register(`waitlist`)} id="waitlist" type="checkbox" />
-              <label htmlFor="waitlist">
-                I want to set benefits and crowdfund on Launch
-              </label>
-            </div>
-          </div>
-          <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="flex">
-            <div className="w-1/2 pr-4">
-              <h2>Editions</h2>
-              <p>
-                At est rutrum at. Curabitur at auctor quam. Vivamus pellentesque
-                pellentesque orci, in blandit nisi finibus pellentesque.
-              </p>
-            </div>
-            <div className="w-1/2">
-              <input
-                {...register(`edition_price`)}
-                className="w-full input-field mb-2"
-                type="number"
-              />
-              ETH
-              <input
-                {...register(`mint_end_date`)}
-                className="w-full input-field mb-2"
-                type="date"
-                placeholder="End Date"
+              <FormField
+                control={form.control}
+                name="waitlist"
+                render={({ field }) => (
+                  <FormItem className="flex items-center space-x-2">
+                    <FormControl>
+                      <Checkbox {...field} />
+                    </FormControl>
+                    <FormLabel>
+                      I want to set benefits and crowdfund on Launch
+                    </FormLabel>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
           </div>
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="flex">
             <div className="w-1/2 pr-4">
-              <h2>Optional Benefits for supporters</h2>
-              <p>Onchain patronage will by default be listed as a benefit.</p>
+              <h2 className="text-xl">Editions</h2>
+              <p>
+                Collecting editions of your vision is how people support you and
+                your project. It allows early adopters to signal their believe
+                and build reputation around emerging futures.
+                <br />
+                <br />
+                We want to make this as accessible as possible, so there is a
+                max price of $20 per edition.
+                <br />
+                <br />
+                To encourage more collections, you can set benefits for
+                multiples e.g 5 editions unlocks access to a physical print.
+                <br />
+                <br />
+                See more on editions below.
+                <br />
+                <br />
+                Supporters will be able to collect editions with credit card.
+              </p>
             </div>
-            <div className="w-1/2">repeatable field</div>
+            <div className="w-1/2">
+              <FormField
+                control={form.control}
+                name="edition_price"
+                render={({ field }) => (
+                  <FormItem className="pb-4">
+                    <FormLabel>Edition Price</FormLabel>
+                    <div className="flex items-center space-x-2">
+                      <FormControl>
+                        <Input type="number" {...field} />
+                      </FormControl>
+                      <p>$USD</p>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="mint_end_date"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Mint End Date</FormLabel>
+                    <FormControl>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={"outline"}
+                              className={cn(
+                                "w-full pl-3 text-left font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, "PPP")
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="flex">
             <div className="w-1/2 pr-4">
-              <h2>Set your admin address</h2>
+              <h2 className="text-xl">Optional Benefits for supporters</h2>
               <p>
-                Please share an address which can withdraw your crowdfunded
-                money. Make sure you have access to this address. In the current
-                version this cannot be a safe address.
+                Set benefits for collectors of your editions, this will be
+                listed on your project page.
+                <br />
+                <br />
+                Think of incentives to support you, it could be first access to
+                a product, a physical redemption, membership to community.
+                <br />
+                <br />
+                At the current time, you cannot offer equity or revenue share
+                through Launch.
               </p>
             </div>
             <div className="w-1/2">
-              <input
-                {...register(`admin_address`)}
-                className="w-full input-field mb-2"
-                placeholder="Your ETH / ENS address"
+              <RepeatingField />
+            </div>
+          </div>
+          <hr className="border-b-1 border-slate-200 my-8" />
+          <div className="flex">
+            <div className="w-1/2 pr-4">
+              <h2 className="text-xl">Set your admin address</h2>
+              <p>
+                Please share an Ethereum address which can withdraw your
+                crowdfunded money.
+                <br />
+                <br />
+                Make sure you have access to this address.
+                <br />
+                <br />
+                In the current version this cannot be a safe address.
+                <br />
+                <br />
+                In the future you will be able to withdraw straight to bank
+                account.
+              </p>
+            </div>
+            <div className="w-1/2">
+              <FormField
+                control={form.control}
+                name={`admin_address`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input {...field} placeholder="Your ETH / ENS address" />
+                    </FormControl>
+                    <FormDescription>
+                      This should start with 0x... or end with .ens
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
           </div>
         </div>
+        <div className="border border-slate-200 rounded p-10 mb-10">
+          <h1>Ready to submit</h1>
+          <p className="form-subheading">
+            Remind yourself of what happens next
+          </p>
+          <hr className="border-b-1 border-slate-200 my-8" />
+          <div className="flex">
+            <div className="w-1/2 pr-4">
+              <h2 className="text-xl">Project Review</h2>
+              <p>
+                Proposals will be reviewed by selected members of the
+                RADAR Community. Expect to receive a decision within 48 hours.
+                You can re-apply if unsuccessful however we will not be able to
+                answer bespoke feedback for why briefs were not successful.
+              </p>
+            </div>
+            <div className="w-1/2">
+              <h3>Your proposal will be accepted if:</h3>
+              <ul className="ml-6 list-disc [&>li]:mt-2">
+                <li>
+                  They answer a brief or have been inspired by a more play-full
+                  future
+                </li>
+                <li>
+                  {
+                    "They've shown they have the skills to execute on their vision and that they have an advantage"
+                  }
+                </li>
+                <li>
+                  {"They're building something that people want to be part of"}
+                </li>
+              </ul>
+              <h3>Your proposal will be denied if:</h3>
+              <ul className="ml-6 list-disc [&>li]:mt-2">
+                <li>{"They're not answering the brief"}</li>
+                <li>{"They're submissions contains a prohibited item"}</li>
+                <li>
+                  {"They're selling a purely speculative asset with no utility"}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
-        <SubmissionReadytoSubmit />
-        <div className="w-full px-16 pb-12">
+        <div className="w-full px-16 pb-20">
           <Button className="w-full" type="submit">
             Submit
           </Button>
