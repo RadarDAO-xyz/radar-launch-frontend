@@ -1,22 +1,36 @@
-import { useContext } from "react";
+import { Web3AuthConnector } from "@web3auth/web3auth-wagmi-connector";
+import { useContext, useState } from "react";
+import { useConnect, useDisconnect } from "wagmi";
 import { Web3Context } from "./Web3Provider";
 import { Button } from "./ui/button";
 
 export function Wallet() {
-  const { onLogin, onLogout, provider } = useContext(Web3Context) ?? {};
+  const { connectAsync } = useConnect();
+  const { disconnectAsync } = useDisconnect({});
+  const { web3Auth } = useContext(Web3Context) ?? {};
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   return (
     <Button
-      onClick={() => {
-        if (provider) {
-          void onLogout?.();
+      onClick={async () => {
+        if (isLoggedIn) {
+          await disconnectAsync();
+          setIsLoggedIn(false);
         } else {
-          void onLogin?.();
+          await web3Auth?.connect();
+          await connectAsync({
+            connector: new Web3AuthConnector({
+              options: {
+                web3AuthInstance: web3Auth!,
+              },
+            }),
+          });
+          setIsLoggedIn(true);
         }
       }}
       variant={"ghost"}
     >
-      {provider ? "Logout" : "Login ⚙"}
+      {isLoggedIn ? "Logout" : "Login ⚙"}
     </Button>
   );
 }
