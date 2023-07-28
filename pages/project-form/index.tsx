@@ -64,7 +64,7 @@ const formSchema = z.object({
     })
   ),
   collaborators: z.string(),
-  waitlist: z.boolean(),
+  waitlist: z.boolean().default(true),
   milestones: z.array(
     z.object({
       amount: z.coerce.number(),
@@ -132,7 +132,7 @@ export default function ProjectForm() {
     if (errors) {
       console.error(errors);
     }
-    
+
     write?.();
   }
 
@@ -480,7 +480,10 @@ export default function ProjectForm() {
                 render={({ field }) => (
                   <FormItem className="flex items-center space-x-2">
                     <FormControl>
-                      <Checkbox {...field} />
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
                     </FormControl>
                     <FormLabel>
                       I want to set benefits and crowdfund on Launch
