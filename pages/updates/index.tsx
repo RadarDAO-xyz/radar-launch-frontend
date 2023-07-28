@@ -31,6 +31,7 @@ export default function Updates() {
                     </Select>
                     <Textarea className="mb-20" />
                 </div>
+                
                 <div className="flex-grow">
                     <Accordion type="single" collapsible className="w-full">
                         <AccordionItem value="item-1">
