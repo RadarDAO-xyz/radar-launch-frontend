@@ -17,7 +17,7 @@ export default function Updates() {
             <div className="flex">
                 <div className="w-1/2 pr-10">
                     <h1 className="text-lg">Share an update with your supporters</h1>
-                    <p>It's important to update your supporters so they can get the latest access, share about your vision and be ready to support your next fundraise. Select your project, add your submission and click submit, updates are made onchain and cannot be edited. This update goes on your main project page.</p>
+                    <p>It&apos;s important to update your supporters so they can get the latest access, share about your vision and be ready to support your next fundraise. Select your project, add your submission and click submit, updates are made onchain and cannot be edited. This update goes on your main project page.</p>
                     
                     <Select>
                         <SelectTrigger className="w-full my-6">
@@ -31,7 +31,7 @@ export default function Updates() {
                     </Select>
                     <Textarea className="mb-20" />
                 </div>
-                
+
                 <div className="flex-grow">
                     <Accordion type="single" collapsible className="w-full">
                         <AccordionItem value="item-1">
