@@ -3,7 +3,7 @@ import { ProjectBlock } from "@/components/ProjectBlock";
 import {
   HeaderHero,
   InspirationFooter,
-  VisionOfTheWeekProject
+  VisionOfTheWeekProject,
 } from "@/devlink";
 import { Project, ProjectStatus } from "@/types/mongo";
 import { WithId } from "mongodb";
@@ -16,9 +16,7 @@ const ProjectDivWithNoSSR = dynamic(
 );
 
 async function getProjects() {
-  return fetch(`${process.env.BACKEND_URL}/api/getProjects`).then((res) =>
-    res.json()
-  );
+  return fetch(`${process.env.BACKEND_URL}/projects`).then((res) => res.json());
 }
 
 export default function HomePage() {
