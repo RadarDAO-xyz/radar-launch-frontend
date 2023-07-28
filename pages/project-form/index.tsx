@@ -45,6 +45,10 @@ import { useForm } from "react-hook-form";
 import { useAccount, useNetwork, useWaitForTransaction } from "wagmi";
 import * as z from "zod";
 import { TeamFields } from "../../components/TeamFields";
+import { useEffect } from "react";
+import { useToast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
+import Link from "next/link";
 
 const formSchema = z.object({
   title: z.string(),
@@ -63,15 +67,15 @@ const formSchema = z.object({
   waitlist: z.boolean(),
   milestones: z.array(
     z.object({
-      amount: z.number(),
+      amount: z.coerce.number(),
       text: z.string(),
     })
   ),
-  edition_price: z.number(),
+  edition_price: z.coerce.number(),
   mint_end_date: z.date(),
   benefits: z.array(
     z.object({
-      amount: z.number(),
+      amount: z.coerce.number(),
       text: z.string(),
     })
   ),
@@ -111,28 +115,55 @@ export default function ProjectForm() {
   const { address } = useAccount();
   const { chain } = useNetwork();
 
-  const { config, error } = usePrepareRadarEditionsCreateEdition({
+  const { config } = usePrepareRadarEditionsCreateEdition({
     account: address,
     chainId: chain?.id,
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
-    args: [BigInt(1000)],
-    enabled: Boolean(chain),
+    args: [BigInt(fee)],
+    enabled: Boolean(chain) && fee > 0,
   });
-  const {
-    data,
-    write,
-    error: writeError,
-  } = useRadarEditionsCreateEdition(config);
-  const { data: txReceipt } = useWaitForTransaction({
+  const { data, write } = useRadarEditionsCreateEdition(config);
+  const { data: txReceipt, isSuccess } = useWaitForTransaction({
     hash: data?.hash,
     enabled: Boolean(data?.hash),
   });
 
+  const { toast } = useToast();
+
   function onSubmit(values: z.infer<typeof formSchema>) {
+    // print form errors
+    if (errors) {
+      console.error(errors);
+    }
     write?.();
   }
 
-  console.log({ data, txReceipt, error, writeError, address, config });
+  useEffect(() => {
+    if (data?.hash && chain) {
+      toast({
+        title: "Project submitted, awaiting confirmation",
+        description: `Transaction hash: ${data.hash}`,
+        action: (
+          <ToastAction altText="View on explorer">
+            <Link
+              href={`${chain.blockExplorers?.default.url}/tx/${data.hash}`}
+              target="_blank"
+            >
+              View Transaction
+            </Link>
+          </ToastAction>
+        ),
+      });
+    }
+  }, [data?.hash]);
+
+  useEffect(() => {
+    if (isSuccess && txReceipt?.transactionHash) {
+      toast({
+        title: "Project successfully submitted!",
+      });
+    }
+  }, [isSuccess]);
 
   return (
     <Form {...form}>

@@ -5,6 +5,7 @@ import type { AppProps } from "next/app";
 import { DevLinkProvider, PreLaunchFooter } from "@/devlink";
 import { NavBar } from "@/components/NavBar";
 import { Web3Provider } from "@/components/Web3Provider";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -13,6 +14,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <NavBar />
         <Component {...pageProps} />
         <PreLaunchFooter />
+        <Toaster />
       </DevLinkProvider>
     </Web3Provider>
   );
