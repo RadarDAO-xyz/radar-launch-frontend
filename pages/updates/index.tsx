@@ -8,13 +8,14 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 export default function Updates() {
 
     return (
         <div className="mt-24 max-w-screen-lg mx-auto">
             <AdminNav />
-            <div className="flex">
+            <div className="flex mb-20">
                 <div className="w-1/2 pr-10">
                     <h1 className="text-lg">Share an update with your supporters</h1>
                     <p>It&apos;s important to update your supporters so they can get the latest access, share about your vision and be ready to support your next fundraise. Select your project, add your submission and click submit, updates are made onchain and cannot be edited. This update goes on your main project page.</p>
@@ -29,7 +30,8 @@ export default function Updates() {
                             <SelectItem value="blueberry">Third Choice</SelectItem>
                         </SelectContent>
                     </Select>
-                    <Textarea className="mb-20" />
+                    <Textarea className="mb-4" />
+                    <Button>Share Update</Button>
                 </div>
 
                 <div className="flex-grow">
