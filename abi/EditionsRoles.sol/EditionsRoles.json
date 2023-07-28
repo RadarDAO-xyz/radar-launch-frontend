@@ -1,0 +1,50 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "EditionsRoles",
+  "sourceName": "src/EditionsRoles.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "PAUSER_ROLE",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "UPGRADER_ROLE",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "URI_SETTER_ROLE",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x61010661003a600b82828239805160001a60731461002d57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe730000000000000000000000000000000000000000301460806040526004361060475760003560e01c80637f34571014604c578063e63ab1e9146084578063f72c0d8b1460aa575b600080fd5b60727f7804d923f43a17d325d77e781528e0793b2edd9890ab45fc64efd7b4b427744c81565b60405190815260200160405180910390f35b60727f65d7a28e3265b37a6474929f336521b332c1681b933f6cb9f3376673440d862a81565b60727f189ab7a9244df0848122154315af71fe140f3db0fe014031783b0946b8c9d2e38156fea2646970667358221220a5bdfd901960f1173d7f9d81d70d3c74842c5faea606f4cfbec4881ea33b35cf64736f6c63430008130033",
+  "deployedBytecode": "0x730000000000000000000000000000000000000000301460806040526004361060475760003560e01c80637f34571014604c578063e63ab1e9146084578063f72c0d8b1460aa575b600080fd5b60727f7804d923f43a17d325d77e781528e0793b2edd9890ab45fc64efd7b4b427744c81565b60405190815260200160405180910390f35b60727f65d7a28e3265b37a6474929f336521b332c1681b933f6cb9f3376673440d862a81565b60727f189ab7a9244df0848122154315af71fe140f3db0fe014031783b0946b8c9d2e38156fea2646970667358221220a5bdfd901960f1173d7f9d81d70d3c74842c5faea606f4cfbec4881ea33b35cf64736f6c63430008130033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

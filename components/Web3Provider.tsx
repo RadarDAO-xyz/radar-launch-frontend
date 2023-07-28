@@ -1,37 +1,18 @@
-import {
-  Web3AuthEventListener,
-  Web3AuthModalPack,
-} from "@safe-global/auth-kit";
-import {
-  ADAPTER_EVENTS,
-  CHAIN_NAMESPACES,
-  SafeEventEmitterProvider,
-  WALLET_ADAPTERS,
-} from "@web3auth/base";
+import isTestnet from "@/lib/utils/isTestnet";
+import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from "@web3auth/base";
+import { MetamaskAdapter } from "@web3auth/metamask-adapter";
+import { Web3Auth } from "@web3auth/modal";
 import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
 import { ReactNode, createContext, useEffect, useState } from "react";
 import { WagmiConfig, configureChains, createConfig } from "wagmi";
-import { optimism } from "wagmi/chains";
+import { optimism, optimismGoerli } from "wagmi/chains";
+import { InjectedConnector } from "wagmi/connectors/injected";
 import { publicProvider } from "wagmi/providers/public";
 
-const { publicClient, webSocketPublicClient } = configureChains(
-  [optimism],
+const { chains, publicClient, webSocketPublicClient } = configureChains(
+  [isTestnet() ? optimismGoerli : optimism],
   [publicProvider()]
 );
-
-const config = createConfig({
-  autoConnect: true,
-  publicClient,
-  webSocketPublicClient,
-});
-
-const modalConfig = {
-  [WALLET_ADAPTERS.METAMASK]: {
-    label: "MetaMask",
-    showOnDesktop: true,
-    showOnMobile: false,
-  },
-};
 
 const openloginAdapter = new OpenloginAdapter({
   loginSettings: {
@@ -40,97 +21,105 @@ const openloginAdapter = new OpenloginAdapter({
   adapterSettings: {
     uxMode: "popup",
     whiteLabel: {
-      name: "Safe",
+      name: "RADARDao Launch",
+      url: "https://radar-launch.netlify.app",
+      logoLight: "https://web3auth.io/images/w3a-L-Favicon-1.svg",
+      logoDark: "https://web3auth.io/images/w3a-D-Favicon-1.svg",
+      defaultLanguage: "en", // en, de, ja, ko, zh, es, fr, pt, nl
+      dark: true, // whether to enable dark mode. defaultValue: false
+      theme: {
+        primary: "#00B4FF",
+      },
     },
+
     // TODO: add social login info here
   },
 });
 
+const chainConfig = {
+  chainNamespace: CHAIN_NAMESPACES.EIP155,
+  rpcTarget: chains[0].rpcUrls.default.http[0],
+  // rpcTarget: isTestnet()
+  //   ? `https://optimism-goerli.infura.io/v3/${process.env.VITE_INFURA_KEY}`
+  //   : `https://optimism-mainnet.infura.io/v3/${process.env.VITE_INFURA_KEY}`,
+  chainId: "0x" + chains[0].id.toString(16),
+  displayName: chains[0].name,
+  tickerName: chains[0].nativeCurrency?.name,
+  ticker: chains[0].nativeCurrency?.symbol,
+  blockExplorer: chains[0]?.blockExplorers.default?.url,
+};
+
+const metamaskAdapter = new MetamaskAdapter({
+  clientId: process.env.VITE_WEB3AUTH_CLIENT_ID,
+  sessionTime: 86400,
+  web3AuthNetwork: "cyan",
+  chainConfig,
+});
+
 interface Web3ContextType {
-  onLogin: () => Promise<void>;
-  onLogout: () => Promise<void>;
-  provider?: SafeEventEmitterProvider;
+  web3Auth?: Web3Auth;
 }
+
+const wagmiConfig = createConfig({
+  autoConnect: true,
+  publicClient,
+  webSocketPublicClient,
+  connectors: [
+    new InjectedConnector({
+      chains,
+      options: {
+        name: "Injected",
+        shimDisconnect: true,
+      },
+    }),
+  ],
+});
 
 export const Web3Context = createContext<Web3ContextType | null>(null);
 
-const connectedHandler: Web3AuthEventListener = (data) =>
-  console.log("CONNECTED", data);
-const disconnectedHandler: Web3AuthEventListener = (data) =>
-  console.log("DISCONNECTED", data);
-
 export const Web3Provider = ({ children }: { children?: ReactNode }) => {
-  const [web3AuthModalPack, setWeb3AuthModalPack] = useState<Web3AuthModalPack>(
-    new Web3AuthModalPack({
-      txServiceUrl: "https://safe-transaction-optimism.safe.global",
-    })
-  );
-  const [provider, setProvider] = useState<SafeEventEmitterProvider>();
+  const [web3Auth, setWeb3Auth] = useState<Web3Auth>();
 
   useEffect(() => {
-    web3AuthModalPack
-      .init({
-        options: {
-          clientId: process.env.VITE_WEB3AUTH_CLIENT_ID || "",
-          web3AuthNetwork: "cyan",
-          chainConfig: {
-            chainNamespace: CHAIN_NAMESPACES.EIP155,
-            chainId: "0xA",
-            rpcTarget: `https://optimism-mainnet.infura.io/v3/${process.env.VITE_INFURA_KEY}`,
-            displayName: "Optimism Mainnet",
-            blockExplorer: "https://optimistic.etherscan.io",
-            ticker: "OP",
-            tickerName: "OP",
-          },
-          uiConfig: {
-            // theme: "dark",
-            loginMethodsOrder: ["google", "email_passwordless"],
-          },
+    const init = async () => {
+      // @ts-ignore
+      const newWeb3Auth = new Web3Auth({
+        clientId: process.env.VITE_WEB3AUTH_CLIENT_ID || "",
+        web3AuthNetwork: "cyan",
+        chainConfig,
+        uiConfig: {
+          // theme: "dark",
+          loginMethodsOrder: ["google", "email_passwordless"],
         },
-        // @ts-ignore
-        adapters: [openloginAdapter],
-        modalConfig,
-      })
-      .then(() => {
-        web3AuthModalPack.subscribe(ADAPTER_EVENTS.CONNECTED, connectedHandler);
-
-        web3AuthModalPack.subscribe(
-          ADAPTER_EVENTS.DISCONNECTED,
-          disconnectedHandler
-        );
-
-        setWeb3AuthModalPack(web3AuthModalPack);
       });
+
+      newWeb3Auth.configureAdapter(metamaskAdapter);
+
+      setWeb3Auth(newWeb3Auth);
+
+      await newWeb3Auth.initModal();
+
+      // if (wagmiConfig.connectors.length === 1) {
+      //   wagmiConfig.setConnectors([
+      //     ...wagmiConfig.connectors,
+      //     new Web3AuthConnector({
+      //       chains,
+      //       options: {
+      //         web3AuthInstance: newWeb3Auth,
+      //       },
+      //     }),
+      //   ]);
+      // }
+
+      // console.log(wagmiConfig.connectors);
+    };
+
+    init().catch(console.error);
   }, []);
 
-  useEffect(() => {
-    if (web3AuthModalPack && web3AuthModalPack.getProvider()) {
-      void onLogin();
-    }
-  }, [web3AuthModalPack]);
-
-  const onLogin = async () => {
-    if (!web3AuthModalPack) return;
-
-    const signInInfo = await web3AuthModalPack.signIn();
-    console.log("SIGN IN RESPONSE: ", signInInfo);
-
-    const userInfo = await web3AuthModalPack.getUserInfo();
-    console.log("USER INFO: ", userInfo);
-
-    setProvider(web3AuthModalPack.getProvider() as SafeEventEmitterProvider);
-  };
-
-  const onLogout = async () => {
-    if (!web3AuthModalPack) return;
-
-    setProvider(undefined);
-    await web3AuthModalPack.signOut();
-  };
-
   return (
-    <Web3Context.Provider value={{ onLogin, onLogout, provider }}>
-      <WagmiConfig config={config}>{children}</WagmiConfig>
+    <Web3Context.Provider value={{ web3Auth }}>
+      <WagmiConfig config={wagmiConfig}>{children}</WagmiConfig>
     </Web3Context.Provider>
   );
 };
