@@ -102,19 +102,16 @@ export default function ProjectForm() {
       admin_address: "",
     },
   });
-
   const {
-    register,
     handleSubmit,
     watch,
+    control,
     formState: { errors },
   } = form;
-
   const fee = watch("edition_price");
 
   const { address } = useAccount();
   const { chain } = useNetwork();
-
   const { config } = usePrepareRadarEditionsCreateEdition({
     account: address,
     chainId: chain?.id,
@@ -135,6 +132,7 @@ export default function ProjectForm() {
     if (errors) {
       console.error(errors);
     }
+    
     write?.();
   }
 
@@ -193,7 +191,7 @@ export default function ProjectForm() {
             </div>
             <div className="w-1/2">
               <FormField
-                control={form.control}
+                control={control}
                 name="title"
                 render={({ field }) => (
                   <FormItem className="pb-4">
@@ -207,7 +205,7 @@ export default function ProjectForm() {
                 )}
               />
               <FormField
-                control={form.control}
+                control={control}
                 name="brief"
                 render={({ field }) => (
                   <FormItem>
@@ -240,7 +238,7 @@ export default function ProjectForm() {
             </div>
             <div className="w-1/2">
               <FormField
-                control={form.control}
+                control={control}
                 name="video_url"
                 render={({ field }) => (
                   <FormItem className="pb-4">
@@ -260,7 +258,7 @@ export default function ProjectForm() {
                 )}
               />
               <FormField
-                control={form.control}
+                control={control}
                 name="tldr"
                 render={({ field }) => (
                   <FormItem>
@@ -287,7 +285,7 @@ export default function ProjectForm() {
               </p>
             </div>
             <FormField
-              control={form.control}
+              control={control}
               name="tldr"
               render={({ field }) => (
                 <FormItem>
@@ -317,7 +315,7 @@ export default function ProjectForm() {
             </div>
             <div className="w-1/2">
               <FormField
-                control={form.control}
+                control={control}
                 name="brief"
                 render={({ field }) => (
                   <FormItem className="pb-4">
@@ -349,7 +347,7 @@ export default function ProjectForm() {
                 )}
               />
               <FormField
-                control={form.control}
+                control={control}
                 name="inspiration"
                 render={({ field }) => (
                   <FormItem>
@@ -400,7 +398,7 @@ export default function ProjectForm() {
             </div>
             <div className="w-1/2">
               <FormField
-                control={form.control}
+                control={control}
                 name="collaborators"
                 render={({ field }) => (
                   <FormItem>
@@ -477,7 +475,7 @@ export default function ProjectForm() {
             </div>
             <div className="w-1/2">
               <FormField
-                control={form.control}
+                control={control}
                 name="waitlist"
                 render={({ field }) => (
                   <FormItem className="flex items-center space-x-2">
@@ -519,7 +517,7 @@ export default function ProjectForm() {
             </div>
             <div className="w-1/2">
               <FormField
-                control={form.control}
+                control={control}
                 name="edition_price"
                 render={({ field }) => (
                   <FormItem className="pb-4">
@@ -535,7 +533,7 @@ export default function ProjectForm() {
                 )}
               />
               <FormField
-                control={form.control}
+                control={control}
                 name="mint_end_date"
                 render={({ field }) => (
                   <FormItem>
@@ -618,7 +616,7 @@ export default function ProjectForm() {
             </div>
             <div className="w-1/2">
               <FormField
-                control={form.control}
+                control={control}
                 name={`admin_address`}
                 render={({ field }) => (
                   <FormItem>
