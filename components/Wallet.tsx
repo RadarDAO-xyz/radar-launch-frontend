@@ -16,7 +16,6 @@ function authenticateUser({
   address?: string;
   appPubKey?: string;
 }) {
-  console.log("fetching", { idToken, isWalletLogin, address, appPubKey });
   return fetch(`${process.env.BACKEND_URL}/verify`, {
     method: "POST",
     headers: {
@@ -45,7 +44,8 @@ export function Wallet() {
   const [idToken, setIdToken] = useState("");
   const [appPubKey, setAppPubKey] = useState("");
 
-  const { data, error } = useQuery(
+  // backend auth
+  useQuery(
     ["login", isWalletLogin, idToken],
     () => authenticateUser({ idToken, isWalletLogin, address, appPubKey }),
     {
