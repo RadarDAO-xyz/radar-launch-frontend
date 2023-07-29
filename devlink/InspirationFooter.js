@@ -1,5 +1,6 @@
 import React from "react";
 import * as _Builtin from "./_Builtin";
+import Link from "next/link";
 
 export function InspirationFooter({ as: _Component = _Builtin.Section }) {
   return (
@@ -29,17 +30,17 @@ export function InspirationFooter({ as: _Component = _Builtin.Section }) {
               target: "_blank",
             }}
           >
-            <_Builtin.Block className="text-block-43" tag="div">
+            <Link className="text-block-43" tag="div" href="/brief">
               {"Find inspiration in our creative briefs "}
               <_Builtin.Span className="right-arrow">{"→"}</_Builtin.Span>
-            </_Builtin.Block>
+            </Link>
           </_Builtin.Link>
           <_Builtin.Block className="_10px-div" tag="div" />
           <_Builtin.Link
             className="text-link-arrow"
             button={false}
             options={{
-              href: "https://lu.ma/radarlaunch",
+              href: "https://lu.ma/radarcommunityevents",
               target: "_blank",
             }}
           >
