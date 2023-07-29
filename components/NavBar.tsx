@@ -2,7 +2,6 @@ import { _Builtin } from "@/devlink";
 import { Wallet } from "./Wallet";
 import { Button } from "./ui/button";
 import Link from "next/link";
-import dynamic from "next/dynamic";
 
 export function NavBar() {
   return (

@@ -8,6 +8,7 @@ export enum ProjectStatus {
 }
 
 export type Project = {
+  _id: string;
   title: string;
   video_url: string;
   tldr: string;
@@ -47,7 +48,7 @@ export type User = {
   wallet_address: string;
   email?: string;
   session_cookie: string;
-}
+};
 
 type Sponsor = {
   logo: string;

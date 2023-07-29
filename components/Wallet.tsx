@@ -1,5 +1,5 @@
 import { Web3AuthConnector } from "@web3auth/web3auth-wagmi-connector";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useAccount, useConnect, useDisconnect, useQuery } from "wagmi";
 import { Web3Context } from "./Web3Provider";
 import { Button } from "./ui/button";
@@ -57,6 +57,36 @@ export function Wallet() {
     }
   );
 
+  useEffect(() => {
+    if (address) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, [address]);
+
+  useEffect(() => {
+    (async () => {
+      if (isLoggedIn && web3Auth) {
+        const socialLoginUserInfo = await web3Auth?.getUserInfo();
+        // social login here
+        if (socialLoginUserInfo?.idToken) {
+          setIsWalletLoggedIn(false);
+          const app_scoped_privkey = await web3Auth.provider?.request({
+            method: "eth_private_key",
+          });
+          const app_pub_key = getPublicCompressed(
+            Buffer.from((app_scoped_privkey as string).padStart(64, "0"), "hex")
+          ).toString("hex");
+          setAppPubKey(app_pub_key);
+        } else {
+          setIsWalletLoggedIn(true);
+        }
+        setIdToken((await web3Auth.authenticateUser()).idToken);
+      }
+    })();
+  }, [isLoggedIn, setIdToken, web3Auth]);
+
   return (
     <Button
       onClick={async () => {
@@ -66,24 +96,7 @@ export function Wallet() {
             setIsLoggedIn(false);
           } else {
             await web3Auth?.connect();
-            const socialLoginUserInfo = await web3Auth.getUserInfo();
-            // social login here
-            if (socialLoginUserInfo?.idToken) {
-              setIsWalletLoggedIn(false);
-              const app_scoped_privkey = await web3Auth.provider?.request({
-                method: "eth_private_key",
-              });
-              const app_pub_key = getPublicCompressed(
-                Buffer.from(
-                  (app_scoped_privkey as string).padStart(64, "0"),
-                  "hex"
-                )
-              ).toString("hex");
-              setAppPubKey(app_pub_key);
-            } else {
-              setIsWalletLoggedIn(true);
-            }
-            setIdToken((await web3Auth.authenticateUser()).idToken);
+
             await connectAsync({
               connector: new Web3AuthConnector({
                 options: {

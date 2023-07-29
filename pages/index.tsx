@@ -5,22 +5,18 @@ import {
   InspirationFooter,
   VisionOfTheWeekProject,
 } from "@/devlink";
-import { Project, ProjectStatus } from "@/types/mongo";
-import { WithId } from "mongodb";
+import { useGetProjects } from "@/hooks/useGetProjects";
+import { ProjectStatus } from "@/types/mongo";
 import dynamic from "next/dynamic";
-import { useQuery } from "wagmi";
 
 const ProjectDivWithNoSSR = dynamic(
   () => import("@/components/ProjectDiv").then((res) => res.ProjectDiv),
   { ssr: false }
 );
 
-async function getProjects() {
-  return fetch(`${process.env.BACKEND_URL}/projects`).then((res) => res.json());
-}
-
 export default function HomePage() {
-  const { data } = useQuery<WithId<Project>[]>(["projects"], getProjects);
+  const { data } = useGetProjects();
+
   return (
     <div className="mt-[80px]">
       {/* <Banner /> */}
