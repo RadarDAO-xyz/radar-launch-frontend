@@ -76,9 +76,15 @@
     @apply bg-background text-foreground;
   }
 }
+
 h1 {
   font-size: 2rem;
 }
+
+h2 {
+  font-family: "Microgrammadot bolext";
+}
+
 .columns-27 img {
   width: 4rem;
 }

@@ -22,9 +22,9 @@ export function ProjectDiv({
     <section className="bg-white px-[5%] pt-12">
       <div className="title-block">
         {projectSectionTitle && (
-          <h1 className="heading-trending-launch-page">
+          <h2 className="heading-trending-launch-page">
             {projectSectionTitle}
-          </h1>
+          </h2>
         )}
         <div className="_10px-div" />
         {projectSectionDescription && (
