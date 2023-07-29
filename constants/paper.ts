@@ -1,2 +1,2 @@
-export const GOERLI_CONTRACT_ID = "9ea233d4-05a0-4641-980a-1f550c369b8d";
+export const GOERLI_CONTRACT_ID = "49234d94-5d7d-4094-8fe3-44bed9c0ecf4";
 export const MAINNET_CONTRACT_ID = "";

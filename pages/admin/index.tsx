@@ -1,12 +1,18 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useGetProjects } from "@/hooks/useGetProjects";
+import { useRadarEditionsGetEditions } from "@/lib/generated";
 import { MoveUpRight } from "lucide-react";
 import Link from "next/link";
 import { useAccount } from "wagmi";
 
 export default function IndividualProjectAdminPage() {
   const { address, status } = useAccount();
+  const { data: chainProjects } = useRadarEditionsGetEditions();
+  const { data: databaseProjects } = useGetProjects();
+
+  console.log(chainProjects, databaseProjects);
 
   if (status === "disconnected") {
     return (

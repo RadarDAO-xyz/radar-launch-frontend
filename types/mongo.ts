@@ -47,7 +47,7 @@ export type User = {
   wallet_address: string;
   email?: string;
   session_cookie: string;
-}
+};
 
 type Sponsor = {
   logo: string;
