@@ -4,6 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Form,
   FormControl,
   FormDescription,
@@ -26,11 +35,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
 import {
   GOERLI_CONTRACT_ADDRESS,
   MAINNET_CONTRACT_ADDRESS,
 } from "@/constants/address";
-import { SubmissionReadytoSubmit } from "@/devlink/SubmissionReadytoSubmit";
 import {
   usePrepareRadarEditionsCreateEdition,
   useRadarEditionsCreateEdition,
@@ -41,14 +51,44 @@ import { Brief } from "@/types/mongo";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
+import Link from "next/link";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useAccount, useNetwork, useWaitForTransaction } from "wagmi";
+import { useAccount, useNetwork, useQuery, useWaitForTransaction } from "wagmi";
 import * as z from "zod";
 import { TeamFields } from "../../components/TeamFields";
-import { useEffect } from "react";
-import { useToast } from "@/components/ui/use-toast";
-import { ToastAction } from "@/components/ui/toast";
-import Link from "next/link";
+import { useRouter } from "next/router";
+import { CheckoutWithCard } from "@paperxyz/react-client-sdk";
+import { GOERLI_CONTRACT_ID, MAINNET_CONTRACT_ID } from "@/constants/paper";
+import { etherUnits } from "viem";
+
+function createProject() {
+  return fetch(`${process.env.BACKEND_URL}/project`, {
+    method: "POST",
+    headers: {},
+    body: JSON.stringify({}),
+  }).then((res) => res.json());
+}
+
+async function getCheckoutLink(fee: number, address?: string): Promise<string> {
+  try {
+    const result = await fetch(`/api/get-checkout-link`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fee,
+        address,
+      }),
+    }).then((res) => res.json());
+
+    return result.checkoutLinkIntentUrl;
+  } catch (e) {
+    console.error(e);
+    return "";
+  }
+}
 
 const formSchema = z.object({
   title: z.string(),
@@ -109,6 +149,17 @@ export default function ProjectForm() {
     formState: { errors },
   } = form;
   const fee = watch("edition_price");
+  const admin_address = watch("admin_address");
+
+  const { data: submitProjectData } = useQuery(["submit-project"], () =>
+    createProject()
+  );
+
+  const { data: checkoutLink, isLoading } = useQuery(
+    ["checkout-link", fee, admin_address],
+    () => getCheckoutLink(fee, admin_address),
+    { enabled: fee > 0 }
+  );
 
   const { address } = useAccount();
   const { chain } = useNetwork();
@@ -116,14 +167,15 @@ export default function ProjectForm() {
     account: address,
     chainId: chain?.id,
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
-    args: [BigInt(fee)],
-    enabled: Boolean(chain) && fee > 0,
+    args: [BigInt(fee), address!],
+    enabled: Boolean(chain) && fee > 0 && address !== undefined,
   });
   const { data, write } = useRadarEditionsCreateEdition(config);
   const { data: txReceipt, isSuccess } = useWaitForTransaction({
     hash: data?.hash,
     enabled: Boolean(data?.hash),
   });
+  const router = useRouter();
 
   const { toast } = useToast();
 
@@ -133,7 +185,13 @@ export default function ProjectForm() {
       console.error(errors);
     }
 
-    write?.();
+    // create project in DB
+
+    // redirect user to paper link
+    toast({
+      title: "Redirecting you to create a project...",
+    });
+    // write?.();
   }
 
   useEffect(() => {
@@ -166,6 +224,7 @@ export default function ProjectForm() {
   return (
     <Form {...form}>
       <form
+        id="create-project"
         onSubmit={handleSubmit(onSubmit)}
         className="max-w-4xl mx-auto mt-40"
       >
@@ -286,7 +345,7 @@ export default function ProjectForm() {
             </div>
             <FormField
               control={control}
-              name="tldr"
+              name="video_url"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
@@ -680,10 +739,25 @@ export default function ProjectForm() {
           </div>
         </div>
 
-        <div className="w-full px-16 pb-20">
-          <Button className="w-full" type="submit">
-            Submit
-          </Button>
+        <div className="flex space-x-2 px-16 pb-20">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="w-full">Submit</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Create Project</DialogTitle>
+                <DialogDescription>
+                  You will be redirected to a separate website to make payments.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <Button className="w-full" asChild disabled={isLoading}>
+                  <Link href={checkoutLink || "/"}>Pay with Paper</Link>
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       </form>
     </Form>
