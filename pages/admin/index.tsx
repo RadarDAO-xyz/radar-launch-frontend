@@ -3,12 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MoveUpRight } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
 
 export default function IndividualProjectAdminPage() {
   const { address, status } = useAccount();
-  const router = useRouter();
 
   if (status === "disconnected") {
     return (
@@ -51,7 +49,7 @@ export default function IndividualProjectAdminPage() {
 
       <div className="mt-8">
         <Tabs defaultValue="your-visions">
-          <TabsList className="grid w-full grid-cols-6 gap-4 mx-auto mb-6">
+          <TabsList className="justify-start w-full gap-4 mx-auto mb-6">
             <TabsTrigger
               // className="data-[state=active]:no-underline data-[state=active]:bg-gray-200 bg-gray-100 rounded font-normal"
               value="your-visions"
