@@ -68,7 +68,7 @@ export function Wallet() {
   useEffect(() => {
     (async () => {
       if (isLoggedIn && web3Auth) {
-        const socialLoginUserInfo = await web3Auth.getUserInfo();
+        const socialLoginUserInfo = await web3Auth?.getUserInfo();
         // social login here
         if (socialLoginUserInfo?.idToken) {
           setIsWalletLoggedIn(false);

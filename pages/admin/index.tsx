@@ -1,3 +1,4 @@
+import { YourVisions } from "@/components/YourVisions";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -8,22 +9,44 @@ import {
 import { useGetProjects } from "@/hooks/useGetProjects";
 import { useRadarEditionsGetEditions } from "@/lib/generated";
 import isTestnet from "@/lib/utils/isTestnet";
+import { Project } from "@/types/mongo";
 import { MoveUpRight } from "lucide-react";
 import Link from "next/link";
 import { useAccount, useNetwork } from "wagmi";
 
+interface OnChainProject {
+  status: number;
+  fee: bigint;
+  balance: bigint;
+  owner: `0x${string}`;
+  id: string;
+}
+
+function transformProjects(
+  databaseProjects?: Project[],
+  chainProjects?: OnChainProject[]
+) {
+  if (!databaseProjects || !chainProjects) {
+    return [];
+  }
+  const projectIds = new Set(
+    // filter for "" ids
+    chainProjects.map((project) => project.id).filter(Boolean)
+  );
+
+  return databaseProjects.filter((project) => projectIds.has(project._id));
+}
+
 export default function IndividualProjectAdminPage() {
   const { address, status } = useAccount();
   const { chain } = useNetwork();
-  const { data: chainProjects } = useRadarEditionsGetEditions({
+  const { data: onChainProjects } = useRadarEditionsGetEditions({
     account: address,
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
     chainId: chain?.id,
     enabled: Boolean(chain),
   });
   const { data: databaseProjects } = useGetProjects();
-
-  console.log({ chainProjects, databaseProjects });
 
   if (status === "disconnected") {
     return (
@@ -80,9 +103,13 @@ export default function IndividualProjectAdminPage() {
               Collected Visions
             </TabsTrigger>
           </TabsList>
-          <TabsContent value="your-visions" className="border rounded-lg p-8">
-            <h2 className="text-2xl">Active Visions</h2>
-            <div></div>
+          <TabsContent value="your-visions">
+            <YourVisions
+              projects={transformProjects(
+                databaseProjects,
+                onChainProjects as OnChainProject[]
+              )}
+            />
           </TabsContent>
           <TabsContent value="collected-visions"></TabsContent>
         </Tabs>

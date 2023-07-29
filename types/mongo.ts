@@ -8,6 +8,7 @@ export enum ProjectStatus {
 }
 
 export type Project = {
+  _id: string;
   title: string;
   video_url: string;
   tldr: string;
