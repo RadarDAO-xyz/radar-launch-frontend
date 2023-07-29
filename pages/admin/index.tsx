@@ -1,3 +1,4 @@
+import { CollectedVisions } from "@/components/CollectedVisions";
 import { YourVisions } from "@/components/YourVisions";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -7,14 +8,17 @@ import {
   MAINNET_CONTRACT_ADDRESS,
 } from "@/constants/address";
 import { useGetProjects } from "@/hooks/useGetProjects";
-import { useRadarEditionsGetEditions } from "@/lib/generated";
+import {
+  useRadarEditionsGetBalances,
+  useRadarEditionsGetEditions,
+} from "@/lib/generated";
 import isTestnet from "@/lib/utils/isTestnet";
 import { Project } from "@/types/mongo";
 import { MoveUpRight } from "lucide-react";
 import Link from "next/link";
 import { useAccount, useNetwork } from "wagmi";
 
-interface OnChainProject {
+export interface OnChainProject {
   status: number;
   fee: bigint;
   balance: bigint;
@@ -22,11 +26,20 @@ interface OnChainProject {
   id: string;
 }
 
+export interface ProjectIdWithBalance {
+  id: string;
+  amount: bigint;
+}
+
 export interface ProjectWithBalance extends Project {
   balance: bigint;
 }
 
-function transformProjects(
+export interface ProjectWithOwnedAmount extends Project {
+  ownedAmount: bigint;
+}
+
+function transformYourVisionsProjects(
   databaseProjects?: Project[],
   chainProjects?: OnChainProject[]
 ): ProjectWithBalance[] {
@@ -48,7 +61,28 @@ function transformProjects(
     .map((project) => ({ ...project, balance: projectBalances[project._id] }));
 }
 
-export default function IndividualProjectAdminPage() {
+function transformCollectionVisionsProject(
+  databaseProjects?: Project[],
+  chainBalances?: ProjectIdWithBalance[]
+): ProjectWithOwnedAmount[] {
+  if (!databaseProjects || !chainBalances) {
+    return [];
+  }
+
+  const projectBalances: Record<string, bigint> = {};
+  chainBalances.forEach((balance) => {
+    projectBalances[balance.id] = balance.amount;
+  });
+
+  return databaseProjects
+    .filter((project) => projectBalances[project._id] > 0n)
+    .map((project) => ({
+      ...project,
+      ownedAmount: projectBalances[project._id],
+    }));
+}
+
+export default function AdminPage() {
   const { address, status } = useAccount();
   const { chain } = useNetwork();
   const { data: onChainProjects } = useRadarEditionsGetEditions({
@@ -56,6 +90,13 @@ export default function IndividualProjectAdminPage() {
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
     chainId: chain?.id,
     enabled: Boolean(chain),
+  });
+  const { data: ownedOnChainProjects } = useRadarEditionsGetBalances({
+    account: address,
+    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    chainId: chain?.id,
+    args: [address!],
+    enabled: Boolean(chain) && Boolean(address),
   });
   const { data: databaseProjects } = useGetProjects();
 
@@ -116,14 +157,27 @@ export default function IndividualProjectAdminPage() {
           </TabsList>
           <TabsContent value="your-visions">
             <YourVisions
-              projects={transformProjects(
+              projects={transformYourVisionsProjects(
                 databaseProjects,
                 onChainProjects as OnChainProject[]
               )}
             />
           </TabsContent>
-          <TabsContent value="collected-visions"></TabsContent>
+          <TabsContent value="collected-visions">
+            <CollectedVisions
+              projects={transformCollectionVisionsProject(
+                databaseProjects,
+                ownedOnChainProjects as ProjectIdWithBalance[]
+              )}
+            />
+          </TabsContent>
         </Tabs>
+        <div className="py-20 text-center">
+          <p className="text-2xl pb-4">Nothing to see here yet...</p>
+          <Link href="/project" className="underline">
+            Be inspired
+          </Link>
+        </div>
       </div>
     </div>
   );

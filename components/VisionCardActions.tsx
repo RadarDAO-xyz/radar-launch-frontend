@@ -28,7 +28,8 @@ export function VisionCardActions({ status }: Project) {
             Supporters List
           </Button>
         )}
-      {status === ProjectStatus.LIVE && <Button>Update</Button>}
+      {status === ProjectStatus.LIVE ||
+        (status === ProjectStatus.BUILDING && <Button>Update</Button>)}
       {status === ProjectStatus.REJECTED && (
         <Button>Submit another vision</Button>
       )}
