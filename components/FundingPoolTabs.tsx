@@ -14,19 +14,19 @@ export function FundingPoolTabs() {
         <Tabs defaultValue="why-funding-pools">
           <TabsList className="grid w-full grid-cols-3 gap-4 max-w-2xl mx-auto mb-6">
             <TabsTrigger
-              className="data-[state=active]:no-underline data-[state=active]:bg-gray-200 bg-gray-100 rounded font-normal"
+              className="data-[state=active]:no-underline data-[state=active]:bg-gray-200 bg-gray-100 rounded font-normal border-b-0"
               value="why-funding-pools"
             >
               Why funding pools
             </TabsTrigger>
             <TabsTrigger
-              className="data-[state=active]:no-underline data-[state=active]:bg-gray-200 bg-gray-100 rounded font-normal"
+              className="data-[state=active]:no-underline data-[state=active]:bg-gray-200 bg-gray-100 rounded font-normal border-b-0"
               value="getting-funded"
             >
               Getting funded
             </TabsTrigger>
             <TabsTrigger
-              className="data-[state=active]:no-underline data-[state=active]:bg-gray-200 bg-gray-100 rounded font-normal"
+              className="data-[state=active]:no-underline data-[state=active]:bg-gray-200 bg-gray-100 rounded font-normal border-b-0"
               value="creating-pool"
             >
               Creating a pool

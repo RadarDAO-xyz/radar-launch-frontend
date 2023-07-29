@@ -44,7 +44,7 @@ import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useAccount, useMutation, useNetwork, useQuery } from "wagmi";
 import * as z from "zod";
-import { TeamFields } from "../../components/TeamFields";
+import { TeamFields } from "../../../components/TeamFields";
 import {
   TooltipProvider,
   Tooltip,
@@ -52,8 +52,9 @@ import {
   TooltipContent,
 } from "@/components/ui/tooltip";
 import { useRouter } from "next/router";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "@/components/AuthProvider";
+import { isAddress } from "viem";
 
 async function createProject(
   idToken: string,
@@ -70,7 +71,11 @@ async function createProject(
   return await res.json();
 }
 
-async function getCheckoutLink(fee: number, address?: string): Promise<string> {
+async function getCheckoutLink(
+  fee: number,
+  address: string,
+  id: string
+): Promise<string> {
   try {
     const result = await fetch(`/api/get-checkout-link`, {
       method: "POST",
@@ -80,14 +85,17 @@ async function getCheckoutLink(fee: number, address?: string): Promise<string> {
       body: JSON.stringify({
         fee,
         address,
+        id,
       }),
     }).then((res) => res.json());
 
-    return result.checkoutLinkIntentUrl;
+    if ("checkoutLinkIntentUrl" in result) {
+      return result.checkoutLinkIntentUrl;
+    }
   } catch (e) {
     console.error(e);
-    return "";
   }
+  return "";
 }
 
 const formSchema = z.object({
@@ -131,7 +139,10 @@ const formSchema = z.object({
       text: z.string(),
     })
   ),
-  admin_address: z.string().min(1, { message: "Admin address is required" }),
+  admin_address: z
+    .string()
+    .min(1, { message: "Admin address is required" })
+    .refine(isAddress, { message: "Invalid address" }),
 });
 
 export default function ProjectForm() {
@@ -155,6 +166,7 @@ export default function ProjectForm() {
       edition_price: 0,
       mint_end_date: new Date(),
       benefits: [],
+      // @ts-expect-error "" is not of type Address
       admin_address: address || "",
     },
   });
@@ -162,20 +174,25 @@ export default function ProjectForm() {
     handleSubmit,
     watch,
     control,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isDirty },
   } = form;
   const fee = watch("edition_price");
   const admin_address = watch("admin_address");
 
-  const { mutateAsync, isLoading: isSubmitLoading } = useMutation(
-    ["submit-project"],
-    () => createProject(idToken, form.getValues())
+  const {
+    data: createProjectData,
+    mutateAsync,
+    isLoading: isSubmitLoading,
+    isSuccess: isSubmitSuccess,
+  } = useMutation(["submit-project"], () =>
+    createProject(idToken, form.getValues())
   );
   const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
-    ["checkout-link", fee, admin_address],
-    () => getCheckoutLink(fee, admin_address)
+    ["checkout-link", fee, createProjectData?._id, admin_address],
+    () => getCheckoutLink(fee, admin_address, createProjectData._id),
+    { enabled: Boolean(createProjectData?._id) }
   );
-
+  console.log({ checkoutLink, createProjectData });
   const router = useRouter();
   const { toast } = useToast();
 
@@ -186,18 +203,7 @@ export default function ProjectForm() {
     }
 
     try {
-      if (!checkoutLink) {
-        throw new Error("Checkout link not found");
-      }
-      // create project in DB
       await mutateAsync();
-      // push to external payment
-      toast({
-        title: "Redirecting to Paper...",
-      });
-      setTimeout(() => {
-        router.push(checkoutLink);
-      }, 1000);
     } catch (e) {
       console.error(e);
       toast({
@@ -207,6 +213,17 @@ export default function ProjectForm() {
       });
     }
   }
+
+  useEffect(() => {
+    if (isSubmitSuccess && createProjectData && checkoutLink) {
+      toast({
+        title: "Redirecting to Paper for payment...",
+      });
+      setTimeout(() => {
+        router.push(checkoutLink);
+      }, 2000);
+    }
+  }, [isSubmitSuccess, createProjectData, toast, router, checkoutLink]);
 
   return (
     <Form {...form}>
@@ -382,11 +399,6 @@ export default function ProjectForm() {
                         ))}
                       </SelectContent>
                     </Select>
-                    <FormDescription>
-                      {
-                        "Chose 'other' if you've been inspired by A More Play-Full Future outside of the briefs"
-                      }
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -734,7 +746,7 @@ export default function ProjectForm() {
                     <DialogTrigger asChild>
                       <Button
                         className="w-full"
-                        disabled={!isValid || !idToken}
+                        disabled={!isValid || !isDirty || !idToken}
                       >
                         Submit
                       </Button>
