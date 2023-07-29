@@ -15,9 +15,6 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
 );
 
 const openloginAdapter = new OpenloginAdapter({
-  loginSettings: {
-    mfaLevel: "mandatory",
-  },
   adapterSettings: {
     uxMode: "popup",
     whiteLabel: {
@@ -31,7 +28,7 @@ const openloginAdapter = new OpenloginAdapter({
         primary: "#00B4FF",
       },
     },
-
+    network: isTestnet() ? "testnet" : "cyan",
     // TODO: add social login info here
   },
 });
@@ -52,7 +49,7 @@ const chainConfig = {
 const metamaskAdapter = new MetamaskAdapter({
   clientId: process.env.VITE_WEB3AUTH_CLIENT_ID,
   sessionTime: 86400,
-  web3AuthNetwork: "cyan",
+  web3AuthNetwork: isTestnet() ? "testnet" : "cyan",
   chainConfig,
 });
 
@@ -93,25 +90,13 @@ export const Web3Provider = ({ children }: { children?: ReactNode }) => {
         },
       });
 
+      newWeb3Auth.configureAdapter(openloginAdapter);
+
       newWeb3Auth.configureAdapter(metamaskAdapter);
 
       setWeb3Auth(newWeb3Auth);
 
       await newWeb3Auth.initModal();
-
-      // if (wagmiConfig.connectors.length === 1) {
-      //   wagmiConfig.setConnectors([
-      //     ...wagmiConfig.connectors,
-      //     new Web3AuthConnector({
-      //       chains,
-      //       options: {
-      //         web3AuthInstance: newWeb3Auth,
-      //       },
-      //     }),
-      //   ]);
-      // }
-
-      // console.log(wagmiConfig.connectors);
     };
 
     init().catch(console.error);
