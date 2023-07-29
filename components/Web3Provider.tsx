@@ -29,7 +29,6 @@ const openloginAdapter = new OpenloginAdapter({
       },
     },
     network: isTestnet() ? "testnet" : "cyan",
-    // TODO: add social login info here
   },
 });
 

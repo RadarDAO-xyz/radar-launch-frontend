@@ -41,9 +41,8 @@ import { Brief } from "@/types/mongo";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { useAccount, useNetwork, useQuery } from "wagmi";
+import { useAccount, useMutation, useNetwork, useQuery } from "wagmi";
 import * as z from "zod";
 import { TeamFields } from "../../components/TeamFields";
 import {
@@ -52,13 +51,23 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from "@/components/ui/tooltip";
+import { useRouter } from "next/router";
+import { useContext } from "react";
+import { AuthContext } from "@/components/AuthProvider";
 
-function createProject() {
-  return fetch(`${process.env.BACKEND_URL}/project`, {
+async function createProject(
+  idToken: string,
+  values: z.infer<typeof formSchema>
+) {
+  const res = await fetch(`${process.env.BACKEND_URL}/projects`, {
     method: "POST",
-    headers: {},
-    body: JSON.stringify({}),
-  }).then((res) => res.json());
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${idToken}`,
+    },
+    body: JSON.stringify(values),
+  });
+  return await res.json();
 }
 
 async function getCheckoutLink(fee: number, address?: string): Promise<string> {
@@ -83,6 +92,7 @@ async function getCheckoutLink(fee: number, address?: string): Promise<string> {
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
+  description: z.string().min(1, { message: "Description is required" }),
   video_url: z
     .string()
     .url({ message: "Please enter a valid URL" })
@@ -126,6 +136,7 @@ const formSchema = z.object({
 
 export default function ProjectForm() {
   const { address } = useAccount();
+  const { idToken } = useContext(AuthContext);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -151,37 +162,50 @@ export default function ProjectForm() {
     handleSubmit,
     watch,
     control,
-    formState: { errors, isDirty, isValid, dirtyFields },
+    formState: { errors, isValid },
   } = form;
   const fee = watch("edition_price");
   const admin_address = watch("admin_address");
 
-  console.log({ errors, dirtyFields });
-
-  const { data: submitProjectData } = useQuery(["submit-project"], () =>
-    createProject()
+  const { mutateAsync, isLoading: isSubmitLoading } = useMutation(
+    ["submit-project"],
+    () => createProject(idToken, form.getValues())
   );
-
-  const { data: checkoutLink, isLoading } = useQuery(
+  const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
     ["checkout-link", fee, admin_address],
-    () => getCheckoutLink(fee, admin_address),
-    { enabled: fee > 0 }
+    () => getCheckoutLink(fee, admin_address)
   );
 
-  const { chain } = useNetwork();
-
+  const router = useRouter();
   const { toast } = useToast();
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // print form errors
     if (errors) {
       console.error(errors);
     }
 
-    // create project in DB
-
-    // redirect user to paper link
-    // write?.();
+    try {
+      if (!checkoutLink) {
+        throw new Error("Checkout link not found");
+      }
+      // create project in DB
+      await mutateAsync();
+      // push to external payment
+      toast({
+        title: "Redirecting to Paper...",
+      });
+      setTimeout(() => {
+        router.push(checkoutLink);
+      }, 1000);
+    } catch (e) {
+      console.error(e);
+      toast({
+        variant: "destructive",
+        title: "An unexpected error occured",
+        description: "Check the console for more information",
+      });
+    }
   }
 
   return (
@@ -221,14 +245,13 @@ export default function ProjectForm() {
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
-                    <FormDescription></FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <FormField
                 control={control}
-                name="brief"
+                name="description"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Describe your idea in a sentence</FormLabel>
@@ -284,7 +307,7 @@ export default function ProjectForm() {
                 name="tldr"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Describe your idea in a sentence</FormLabel>
+                    <FormLabel>Project TLDR</FormLabel>
                     <FormControl>
                       <Textarea {...field} />
                     </FormControl>
@@ -706,15 +729,24 @@ export default function ProjectForm() {
           <Dialog>
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger className="w-full">
-                  <DialogTrigger asChild>
-                    <Button className="w-full" disabled={!isValid}>
-                      Submit
-                    </Button>
-                  </DialogTrigger>
+                <TooltipTrigger asChild className="w-full">
+                  <div>
+                    <DialogTrigger asChild>
+                      <Button
+                        className="w-full"
+                        disabled={!isValid || !idToken}
+                      >
+                        Submit
+                      </Button>
+                    </DialogTrigger>
+                  </div>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Please check if you have missed any fields</p>
+                  {!idToken ? (
+                    <p>{"Please make sure you're logged in!"}</p>
+                  ) : (
+                    <p>Please check if you have missed any fields</p>
+                  )}
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -726,8 +758,13 @@ export default function ProjectForm() {
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter>
-                <Button className="w-full" asChild disabled={isLoading}>
-                  <Link href={checkoutLink || "/"}>Pay with Paper</Link>
+                <Button
+                  className="w-full"
+                  disabled={isSubmitLoading || isCheckoutLinkLoading}
+                  type="submit"
+                  form="create-project"
+                >
+                  Pay with Paper
                 </Button>
               </DialogFooter>
             </DialogContent>

@@ -4,6 +4,7 @@ import { useAccount, useConnect, useDisconnect, useQuery } from "wagmi";
 import { Web3Context } from "./Web3Provider";
 import { Button } from "./ui/button";
 import { getPublicCompressed } from "@toruslabs/eccrypto";
+import { AuthContext } from "./AuthProvider";
 
 function authenticateUser({
   idToken,
@@ -39,9 +40,9 @@ export function Wallet() {
   const { web3Auth } = useContext(Web3Context) ?? {};
   const { address } = useAccount();
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { idToken, setIdToken } = useContext(AuthContext);
+  const [isLoggedIn, setIsLoggedIn] = useState(address !== undefined);
   const [isWalletLogin, setIsWalletLoggedIn] = useState(false);
-  const [idToken, setIdToken] = useState("");
   const [appPubKey, setAppPubKey] = useState("");
 
   // backend auth

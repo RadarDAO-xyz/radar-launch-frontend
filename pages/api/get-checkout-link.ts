@@ -17,7 +17,6 @@ export default async function handler(
   }
   try {
     const { fee, address } = req.body;
-    console.log("hello", { fee, address });
 
     const options = {
       method: "POST",
@@ -40,7 +39,7 @@ export default async function handler(
         metadata: {},
         mintMethod: {
           name: "createEdition",
-          args: { owner: address || "$WALLET", fee },
+          args: { owner: "$WALLET", fee },
           payment: { currency: "ETH", value: "0" },
         },
         // contractArgs: "string",

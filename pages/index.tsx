@@ -20,10 +20,7 @@ async function getProjects() {
 }
 
 export default function HomePage() {
-  const { data, error } = useQuery<WithId<Project>[]>(
-    ["projects"],
-    getProjects
-  );
+  const { data } = useQuery<WithId<Project>[]>(["projects"], getProjects);
   return (
     <div className="mt-[80px]">
       {/* <Banner /> */}
