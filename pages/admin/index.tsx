@@ -22,19 +22,30 @@ interface OnChainProject {
   id: string;
 }
 
+export interface ProjectWithBalance extends Project {
+  balance: bigint;
+}
+
 function transformProjects(
   databaseProjects?: Project[],
   chainProjects?: OnChainProject[]
-) {
+): ProjectWithBalance[] {
   if (!databaseProjects || !chainProjects) {
     return [];
   }
+
   const projectIds = new Set(
     // filter for "" ids
     chainProjects.map((project) => project.id).filter(Boolean)
   );
+  const projectBalances: Record<string, bigint> = {};
+  chainProjects.forEach((project) => {
+    projectBalances[project.id] = project.balance;
+  });
 
-  return databaseProjects.filter((project) => projectIds.has(project._id));
+  return databaseProjects
+    .filter((project) => projectIds.has(project._id))
+    .map((project) => ({ ...project, balance: projectBalances[project._id] }));
 }
 
 export default function IndividualProjectAdminPage() {

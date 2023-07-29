@@ -1,8 +1,9 @@
-import { Project, ProjectStatus } from "@/types/mongo";
-import { Badge } from "./ui/badge";
 import { cn } from "@/lib/utils";
+import { Project, ProjectStatus } from "@/types/mongo";
 import { VisionCardActions } from "./VisionCardActions";
-import { title } from "process";
+import { Badge } from "./ui/badge";
+import { ProjectWithBalance } from "@/pages/admin";
+import { formatEther } from "viem";
 
 function convertStatusName(status: ProjectStatus) {
   switch (status) {
@@ -42,8 +43,8 @@ function convertStatusToColour(status: ProjectStatus) {
   }
 }
 
-export function VisionCard(props: Project) {
-  const { _id, status, video_url, title } = props;
+export function VisionCard(props: ProjectWithBalance) {
+  const { _id, status, video_url, title, collaborators, balance } = props;
   return (
     <div className="p-2 col-span-1">
       <div className="flex justify-between items-center pb-2">
@@ -68,7 +69,7 @@ export function VisionCard(props: Project) {
             Funding Raised
           </div>
           <div className="col-span-1 border border-l-0 rounded-lg rounded-l-none p-3">
-            0 ETH
+            {formatEther(balance)} ETH
           </div>
         </div>
         <div className="grid grid-cols-3">
