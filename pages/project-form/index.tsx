@@ -382,11 +382,6 @@ export default function ProjectForm() {
                         ))}
                       </SelectContent>
                     </Select>
-                    <FormDescription>
-                      {
-                        "Chose 'other' if you've been inspired by A More Play-Full Future outside of the briefs"
-                      }
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
