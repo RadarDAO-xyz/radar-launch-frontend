@@ -35,32 +35,23 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
-import {
-  GOERLI_CONTRACT_ADDRESS,
-  MAINNET_CONTRACT_ADDRESS,
-} from "@/constants/address";
-import {
-  usePrepareRadarEditionsCreateEdition,
-  useRadarEditionsCreateEdition,
-} from "@/lib/generated";
 import { cn } from "@/lib/utils";
-import isTestnet from "@/lib/utils/isTestnet";
 import { Brief } from "@/types/mongo";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import Link from "next/link";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useAccount, useNetwork, useQuery, useWaitForTransaction } from "wagmi";
+import { useAccount, useNetwork, useQuery } from "wagmi";
 import * as z from "zod";
 import { TeamFields } from "../../components/TeamFields";
-import { useRouter } from "next/router";
-import { CheckoutWithCard } from "@paperxyz/react-client-sdk";
-import { GOERLI_CONTRACT_ID, MAINNET_CONTRACT_ID } from "@/constants/paper";
-import { etherUnits } from "viem";
+import {
+  TooltipProvider,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 
 function createProject() {
   return fetch(`${process.env.BACKEND_URL}/project`, {
@@ -91,16 +82,23 @@ async function getCheckoutLink(fee: number, address?: string): Promise<string> {
 }
 
 const formSchema = z.object({
-  title: z.string(),
-  video_url: z.string(),
-  tldr: z.string(),
-  brief: z.string(),
-  inspiration: z.string(),
+  title: z.string().min(1, { message: "Title is required" }),
+  video_url: z
+    .string()
+    .url({ message: "Please enter a valid URL" })
+    .min(1, { message: "Video URL is required" }),
+  tldr: z.string().min(1, { message: "Brief description is required" }),
+  video_image: z.string(),
+  brief: z.string().min(1, { message: "Brief is required" }),
+  inspiration: z.string().min(1, { message: "Inspiration is required" }),
   team: z.array(
     z.object({
-      name: z.string(),
-      bio: z.string(),
-      email: z.string(),
+      name: z.string().min(1, { message: "Name is required" }),
+      bio: z.string().min(1, { message: "Bio is required" }),
+      email: z
+        .string()
+        .email({ message: "Please enter a valid email" })
+        .min(1, { message: "Email is required" }),
     })
   ),
   collaborators: z.string(),
@@ -108,21 +106,27 @@ const formSchema = z.object({
   milestones: z.array(
     z.object({
       amount: z.coerce.number(),
+      // .min(0, { message: "Amount is required" }),
       text: z.string(),
+      // .min(1, { message: "Milestone description is required" }),
     })
   ),
   edition_price: z.coerce.number(),
-  mint_end_date: z.date(),
+  mint_end_date: z.date().min(new Date(), {
+    message: "Must end later than today",
+  }),
   benefits: z.array(
     z.object({
       amount: z.coerce.number(),
       text: z.string(),
     })
   ),
-  admin_address: z.string(),
+  admin_address: z.string().min(1, { message: "Admin address is required" }),
 });
 
 export default function ProjectForm() {
+  const { address } = useAccount();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: "onBlur",
@@ -131,6 +135,7 @@ export default function ProjectForm() {
       video_url: "",
       tldr: "",
       brief: "",
+      video_image: "",
       inspiration: "",
       team: [],
       collaborators: "",
@@ -139,17 +144,19 @@ export default function ProjectForm() {
       edition_price: 0,
       mint_end_date: new Date(),
       benefits: [],
-      admin_address: "",
+      admin_address: address || "",
     },
   });
   const {
     handleSubmit,
     watch,
     control,
-    formState: { errors },
+    formState: { errors, isDirty, isValid, dirtyFields },
   } = form;
   const fee = watch("edition_price");
   const admin_address = watch("admin_address");
+
+  console.log({ errors, dirtyFields });
 
   const { data: submitProjectData } = useQuery(["submit-project"], () =>
     createProject()
@@ -161,21 +168,7 @@ export default function ProjectForm() {
     { enabled: fee > 0 }
   );
 
-  const { address } = useAccount();
   const { chain } = useNetwork();
-  const { config } = usePrepareRadarEditionsCreateEdition({
-    account: address,
-    chainId: chain?.id,
-    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
-    args: [BigInt(fee), address!],
-    enabled: Boolean(chain) && fee > 0 && address !== undefined,
-  });
-  const { data, write } = useRadarEditionsCreateEdition(config);
-  const { data: txReceipt, isSuccess } = useWaitForTransaction({
-    hash: data?.hash,
-    enabled: Boolean(data?.hash),
-  });
-  const router = useRouter();
 
   const { toast } = useToast();
 
@@ -188,38 +181,8 @@ export default function ProjectForm() {
     // create project in DB
 
     // redirect user to paper link
-    toast({
-      title: "Redirecting you to create a project...",
-    });
     // write?.();
   }
-
-  useEffect(() => {
-    if (data?.hash && chain) {
-      toast({
-        title: "Project submitted, awaiting confirmation",
-        description: `Transaction hash: ${data.hash}`,
-        action: (
-          <ToastAction altText="View on explorer">
-            <Link
-              href={`${chain.blockExplorers?.default.url}/tx/${data.hash}`}
-              target="_blank"
-            >
-              View Transaction
-            </Link>
-          </ToastAction>
-        ),
-      });
-    }
-  }, [data?.hash]);
-
-  useEffect(() => {
-    if (isSuccess && txReceipt?.transactionHash) {
-      toast({
-        title: "Project successfully submitted!",
-      });
-    }
-  }, [isSuccess]);
 
   return (
     <Form {...form}>
@@ -345,14 +308,14 @@ export default function ProjectForm() {
             </div>
             <FormField
               control={control}
-              name="video_url"
+              name="video_image"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
                     <Input
                       type="file"
                       className="h-full"
-                      accept="video/mp4,video/x-m4v,video/*"
+                      accept="image/*"
                       {...field}
                     />
                   </FormControl>
@@ -589,8 +552,8 @@ export default function ProjectForm() {
                         <Input type="number" {...field} />
                       </FormControl>
                       <p>$USD</p>
+                      <FormMessage />
                     </div>
-                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -741,9 +704,20 @@ export default function ProjectForm() {
 
         <div className="flex space-x-2 px-16 pb-20">
           <Dialog>
-            <DialogTrigger asChild>
-              <Button className="w-full">Submit</Button>
-            </DialogTrigger>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger className="w-full">
+                  <DialogTrigger asChild>
+                    <Button className="w-full" disabled={!isValid}>
+                      Submit
+                    </Button>
+                  </DialogTrigger>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Please check if you have missed any fields</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Create Project</DialogTitle>
