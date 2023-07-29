@@ -1,14 +1,5 @@
-import {
-  GOERLI_CONTRACT_ADDRESS,
-  MAINNET_CONTRACT_ADDRESS,
-} from "@/constants/address";
-import { useRadarEditionsGetEditions } from "@/lib/generated";
-import isTestnet from "@/lib/utils/isTestnet";
-import { useAccount, useNetwork } from "wagmi";
-import { CollectedVision } from "./CollectedVision";
-import { Project } from "@/types/mongo";
-import { data } from "autoprefixer";
 import { ProjectWithOwnedAmount } from "@/pages/admin";
+import { CollectedVision } from "./CollectedVision";
 
 export function CollectedVisions({
   projects,

@@ -5148,7 +5148,7 @@ blockquote {
 
   display: block;
   overflow: visible;
-  height: calc(100vh - 120.8px);
+  height: calc(100vh - 80px);
   margin-top: 0vh;
   margin-bottom: 0px;
   padding: 2vh 0% 8vh;

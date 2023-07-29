@@ -1,11 +1,27 @@
 import React from "react";
 import * as _Builtin from "./_Builtin";
 import { VisionOfTheWeekProject } from "./VisionOfTheWeekProject";
+import { useAccount, useNetwork } from "wagmi";
+import { useRadarEditionsGetEditions } from "@/lib/generated";
+import isTestnet from "@/lib/utils/isTestnet";
+import {
+  GOERLI_CONTRACT_ADDRESS,
+  MAINNET_CONTRACT_ADDRESS,
+} from "@/constants/address";
+import { chains } from "@/components/Web3Provider";
 
 export function HeaderHero({
   as: _Component = _Builtin.Section,
   visionOfTheWeekSlot,
 }) {
+  const { address } = useAccount();
+  const { chain } = useNetwork();
+  const { data } = useRadarEditionsGetEditions({
+    account: address,
+    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    chainId: "0x" + chains[0].id.toString(16),
+  });
+
   return (
     <_Component className="header-featured" tag="section">
       <_Builtin.Block className="floating-down-arrow" tag="div">
@@ -22,7 +38,7 @@ export function HeaderHero({
           <_Builtin.Block className="_10px-div" tag="div" />
           <_Builtin.Paragraph className="body-text larger">
             {
-              "RADAR Launch is a crowdraising platform for visionary builders and early adopters acclerating better futures."
+              "We believe the future is multiplayer and we need future makers, future adopters and future backers to accelerate adoption. Launch is where you can support future makers, unlock benefits as a patron and build reputation as an future adopter."
             }
             <_Builtin.Link
               button={false}
@@ -37,10 +53,16 @@ export function HeaderHero({
           </_Builtin.Paragraph>
           <_Builtin.Block className="div-block-99" tag="div">
             <_Builtin.Heading className="heading-5" tag="h1">
-              {"$18,391"}
+              {"$" +
+                (
+                  12400n +
+                  (data
+                    ? data.reduce((acc, edition) => acc + edition.balance, 0n)
+                    : 0n)
+                ).toLocaleString()}
             </_Builtin.Heading>
             <_Builtin.Paragraph className="body-text larger">
-              {"total funding pool to build a better future"}
+              {"already committed to build better futures"}
               <_Builtin.Span className="arrow-diagonal">{""}</_Builtin.Span>
               <br />
             </_Builtin.Paragraph>
