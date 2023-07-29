@@ -16,7 +16,7 @@ export default async function handler(
     return res.status(404).send("Not found");
   }
   try {
-    const { fee, address } = req.body;
+    const { fee, address, id } = req.body;
 
     const options = {
       method: "POST",
@@ -39,7 +39,7 @@ export default async function handler(
         metadata: {},
         mintMethod: {
           name: "createEdition",
-          args: { owner: "$WALLET", fee },
+          args: { payer: "$WALLET", fee, owner: address, id },
           payment: { currency: "ETH", value: "0" },
         },
         // contractArgs: "string",
@@ -47,14 +47,12 @@ export default async function handler(
         sendEmailOnTransferSucceeded: true,
       }),
     };
-    return res
-      .status(200)
-      .send(
-        await fetch(
-          "https://withpaper.com/api/2022-08-12/checkout-link-intent",
-          options
-        ).then((response) => response.json())
-      );
+
+    const response = await fetch(
+      "https://withpaper.com/api/2022-08-12/checkout-link-intent",
+      options
+    ).then((response) => response.json());
+    return res.status(200).send(response);
   } catch (e) {
     console.log(e);
     return res.status(400).send("Error has occured");

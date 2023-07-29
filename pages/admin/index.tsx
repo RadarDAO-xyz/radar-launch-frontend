@@ -1,18 +1,29 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  GOERLI_CONTRACT_ADDRESS,
+  MAINNET_CONTRACT_ADDRESS,
+} from "@/constants/address";
 import { useGetProjects } from "@/hooks/useGetProjects";
 import { useRadarEditionsGetEditions } from "@/lib/generated";
+import isTestnet from "@/lib/utils/isTestnet";
 import { MoveUpRight } from "lucide-react";
 import Link from "next/link";
-import { useAccount } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 
 export default function IndividualProjectAdminPage() {
   const { address, status } = useAccount();
-  const { data: chainProjects } = useRadarEditionsGetEditions();
+  const { chain } = useNetwork();
+  const { data: chainProjects } = useRadarEditionsGetEditions({
+    account: address,
+    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    chainId: chain?.id,
+    enabled: Boolean(chain),
+  });
   const { data: databaseProjects } = useGetProjects();
 
-  console.log(chainProjects, databaseProjects);
+  console.log({ chainProjects, databaseProjects });
 
   if (status === "disconnected") {
     return (
