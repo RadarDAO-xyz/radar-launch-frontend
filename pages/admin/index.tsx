@@ -11,11 +11,19 @@ export default function IndividualProjectAdminPage() {
   const router = useRouter();
 
   if (status === "disconnected") {
-    return <div className="mt-[80px] container">Please login</div>;
+    return (
+      <div className="mt-36 container mb-20 text-center">
+        <h1>Please login to see the page</h1>
+        <p>
+          You can login either with your wallet or other social authentication
+          providers.
+        </p>
+      </div>
+    );
   }
 
   return (
-    <div className="mt-[80px] pt-6 pb-12 container max-w-6xl">
+    <div className="mt-[80px] pt-6 pb-12 container max-w-7xl">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <Avatar className="w-16 h-16">
@@ -59,12 +67,9 @@ export default function IndividualProjectAdminPage() {
           </TabsList>
           <TabsContent value="your-visions" className="border rounded-lg p-8">
             <h2 className="text-2xl">Active Visions</h2>
-            <div>
-              
-            </div>
+            <div></div>
           </TabsContent>
-          <TabsContent value="collected-visions">
-          </TabsContent>
+          <TabsContent value="collected-visions"></TabsContent>
         </Tabs>
       </div>
     </div>
