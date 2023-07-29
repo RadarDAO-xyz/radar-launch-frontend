@@ -4,14 +4,19 @@ import { FundingPoolTabs } from "./FundingPoolTabs";
 import { useQuery } from "wagmi";
 import { Pool } from "@/types/mongo";
 import { PoolBlock } from "./PoolBlock";
+import { renderPaperCheckoutLink } from "@paperxyz/js-client-sdk";
 
 async function getPools() {
   return fetch(`${process.env.BACKEND_URL}/pools`).then((res) => res.json());
 }
 
+const openCheckout = () =>
+  renderPaperCheckoutLink({
+    checkoutLinkUrl: "https://withpaper.com/checkout-link-intent/eyJh...",
+  });
+
 export function FundingPoolHome() {
   const { data, error } = useQuery<WithId<Pool>[]>(["pools"], getPools);
-  console.log({ data });
   return (
     <section className="container pt-16 mt-[80px]">
       <div className="funding-pool-title">

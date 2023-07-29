@@ -4,6 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Form,
   FormControl,
   FormDescription,
@@ -26,41 +35,80 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  GOERLI_CONTRACT_ADDRESS,
-  MAINNET_CONTRACT_ADDRESS,
-} from "@/constants/address";
-import { SubmissionReadytoSubmit } from "@/devlink/SubmissionReadytoSubmit";
-import {
-  usePrepareRadarEditionsCreateEdition,
-  useRadarEditionsCreateEdition,
-} from "@/lib/generated";
+import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
-import isTestnet from "@/lib/utils/isTestnet";
 import { Brief } from "@/types/mongo";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { useAccount, useNetwork, useWaitForTransaction } from "wagmi";
+import { useAccount, useMutation, useNetwork, useQuery } from "wagmi";
 import * as z from "zod";
 import { TeamFields } from "../../components/TeamFields";
-import { useEffect } from "react";
-import { useToast } from "@/components/ui/use-toast";
-import { ToastAction } from "@/components/ui/toast";
-import Link from "next/link";
+import {
+  TooltipProvider,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
+import { useRouter } from "next/router";
+import { useContext } from "react";
+import { AuthContext } from "@/components/AuthProvider";
+
+async function createProject(
+  idToken: string,
+  values: z.infer<typeof formSchema>
+) {
+  const res = await fetch(`${process.env.BACKEND_URL}/projects`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${idToken}`,
+    },
+    body: JSON.stringify(values),
+  });
+  return await res.json();
+}
+
+async function getCheckoutLink(fee: number, address?: string): Promise<string> {
+  try {
+    const result = await fetch(`/api/get-checkout-link`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fee,
+        address,
+      }),
+    }).then((res) => res.json());
+
+    return result.checkoutLinkIntentUrl;
+  } catch (e) {
+    console.error(e);
+    return "";
+  }
+}
 
 const formSchema = z.object({
-  title: z.string(),
-  video_url: z.string(),
-  tldr: z.string(),
-  brief: z.string(),
-  inspiration: z.string(),
+  title: z.string().min(1, { message: "Title is required" }),
+  description: z.string().min(1, { message: "Description is required" }),
+  video_url: z
+    .string()
+    .url({ message: "Please enter a valid URL" })
+    .min(1, { message: "Video URL is required" }),
+  tldr: z.string().min(1, { message: "Brief description is required" }),
+  video_image: z.string(),
+  brief: z.string().min(1, { message: "Brief is required" }),
+  inspiration: z.string().min(1, { message: "Inspiration is required" }),
   team: z.array(
     z.object({
-      name: z.string(),
-      bio: z.string(),
-      email: z.string(),
+      name: z.string().min(1, { message: "Name is required" }),
+      bio: z.string().min(1, { message: "Bio is required" }),
+      email: z
+        .string()
+        .email({ message: "Please enter a valid email" })
+        .min(1, { message: "Email is required" }),
     })
   ),
   collaborators: z.string(),
@@ -68,21 +116,28 @@ const formSchema = z.object({
   milestones: z.array(
     z.object({
       amount: z.coerce.number(),
+      // .min(0, { message: "Amount is required" }),
       text: z.string(),
+      // .min(1, { message: "Milestone description is required" }),
     })
   ),
   edition_price: z.coerce.number(),
-  mint_end_date: z.date(),
+  mint_end_date: z.date().min(new Date(), {
+    message: "Must end later than today",
+  }),
   benefits: z.array(
     z.object({
       amount: z.coerce.number(),
       text: z.string(),
     })
   ),
-  admin_address: z.string(),
+  admin_address: z.string().min(1, { message: "Admin address is required" }),
 });
 
 export default function ProjectForm() {
+  const { address } = useAccount();
+  const { idToken } = useContext(AuthContext);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: "onBlur",
@@ -91,6 +146,7 @@ export default function ProjectForm() {
       video_url: "",
       tldr: "",
       brief: "",
+      video_image: "",
       inspiration: "",
       team: [],
       collaborators: "",
@@ -99,73 +155,63 @@ export default function ProjectForm() {
       edition_price: 0,
       mint_end_date: new Date(),
       benefits: [],
-      admin_address: "",
+      admin_address: address || "",
     },
   });
   const {
     handleSubmit,
     watch,
     control,
-    formState: { errors },
+    formState: { errors, isValid },
   } = form;
   const fee = watch("edition_price");
+  const admin_address = watch("admin_address");
 
-  const { address } = useAccount();
-  const { chain } = useNetwork();
-  const { config } = usePrepareRadarEditionsCreateEdition({
-    account: address,
-    chainId: chain?.id,
-    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
-    args: [BigInt(fee)],
-    enabled: Boolean(chain) && fee > 0,
-  });
-  const { data, write } = useRadarEditionsCreateEdition(config);
-  const { data: txReceipt, isSuccess } = useWaitForTransaction({
-    hash: data?.hash,
-    enabled: Boolean(data?.hash),
-  });
+  const { mutateAsync, isLoading: isSubmitLoading } = useMutation(
+    ["submit-project"],
+    () => createProject(idToken, form.getValues())
+  );
+  const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
+    ["checkout-link", fee, admin_address],
+    () => getCheckoutLink(fee, admin_address)
+  );
 
+  const router = useRouter();
   const { toast } = useToast();
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // print form errors
     if (errors) {
       console.error(errors);
     }
 
-    write?.();
+    try {
+      if (!checkoutLink) {
+        throw new Error("Checkout link not found");
+      }
+      // create project in DB
+      await mutateAsync();
+      // push to external payment
+      toast({
+        title: "Redirecting to Paper...",
+      });
+      setTimeout(() => {
+        router.push(checkoutLink);
+      }, 1000);
+    } catch (e) {
+      console.error(e);
+      toast({
+        variant: "destructive",
+        title: "An unexpected error occured",
+        description: "Check the console for more information",
+      });
+    }
   }
-
-  useEffect(() => {
-    if (data?.hash && chain) {
-      toast({
-        title: "Project submitted, awaiting confirmation",
-        description: `Transaction hash: ${data.hash}`,
-        action: (
-          <ToastAction altText="View on explorer">
-            <Link
-              href={`${chain.blockExplorers?.default.url}/tx/${data.hash}`}
-              target="_blank"
-            >
-              View Transaction
-            </Link>
-          </ToastAction>
-        ),
-      });
-    }
-  }, [data?.hash]);
-
-  useEffect(() => {
-    if (isSuccess && txReceipt?.transactionHash) {
-      toast({
-        title: "Project successfully submitted!",
-      });
-    }
-  }, [isSuccess]);
 
   return (
     <Form {...form}>
       <form
+        id="create-project"
         onSubmit={handleSubmit(onSubmit)}
         className="max-w-4xl mx-auto mt-40"
       >
@@ -199,14 +245,13 @@ export default function ProjectForm() {
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
-                    <FormDescription></FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <FormField
                 control={control}
-                name="brief"
+                name="description"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Describe your idea in a sentence</FormLabel>
@@ -262,7 +307,7 @@ export default function ProjectForm() {
                 name="tldr"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Describe your idea in a sentence</FormLabel>
+                    <FormLabel>Project TLDR</FormLabel>
                     <FormControl>
                       <Textarea {...field} />
                     </FormControl>
@@ -286,14 +331,14 @@ export default function ProjectForm() {
             </div>
             <FormField
               control={control}
-              name="tldr"
+              name="video_image"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
                     <Input
                       type="file"
                       className="h-full"
-                      accept="video/mp4,video/x-m4v,video/*"
+                      accept="image/*"
                       {...field}
                     />
                   </FormControl>
@@ -530,8 +575,8 @@ export default function ProjectForm() {
                         <Input type="number" {...field} />
                       </FormControl>
                       <p>$USD</p>
+                      <FormMessage />
                     </div>
-                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -680,10 +725,50 @@ export default function ProjectForm() {
           </div>
         </div>
 
-        <div className="w-full px-16 pb-20">
-          <Button className="w-full" type="submit">
-            Submit
-          </Button>
+        <div className="flex space-x-2 px-16 pb-20">
+          <Dialog>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild className="w-full">
+                  <div>
+                    <DialogTrigger asChild>
+                      <Button
+                        className="w-full"
+                        disabled={!isValid || !idToken}
+                      >
+                        Submit
+                      </Button>
+                    </DialogTrigger>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {!idToken ? (
+                    <p>{"Please make sure you're logged in!"}</p>
+                  ) : (
+                    <p>Please check if you have missed any fields</p>
+                  )}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Create Project</DialogTitle>
+                <DialogDescription>
+                  You will be redirected to a separate website to make payments.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <Button
+                  className="w-full"
+                  disabled={isSubmitLoading || isCheckoutLinkLoading}
+                  type="submit"
+                  form="create-project"
+                >
+                  Pay with Paper
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       </form>
     </Form>
