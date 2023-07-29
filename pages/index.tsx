@@ -1,5 +1,6 @@
 import { FundingPoolHome } from "@/components/FundingPoolHome";
 import { ProjectBlock } from "@/components/ProjectBlock";
+import { ProjectDiv } from "@/components/ProjectDiv";
 import {
   HeaderHero,
   InspirationFooter,
@@ -7,12 +8,6 @@ import {
 } from "@/devlink";
 import { useGetProjects } from "@/hooks/useGetProjects";
 import { ProjectStatus } from "@/types/mongo";
-import dynamic from "next/dynamic";
-
-const ProjectDivWithNoSSR = dynamic(
-  () => import("@/components/ProjectDiv").then((res) => res.ProjectDiv),
-  { ssr: false }
-);
 
 export default function HomePage() {
   const { data } = useGetProjects();
@@ -21,9 +16,9 @@ export default function HomePage() {
     <div className="mt-[80px]">
       {/* <Banner /> */}
       <HeaderHero visionOfTheWeekSlot={<VisionOfTheWeekProject />} />
-      <ProjectDivWithNoSSR
+      <ProjectDiv
         projectSectionCurationName="August"
-        projectSectionTitle="curated visions"
+        projectSectionTitle="CURATED VISIONS"
         projectSectionDescription="every month we invite a guest curator to support 4 projects"
         showCreateProjectButton
         curator={
@@ -58,7 +53,7 @@ export default function HomePage() {
           </>
         }
       />
-      <ProjectDivWithNoSSR
+      <ProjectDiv
         projectSectionCurationName="July"
         curator={<span>gary sheng</span>}
         projects={
