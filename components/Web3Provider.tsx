@@ -10,12 +10,9 @@ import { InjectedConnector } from "wagmi/connectors/injected";
 import { publicProvider } from "wagmi/providers/public";
 import { infuraProvider } from "wagmi/providers/infura";
 
-const { chains, publicClient, webSocketPublicClient } = configureChains(
+export const { chains, publicClient, webSocketPublicClient } = configureChains(
   [isTestnet() ? optimismGoerli : optimism],
-  [
-    publicProvider(),
-    infuraProvider({ apiKey: process.env.VITE_INFURA_KEY! }),
-  ]
+  [publicProvider(), infuraProvider({ apiKey: process.env.VITE_INFURA_KEY! })]
 );
 
 const openloginAdapter = new OpenloginAdapter({
