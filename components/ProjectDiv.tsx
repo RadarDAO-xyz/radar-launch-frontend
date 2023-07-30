@@ -1,5 +1,7 @@
 import { _Builtin } from "@/devlink";
 import React from "react";
+import { Button } from "./ui/button";
+import Link from "next/link";
 
 interface ProjectDivProps {
   projects: React.ReactNode;
@@ -34,12 +36,15 @@ export function ProjectDiv({
               <br />
             </p>
             {showCreateProjectButton && (
-              <div className="subbutton no-share">
-                <div className="small-text">
-                  {"become a curator "}
-                  <span className="arrow-diagonal">{"↗"}</span>
-                </div>
-              </div>
+              <Button
+                className="font-bold font-bolded text-gray-400 hover:text-gray-500"
+                variant={"ghost"}
+                asChild
+              >
+                <Link href="https://t.me/+e97ms5e1fvJiMjhk" target="_blank">
+                  {"GET DROP UPDATES"}
+                </Link>
+              </Button>
             )}
           </div>
         )}
