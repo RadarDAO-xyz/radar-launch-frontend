@@ -1,24 +1,22 @@
 import { _Builtin } from "@/devlink";
-import React from "react";
+import React, { ReactNode } from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
 
 interface ProjectDivProps {
   projects: React.ReactNode;
-  curator: React.ReactNode;
-  projectSectionCurationName?: string;
   projectSectionTitle?: string;
   projectSectionDescription?: string;
   showCreateProjectButton?: boolean;
+  curatorSection: ReactNode;
 }
 
 export function ProjectDiv({
   projects,
-  projectSectionCurationName,
   projectSectionDescription,
   projectSectionTitle,
   showCreateProjectButton,
-  curator,
+  curatorSection,
 }: ProjectDivProps) {
   return (
     <section className="bg-white px-[5%] pt-12">
@@ -50,14 +48,8 @@ export function ProjectDiv({
         )}
       </div>
       <div className="month-curated">
-        <div className="flex overflow-auto ">{projects}</div>
-        <div className="div-block-101 top">
-          <p className="curator-text">
-            {projectSectionCurationName} curated by
-            <br />
-          </p>
-          {curator}
-        </div>
+        <div className="flex overflow-auto">{projects}</div>
+        <div className="div-block-101 top">{curatorSection}</div>
       </div>
     </section>
   );
