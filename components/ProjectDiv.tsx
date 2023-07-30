@@ -1,22 +1,22 @@
 import { _Builtin } from "@/devlink";
-import React from "react";
+import React, { ReactNode } from "react";
+import { Button } from "./ui/button";
+import Link from "next/link";
 
 interface ProjectDivProps {
   projects: React.ReactNode;
-  curator: React.ReactNode;
-  projectSectionCurationName?: string;
   projectSectionTitle?: string;
   projectSectionDescription?: string;
   showCreateProjectButton?: boolean;
+  curatorSection: ReactNode;
 }
 
 export function ProjectDiv({
   projects,
-  projectSectionCurationName,
   projectSectionDescription,
   projectSectionTitle,
   showCreateProjectButton,
-  curator,
+  curatorSection,
 }: ProjectDivProps) {
   return (
     <section className="bg-white px-[5%] pt-12">
@@ -34,25 +34,22 @@ export function ProjectDiv({
               <br />
             </p>
             {showCreateProjectButton && (
-              <div className="subbutton no-share">
-                <div className="small-text">
-                  {"become a curator "}
-                  <span className="arrow-diagonal">{"↗"}</span>
-                </div>
-              </div>
+              <Button
+                className="font-bold font-bolded text-gray-400 hover:text-gray-500"
+                variant={"ghost"}
+                asChild
+              >
+                <Link href="https://t.me/+e97ms5e1fvJiMjhk" target="_blank">
+                  {"GET DROP UPDATES"}
+                </Link>
+              </Button>
             )}
           </div>
         )}
       </div>
       <div className="month-curated">
-        <div className="flex overflow-auto ">{projects}</div>
-        <div className="div-block-101 top">
-          <p className="curator-text">
-            {projectSectionCurationName} curated by
-            <br />
-          </p>
-          {curator}
-        </div>
+        <div className="flex overflow-auto">{projects}</div>
+        <div className="div-block-101 top">{curatorSection}</div>
       </div>
     </section>
   );

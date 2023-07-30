@@ -32,7 +32,7 @@ export function PreLaunchFooter({ as: _Component = _Builtin.Section }) {
               target="_blank"
             >
               RADAR
-            </Link>{" "}
+            </Link>
             community.
             <br />
             <br />
@@ -72,7 +72,6 @@ export function PreLaunchFooter({ as: _Component = _Builtin.Section }) {
           </_Builtin.ListItem>
           <_Builtin.ListItem className="footer-list-item right">
             <Link
-              Link
               className="black-link hover:underline"
               href="https://airtable.com/appX7pDZw5NAGWoLc/shrFKUzeNpJoDU0x9"
               target="_blank"
