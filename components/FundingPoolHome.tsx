@@ -2,7 +2,7 @@ import { Pool } from "@/types/mongo";
 import Link from "next/link";
 import { useQuery } from "wagmi";
 import { FundingPoolTabs } from "./FundingPoolTabs";
-import { PoolBlock } from "./PoolBlock";
+import { PoolCard } from "./PoolCard";
 import { Input } from "./ui/input";
 import { useRef, useState } from "react";
 import { Button } from "./ui/button";
@@ -44,13 +44,11 @@ export function FundingPoolHome() {
       </div>
       <div className="_20px-div" />
       <div className="funding-pool-wrapper">
-        {data?.map((pool, index) => (
-          <PoolBlock
-            title={pool.title}
-            pool_amount={pool.pool_amount}
-            key={index}
-          />
-        ))}
+        <PoolCard
+          title={"BRIEF COMING SOON"}
+          poolAmount={10000}
+          projectSubmitted={0}
+        />
       </div>
       <FundingPoolTabs />
     </section>
