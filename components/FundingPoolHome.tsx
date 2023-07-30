@@ -10,7 +10,7 @@ export function FundingPoolHome() {
 
   return (
     <section className="container py-20 mt-[80px]">
-      <div className="funding-pool-title">
+      <div className="funding-pool-title pb-20">
         <h1 className="feature-heading pb-4">{"Funding Pools"}</h1>
         <p className="body-text larger">
           Funding pools are set by visionary partners asking big questions
