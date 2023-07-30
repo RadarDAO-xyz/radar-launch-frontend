@@ -2,12 +2,15 @@ import { _Builtin } from "@/devlink";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
 import Link from "next/link";
 import React from "react";
+import Image from "next/image";
 
 export function FundingPoolTabs() {
   return (
     <div className={"funding-pool-header"}>
       <div className={"funding-pool-title"}>
-        <h1 className={"feature-heading center"}>{"Funding the future"}</h1>
+        <h1 className={"feature-heading center"}>
+          FUNDING THE FUTURE THROUGH FUNDING POOLS
+        </h1>
       </div>
       <div className={"_20px-div"} />
       <div className="">
@@ -34,9 +37,8 @@ export function FundingPoolTabs() {
           </TabsList>
           <TabsContent
             value="why-funding-pools"
-            className="max-w-5xl w-full mx-auto text-center border p-8 rounded"
+            className="max-w-5xl w-full mx-auto text-center border p-16 rounded-lg"
           >
-            {" "}
             {
               "To accelerate the better futures we believe in, we’re collaborating with visionary partners: investors, individuals, blockchains, and brands who have deep conviction in an opportunity space that’s inherently linked to one of our futures."
             }
@@ -53,62 +55,66 @@ export function FundingPoolTabs() {
           </TabsContent>
           <TabsContent
             value="getting-funded"
-            className="max-w-5xl w-full mx-auto text-center border p-8 rounded"
+            className="max-w-5xl w-full mx-auto text-center border p-16 rounded-lg"
           >
             <div className={"pricing-grid"}>
               <div
                 className={"pricing-card-three"}
                 id={"w-node-_49230e1b-43ad-541c-866d-cdfa85fdae69-85fdae53"}
               >
-                <p className={"body-text center"}>{"Be inspired by a brief"}</p>
-                <img
+                <Image
                   className={"image-29"}
-                  width="auto"
-                  height="auto"
+                  width={100}
+                  height={100}
+                  alt="Be inspired by a brief"
                   loading="lazy"
-                  src="https://d3e54v103j8qbb.cloudfront.net/plugins/Basic/assets/placeholder.60f9b1840c.svg"
+                  src="/inspired.svg"
                 />
+                <p className={"body-text center"}>{"Be inspired by a brief"}</p>
               </div>
               <div
                 className={"pricing-card-three"}
                 id={"w-node-_49230e1b-43ad-541c-866d-cdfa85fdae6d-85fdae53"}
               >
-                <p className={"body-text center"}>{"Submit your vision"}</p>
-                <img
+                <Image
                   className={"image-29"}
-                  width="auto"
-                  height="auto"
+                  width={100}
+                  height={100}
+                  alt="Submit your vision"
                   loading="lazy"
-                  src="https://d3e54v103j8qbb.cloudfront.net/plugins/Basic/assets/placeholder.60f9b1840c.svg"
+                  src="/vision.svg"
                 />
+                <p className={"body-text center"}>{"Submit your vision"}</p>
               </div>
               <div
                 className={"pricing-card-three"}
                 id={"w-node-_49230e1b-43ad-541c-866d-cdfa85fdae71-85fdae53"}
               >
-                <p className={"body-text center"}>{"Launch on the platform"}</p>
-                <img
+                <Image
                   className={"image-29"}
-                  width="auto"
-                  height="auto"
+                  width={100}
+                  height={100}
+                  alt="Be inspired by a brief"
                   loading="lazy"
-                  src="https://d3e54v103j8qbb.cloudfront.net/plugins/Basic/assets/placeholder.60f9b1840c.svg"
+                  src="/inspired.svg"
                 />
+                <p className={"body-text center"}>{"Launch on the platform"}</p>
               </div>
               <div
                 className={"pricing-card-three"}
                 id={"w-node-_49230e1b-43ad-541c-866d-cdfa85fdae75-85fdae53"}
               >
+                <Image
+                  className={"image-29"}
+                  width={100}
+                  height={100}
+                  alt="Get funded from the pool and public"
+                  loading="lazy"
+                  src="/leaves.svg"
+                />
                 <p className={"body-text center"}>
                   {"Get funded from the pool and public"}
                 </p>
-                <img
-                  className={"image-29"}
-                  width="auto"
-                  height="auto"
-                  loading="lazy"
-                  src="https://d3e54v103j8qbb.cloudfront.net/plugins/Basic/assets/placeholder.60f9b1840c.svg"
-                />
               </div>
             </div>
             <div className={"_20px-div"} />
@@ -117,7 +123,11 @@ export function FundingPoolTabs() {
               href="https://radarxyz.notion.site/Funding-Pools-Partner-Briefs-07b0753b0f6f401f9249fe8e0537ef03?pvs=4"
               target="_blank"
             >
-              <Link href="/pool" className={"body-text center hover:underline"}>
+              <Link
+                href="https://radarxyz.notion.site/Funding-Pools-Partner-Briefs-07b0753b0f6f401f9249fe8e0537ef03?pvs=4"
+                target="_blank"
+                className={"body-text center hover:underline"}
+              >
                 {"Learn more about pools "}
                 <span className={"arrow-diagonal"}>{"↗"}</span>
               </Link>
@@ -125,14 +135,14 @@ export function FundingPoolTabs() {
           </TabsContent>
           <TabsContent
             value="creating-pool"
-            className="max-w-5xl w-full mx-auto text-center border p-8 rounded"
+            className="max-w-5xl w-full mx-auto text-center border p-16 rounded-lg"
           >
             <p className={"body-text center"}>
               {
-                "If you’re a visionary builder, investor, individual, blockchain, or brand with deep conviction in an opportunity space you’ve identified and want to influence the energy that’s bubbling up around it,"
+                "If you’re a visionary builder, investor, individual, blockchain, or brand with deep conviction in an opportunity space you’ve identified and want to influence the energy that’s bubbling up around it, "
               }
-              <Link className={"underline"} href="#">
-                {" reach out to us."}
+              <Link className={"underline"} href="mailto:admin@radardao.xyz">
+                {"reach out to us."}
               </Link>
               <br />
               <br />
@@ -141,7 +151,7 @@ export function FundingPoolTabs() {
               }
               <br />
               <br />
-              <Link className={"underline"} href="/brief" target="_blank">
+              <Link className={"underline"} href="/brief">
                 {"Read some examples of our community inspired briefs"}
               </Link>
             </p>
