@@ -44,12 +44,12 @@ export default function HomePage() {
         projects={
           <>
             {data
-              ?.filter(
-                (project) =>
-                  project?.curation?.start &&
-                  new Date(project.curation.start) > new Date()
-              )
-              .map((project) => (
+              // ?.filter(
+              //   (project) =>
+              //     project?.curation?.start &&
+              //     new Date(project.curation.start) > new Date()
+              // )
+              ?.map((project) => (
                 <ProjectBlock
                   key={project._id.toString()}
                   id={project._id.toString()}
@@ -58,7 +58,7 @@ export default function HomePage() {
                   projectTitle={project.title}
                   supporters={project.supporter_count}
                   projectDate={new Date(project.mint_end_date)}
-                  isDisabled={project.status === ProjectStatus["IN_REVIEW"]}
+                  isDisabled={project.status !== ProjectStatus.LIVE}
                 />
               ))}
           </>
