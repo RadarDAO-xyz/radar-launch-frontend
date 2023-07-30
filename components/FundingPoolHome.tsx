@@ -3,6 +3,9 @@ import Link from "next/link";
 import { useQuery } from "wagmi";
 import { FundingPoolTabs } from "./FundingPoolTabs";
 import { PoolBlock } from "./PoolBlock";
+import { Input } from "./ui/input";
+import { useRef, useState } from "react";
+import { Button } from "./ui/button";
 
 async function getPools(): Promise<Pool[]> {
   try {
@@ -15,8 +18,11 @@ async function getPools(): Promise<Pool[]> {
 
 export function FundingPoolHome() {
   const { data } = useQuery<Pool[]>(["pools"], getPools);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
   return (
-    <section className="container pt-16 mt-[80px]">
+    <section className="container py-20 mt-[80px]">
       <div className="funding-pool-title">
         <h1 className="feature-heading pb-4">{"Funding Pools"}</h1>
         <p className="body-text larger">
@@ -24,13 +30,17 @@ export function FundingPoolHome() {
           around futures they believe in.
           <br />
           <br />
-          If you&apos;re a future maker or want to support projects building
-          these futures, see below.
-          <Link href="#" target="_blank">
-            <span className="underline">{""}</span>
-          </Link>
-          <br />
+          Want to be first to know about new briefs and funding pools?
         </p>
+        <div className="flex max-w-[400px] mx-auto space-x-2 pt-8">
+          <Input className="" ref={inputRef} placeholder="Email" />
+          <Button
+            className="max-w-[120px] w-full font-bolded"
+            variant={"ghost"}
+          >
+            SIGN UP
+          </Button>
+        </div>
       </div>
       <div className="_20px-div" />
       <div className="funding-pool-wrapper">
