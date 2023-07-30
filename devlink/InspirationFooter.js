@@ -22,47 +22,36 @@ export function InspirationFooter({ as: _Component = _Builtin.Section }) {
             }
           </_Builtin.Paragraph>
           <_Builtin.Block className="_20px-div" tag="div" />
-          <_Builtin.Link
-            className="text-link-arrow"
-            button={false}
-            options={{
-              href: "#",
-              target: "_blank",
-            }}
-          >
+          <div className="text-link-arrow">
             <Link className="text-block-43" tag="div" href="/brief">
               {"Find inspiration in our creative briefs "}
               <_Builtin.Span className="right-arrow">{"→"}</_Builtin.Span>
             </Link>
-          </_Builtin.Link>
+          </div>
           <_Builtin.Block className="_10px-div" tag="div" />
-          <_Builtin.Link
-            className="text-link-arrow"
-            button={false}
-            options={{
-              href: "https://lu.ma/radarcommunityevents",
-              target: "_blank",
-            }}
-          >
-            <_Builtin.Block className="text-block-44" tag="div">
+          <div className="text-link-arrow">
+            <Link
+              className="text-block-44"
+              tag="div"
+              href="https://lu.ma/radarcommunityevents"
+              target="_blank"
+            >
               {"Register for one of our what-if workshops "}
               <_Builtin.Span className="right-arrow">{"→"}</_Builtin.Span>
-            </_Builtin.Block>
-          </_Builtin.Link>
+            </Link>
+          </div>
           <_Builtin.Block className="_10px-div" tag="div" />
-          <_Builtin.Link
-            className="text-link-arrow"
-            button={false}
-            options={{
-              href: "https://lu.ma/radarlaunch",
-              target: "_blank",
-            }}
-          >
-            <_Builtin.Block className="text-block-45" tag="div">
+          <div className="text-link-arrow">
+            <_Builtin.Block
+              className="text-block-45"
+              tag="div"
+              href="https://lu.ma/radarlaunch"
+              target="_blank"
+            >
               {"Join our public Discord server to jam on ideas "}
               <_Builtin.Span className="right-arrow">{"→"}</_Builtin.Span>
             </_Builtin.Block>
-          </_Builtin.Link>
+          </div>
         </_Builtin.Block>
         <_Builtin.Block className="hero-split right" tag="div">
           <_Builtin.Block className="div-block-62" tag="div">

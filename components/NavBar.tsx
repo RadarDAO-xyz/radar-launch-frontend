@@ -1,7 +1,9 @@
 import { _Builtin } from "@/devlink";
-import { Wallet } from "./Wallet";
-import { Button } from "./ui/button";
+import dynamic from "next/dynamic";
 import Link from "next/link";
+import { Button } from "./ui/button";
+
+const WalletNoSSR = dynamic(() => import("./Wallet").then((res) => res.Wallet));
 
 export function NavBar() {
   return (
@@ -101,7 +103,7 @@ export function NavBar() {
                       </div>
                       <div className="time-text end">{"s"}</div>
                     </div>
-                    <Wallet />
+                    <WalletNoSSR />
                   </div>
                 </div>
                 <div className="div-block-34">
