@@ -17755,7 +17755,7 @@ blockquote {
   position: relative;
   padding-top: 56.25%;
   overflow: hidden;
-  cursor: pointer;
+  cursor: default;
 }
 .youtube img {
   width: 100%;
@@ -17771,6 +17771,7 @@ blockquote {
   z-index: 1;
   opacity: 0.8;
   border-radius: 6px;
+  cursor: default;
 }
 .youtube .play-button:before {
   content: "";
