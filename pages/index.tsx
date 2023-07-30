@@ -53,33 +53,6 @@ export default function HomePage() {
           </>
         }
       />
-      <ProjectDiv
-        projectSectionCurationName="July"
-        curator={<span>gary sheng</span>}
-        projects={
-          <>
-            {data
-              ?.filter(
-                (project) =>
-                  project?.curation?.start === undefined ||
-                  project?.curation?.end === undefined ||
-                  new Date(project.curation.end) < new Date()
-              )
-              .map((project) => (
-                <ProjectBlock
-                  key={project._id.toString()}
-                  id={project._id.toString()}
-                  briefName={project.brief}
-                  projectByline={project.description}
-                  projectTitle={project.title}
-                  supporters={project.supporter_count}
-                  projectDate={new Date(project.mint_end_date)}
-                  isDisabled={project.status === ProjectStatus["IN_REVIEW"]}
-                />
-              ))}
-          </>
-        }
-      />
       <FundingPoolHome />
       <InspirationFooter />
     </div>
