@@ -1,24 +1,11 @@
-import { Pool } from "@/types/mongo";
-import Link from "next/link";
-import { useQuery } from "wagmi";
+import { useRef } from "react";
 import { FundingPoolTabs } from "./FundingPoolTabs";
 import { PoolCard } from "./PoolCard";
-import { Input } from "./ui/input";
-import { useRef, useState } from "react";
 import { Button } from "./ui/button";
-
-async function getPools(): Promise<Pool[]> {
-  try {
-    return fetch(`${process.env.BACKEND_URL}/pools`).then((res) => res.json());
-  } catch (e) {
-    console.log(e);
-    return [];
-  }
-}
+import { Input } from "./ui/input";
+import { SetOwnBriefPoolCard } from "./SetOwnBriefPoolCard";
 
 export function FundingPoolHome() {
-  const { data } = useQuery<Pool[]>(["pools"], getPools);
-
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
@@ -43,12 +30,14 @@ export function FundingPoolHome() {
         </div>
       </div>
       <div className="_20px-div" />
-      <div className="funding-pool-wrapper">
+      <div className="grid grid-cols-2 gap-8">
         <PoolCard
           title={"BRIEF COMING SOON"}
           poolAmount={10000}
           projectSubmitted={0}
+          dropDate={new Date("2023-08-01")}
         />
+        <SetOwnBriefPoolCard />
       </div>
       <FundingPoolTabs />
     </section>
