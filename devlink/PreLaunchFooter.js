@@ -6,12 +6,12 @@ export function PreLaunchFooter({ as: _Component = _Builtin.Section }) {
   return (
     <_Component className="footer" tag="section">
       <_Builtin.Block tag="div">
-        <_Builtin.Block className="logo-wrapper" tag="div">
+        <_Builtin.Block className="w-[100px]" tag="div">
           <_Builtin.Image
             className="image-5"
             loading="lazy"
-            width={114}
-            height="auto"
+            width={"auth"}
+            height={"auto"}
             src="https://uploads-ssl.webflow.com/64548f6f8feacfafa79c9592/64620019197d0843980b2c90_Asset%205%402x-8.png"
           />
         </_Builtin.Block>
