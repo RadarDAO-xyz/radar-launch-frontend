@@ -16,7 +16,7 @@ export function SetOwnBriefPoolCard() {
         WANT TO SET YOUR <br />
         OWN BRIEF?
       </h2>
-      <div className="flex justify-between w-full space-x-2 pt-2">
+      <div className="flex justify-between w-full space-x-2 pt-2 px-2">
         <div className="border rounded-lg p-4 w-full">
           <div className="small-text">{"Remaining Funding pool"}</div>
           <div className="_5px-div" />
@@ -32,7 +32,7 @@ export function SetOwnBriefPoolCard() {
       </div>
       <div className="w-full pt-6">
         <Button className={"w-full"} asChild>
-          <Link href="/pool">FUND A BRIEF</Link>
+          <Link href="https://radarxyz.notion.site/Funding-Pools-Partner-Briefs-07b0753b0f6f401f9249fe8e0537ef03?pvs=4" target="_blank">CREATE A BRIEF</Link>
         </Button>
       </div>
     </div>

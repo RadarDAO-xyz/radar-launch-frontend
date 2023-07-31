@@ -8,7 +8,7 @@ interface ProjectDivProps {
   projectSectionTitle?: string;
   projectSectionDescription?: string;
   showCreateProjectButton?: boolean;
-  curatorSection: ReactNode;
+  curatorSection?: ReactNode;
 }
 
 export function ProjectDiv({
@@ -19,7 +19,7 @@ export function ProjectDiv({
   curatorSection,
 }: ProjectDivProps) {
   return (
-    <section className="bg-white px-[5%] pt-12">
+    <section className="bg-white px-[5%] pt-12 pb-20 border-b border-b-black">
       <div className="title-block">
         {projectSectionTitle && (
           <h2 className="heading-trending-launch-page">
@@ -28,14 +28,14 @@ export function ProjectDiv({
         )}
         <div className="_10px-div" />
         {projectSectionDescription && (
-          <div className="div-block-103">
+          <div className="div-block-103 pb-8 flex md:flex-row flex-col self-end space-y-4">
             <p className="body-text left">
               {projectSectionDescription}
               <br />
             </p>
             {showCreateProjectButton && (
               <Button
-                className="font-bold font-bolded text-gray-400 hover:text-gray-500"
+                className="font-bold font-bolded"
                 variant={"ghost"}
                 asChild
               >
@@ -48,8 +48,8 @@ export function ProjectDiv({
         )}
       </div>
       <div className="month-curated">
-        <div className="flex overflow-auto">{projects}</div>
-        <div className="div-block-101 top">{curatorSection}</div>
+        <div className="w-full">{projects}</div>
+        {/* <div className="div-block-101 top">{curatorSection}</div> */}
       </div>
     </section>
   );

@@ -11,7 +11,7 @@ export function InspirationFooter({ as: _Component = _Builtin.Section }) {
             {"Still looking for inspiration?"}
           </_Builtin.Heading>
           <_Builtin.Block className="_20px-div" tag="div" />
-          <_Builtin.Paragraph className="body-text">
+          <_Builtin.Paragraph className="body-text text-left">
             {
               "The RADAR community of 300+ future seekers are behind RADAR Launch."
             }

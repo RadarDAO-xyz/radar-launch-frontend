@@ -2463,7 +2463,6 @@ blockquote {
 
 .body-text {
   display: inline;
-  align-self: center;
 
   font-family: Inter;
   color: var(--backgroundsBlack-4be50407);
@@ -5261,7 +5260,6 @@ blockquote {
 
   display: flex;
   overflow: visible;
-  width: 80%;
   height: auto;
   margin-right: auto;
   margin-left: auto;
@@ -5441,7 +5439,7 @@ blockquote {
 
 .about-div.home {
   width: 80%;
-  height: 100%;
+  /* height: 100%; */
   margin-right: 30px;
   align-self: center;
   flex: 0 auto;
@@ -8066,27 +8064,6 @@ blockquote {
   width: 8%;
   margin-right: 30px;
   align-self: center;
-}
-
-@media screen and (max-width: 991px) {
-  .logo-wrapper {
-    width: 20%;
-  }
-}
-
-@media screen and (max-width: 767px) {
-  .logo-wrapper {
-    width: 30%;
-    flex: 0 auto;
-  }
-}
-
-@media screen and (max-width: 479px) {
-  .logo-wrapper {
-    position: relative;
-    z-index: 10;
-    width: 100%;
-  }
 }
 
 .project-tabs {
