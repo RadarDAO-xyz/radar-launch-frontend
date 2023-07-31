@@ -26,7 +26,7 @@ export function HeaderHero({
   return (
     <_Component className="header-featured" tag="section">
       <_Builtin.Block
-        className="floating-down-arrow flex justify-between container absolute right-[5%]"
+        className="floating-down-arrow flex justify-between absolute right-[5%]"
         tag="div"
       >
         <_Builtin.Paragraph className="body-text larger">
@@ -56,7 +56,7 @@ export function HeaderHero({
           <_Builtin.Block className="_10px-div" tag="div" />
           <_Builtin.Paragraph className="body-text larger">
             {
-              "We believe the future is multiplayer and we need future makers, future adopters and future backers to accelerate adoption. Launch is where you can support future makers, unlock benefits as a patron and build reputation as an future adopter."
+              "We believe the future is multiplayer and we need future makers, future adopters and future backers to accelerate adoption."}<br /><br /> {"Launch is where you can support future makers, unlock benefits as a patron and build reputation as an future adopter."
             }
             <_Builtin.Link
               button={false}

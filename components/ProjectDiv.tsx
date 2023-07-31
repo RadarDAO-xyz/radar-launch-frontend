@@ -28,14 +28,14 @@ export function ProjectDiv({
         )}
         <div className="_10px-div" />
         {projectSectionDescription && (
-          <div className="div-block-103">
+          <div className="div-block-103 pb-8">
             <p className="body-text left">
               {projectSectionDescription}
               <br />
             </p>
             {showCreateProjectButton && (
               <Button
-                className="font-bold font-bolded text-gray-400 hover:text-gray-500"
+                className="font-bold font-bolded"
                 variant={"ghost"}
                 asChild
               >

@@ -19,7 +19,7 @@ export default function HomePage() {
       <HeaderHero visionOfTheWeekSlot={<VisionOfTheWeekProject />} />
       <ProjectDiv
         projectSectionTitle="CURATED VISIONS"
-        projectSectionDescription="every month we invite a guest curator to support 4 projects"
+        projectSectionDescription="Every month we invite a guest curator to spotlight 4 projects building a better future"
         showCreateProjectButton
         curatorSection={
           <Link

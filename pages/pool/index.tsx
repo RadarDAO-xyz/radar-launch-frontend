@@ -5,7 +5,7 @@ export default function PoolPage() {
   return (
     <section className="mt-[80px]">
       <FundingPoolHome />
-      <FundingPoolTabs />
+      {/* <FundingPoolTabs /> */}
     </section>
   );
 }

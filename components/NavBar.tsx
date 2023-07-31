@@ -103,7 +103,12 @@ export function NavBar() {
                       </div>
                       <div className="time-text end">{"s"}</div>
                     </div>
-                    <WalletNoSSR />
+                    <Button variant={'ghost'} asChild>
+                      <Link href="https://airtable.com/appGvDqIhUSP0caqo/shrMcuu3zvWEfRqGM" target="_blank">
+                        Sign up for drops
+                      </Link>
+                    </Button>
+                    {/* <WalletNoSSR /> */}
                   </div>
                 </div>
                 <div className="div-block-34">
@@ -112,10 +117,10 @@ export function NavBar() {
                   </div>
                   <Button asChild>
                     <Link
-                      href="https://airtable.com/shrvi09PTUP5mTSHN"
+                      href="https://airtable.com/appGvDqIhUSP0caqo/shrvi09PTUP5mTSHN"
                       target="_blank"
                     >
-                      {"SUBMIT"}
+                      {"Share your project"}
                     </Link>
                   </Button>
                 </div>
