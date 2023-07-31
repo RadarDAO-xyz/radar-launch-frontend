@@ -8,7 +8,6 @@ import {
 } from "@/devlink";
 import { useGetProjects } from "@/hooks/useGetProjects";
 import { ProjectStatus } from "@/types/mongo";
-import Link from "next/link";
 
 export default function HomePage() {
   const { data } = useGetProjects();
@@ -18,6 +17,7 @@ export default function HomePage() {
       <div className="absolute w-screen top-[64px] left-0 text-[200px] leading-none whitespace-nowrap font-bold text-gray-100 z-10 font-bolded overflow-hidden">
         A MORE PLAYFUL FUTURE
       </div>
+
       {/* <Banner /> */}
       <HeaderHero visionOfTheWeekSlot={<VisionOfTheWeekProject />} />
       <ProjectDiv
@@ -41,6 +41,7 @@ export default function HomePage() {
                   projectTitle={project.title}
                   supporters={project.supporter_count}
                   projectDate={new Date(project.mint_end_date)}
+                  videoUrl={project.video_url}
                   isDisabled={project.status !== ProjectStatus.LIVE}
                 />
               ))}

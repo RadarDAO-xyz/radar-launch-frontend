@@ -5960,6 +5960,11 @@ react-hook-form@^7.45.2:
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.45.2.tgz#c757f3d5e633ccb186443d57c10fc511df35721a"
   integrity sha512-9s45OdTaKN+4NSTbXVqeDITd/nwIg++nxJGL8+OD5uf1DxvhsXQ641kaYHk5K28cpIOTYm71O/fYk7rFaygb3A==
 
+react-hover-video-player@^10.0.1:
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/react-hover-video-player/-/react-hover-video-player-10.0.1.tgz#5cdf5fb2c95185e932e9793cf84cd30fd12204bd"
+  integrity sha512-n1loMfpykE12Jj4U8YS6T9nvzDsmeKSaKcZest+SyQkvEwh8IqCunFx4QXQ/ls878DMOgN48WhMxikk2cDE1BA==
+
 react-i18next@^13.0.2:
   version "13.0.2"
   resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-13.0.2.tgz#1708a9bdabc1fe1dd4a8534f4c3a80ab784b01e9"

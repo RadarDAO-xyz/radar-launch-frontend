@@ -5,6 +5,8 @@ import {
   differenceInMinutes,
 } from "date-fns";
 import Link from "next/link";
+import HoverVideoPlayer from "react-hover-video-player";
+import { getCountdown } from '../lib/utils';
 
 interface ProjectBlockProps {
   id: string;
@@ -13,6 +15,7 @@ interface ProjectBlockProps {
   projectByline: string;
   supporters: number;
   projectDate: Date;
+  videoUrl: string;
   isDisabled?: boolean;
 }
 
@@ -52,16 +55,11 @@ export function ProjectBlock({
   briefName,
   isDisabled,
   supporters,
+  videoUrl,
   projectByline,
   projectTitle,
   projectDate,
 }: ProjectBlockProps) {
-  const daysLeft = differenceInDays(projectDate, new Date());
-  const hoursLeft = differenceInHours(projectDate, new Date()) - daysLeft * 24;
-  const minutesLeft =
-    differenceInMinutes(projectDate, new Date()) -
-    daysLeft * 24 * 60 -
-    hoursLeft * 60;
   return (
     <div
       className={cn(
@@ -80,13 +78,9 @@ export function ProjectBlock({
         </div>
         <div className="_10px-div" />
         <div className="project-image">
-          <div className={cn("video-html", isDisabled ? "cursor-default" : "")}>
-            <div className="wrapper">
-              <div className="youtube" data-embed="FFvIb1gQYa8">
-                <div className="play-button"></div>
-              </div>
-            </div>
-          </div>
+          <HoverVideoPlayer
+            videoSrc={videoUrl}
+          />
         </div>
         <div className="_20px-div" />
         <Link
@@ -111,27 +105,9 @@ export function ProjectBlock({
                   <div className="amount-of-supporters">{supporters}</div>
                   <div className="small-text">{"• Supporters"}</div>
                 </div>
-                <div className="count-block">
-                  <div className="count-wrap">
-                    <div className="count-text">{daysLeft}d</div>
-                  </div>
-                  <div className="count-wrap">
-                    <div className="count-text">{hoursLeft}h</div>
-                  </div>
-                  <div className="count-wrap">
-                    <div className="count-text">{minutesLeft}m</div>
-                  </div>
-                </div>
+                <span>{getCountdown(projectDate)}</span>
               </> : <div className="count-block flex items-center justify-center">
-                <div className="count-wrap">
-                  <div className="count-text">{daysLeft}d</div>
-                </div>
-                <div className="count-wrap">
-                  <div className="count-text">{hoursLeft}h</div>
-                </div>
-                <div className="count-wrap">
-                  <div className="count-text">{minutesLeft}m</div>
-                </div>
+                {getCountdown(projectDate)}{" "}
                 until drop
               </div>
             }
