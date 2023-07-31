@@ -42,7 +42,7 @@ export function InspirationFooter({ as: _Component = _Builtin.Section }) {
           </div>
           <_Builtin.Block className="_10px-div" tag="div" />
           <div className="text-link-arrow">
-            <_Builtin.Block
+            <Link
               className="text-block-45"
               tag="div"
               href="https://lu.ma/radarlaunch"
@@ -50,7 +50,7 @@ export function InspirationFooter({ as: _Component = _Builtin.Section }) {
             >
               {"Join our public Discord server to jam on ideas "}
               <_Builtin.Span className="right-arrow">{"→"}</_Builtin.Span>
-            </_Builtin.Block>
+            </Link>
           </div>
         </_Builtin.Block>
         <_Builtin.Block className="hero-split right" tag="div">

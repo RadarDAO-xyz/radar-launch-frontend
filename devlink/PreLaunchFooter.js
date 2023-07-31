@@ -32,7 +32,7 @@ export function PreLaunchFooter({ as: _Component = _Builtin.Section }) {
               target="_blank"
             >
               RADAR
-            </Link>
+            </Link>{" "}
             community.
             <br />
             <br />
