@@ -231,6 +231,8 @@ export default function ProjectForm() {
         id="create-project"
         onSubmit={handleSubmit(onSubmit)}
         className="max-w-4xl mx-auto mt-40"
+        // @ts-expect-error For netlify forms
+        netlify
       >
         <div className="border border-slate-200 rounded p-10 mb-10">
           <h1>The Vision</h1>
