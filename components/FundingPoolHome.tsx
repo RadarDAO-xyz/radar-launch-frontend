@@ -1,14 +1,12 @@
-import { useRef } from "react";
+import Link from "next/link";
 import { PoolCard } from "./PoolCard";
 import { SetOwnBriefPoolCard } from "./SetOwnBriefPoolCard";
 import { Button } from "./ui/button";
-import { Input } from "./ui/input";
 
 export function FundingPoolHome() {
-  const inputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <div className="container py-20">
+    <div className="py-20">
       <div className="funding-pool-title pb-20">
         <h1 className="feature-heading pb-4">{"Funding Pools"}</h1>
         <p className="body-text larger">
@@ -18,18 +16,20 @@ export function FundingPoolHome() {
           <br />
           Want to be first to know about new briefs and funding pools?
         </p>
-        <div className="flex max-w-[400px] mx-auto space-x-2 pt-8">
-          <Input className="" ref={inputRef} placeholder="Email" />
+        <div className="pt-8">
           <Button
             className="max-w-[120px] w-full font-bolded"
             variant={"ghost"}
+            asChild
           >
-            SIGN UP
+            <Link href="https://airtable.com/appGvDqIhUSP0caqo/shrkX6fnUJrcYreUy" target="_blank">
+              SIGN UP
+            </Link>
           </Button>
         </div>
       </div>
       <div className="_20px-div" />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 w-[80%] mx-auto">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 w-[80%] mx-auto">
         <PoolCard
           title={"BRIEF COMING SOON"}
           poolAmount={10000}

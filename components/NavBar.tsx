@@ -53,13 +53,21 @@ export function NavBar() {
               />
             </Link>
           </div><NavigationMenu className="z-50 lg:flex hidden">
-            <NavigationMenuList><NavigationMenuItem>
-              <Link href="https://www.launch.radardao.xyz/" target="_blank" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  HOW IT WORKS
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <Link href="/pool" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    FUNDING POOLS
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link href="https://www.launch.radardao.xyz/" target="_blank" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    HOW IT WORKS
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
               <NavigationMenuItem>
                 <NavigationMenuTrigger>INSPIRATION</NavigationMenuTrigger>
                 <NavigationMenuContent>
@@ -92,7 +100,7 @@ export function NavBar() {
           </NavigationMenu>
           <nav className="w-full flex justify-end" role="navigation">
             <div className="flex">
-              <div className="flex space-x-3 pr-2 lg:pr-0">
+              <div className="flex space-x-3 lg:pr-0">
                 <Button variant={'ghost'} asChild>
                   <Link href="https://airtable.com/appGvDqIhUSP0caqo/shrMcuu3zvWEfRqGM" target="_blank">
                     Sign up for drops
@@ -111,8 +119,8 @@ export function NavBar() {
             </div>
           </nav>
           <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="outline">
+            <SheetTrigger asChild className="block lg:hidden ml-2">
+              <Button variant="outline" >
                 <MenuIcon />
               </Button>
             </SheetTrigger>
