@@ -39,7 +39,7 @@ ListItem.displayName = "ListItem"
 
 export function NavBar() {
   return (
-    <header className="px-[5%] pt-4 z-50">
+    <header className="px-[5%] py-4 z-50 sticky border-b">
       <div className="">
         <div className="navbar-logo-center-container shadow-three items-center">
           <div className="w-40 mr-8">
@@ -52,7 +52,8 @@ export function NavBar() {
                 src="https://uploads-ssl.webflow.com/64548f6f8feacfafa79c9592/645ddcb1ed7bc34887f6efc9_Asset%204%402x-8.png"
               />
             </Link>
-          </div><NavigationMenu className="z-50 lg:flex hidden">
+          </div>
+          <NavigationMenu className="z-50 lg:flex hidden">
             <NavigationMenuList>
               <NavigationMenuItem>
                 <Link href="/pool" legacyBehavior passHref>

@@ -26,7 +26,7 @@ export default function HomePage() {
         showCreateProjectButton
         projects={
           <div className="flex w-full overflow-auto md:space-x-12 space-x-4">
-            {data
+            {data?.slice(0, 4)
               // ?.filter(
               //   (project) =>
               //     project?.curation?.start &&

@@ -34,7 +34,7 @@ export function FundingPoolHome() {
           title={"BRIEF COMING SOON"}
           poolAmount={10000}
           projectSubmitted={0}
-          dropDate={new Date("2023-08-01")}
+          dropDate={new Date("2023-08-11")}
         />
         <SetOwnBriefPoolCard />
       </div>
