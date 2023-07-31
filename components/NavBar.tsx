@@ -100,7 +100,7 @@ export function NavBar() {
           </NavigationMenu>
           <nav className="w-full flex justify-end" role="navigation">
             <div className="flex">
-              <div className="flex space-x-3 lg:pr-0">
+              <div className="space-x-3 lg:pr-0 hidden sm:flex">
                 <Button variant={'ghost'} asChild>
                   <Link href="https://airtable.com/appGvDqIhUSP0caqo/shrMcuu3zvWEfRqGM" target="_blank">
                     Sign up for drops
@@ -163,7 +163,7 @@ export function NavBar() {
                 </Button>
               </div>
               <SheetFooter>
-                <div className="flex justify-between">
+                <div className="flex justify-between flex-col sm:flex-row space-y-2 space-x-2">
                   <Button variant={'ghost'} asChild>
                     <Link href="https://airtable.com/appGvDqIhUSP0caqo/shrMcuu3zvWEfRqGM" target="_blank">
                       Sign up for drops
