@@ -40,7 +40,7 @@ export function VisionOfTheWeekProject({ as: _Component = _Builtin.Block }) {
           </_Builtin.Paragraph>
         </_Builtin.Block> */}
         <_Builtin.Block className="_10px-div" tag="div" />
-        <_Builtin.Block className="collect-wrapper main flex justify-between" tag="div">
+        <_Builtin.Block className="collect-wrapper main flex justify-between bottom-1   md:bottom-[5%]" tag="div">
           <_Builtin.Block className="small-text text-gray-400" tag="div">
             {"0000 • supporters"}
           </_Builtin.Block>

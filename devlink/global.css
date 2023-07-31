@@ -2463,7 +2463,6 @@ blockquote {
 
 .body-text {
   display: inline;
-  align-self: center;
 
   font-family: Inter;
   color: var(--backgroundsBlack-4be50407);

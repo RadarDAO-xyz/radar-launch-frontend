@@ -29,7 +29,7 @@ export function FundingPoolHome() {
         </div>
       </div>
       <div className="_20px-div" />
-      <div className="grid grid-cols-2 gap-10 w-[80%] mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 w-[80%] mx-auto">
         <PoolCard
           title={"BRIEF COMING SOON"}
           poolAmount={10000}

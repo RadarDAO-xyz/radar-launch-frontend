@@ -28,7 +28,7 @@ export function ProjectDiv({
         )}
         <div className="_10px-div" />
         {projectSectionDescription && (
-          <div className="div-block-103 pb-8">
+          <div className="div-block-103 pb-8 flex md:flex-row flex-col self-end space-y-4">
             <p className="body-text left">
               {projectSectionDescription}
               <br />
