@@ -18,7 +18,7 @@ export default function Updates() {
             <div className="flex mb-20">
                 <div className="w-1/2 pr-10">
                     <h1 className="text-lg">Share an update with your supporters</h1>
-                    <p>It&apos;s important to update your supporters so they can get the latest access, share about your vision and be ready to support your next fundraise. Select your project, add your submission and click submit, updates are made onchain and cannot be edited. This update goes on your main project page.</p>
+                    <p>Update your supporters with the latest intel on your project and progress. Let them know what you're looking for and how they can support you. Help them help you spread your vision!</p>
                     
                     <Select>
                         <SelectTrigger className="w-full my-6">

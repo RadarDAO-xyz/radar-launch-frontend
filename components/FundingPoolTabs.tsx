@@ -17,19 +17,19 @@ export function FundingPoolTabs() {
         <Tabs defaultValue="why-funding-pools">
           <TabsList className="grid w-full grid-cols-3 gap-4 max-w-2xl mx-auto mb-6">
             <TabsTrigger
-              className="data-[state=active]:no-underline data-[state=active]:bg-gray-200 bg-gray-100 rounded font-normal border-b-0"
+              className="data-[state=active]:no-underline data-[state=active]:bg-gray-200 bg-gray-100 rounded font-normal border-b-0 leading-8"
               value="why-funding-pools"
             >
               Why funding pools
             </TabsTrigger>
             <TabsTrigger
-              className="data-[state=active]:no-underline data-[state=active]:bg-gray-200 bg-gray-100 rounded font-normal border-b-0"
+              className="data-[state=active]:no-underline data-[state=active]:bg-gray-200 bg-gray-100 rounded font-normal border-b-0 leading-8"
               value="getting-funded"
             >
               Getting funded
             </TabsTrigger>
             <TabsTrigger
-              className="data-[state=active]:no-underline data-[state=active]:bg-gray-200 bg-gray-100 rounded font-normal border-b-0"
+              className="data-[state=active]:no-underline data-[state=active]:bg-gray-200 bg-gray-100 rounded font-normal border-b-0 leading-8"
               value="creating-pool"
             >
               Creating a pool
@@ -37,7 +37,7 @@ export function FundingPoolTabs() {
           </TabsList>
           <TabsContent
             value="why-funding-pools"
-            className="max-w-5xl w-full mx-auto text-center border p-16 rounded-lg"
+            className="max-w-2xl w-full mx-auto text-center border p-16 rounded-lg"
           >
             {
               "To accelerate the better futures we believe in, we’re collaborating with visionary partners: investors, individuals, blockchains, and brands who have deep conviction in an opportunity space that’s inherently linked to one of our futures."
