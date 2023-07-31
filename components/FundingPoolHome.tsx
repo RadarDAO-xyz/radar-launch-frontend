@@ -8,7 +8,7 @@ export function FundingPoolHome() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <div className="container py-20">
+    <div className="py-20">
       <div className="funding-pool-title pb-20">
         <h1 className="feature-heading pb-4">{"Funding Pools"}</h1>
         <p className="body-text larger">
@@ -29,7 +29,7 @@ export function FundingPoolHome() {
         </div>
       </div>
       <div className="_20px-div" />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 w-[80%] mx-auto">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 w-[80%] mx-auto">
         <PoolCard
           title={"BRIEF COMING SOON"}
           poolAmount={10000}

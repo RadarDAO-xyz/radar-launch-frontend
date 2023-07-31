@@ -53,13 +53,21 @@ export function NavBar() {
               />
             </Link>
           </div><NavigationMenu className="z-50 lg:flex hidden">
-            <NavigationMenuList><NavigationMenuItem>
-              <Link href="https://www.launch.radardao.xyz/" target="_blank" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  HOW IT WORKS
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <Link href="/pool" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    FUNDING POOLS
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link href="https://www.launch.radardao.xyz/" target="_blank" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    HOW IT WORKS
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
               <NavigationMenuItem>
                 <NavigationMenuTrigger>INSPIRATION</NavigationMenuTrigger>
                 <NavigationMenuContent>
