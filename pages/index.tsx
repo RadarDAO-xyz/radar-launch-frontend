@@ -14,7 +14,7 @@ export default function HomePage() {
   const { data } = useGetProjects();
 
   return (
-    <div className="mt-[80px]">
+    <section className="mt-[80px]">
       {/* <Banner /> */}
       <HeaderHero visionOfTheWeekSlot={<VisionOfTheWeekProject />} />
       <ProjectDiv
@@ -42,7 +42,7 @@ export default function HomePage() {
           </Link>
         }
         projects={
-          <>
+          <div className="flex w-full space-x-12">
             {data
               // ?.filter(
               //   (project) =>
@@ -61,11 +61,11 @@ export default function HomePage() {
                   isDisabled={project.status !== ProjectStatus.LIVE}
                 />
               ))}
-          </>
+          </div>
         }
       />
       <FundingPoolHome />
       <InspirationFooter />
-    </div>
+    </section>
   );
 }

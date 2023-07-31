@@ -123,14 +123,8 @@ export function FundingPoolTabs() {
               href="https://radarxyz.notion.site/Funding-Pools-Partner-Briefs-07b0753b0f6f401f9249fe8e0537ef03?pvs=4"
               target="_blank"
             >
-              <Link
-                href="https://radarxyz.notion.site/Funding-Pools-Partner-Briefs-07b0753b0f6f401f9249fe8e0537ef03?pvs=4"
-                target="_blank"
-                className={"body-text center hover:underline"}
-              >
-                {"Learn more about pools "}
-                <span className={"arrow-diagonal"}>{"↗"}</span>
-              </Link>
+              {"Learn more about pools "}
+              <span className={"arrow-diagonal"}>{"↗"}</span>
             </Link>
           </TabsContent>
           <TabsContent

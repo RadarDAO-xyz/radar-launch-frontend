@@ -3,7 +3,7 @@ import { useQuery } from "wagmi";
 
 async function getProjects(): Promise<Project[]> {
   try {
-    return fetch(`${process.env.BACKEND_URL}/projects`).then((res) =>
+    return fetch(`${process.env.BACKEND_URL}/projects?all`).then((res) =>
       res.json()
     );
   } catch (e) {

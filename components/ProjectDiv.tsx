@@ -48,7 +48,7 @@ export function ProjectDiv({
         )}
       </div>
       <div className="month-curated">
-        <div className="flex overflow-auto">{projects}</div>
+        <div className="w-full">{projects}</div>
         <div className="div-block-101 top">{curatorSection}</div>
       </div>
     </section>
