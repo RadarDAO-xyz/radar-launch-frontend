@@ -8067,27 +8067,6 @@ blockquote {
   align-self: center;
 }
 
-@media screen and (max-width: 991px) {
-  .logo-wrapper {
-    width: 20%;
-  }
-}
-
-@media screen and (max-width: 767px) {
-  .logo-wrapper {
-    width: 30%;
-    flex: 0 auto;
-  }
-}
-
-@media screen and (max-width: 479px) {
-  .logo-wrapper {
-    position: relative;
-    z-index: 10;
-    width: 100%;
-  }
-}
-
 .project-tabs {
   padding: 2%;
   border: 2px solid var(--line-83d2b2f6);
