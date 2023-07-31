@@ -100,7 +100,7 @@ export function NavBar() {
           </NavigationMenu>
           <nav className="w-full flex justify-end" role="navigation">
             <div className="flex">
-              <div className="flex space-x-3 pr-2 lg:pr-0">
+              <div className="flex space-x-3 lg:pr-0">
                 <Button variant={'ghost'} asChild>
                   <Link href="https://airtable.com/appGvDqIhUSP0caqo/shrMcuu3zvWEfRqGM" target="_blank">
                     Sign up for drops
@@ -119,8 +119,8 @@ export function NavBar() {
             </div>
           </nav>
           <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="outline">
+            <SheetTrigger asChild className="block lg:hidden ml-2">
+              <Button variant="outline" >
                 <MenuIcon />
               </Button>
             </SheetTrigger>
