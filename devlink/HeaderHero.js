@@ -24,7 +24,7 @@ export function HeaderHero({
   });
 
   return (
-    <_Component className="header-featured" tag="section">
+    <_Component className="header-featured z-20 bg-transparent" tag="section">
       <_Builtin.Block
         className="floating-down-arrow flex justify-between absolute right-[5%]"
         tag="div"

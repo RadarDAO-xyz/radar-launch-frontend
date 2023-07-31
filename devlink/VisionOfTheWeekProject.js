@@ -3,7 +3,7 @@ import * as _Builtin from "./_Builtin";
 
 export function VisionOfTheWeekProject({ as: _Component = _Builtin.Block }) {
   return (
-    <_Component className="featured-project-wrapper" tag="div">
+    <_Component className="featured-project-wrapper bg-transparent" tag="div">
       <_Builtin.Paragraph className="mobile-subtitle">
         {"Featured Project"}
       </_Builtin.Paragraph>
