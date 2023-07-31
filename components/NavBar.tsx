@@ -7,7 +7,7 @@ const WalletNoSSR = dynamic(() => import("./Wallet").then((res) => res.Wallet));
 
 export function NavBar() {
   return (
-    <header className="navbar-logo-center">
+    <header className="navbar-logo-center z-50">
       <div className="navbar-logo-center-container shadow-three">
         <div className="navbar-wrapper-three">
           <div className="logo-wrapper">
