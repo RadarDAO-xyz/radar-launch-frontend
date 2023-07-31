@@ -9,7 +9,7 @@ export function FundingPoolHome() {
     <div className="py-20">
       <div className="funding-pool-title pb-20">
         <h1 className="feature-heading pb-4">{"Funding Pools"}</h1>
-        <p className="body-text larger">
+        <p className="body-text larger px-[5%] md:px-0">
           Funding pools are set by visionary partners asking big questions
           around futures they believe in.
           <br />
@@ -34,7 +34,7 @@ export function FundingPoolHome() {
           title={"BRIEF COMING SOON"}
           poolAmount={10000}
           projectSubmitted={0}
-          dropDate={new Date("2023-08-01")}
+          dropDate={new Date("2023-08-11")}
         />
         <SetOwnBriefPoolCard />
       </div>

@@ -1,5 +1,6 @@
 import React from "react";
 import * as _Builtin from "./_Builtin";
+import { getCountdown } from "@/lib/utils";
 
 export function VisionOfTheWeekProject({ as: _Component = _Builtin.Block }) {
   return (
@@ -45,7 +46,7 @@ export function VisionOfTheWeekProject({ as: _Component = _Builtin.Block }) {
             {"0000 • supporters"}
           </_Builtin.Block>
           <_Builtin.Block className="text-xs text-gray-400" tag="div">
-            {"00d 00h 00m"}
+            {getCountdown(new Date("2023-08-11T21:00:00+02:00"))}
           </_Builtin.Block>
         </_Builtin.Block>
       </_Builtin.Block>

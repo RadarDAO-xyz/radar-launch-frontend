@@ -39,7 +39,7 @@ ListItem.displayName = "ListItem"
 
 export function NavBar() {
   return (
-    <header className="px-[5%] pt-4 z-50">
+    <header className="px-[5%] py-4 z-50 sticky border-b">
       <div className="">
         <div className="navbar-logo-center-container shadow-three items-center">
           <div className="w-40 mr-8">
@@ -52,7 +52,8 @@ export function NavBar() {
                 src="https://uploads-ssl.webflow.com/64548f6f8feacfafa79c9592/645ddcb1ed7bc34887f6efc9_Asset%204%402x-8.png"
               />
             </Link>
-          </div><NavigationMenu className="z-50 lg:flex hidden">
+          </div>
+          <NavigationMenu className="z-50 lg:flex hidden">
             <NavigationMenuList>
               <NavigationMenuItem>
                 <Link href="/pool" legacyBehavior passHref>
@@ -100,10 +101,10 @@ export function NavBar() {
           </NavigationMenu>
           <nav className="w-full flex justify-end" role="navigation">
             <div className="flex">
-              <div className="flex space-x-3 lg:pr-0">
+              <div className="space-x-3 lg:pr-0 hidden sm:flex">
                 <Button variant={'ghost'} asChild>
                   <Link href="https://airtable.com/appGvDqIhUSP0caqo/shrMcuu3zvWEfRqGM" target="_blank">
-                    Sign up for drops
+                    SIGN UP FOR DROPS
                   </Link>
                 </Button>
                 {/* <WalletNoSSR /> */}
@@ -112,7 +113,7 @@ export function NavBar() {
                     href="https://airtable.com/appGvDqIhUSP0caqo/shrvi09PTUP5mTSHN"
                     target="_blank"
                   >
-                    {"Share your project"}
+                    {"SHARE YOUR PROJECT"}
                   </Link>
                 </Button>
               </div>
@@ -163,10 +164,10 @@ export function NavBar() {
                 </Button>
               </div>
               <SheetFooter>
-                <div className="flex justify-between">
+                <div className="flex justify-between flex-col sm:flex-row space-y-2 space-x-2">
                   <Button variant={'ghost'} asChild>
                     <Link href="https://airtable.com/appGvDqIhUSP0caqo/shrMcuu3zvWEfRqGM" target="_blank">
-                      Sign up for drops
+                      SIGN UP FOR DROPS
                     </Link>
                   </Button>
                   {/* <WalletNoSSR /> */}
@@ -175,7 +176,7 @@ export function NavBar() {
                       href="https://airtable.com/appGvDqIhUSP0caqo/shrvi09PTUP5mTSHN"
                       target="_blank"
                     >
-                      {"Share your project"}
+                      {"SHARE YOUR PROJECT"}
                     </Link>
                   </Button>
                 </div>
