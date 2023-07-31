@@ -18,7 +18,7 @@ export default function Updates() {
             <div className="flex mb-20">
                 <div className="w-1/2 pr-10">
                     <h1 className="text-lg">Share an update with your supporters</h1>
-                    <p>Update your supporters with the latest intel on your project and progress. Let them know what you're looking for and how they can support you. Help them help you spread your vision!</p>
+                    <p>Update your supporters with the latest intel on your project and progress. Let them know what you&apos;re looking for and how they can support you. Help them help you spread your vision!</p>
                     
                     <Select>
                         <SelectTrigger className="w-full my-6">
