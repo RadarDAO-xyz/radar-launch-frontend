@@ -48,7 +48,7 @@ export function HeaderHero({
           <div className="arrow-diagonal">{"↗"}</div>
         </Link>
       </_Builtin.Block>
-      <_Builtin.Block className="featured-project-tabs space-x-8" tag="div">
+      <_Builtin.Block className="featured-project-tabs md:w-[80%] lg:w-[80%] space-x-4 lg:space-x-8" tag="div">
         <_Builtin.Block className="about-div home" tag="div">
           <_Builtin.Heading className="heading-5" tag="h1">
             {"SUPPORT IDEAS AND BUILDERS OF FUTURES YOU BELIEVE IN"}

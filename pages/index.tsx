@@ -24,26 +24,6 @@ export default function HomePage() {
         projectSectionTitle="CURATED VISIONS"
         projectSectionDescription="Every month we invite a guest curator to spotlight 4 projects building a better future"
         showCreateProjectButton
-        curatorSection={
-          <Link
-            href="https://www.culture3.xyz/"
-            target="_blank"
-            className="flex"
-          >
-            <p className="curator-text">
-              august curated by
-              <br />
-            </p>
-            <img
-              className="logo"
-              loading="lazy"
-              width={56}
-              height="auto"
-              src="https://uploads-ssl.webflow.com/64548f6f8feacfafa79c9592/64a6a82851e7ea1f12599225_62c421c68db31c451cbecc30_c3full_off_black.svg"
-            />
-            <div className="arrow-diagonal">{"↗"}</div>
-          </Link>
-        }
         projects={
           <div className="flex w-full space-x-12">
             {data
