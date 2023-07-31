@@ -72,10 +72,9 @@ export function ProjectBlock({
       <div className="top-half-of-content">
         <div className="brief-wrapper items-center">
           <div className="div-block-102">
-            <div className="briefs-labels">{"Brief:"}</div>
-            <div className="briefs-labels" fs-cmsfilter-field="brief">
-              {briefName}
-            </div>
+            <div className="briefs-labels">{"Brief"}</div>
+            {/* <div className="briefs-labels" fs-cmsfilter-field="brief">
+            </div> */}
           </div>
           {isDisabled && <div className="text-xs text-gray-500">LOADING</div>}
         </div>
@@ -91,7 +90,7 @@ export function ProjectBlock({
         </div>
         <div className="_20px-div" />
         <Link
-          className={cn("project-copy", isDisabled ? "cursor-default" : "")}
+          className={cn("project-copy", isDisabled ? "pointer-events-none" : "")}
           href={`/project/${id}`}
         >
           <div className="div-block-96">
@@ -105,22 +104,37 @@ export function ProjectBlock({
       </div>
       <div className="bottom-half-of-content">
         <div className="collect-wrapper">
-          <div className="data">
-            <div className="supporters">
-              <div className="amount-of-supporters">{supporters}</div>
-              <div className="small-text">{"• Supporters"}</div>
-            </div>
-            <div className="count-block">
-              <div className="count-wrap">
-                <div className="count-text">{daysLeft}d</div>
+          <div className="data pt-1">
+            {supporters > 0 ?
+              <>
+                <div className="supporters">
+                  <div className="amount-of-supporters">{supporters}</div>
+                  <div className="small-text">{"• Supporters"}</div>
+                </div>
+                <div className="count-block">
+                  <div className="count-wrap">
+                    <div className="count-text">{daysLeft}d</div>
+                  </div>
+                  <div className="count-wrap">
+                    <div className="count-text">{hoursLeft}h</div>
+                  </div>
+                  <div className="count-wrap">
+                    <div className="count-text">{minutesLeft}m</div>
+                  </div>
+                </div>
+              </> : <div className="count-block flex items-center justify-center">
+                <div className="count-wrap">
+                  <div className="count-text">{daysLeft}d</div>
+                </div>
+                <div className="count-wrap">
+                  <div className="count-text">{hoursLeft}h</div>
+                </div>
+                <div className="count-wrap">
+                  <div className="count-text">{minutesLeft}m</div>
+                </div>
+                until drop
               </div>
-              <div className="count-wrap">
-                <div className="count-text">{hoursLeft}h</div>
-              </div>
-              <div className="count-wrap">
-                <div className="count-text">{minutesLeft}m</div>
-              </div>
-            </div>
+            }
           </div>
         </div>
       </div>
