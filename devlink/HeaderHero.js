@@ -26,7 +26,7 @@ export function HeaderHero({
   return (
     <_Component className="header-featured z-20 bg-transparent" tag="section">
       <_Builtin.Block
-        className="floating-down-arrow flex justify-between absolute right-[5%]"
+        className="floating-down-arrow justify-between absolute right-[5%] hidden lg:flex"
         tag="div"
       >
         <_Builtin.Paragraph className="body-text larger">
@@ -107,6 +107,26 @@ export function HeaderHero({
           )}
         </_Builtin.Block>
       </_Builtin.Block>
+      <div className="flex justify-between lg:hidden px-[5%] pt-6">
+        <_Builtin.Paragraph className="body-text larger">
+          {"Curated projects dropping weekly ↓"}
+          <br />
+        </_Builtin.Paragraph>
+        <Link href="https://www.culture3.xyz/" target="_blank" className="flex">
+          <p className="curator-text">
+            august curated by
+            <br />
+          </p>
+          <img
+            className="logo"
+            loading="lazy"
+            width={56}
+            height="auto"
+            src="https://uploads-ssl.webflow.com/64548f6f8feacfafa79c9592/64a6a82851e7ea1f12599225_62c421c68db31c451cbecc30_c3full_off_black.svg"
+          />
+          <div className="arrow-diagonal">{"↗"}</div>
+        </Link>
+      </div>
     </_Component>
   );
 }

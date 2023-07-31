@@ -86,7 +86,7 @@ export function PreLaunchFooter({ as: _Component = _Builtin.Section }) {
         </_Builtin.List>
       </_Builtin.Block>
       <_Builtin.Block className="_20px-div" tag="div" />
-      <_Builtin.Block className="div-block-16" tag="div">
+      <_Builtin.Block className="div-block-16 space-y-2 sm:space-y-0" tag="div">
         <_Builtin.Paragraph className="body-text white">
           {"© 2023 RADAR Community Labs. All rights reserved"}
         </_Builtin.Paragraph>
