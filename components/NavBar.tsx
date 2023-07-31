@@ -104,7 +104,7 @@ export function NavBar() {
               <div className="space-x-3 lg:pr-0 hidden sm:flex">
                 <Button variant={'ghost'} asChild>
                   <Link href="https://airtable.com/appGvDqIhUSP0caqo/shrMcuu3zvWEfRqGM" target="_blank">
-                    Sign up for drops
+                    SIGN UP FOR DROPS
                   </Link>
                 </Button>
                 {/* <WalletNoSSR /> */}
@@ -113,7 +113,7 @@ export function NavBar() {
                     href="https://airtable.com/appGvDqIhUSP0caqo/shrvi09PTUP5mTSHN"
                     target="_blank"
                   >
-                    {"Share your project"}
+                    {"SHARE YOUR PROJECT"}
                   </Link>
                 </Button>
               </div>
@@ -167,7 +167,7 @@ export function NavBar() {
                 <div className="flex justify-between flex-col sm:flex-row space-y-2 space-x-2">
                   <Button variant={'ghost'} asChild>
                     <Link href="https://airtable.com/appGvDqIhUSP0caqo/shrMcuu3zvWEfRqGM" target="_blank">
-                      Sign up for drops
+                      SIGN UP FOR DROPS
                     </Link>
                   </Button>
                   {/* <WalletNoSSR /> */}
@@ -176,7 +176,7 @@ export function NavBar() {
                       href="https://airtable.com/appGvDqIhUSP0caqo/shrvi09PTUP5mTSHN"
                       target="_blank"
                     >
-                      {"Share your project"}
+                      {"SHARE YOUR PROJECT"}
                     </Link>
                   </Button>
                 </div>
