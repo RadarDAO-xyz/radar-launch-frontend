@@ -164,14 +164,14 @@ export function NavBar() {
                 </Button>
               </div>
               <SheetFooter>
-                <div className="flex justify-between flex-col sm:flex-row space-y-2 space-x-2">
+                <div className="flex justify-between flex-col space-y-2 w-full">
                   <Button variant={'ghost'} asChild>
                     <Link href="https://airtable.com/appGvDqIhUSP0caqo/shrMcuu3zvWEfRqGM" target="_blank">
                       SIGN UP FOR DROPS
                     </Link>
                   </Button>
                   {/* <WalletNoSSR /> */}
-                  <Button asChild>
+                  <Button asChild className="w-full">
                     <Link
                       href="https://airtable.com/appGvDqIhUSP0caqo/shrvi09PTUP5mTSHN"
                       target="_blank"
