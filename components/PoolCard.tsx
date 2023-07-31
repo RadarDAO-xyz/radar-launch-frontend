@@ -31,7 +31,7 @@ export function PoolCard({
       <h2 className={cn("text-xl text-center pt-4", dropDate ? "text-gray-400" : "")}>
         {title}
       </h2>
-      <div className="flex justify-between w-full space-x-2 pt-2 px-2">
+      <div className="flex justify-between w-full space-y-2 md:space-y-0 md:space-x-2 pt-2 px-2 flex-col md:flex-row">
         <div className="border rounded-lg p-4 w-full">
           <div className="small-text">{"Remaining Funding pool"}</div>
           <div className="_5px-div" />
@@ -77,7 +77,7 @@ export function PoolCard({
         src="/op-games.png"
       />
       <Image
-        className="sponsor-image absolute rounded-full top-[2%] left-[20%] floating"
+        className="sponsor-image absolute rounded-full top-[2%] left-[calc(2%+80px)] floating"
         loading="lazy"
         alt="OP Games sponsor image"
         width={77}
