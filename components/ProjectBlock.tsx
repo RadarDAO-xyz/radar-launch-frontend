@@ -60,6 +60,7 @@ export function ProjectBlock({
   projectTitle,
   projectDate,
 }: ProjectBlockProps) {
+  
   return (
     <div
       className={cn(
@@ -79,6 +80,7 @@ export function ProjectBlock({
         <div className="_10px-div" />
         <div className="project-image">
           <HoverVideoPlayer
+            focused
             videoSrc={videoUrl}
           />
         </div>

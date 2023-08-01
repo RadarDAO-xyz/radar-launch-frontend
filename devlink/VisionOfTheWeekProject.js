@@ -44,7 +44,7 @@ export function VisionOfTheWeekProject({ as: _Component = _Builtin.Block }) {
         <_Builtin.Block className="_10px-div" tag="div" />
         <_Builtin.Block className="collect-wrapper main flex justify-center bottom-1 md:bottom-[5%]" tag="div">
           <_Builtin.Block className="text-xs text-gray-400" tag="div">
-            {getCountdown(new Date("2023-08-11T21:00:00+02:00"))} until drop
+            {getCountdown(new Date("2023-08-03T23:00:00+02:00"))} until drop
           </_Builtin.Block>
         </_Builtin.Block>
       </_Builtin.Block>
