@@ -81,6 +81,7 @@ export function ProjectBlock({
         <div className="project-image">
           <HoverVideoPlayer
             focused
+            loop
             videoSrc={videoUrl}
           />
         </div>
