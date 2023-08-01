@@ -60,7 +60,7 @@ export function ProjectBlock({
   projectTitle,
   projectDate,
 }: ProjectBlockProps) {
-  
+
   return (
     <div
       className={cn(
@@ -83,7 +83,10 @@ export function ProjectBlock({
             focused
             loop
             videoSrc={videoUrl}
+            className="!hidden md:!inline-block"
           />
+          {/* TODO: figure out why videos not loading on mobile */}
+          <img src={`${videoUrl.split(".")[0]}.png`} className="md:hidden" />
         </div>
         <div className="_20px-div" />
         <Link

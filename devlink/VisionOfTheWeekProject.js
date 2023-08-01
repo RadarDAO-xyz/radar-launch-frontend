@@ -17,7 +17,9 @@ export function VisionOfTheWeekProject({ as: _Component = _Builtin.Block }) {
           focused
           loop
           videoSrc={"/RL1.mp4"}
+          className="!hidden md:!inline-block"
         />
+        <img src={`/RL1.png`} className="md:hidden" />
       </_Builtin.Block>
       <_Builtin.Block className="feature-project-div" tag="div">
         <_Builtin.Block className="_20px-div" tag="div" />
