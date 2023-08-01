@@ -1,4 +1,4 @@
-import { AdminNav } from "@/devlink";
+import { AdminNav } from "@/components/AdminNav";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { User } from "@/types/mongo";
 
@@ -16,7 +16,7 @@ export default function UpdateProfile() {
       onSubmit={handleSubmit(onSubmit)}
       className="mt-24 max-w-screen-lg mx-auto"
     >
-      <AdminNav />
+      <AdminNav isUpdateProfile={true} />
       <div className="border border-slate-200 rounded p-10 mb-10">
         <div className="flex">
           <div>
