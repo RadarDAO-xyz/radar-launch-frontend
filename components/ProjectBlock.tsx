@@ -63,7 +63,7 @@ export function ProjectBlock({
   return (
     <div
       className={cn(
-        "col-span-1 flex h-auto w-full mb-1 flex-col",
+        "col-span-1 flex h-auto w-full mb-4 flex-col",
         isDisabled ? "opacity-70 cursor-default" : ""
       )}
     >
