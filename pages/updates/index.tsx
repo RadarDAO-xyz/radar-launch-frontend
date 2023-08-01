@@ -1,4 +1,4 @@
-import { AdminNav } from "@/devlink";
+import { AdminNav } from "@/components/AdminNav";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Textarea } from "@/components/ui/textarea";
 import {
