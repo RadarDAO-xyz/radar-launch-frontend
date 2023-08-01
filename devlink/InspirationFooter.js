@@ -23,7 +23,7 @@ export function InspirationFooter({ as: _Component = _Builtin.Section }) {
           </_Builtin.Paragraph>
           <_Builtin.Block className="_20px-div" tag="div" />
           <div className="text-link-arrow">
-            <Link className="text-block-43" tag="div" href="/brief">
+            <Link className="text-block-43" tag="div" href="https://www.launch.radardao.xyz/brief" target="_blank">
               {"Find inspiration in our creative briefs "}
               <_Builtin.Span className="right-arrow">{"→"}</_Builtin.Span>
             </Link>

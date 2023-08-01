@@ -49,7 +49,7 @@ export function PreLaunchFooter({ as: _Component = _Builtin.Section }) {
         </_Builtin.Block>
         <_Builtin.List className="footer-list" tag="ul" unstyled={false}>
           <_Builtin.ListItem className="footer-list-item right">
-            <Link className="black-link hover:underline" href="/project/create">
+            <Link className="black-link hover:underline" href="https://airtable.com/appGvDqIhUSP0caqo/shrvi09PTUP5mTSHN" target="_blank">
               {"Submit a project"}
             </Link>
             <_Builtin.HtmlEmbed
