@@ -14,6 +14,7 @@ export function VisionOfTheWeekProject({ as: _Component = _Builtin.Block }) {
       </_Builtin.Block>
       <_Builtin.Block className="project-image" tag="div">
         <HoverVideoPlayer
+          focused
           videoSrc={"/RL1.mp4"}
         />
       </_Builtin.Block>
