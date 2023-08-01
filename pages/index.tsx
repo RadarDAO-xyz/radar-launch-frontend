@@ -25,7 +25,7 @@ export default function HomePage() {
         projectSectionDescription="Every month we invite a guest curator to spotlight 4 projects building a better future"
         showCreateProjectButton
         projects={
-          <div className="flex w-full overflow-auto md:space-x-12 space-x-4">
+          <div className="flex flex-col md:flex-row w-full overflow-auto md:space-x-12">
             {data?.slice(0, 4)
               // ?.filter(
               //   (project) =>
