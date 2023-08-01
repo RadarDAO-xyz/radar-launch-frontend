@@ -15,7 +15,7 @@ export function AdminNav({isUpdateProfile = false}:Props) {
             </div>
             <div className="admin-links ml-auto">
                 {isUpdateProfile && (
-                    <a className="admin-link" href="/updates">Share Update ↗</a>
+                    <Link className="admin-link" href="/updates">Share Update ↗</Link>
                 )}
                 {!isUpdateProfile && (
                     <Link className="admin-link" href="/update-profile">Edit Profile ↗</Link>
