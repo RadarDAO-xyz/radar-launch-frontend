@@ -58,7 +58,7 @@ interface Web3ContextType {
 }
 
 const wagmiConfig = createConfig({
-  autoConnect: true,
+  // autoConnect: true,
   publicClient,
   webSocketPublicClient,
   connectors: [
