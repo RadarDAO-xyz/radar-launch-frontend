@@ -39,7 +39,7 @@ ListItem.displayName = "ListItem"
 
 export function NavBar() {
   return (
-    <header className="px-[5%] py-4 z-50 sticky border-b">
+    <header className="px-[5%] py-4 z-50 sticky top-0 bg-white border-b">
       <div className="">
         <div className="navbar-logo-center-container shadow-three items-center">
           <div className="w-40 mr-8">

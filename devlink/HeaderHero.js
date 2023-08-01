@@ -107,11 +107,7 @@ export function HeaderHero({
           )}
         </_Builtin.Block>
       </_Builtin.Block>
-      <div className="flex justify-between lg:hidden px-[5%] pt-6">
-        <_Builtin.Paragraph className="body-text larger">
-          {"Curated projects dropping weekly ↓"}
-          <br />
-        </_Builtin.Paragraph>
+      <div className="flex justify-center lg:hidden px-[5%] pt-6">
         <Link href="https://www.culture3.xyz/" target="_blank" className="flex">
           <p className="curator-text">
             august curated by

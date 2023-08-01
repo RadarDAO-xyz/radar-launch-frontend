@@ -5,7 +5,7 @@ import HoverVideoPlayer from 'react-hover-video-player'
 
 export function VisionOfTheWeekProject({ as: _Component = _Builtin.Block }) {
   return (
-    <_Component className="featured-project-wrapper bg-transparent" tag="div">
+    <_Component className="featured-project-wrapper" tag="div">
       <_Builtin.Paragraph className="mobile-subtitle">
         {"Featured Project"}
       </_Builtin.Paragraph>
@@ -14,6 +14,7 @@ export function VisionOfTheWeekProject({ as: _Component = _Builtin.Block }) {
       </_Builtin.Block>
       <_Builtin.Block className="project-image" tag="div">
         <HoverVideoPlayer
+          focused
           videoSrc={"/RL1.mp4"}
         />
       </_Builtin.Block>
@@ -41,12 +42,9 @@ export function VisionOfTheWeekProject({ as: _Component = _Builtin.Block }) {
           </_Builtin.Paragraph>
         </_Builtin.Block> */}
         <_Builtin.Block className="_10px-div" tag="div" />
-        <_Builtin.Block className="collect-wrapper main flex justify-between bottom-1   md:bottom-[5%]" tag="div">
-          <_Builtin.Block className="small-text text-gray-400" tag="div">
-            {"0000 • supporters"}
-          </_Builtin.Block>
+        <_Builtin.Block className="collect-wrapper main flex justify-center bottom-1 md:bottom-[5%]" tag="div">
           <_Builtin.Block className="text-xs text-gray-400" tag="div">
-            {getCountdown(new Date("2023-08-11T21:00:00+02:00"))}
+            {getCountdown(new Date("2023-08-11T21:00:00+02:00"))} until drop
           </_Builtin.Block>
         </_Builtin.Block>
       </_Builtin.Block>

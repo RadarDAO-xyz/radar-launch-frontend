@@ -6,10 +6,10 @@ import { Button } from "./ui/button";
 export function FundingPoolHome() {
 
   return (
-    <div className="py-20">
+    <div className="py-20 px-[5%] md:px-0 mx-auto">
       <div className="funding-pool-title pb-20">
         <h1 className="feature-heading pb-4">{"Funding Pools"}</h1>
-        <p className="body-text larger px-[5%] md:px-0">
+        <p className="body-text larger ">
           Funding pools are set by visionary partners asking big questions
           around futures they believe in.
           <br />
