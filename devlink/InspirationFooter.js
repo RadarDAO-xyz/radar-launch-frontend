@@ -45,7 +45,7 @@ export function InspirationFooter({ as: _Component = _Builtin.Section }) {
             <Link
               className="text-block-45"
               tag="div"
-              href="https://lu.ma/radarlaunch"
+              href="https://discord.gg/fpfAsR4nRt"
               target="_blank"
             >
               {"Join our public Discord server to jam on ideas "}
