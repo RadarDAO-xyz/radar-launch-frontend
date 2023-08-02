@@ -3,10 +3,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/components/ui/use-toast";
 import { GOERLI_CONTRACT_ADDRESS, MAINNET_CONTRACT_ADDRESS } from "@/constants/address";
 import { useGetProject } from "@/hooks/useGetProject";
 import { useGetUser } from "@/hooks/useGetUser";
 import { useRadarEditionsGetEditions } from "@/lib/generated";
+import { cn } from "@/lib/utils";
 import isTestnet from "@/lib/utils/isTestnet";
 import { MoveDown } from "lucide-react";
 import Link from "next/link";
@@ -63,14 +65,18 @@ export default function IndividualProjectPage() {
     chainId: chains[0]?.id,
     enabled: Boolean(chains[0]?.id),
   });
+  const { toast } = useToast()
 
   const editionId = onChainProjects?.findIndex(project => project.id === id)
   const value = editionId !== undefined && onChainProjects?.[editionId]?.fee
   const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
     ["checkout-mint-link", editionId, value],
     () => getMintCheckoutLink(editionId!, value!.toString()),
-    { enabled: editionId !== undefined && (value) !== undefined }
+    { enabled: editionId !== undefined && value !== undefined }
   );
+
+  console.log({ onChainProjects, editionId, value })
+
 
   if (!data) {
     return <div>No project found</div>
@@ -165,8 +171,14 @@ export default function IndividualProjectPage() {
 
         <div className="pt-8 pb-4">
           <div className="flex space-x-2 w-full">
-            <Button className="w-full" variant={"ghost"} asChild disabled={isCheckoutLinkLoading || checkoutLink === undefined}>
-              <Link href={checkoutLink!}>
+            <Button className="w-full" variant={"ghost"} asChild disabled={isCheckoutLinkLoading || !checkoutLink}>
+              <Link href={checkoutLink || ""} className={cn(isCheckoutLinkLoading || !checkoutLink ? "pointer-events-none opacity-70" : "")} onClick={() => {
+                if (checkoutLink) {
+                  toast({
+                    title: "Redirecting to checkout"
+                  })
+                }
+              }}>
                 Collect <MoveDown className="ml-1 w-3 h-3" />
               </Link>
             </Button>

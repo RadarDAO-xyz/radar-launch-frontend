@@ -86,7 +86,6 @@ export default function AdminPage() {
   const { address, status } = useAccount();
   const { chain } = useNetwork();
   const { data: onChainProjects } = useRadarEditionsGetEditions({
-    account: address,
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
     chainId: chain?.id,
     enabled: Boolean(chain),
