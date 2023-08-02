@@ -26,11 +26,11 @@ function authenticateUser({
     },
     body: isWalletLogin
       ? JSON.stringify({
-          public_address: address,
-        })
+        public_address: address,
+      })
       : JSON.stringify({
-          appPubKey,
-        }),
+        appPubKey,
+      }),
   });
 }
 
