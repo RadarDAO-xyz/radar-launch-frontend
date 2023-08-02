@@ -235,23 +235,19 @@ export default function ProjectForm() {
         netlify
       >
         <div className="border border-slate-200 rounded p-10 mb-10">
-          <h1>The Vision</h1>
+          <h1>The Project</h1>
           <p className="form-subheading">
-            Make it easy for people to learn about your vision
+            {"Hey there future maker, what's your project?"}
           </p>
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="flex">
             <div className="w-1/2 pr-4">
               <h2 className="text-xl">Basic Info</h2>
               <p>
-                Write a clear, brief title and subtitle to help people quickly
-                understand your project. Both will appear on your project and
-                pre-launch pages.
+                Write a Clear and Concise Title and Subtitle for Your Project
                 <br />
                 <br />
-                Potential supporters will also see them if your project appears
-                on category pages, search results, or in emails we send to our
-                community.
+                Your project title and subtitle will appear on your project and pre-launch pages, as well as in category pages, search results, and emails we send to our community. Make sure they accurately represent your project and are easy to understand for potential supporters.
               </p>
             </div>
             <div className="w-1/2">
@@ -291,13 +287,10 @@ export default function ProjectForm() {
             <div className="w-1/2 pr-4">
               <h2 className="text-xl">Summary</h2>
               <p>
-                Please give us a TLDR that will inspire supporters of your
-                vision, make it authentic rather than polished!
+                Please provide a brief summary that will motivate supporters to believe in your vision. Be genuine rather than polished!
                 <br />
                 <br />
-                Tell people what you&apos;re raising funds to do, how you plan
-                to make it happen, who you are, and why you care about this
-                project, demos and walkthroughs are great!
+                Explain what you aim to achieve with the funding, how you intend to accomplish it, who you are, and why this project is important to you. Demonstrations and step-by-step guides are highly effective!
               </p>
             </div>
             <div className="w-1/2">
@@ -306,16 +299,11 @@ export default function ProjectForm() {
                 name="video_url"
                 render={({ field }) => (
                   <FormItem className="pb-4">
-                    <FormLabel>
-                      Please share a video introducing your vision for a better
-                      future
-                    </FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
                     <FormDescription>
-                      This should be a maximum of 3 minutes; this must be a URL,
-                      you can use vimeo or youtube
+                      Share a brief 3-minute video through a URL (e.g. Vimeo or YouTube) introducing your vision for a better future.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -341,8 +329,8 @@ export default function ProjectForm() {
             <div className="w-1/2 pr-4">
               <h2 className="text-xl">Video Image</h2>
               <p>
-                This thumbnail is taken from the first slide of your uploaded
-                video. <br />
+                This image is taken from the thumbnail of your uploaded video.
+                <br />
                 <br />
                 This will appear for collectors in their wallet and on their
                 profile.
@@ -371,10 +359,7 @@ export default function ProjectForm() {
             <div className="w-1/2 pr-4">
               <h2 className="text-xl">Inspiration</h2>
               <p>
-                Select a brief inspired a More Play-Full Future, or one of our
-                partner briefs and tells us more about why you&apos;re building
-                this, we&apos;ll use this in communications to help share your
-                vision.
+                {"Choose a brief that inspires a playful future, or select one of our partner briefs and explain why you're building it. We'll use this to communicate your vision in any email newsletters, interviews or social campaigns."}
               </p>
             </div>
             <div className="w-1/2">
@@ -425,14 +410,13 @@ export default function ProjectForm() {
         </div>
         <div className="border border-slate-200 rounded p-10 mb-10">
           <h1>The Team</h1>
-          <p className="form-subheading">Who is building the vision</p>
+          <p className="form-subheading">{"Who's building this project?"}</p>
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="flex">
             <div className="w-1/2 pr-4">
               <h2 className="text-xl">Team</h2>
               <p>
-                Add your team members and a short bio, your email will not be
-                visible on the platform.
+                Please add your team members names and brief bio. Note that your email will not be visible on the platform.
               </p>
             </div>
             <div className="w-1/2">
@@ -448,11 +432,7 @@ export default function ProjectForm() {
             <div className="w-1/2 pr-4">
               <h2 className="text-xl">Collaborators</h2>
               <p>
-                Do you want to find collaborators on your project? <br />
-                <br />
-                This will appear in your project description for people to apply
-                to help you build, leave blank if you are not looking for
-                collaborators
+                Specify the type of collaborators you need, technical or non-technical, advisors, audiences, or allies. Provide a project description to invite people to assist you.
               </p>
             </div>
             <div className="w-1/2">
@@ -480,31 +460,18 @@ export default function ProjectForm() {
         <div className="border border-slate-200 rounded p-10 mb-10">
           <h1>Milestones</h1>
           <p className="form-subheading">
-            Set yourself a roadmap to let people know where your vision is
-            heading, you can leave the funding amounts blank if you&apos;re not
-            looking for capital
+            {"What's your roadmap?"}
           </p>
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="flex">
             <div className="w-1/2 pr-4">
               <h2 className="text-xl">Funding Milestones</h2>
               <p>
-                We believe that building is an evolutionary process. Roadmaps
-                are important, but we also want to set achievable milestones.
+                We believe that building is an evolutionary process and we need achievable milestones to help reach it, please list your milestones, big or small, if you are crowdfunding, you must reach the amount in milestone 1 to withdraw funds. Otherwise, supporters will receive a refund.
               </p>
               <br />
               <p>
-                Fill out milestones you&apos;re hoping to achieve in your
-                projects, big or small.
-              </p>
-              <br />
-              <p>
-                Leave the funding amount blank if you&apos;re not looking to
-                crowdfund.
-              </p>
-              <br />
-              <p>
-                Note: you will have to reach milestone 1 to unlock your funds
+                If you are not crowdfunding, leave the funding amounts blank.
               </p>
             </div>
             <div className="w-1/2">
@@ -515,21 +482,14 @@ export default function ProjectForm() {
         <div className="border border-slate-200 rounded p-10 mb-10">
           <h1>Crowdfund (Optional)</h1>
           <p className="form-subheading">
-            Raise capital to reach your milestones, set optional benefits to
-            inspire people to support
+            Do you want to crowdfund to reach your milestones, raise capital and offer optional benefits to inspire people to support you?
           </p>
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="flex">
             <div className="w-1/2 pr-4">
               <h2 className="text-xl">Crowdfunding</h2>
               <p>
-                We know how hard it is for projects to get the resources they
-                need to build outside of the current broken funding systems.
-                <br />
-                <br />
-                On Launch, we do crowdfunding a bit differently. We encourage
-                you to set realistic crowdfunding goals to reach smaller
-                milestones and then come back to raise again.
+                We encourage you to focus on smaller fundraising goals to reach impactful milestones, building trust and growing supporters as you go, and crowdraise again at any time for new experiments, ideas and projects on your journey.
               </p>
             </div>
             <div className="w-1/2">
@@ -558,23 +518,13 @@ export default function ProjectForm() {
             <div className="w-1/2 pr-4">
               <h2 className="text-xl">Editions</h2>
               <p>
-                Collecting editions of your vision is how people support you and
-                your project. It allows early adopters to signal their believe
-                and build reputation around emerging futures.
+                On Launch, projects start with a default edition price of $0.
                 <br />
                 <br />
-                We want to make this as accessible as possible, so there is a
-                max price of $20 per edition.
+                You can offer benefits and set an alternate price for your editions to incentivize supporters.
                 <br />
                 <br />
-                To encourage more collections, you can set benefits for
-                multiples e.g 5 editions unlocks access to a physical print.
-                <br />
-                <br />
-                See more on editions below.
-                <br />
-                <br />
-                Supporters will be able to collect editions with credit card.
+                Edition prices are set at a maximum of $20 to make supporting projects accessible.
               </p>
             </div>
             <div className="w-1/2">
@@ -662,18 +612,7 @@ export default function ProjectForm() {
             <div className="w-1/2 pr-4">
               <h2 className="text-xl">Set your admin address</h2>
               <p>
-                Please share an Ethereum address which can withdraw your
-                crowdfunded money.
-                <br />
-                <br />
-                Make sure you have access to this address.
-                <br />
-                <br />
-                In the current version this cannot be a safe address.
-                <br />
-                <br />
-                In the future you will be able to withdraw straight to bank
-                account.
+                Please share an Ethereum address which can withdraw your crowdfund, please ensure you have access to this address.
               </p>
             </div>
             <div className="w-1/2">
@@ -698,41 +637,37 @@ export default function ProjectForm() {
         <div className="border border-slate-200 rounded p-10 mb-10">
           <h1>Ready to submit</h1>
           <p className="form-subheading">
-            Remind yourself of what happens next
+            What happens next?
           </p>
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="flex">
             <div className="w-1/2 pr-4">
               <h2 className="text-xl">Project Review</h2>
               <p>
-                Proposals will be reviewed by selected members of the
-                RADAR Community. Expect to receive a decision within 48 hours.
-                You can re-apply if unsuccessful however we will not be able to
-                answer bespoke feedback for why briefs were not successful.
+                Selected RADAR Community members review proposals and respond within 48 hours. We are unable to provide feedback on unsuccessful briefs but you may re-apply.
               </p>
             </div>
             <div className="w-1/2">
               <h3>Your proposal will be accepted if:</h3>
               <ul className="ml-6 list-disc [&>li]:mt-2">
                 <li>
-                  They answer a brief or have been inspired by a more play-full
-                  future
+                  You have answered a brief
                 </li>
                 <li>
                   {
-                    "They've shown they have the skills to execute on their vision and that they have an advantage"
+                    "You have shown you have the skills to execute on your project"
                   }
                 </li>
                 <li>
-                  {"They're building something that people want to be part of"}
+                  {"You are building something that people want to be part of"}
                 </li>
               </ul>
               <h3>Your proposal will be denied if:</h3>
               <ul className="ml-6 list-disc [&>li]:mt-2">
-                <li>{"They're not answering the brief"}</li>
-                <li>{"They're submissions contains a prohibited item"}</li>
+                <li>{"You’re not answering the brief"}</li>
+                <li>{"Your submissions contains a prohibited item"}</li>
                 <li>
-                  {"They're selling a purely speculative asset with no utility"}
+                  {"Your selling a purely speculative asset with no utility"}
                 </li>
               </ul>
             </div>
