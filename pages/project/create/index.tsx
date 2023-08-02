@@ -42,7 +42,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { format, isBefore } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { useAccount, useMutation, useNetwork, useQuery } from "wagmi";
+import { useAccount, useEnsAddress, useMutation, useNetwork, useQuery } from "wagmi";
 import * as z from "zod";
 import { TeamFields } from "../../../components/TeamFields";
 import {
@@ -54,10 +54,11 @@ import {
 import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "@/components/AuthProvider";
-import { isAddress, isAddressEqual } from "viem";
+import { Address, isAddress, isAddressEqual } from "viem";
 import { retrieveYoutubeId } from "../../../lib/retrieveYoutubeId";
 import { YOUTUBE_REGEX } from "../../../constants/regex";
-import { WHITELISTED_ADDRESSES } from "@/constants/whitelist";
+import isTestnet from "@/lib/utils/isTestnet";
+import { chains } from "@/components/Web3Provider";
 
 async function createProject(
   idToken: string,
@@ -145,7 +146,7 @@ const formSchema = z.object({
   admin_address: z
     .string()
     .min(1, { message: "Admin address is required" })
-    .refine(isAddress, { message: "Invalid address" }),
+    .refine(address => isAddress(address) || address.endsWith('.eth'), { message: "Invalid address" }),
 });
 
 export default function ProjectForm() {
@@ -173,7 +174,6 @@ export default function ProjectForm() {
       edition_price: 0,
       mint_end_date: new Date(),
       benefits: [],
-      // @ts-expect-error "" is not of type Address
       admin_address: address || "",
     },
   });
@@ -187,6 +187,12 @@ export default function ProjectForm() {
   const admin_address = watch("admin_address");
   const video_image = watch("video_image");
 
+
+  const { data: ensAddressData } = useEnsAddress({
+    name: admin_address,
+    chainId: chains[0].id,
+    enabled: admin_address.endsWith('.eth')
+  })
   const {
     data: createProjectData,
     mutateAsync,
@@ -194,11 +200,14 @@ export default function ProjectForm() {
     isSuccess: isSubmitSuccess,
   } = useMutation(["submit-project"], () => {
     const values = form.getValues();
-    return createProject(idToken, { ...values, video_image: retrieveYoutubeId(values.video_image) })
-  }
-  );
+    let admin_address = values.admin_address
+    if (admin_address.endsWith('.eth')) {
+      admin_address = ensAddressData || admin_address
+    }
+    return createProject(idToken, { ...values, video_image: retrieveYoutubeId(values.video_image), admin_address })
+  });
   const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
-    ["checkout-link", fee, createProjectData?._id, admin_address],
+    ["checkout-link", fee, createProjectData?._id, ensAddressData || admin_address],
     () => getCheckoutLink(fee, admin_address, createProjectData._id),
     { enabled: Boolean(createProjectData?._id) }
   );
@@ -235,7 +244,7 @@ export default function ProjectForm() {
   }, [isSubmitSuccess, createProjectData, toast, router, checkoutLink]);
 
   useEffect(() => {
-    if (address !== undefined && !WHITELISTED_ADDRESSES.some(addr => isAddressEqual(address, addr))) {
+    if (address !== undefined && !(process.env.WHITELISTED_ADDRESSES?.split(" ") || []).some(addr => isAddressEqual(address, addr as Address))) {
       router.back()
     }
   }, [address, router])
@@ -641,7 +650,7 @@ export default function ProjectForm() {
                       <Input {...field} placeholder="Your ETH / ENS address" />
                     </FormControl>
                     <FormDescription>
-                      This should start with 0x... or end with .ens
+                      This should start with 0x... or end with .eth
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
