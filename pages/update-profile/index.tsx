@@ -5,7 +5,7 @@ import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
 
 async function updateUser(values:User, id:number) {
   const res = await fetch(`${process.env.BACKEND_URL}/users/${id}`, {
-    method: "put",
+    method: "patch",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${id}`,
