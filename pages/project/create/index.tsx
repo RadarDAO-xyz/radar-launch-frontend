@@ -195,8 +195,10 @@ export default function ProjectForm() {
     mutateAsync,
     isLoading: isSubmitLoading,
     isSuccess: isSubmitSuccess,
-  } = useMutation(["submit-project"], () =>
-    createProject(idToken, form.getValues())
+  } = useMutation(["submit-project"], () => {
+    const values = form.getValues();
+    return createProject(idToken, { ...values, video_image: retrieveYoutubeId(values.video_image) })
+  }
   );
   const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
     ["checkout-link", fee, createProjectData?._id, admin_address],
