@@ -1,11 +1,17 @@
+import { chains } from "@/components/Web3Provider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { GOERLI_CONTRACT_ADDRESS, MAINNET_CONTRACT_ADDRESS } from "@/constants/address";
 import { useGetProject } from "@/hooks/useGetProject";
 import { useGetUser } from "@/hooks/useGetUser";
+import { useRadarEditionsGetEditions } from "@/lib/generated";
+import isTestnet from "@/lib/utils/isTestnet";
 import { MoveDown } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/router";
+import { useQuery } from "wagmi";
 
 enum Tab {
   ONE = "ONE",
@@ -22,17 +28,54 @@ function transformYouTubeUrl(url: string) {
   return url;
 }
 
+async function getMintCheckoutLink(
+  editionId: number,
+  value: string // project's mint fee
+): Promise<string> {
+  try {
+    const result = await fetch(`/api/get-mint-checkout-link`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        editionId, value,
+      }),
+    }).then((res) => res.json());
+
+    if ("checkoutLinkIntentUrl" in result) {
+      return result.checkoutLinkIntentUrl;
+    }
+  } catch (e) {
+    console.error(e);
+  }
+  return "";
+}
+
 export default function IndividualProjectPage() {
   const router = useRouter()
   const { id } = router.query;
 
   const { data } = useGetProject(id?.toString())
   const { data: userData } = useGetUser(data?.founder)
+  const { data: onChainProjects } = useRadarEditionsGetEditions({
+    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    chainId: chains[0]?.id,
+    enabled: Boolean(chains[0]?.id),
+  });
+
+  const editionId = onChainProjects?.findIndex(project => project.id === id)
+  const value = editionId !== undefined && onChainProjects?.[editionId]?.fee
+  const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
+    ["checkout-mint-link", editionId, value],
+    () => getMintCheckoutLink(editionId!, value!.toString()),
+    { enabled: editionId !== undefined && (value) !== undefined }
+  );
+
   if (!data) {
     return <div>No project found</div>
   }
   console.log("Video URL", data.video_url)
-  console.log({ data, userData })
 
   return (
 
@@ -122,8 +165,10 @@ export default function IndividualProjectPage() {
 
         <div className="pt-8 pb-4">
           <div className="flex space-x-2 w-full">
-            <Button className="w-full" variant={"ghost"}>
-              Collect <MoveDown className="ml-1 w-3 h-3" />
+            <Button className="w-full" variant={"ghost"} asChild disabled={isCheckoutLinkLoading || checkoutLink === undefined}>
+              <Link href={checkoutLink!}>
+                Collect <MoveDown className="ml-1 w-3 h-3" />
+              </Link>
             </Button>
             <Button className="w-full" variant={"ghost"}>
               Sign Up <MoveDown className="ml-1 w-3 h-3" />
