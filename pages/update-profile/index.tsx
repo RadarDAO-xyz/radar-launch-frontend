@@ -33,7 +33,7 @@ export default function UpdateProfile() {
   const onSubmit: SubmitHandler<User> = (formData) => {
     try {
       if(data)
-      // @ts-ignore
+      // @ts-ignore ts doesn't like mongoose id's
       updateUser(formData, data._id)
     } catch (error) {
       console.log(error)
