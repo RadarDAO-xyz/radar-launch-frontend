@@ -58,27 +58,39 @@ export default function UpdateProfile() {
           <div className="grow pr-4">
             <label>Your name</label>
             <input
-              {...register(`name`)}
+              {...register(`name`, { required: "Name is required" })}
               className="w-full input-field mb-2"
               placeholder="Name"
             />
+            <span className="text-red-600 text-xs">
+              {" "}
+              {errors.name && errors.name.message}
+            </span>
           </div>
           <div className="grow">
             <label>Where people can find you</label>
             <input
-              {...register(`socials`)}
+              {...register(`socials`, { required: "Social is required" })}
               className="w-full input-field mb-2"
               placeholder="https://"
             />
+            <span className="text-red-600 text-xs">
+              {" "}
+              {errors.socials && errors.socials.message}
+            </span>
           </div>
         </div>
         <hr className="border-b-1 border-slate-200 my-8" />
         <label>Your Bio</label>
         <textarea
-          {...register(`bio`)}
+          {...register(`bio`, { required: "Bio is required" })}
           className="w-full input-field mb-2"
           placeholder="Something about yourself..."
         />
+        <span className="text-red-600 text-xs">
+              {" "}
+              {errors.bio && errors.bio.message}
+            </span>
         <hr className="border-b-1 border-slate-200 my-8" />
         <button
           className="bg-black text-white rounded leading-10 px-5"
