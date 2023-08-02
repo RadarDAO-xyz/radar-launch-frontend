@@ -1,86 +1,52 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useGetProject } from "@/hooks/useGetProject";
 import { MoveDown } from "lucide-react";
+import { useRouter } from "next/router";
 
 enum Tab {
   ONE = "ONE",
   TWO = "TWO",
 }
 
-const milestones = [
-  {
-    name: "Milestone 1",
-    amount: 0,
-  },
-  {
-    name: "Milestone 2",
-    amount: 0,
-  },
-  {
-    name: "Milestone 3",
-    amount: 0,
-  },
-  {
-    name: "Milestone 4",
-    amount: 0,
-  },
-  {
-    name: "Milestone 5",
-    amount: 0,
-  },
-  {
-    name: "Milestone 6",
-    amount: 0,
-  },
-];
-
-const benefits = [
-  {
-    amountRequired: 0,
-    benefitTitle: "Benefit 1",
-  },
-  {
-    amountRequired: 0,
-    benefitTitle: "Benefit 2",
-  },
-  {
-    amountRequired: 0,
-    benefitTitle: "Benefit 3",
-  },
-  {
-    amountRequired: 0,
-    benefitTitle: "Benefit 4",
-  },
-  {
-    amountRequired: 0,
-    benefitTitle: "Benefit 5",
-  },
-  {
-    amountRequired: 0,
-    benefitTitle: "Benefit 6",
-  },
-  {
-    amountRequired: 0,
-    benefitTitle: "Benefit 7",
-  },
-];
+function transformYouTubeUrl(url: string) {
+  if (!url.includes("youtube")) {
+    return ""
+  }
+  if (!url.includes("embed")) {
+    return url.replace("watch?v=", "embed/");
+  }
+  return url;
+}
 
 export default function IndividualProjectPage() {
+  const router = useRouter()
+  const { id } = router.query;
+
+  const { data } = useGetProject(id?.toString())
+
+  if (!data) {
+    return <div>No project found</div>
+  }
+  console.log("Video URL", data.video_url)
+
   return (
-    <div className="grid grid-cols-6 mt-20 px-[5%] bg-white py-12">
-      <div className="col-span-4 overflow-y-scroll pr-10">
+
+    <div className="grid grid-cols-6 px-[5%] bg-white py-12">
+      <div className="col-span-4 pr-10">
         <div>
-          <iframe
-            width={"100%"}
-            className="aspect-video  pt-6"
-            src={`https://www.youtube.com/embed/wy8tgRbHN1U`}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            title="Embedded youtube"
-          />
+          {transformYouTubeUrl(data?.video_url) !== '' ?
+            <iframe
+              width={"100%"}
+              className="aspect-video pt-6"
+              src={transformYouTubeUrl(data?.video_url)}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              title="Embedded youtube"
+            />
+            : <div>Invalid project video submitted. See browser console for more information</div>}
         </div>
         <div className="text-lg pt-10 pb-4">
           The Brief: <span className="font-semibold">Brief Name</span>
@@ -97,10 +63,19 @@ export default function IndividualProjectPage() {
             <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16">
               Project TLDR
             </h3>
+            <p>{data?.tldr}</p>
             <hr />
             <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16 pt-10">
               Who is the team executing on this vision
             </h3>
+            {data?.team.map((teamMember, index) => (
+              <div key={teamMember.name} className="space-y-2 pb-4">
+                <h4 className="font-semibold">{index + 1}. {teamMember.name}</h4>
+                <div className="text-gray-600">
+                  {teamMember.bio}
+                </div>
+              </div>
+            ))}
             <hr />
             <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16 pt-10">
               This project is looking for:
@@ -111,15 +86,15 @@ export default function IndividualProjectPage() {
             </h3>
             <Table>
               <TableBody>
-                {milestones.map((milestone) => (
-                  <TableRow key={milestone.name}>
+                {data?.milestones.map((milestone) => (
+                  <TableRow key={milestone.text}>
                     <TableCell className="font-medium text-xl w-[200px]">
                       ${" "}
                       <span className="text-gray-400 text">
                         {milestone.amount.toFixed(2)}
                       </span>
                     </TableCell>
-                    <TableCell className="border-l">{milestone.name}</TableCell>
+                    <TableCell className="border-l">{milestone.text}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -128,7 +103,7 @@ export default function IndividualProjectPage() {
           <TabsContent value={Tab.TWO}></TabsContent>
         </Tabs>
       </div>
-      <div className="col-span-2 overflow-y-scroll px-4 pt-6">
+      <div className="col-span-2 px-4 pt-6">
         <div className="flex space-x-2 pb-4">
           <Avatar className="w-12 h-12">
             <AvatarImage src="/default-avatar.png" alt="@shadcn" />
@@ -164,13 +139,13 @@ export default function IndividualProjectPage() {
         </div>
 
         <hr />
-        {benefits.map((benefit) => (
-          <div key={benefit.benefitTitle} className="mt-4 border rounded">
+        {data?.benefits.map((benefit) => (
+          <div key={benefit.text} className="mt-4 border rounded">
             <h3 className="p-4">
-              Collect {benefit.amountRequired} or more editions and get
+              Collect {benefit.amount} or more editions and get
             </h3>
             <hr />
-            <p className="p-4">{benefit.benefitTitle}</p>
+            <p className="p-4">{benefit.text}</p>
           </div>
         ))}
       </div>
