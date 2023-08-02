@@ -1,15 +1,43 @@
 import { AdminNav } from "@/components/AdminNav";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { User } from "@/types/mongo";
+import { useGetSignedUser } from "@/hooks/useGetSignedUser";
+
+async function updateUser(values:User, id:number) {
+  const res = await fetch(`${process.env.BACKEND_URL}/users/${id}`, {
+    method: "put",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${id}`,
+    },
+    body: JSON.stringify(values),
+  });
+  return await res.json();
+}
 
 export default function UpdateProfile() {
+  const { data } = useGetSignedUser()
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<User>();
-  const onSubmit: SubmitHandler<User> = (data) => console.log(data);
+  } = useForm<User>({
+    mode: "onBlur",
+    defaultValues: {
+      name: data ? data[0].name : '',
+      socials: data ? data[0].socials : '',
+      bio: data ? data[0].bio : ''
+    }
+  });
+  const onSubmit: SubmitHandler<User> = (data) => {
+    try {
+      // @ts-ignore
+      updateUser(data, data._id)
+    } catch (error) {
+      console.log(error)
+    }
+  };
 
   return (
     <form
