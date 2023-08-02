@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetProject } from "@/hooks/useGetProject";
+import { useGetUser } from "@/hooks/useGetUser";
 import { MoveDown } from "lucide-react";
 import { useRouter } from "next/router";
 
@@ -26,11 +27,12 @@ export default function IndividualProjectPage() {
   const { id } = router.query;
 
   const { data } = useGetProject(id?.toString())
-
+  const { data: userData } = useGetUser(data?.founder)
   if (!data) {
     return <div>No project found</div>
   }
   console.log("Video URL", data.video_url)
+  console.log({ data, userData })
 
   return (
 
@@ -49,9 +51,9 @@ export default function IndividualProjectPage() {
             : <div>Invalid project video submitted. See browser console for more information</div>}
         </div>
         <div className="text-lg pt-10 pb-4">
-          The Brief: <span className="font-semibold">Brief Name</span>
+          The Brief: <span className="font-semibold">{data.brief}</span>
         </div>
-        <h2 className="text-3xl pb-4">Heading</h2>
+        <h2 className="text-3xl pb-4">{data.title}</h2>
         <hr />
         <p className="text-lg py-6">This is some text inside of a div block.</p>
         <Tabs defaultValue={Tab.ONE} className="border py-6">
@@ -63,12 +65,12 @@ export default function IndividualProjectPage() {
             <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16">
               Project TLDR
             </h3>
-            <p>{data?.tldr}</p>
+            <p>{data.tldr}</p>
             <hr />
             <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16 pt-10">
               Who is the team executing on this vision
             </h3>
-            {data?.team.map((teamMember, index) => (
+            {data.team.map((teamMember, index) => (
               <div key={teamMember.name} className="space-y-2 pb-4">
                 <h4 className="font-semibold">{index + 1}. {teamMember.name}</h4>
                 <div className="text-gray-600">
@@ -106,13 +108,13 @@ export default function IndividualProjectPage() {
       <div className="col-span-2 px-4 pt-6">
         <div className="flex space-x-2 pb-4">
           <Avatar className="w-12 h-12">
-            <AvatarImage src="/default-avatar.png" alt="@shadcn" />
+            <AvatarImage src={userData?.profile || "/default-avatar.png"} alt="@shadcn" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <div>
-            <p className="pb-1">Founder Name</p>
+            <p className="pb-1">{userData?.name}</p>
             <p className="font-mono text-gray-600">
-              0x7730B4Cdc1B1E7a33A309AB7205411faD009C106
+              {data.admin_address}
             </p>
           </div>
         </div>
@@ -139,7 +141,7 @@ export default function IndividualProjectPage() {
         </div>
 
         <hr />
-        {data?.benefits.map((benefit) => (
+        {data.benefits.map((benefit) => (
           <div key={benefit.text} className="mt-4 border rounded">
             <h3 className="p-4">
               Collect {benefit.amount} or more editions and get
