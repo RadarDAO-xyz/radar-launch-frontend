@@ -129,7 +129,7 @@ const formSchema = z.object({
       // .min(1, { message: "Milestone description is required" }),
     })
   ),
-  edition_price: z.coerce.number(),
+  edition_price: z.coerce.number().min(0, { message: "Edition price too small, minimum 0" }).max(20, { message: "Edition price too large, maximum 20" }),
   mint_end_date: z.date().min(new Date(), {
     message: "Must end later than today",
   }),
@@ -240,8 +240,8 @@ export default function ProjectForm() {
             {"Hey there future maker, what's your project?"}
           </p>
           <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="flex">
-            <div className="w-1/2 pr-4">
+          <div className="grid grid-cols-2 gap-10">
+            <div className="col-span-1 pr-4">
               <h2 className="text-xl">Basic Info</h2>
               <p>
                 Write a Clear and Concise Title and Subtitle for Your Project
@@ -250,7 +250,7 @@ export default function ProjectForm() {
                 Your project title and subtitle will appear on your project and pre-launch pages, as well as in category pages, search results, and emails we send to our community. Make sure they accurately represent your project and are easy to understand for potential supporters.
               </p>
             </div>
-            <div className="w-1/2">
+            <div className="col-span-1">
               <FormField
                 control={control}
                 name="title"
@@ -283,8 +283,8 @@ export default function ProjectForm() {
             </div>
           </div>
           <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="flex">
-            <div className="w-1/2 pr-4">
+          <div className="grid grid-cols-2 gap-10">
+            <div className="col-span-1 pr-4">
               <h2 className="text-xl">Summary</h2>
               <p>
                 Please provide a brief summary that will motivate supporters to believe in your vision. Be genuine rather than polished!
@@ -293,7 +293,7 @@ export default function ProjectForm() {
                 Explain what you aim to achieve with the funding, how you intend to accomplish it, who you are, and why this project is important to you. Demonstrations and step-by-step guides are highly effective!
               </p>
             </div>
-            <div className="w-1/2">
+            <div className="col-span-1">
               <FormField
                 control={control}
                 name="video_url"
@@ -325,8 +325,8 @@ export default function ProjectForm() {
             </div>
           </div>
           <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="flex">
-            <div className="w-1/2 pr-4">
+          <div className="grid grid-cols-2 gap-10">
+            <div className="col-span-1 pr-4">
               <h2 className="text-xl">Video Image</h2>
               <p>
                 This image is taken from the thumbnail of your uploaded video.
@@ -340,7 +340,7 @@ export default function ProjectForm() {
               control={control}
               name="video_image"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="col-span-1">
                   <FormControl>
                     <Input
                       type="file"
@@ -355,14 +355,14 @@ export default function ProjectForm() {
             />
           </div>
           <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="flex">
-            <div className="w-1/2 pr-4">
+          <div className="grid grid-cols-2 gap-10">
+            <div className="col-span-1 pr-4">
               <h2 className="text-xl">Inspiration</h2>
               <p>
                 {"Choose a brief that inspires a playful future, or select one of our partner briefs and explain why you're building it. We'll use this to communicate your vision in any email newsletters, interviews or social campaigns."}
               </p>
             </div>
-            <div className="w-1/2">
+            <div className="col-span-1">
               <FormField
                 control={control}
                 name="brief"
@@ -412,14 +412,14 @@ export default function ProjectForm() {
           <h1>The Team</h1>
           <p className="form-subheading">{"Who's building this project?"}</p>
           <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="flex">
-            <div className="w-1/2 pr-4">
+          <div className="grid grid-cols-2 gap-10">
+            <div className="col-span-1 pr-4">
               <h2 className="text-xl">Team</h2>
               <p>
                 Please add your team members names and brief bio. Note that your email will not be visible on the platform.
               </p>
             </div>
-            <div className="w-1/2">
+            <div className="col-span-1">
               <TeamFields />
             </div>
           </div>
@@ -428,14 +428,14 @@ export default function ProjectForm() {
           <h1>Support</h1>
           <p className="form-subheading">What support are you looking for?</p>
           <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="flex">
-            <div className="w-1/2 pr-4">
+          <div className="grid grid-cols-2 gap-10">
+            <div className="col-span-1 pr-4">
               <h2 className="text-xl">Collaborators</h2>
               <p>
                 Specify the type of collaborators you need, technical or non-technical, advisors, audiences, or allies. Provide a project description to invite people to assist you.
               </p>
             </div>
-            <div className="w-1/2">
+            <div className="col-span-1">
               <FormField
                 control={control}
                 name="collaborators"
@@ -463,8 +463,8 @@ export default function ProjectForm() {
             {"What's your roadmap?"}
           </p>
           <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="flex">
-            <div className="w-1/2 pr-4">
+          <div className="grid grid-cols-2 gap-10">
+            <div className="col-span-1 pr-4">
               <h2 className="text-xl">Funding Milestones</h2>
               <p>
                 We believe that building is an evolutionary process and we need achievable milestones to help reach it, please list your milestones, big or small, if you are crowdfunding, you must reach the amount in milestone 1 to withdraw funds. Otherwise, supporters will receive a refund.
@@ -474,7 +474,7 @@ export default function ProjectForm() {
                 If you are not crowdfunding, leave the funding amounts blank.
               </p>
             </div>
-            <div className="w-1/2">
+            <div className="col-span-1">
               <MilestoneFields />
             </div>
           </div>
@@ -485,14 +485,14 @@ export default function ProjectForm() {
             Do you want to crowdfund to reach your milestones, raise capital and offer optional benefits to inspire people to support you?
           </p>
           <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="flex">
-            <div className="w-1/2 pr-4">
+          <div className="grid grid-cols-2 gap-10">
+            <div className="col-span-1 pr-4">
               <h2 className="text-xl">Crowdfunding</h2>
               <p>
                 We encourage you to focus on smaller fundraising goals to reach impactful milestones, building trust and growing supporters as you go, and crowdraise again at any time for new experiments, ideas and projects on your journey.
               </p>
             </div>
-            <div className="w-1/2">
+            <div className="col-span-1">
               <FormField
                 control={control}
                 name="waitlist"
@@ -514,8 +514,8 @@ export default function ProjectForm() {
             </div>
           </div>
           <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="flex">
-            <div className="w-1/2 pr-4">
+          <div className="grid grid-cols-2 gap-10">
+            <div className="col-span-1 pr-4">
               <h2 className="text-xl">Editions</h2>
               <p>
                 On Launch, projects start with a default edition price of $0.
@@ -527,7 +527,7 @@ export default function ProjectForm() {
                 Edition prices are set at a maximum of $20 to make supporting projects accessible.
               </p>
             </div>
-            <div className="w-1/2">
+            <div className="col-span-1">
               <FormField
                 control={control}
                 name="edition_price"
@@ -536,7 +536,7 @@ export default function ProjectForm() {
                     <FormLabel>Edition Price</FormLabel>
                     <div className="flex items-center space-x-2">
                       <FormControl>
-                        <Input type="number" {...field} />
+                        <Input type="number" placeholder="0-20" {...field} />
                       </FormControl>
                       <p>$USD</p>
                       <FormMessage />
@@ -587,8 +587,8 @@ export default function ProjectForm() {
             </div>
           </div>
           <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="flex">
-            <div className="w-1/2 pr-4">
+          <div className="grid grid-cols-2 gap-10">
+            <div className="col-span-1 pr-4">
               <h2 className="text-xl">Optional Benefits for supporters</h2>
               <p>
                 Set benefits for collectors of your editions, this will be
@@ -603,19 +603,19 @@ export default function ProjectForm() {
                 through Launch.
               </p>
             </div>
-            <div className="w-1/2">
+            <div className="col-span-1">
               <RepeatingField />
             </div>
           </div>
           <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="flex">
-            <div className="w-1/2 pr-4">
+          <div className="grid grid-cols-2 gap-10">
+            <div className="col-span-1 pr-4">
               <h2 className="text-xl">Set your admin address</h2>
               <p>
                 Please share an Ethereum address which can withdraw your crowdfund, please ensure you have access to this address.
               </p>
             </div>
-            <div className="w-1/2">
+            <div className="col-span-1">
               <FormField
                 control={control}
                 name={`admin_address`}
@@ -640,14 +640,14 @@ export default function ProjectForm() {
             What happens next?
           </p>
           <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="flex">
-            <div className="w-1/2 pr-4">
+          <div className="grid grid-cols-2 gap-10">
+            <div className="col-span-1 pr-4">
               <h2 className="text-xl">Project Review</h2>
               <p>
                 Selected RADAR Community members review proposals and respond within 48 hours. We are unable to provide feedback on unsuccessful briefs but you may re-apply.
               </p>
             </div>
-            <div className="w-1/2">
+            <div className="col-span-1">
               <h3>Your proposal will be accepted if:</h3>
               <ul className="ml-6 list-disc [&>li]:mt-2">
                 <li>

@@ -37,11 +37,11 @@ export const MilestoneFields = ({ children }: Props) => {
         <div key={index} className="mb-6">
           <FormField
             control={control}
-            name={`milestone.${row.key}.text`}
+            name={`milestone.${row.key}.amount`}
             render={({ field }) => (
               <FormItem className="pb-4">
                 <FormControl>
-                  <Input {...field} placeholder="Name" />
+                  <Input {...field} type="number" placeholder="$" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -49,11 +49,11 @@ export const MilestoneFields = ({ children }: Props) => {
           />
           <FormField
             control={control}
-            name={`milestone.${row.key}.amount`}
+            name={`milestone.${row.key}.text`}
             render={({ field }) => (
-              <FormItem>
+              <FormItem >
                 <FormControl>
-                  <Input {...field} type="number" placeholder="$" />
+                  <Input {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
