@@ -2,21 +2,25 @@ import { AdminNav } from "@/components/AdminNav";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { User } from "@/types/mongo";
 import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
+import { useContext } from "react";
+import { AuthContext } from "@/components/AuthProvider";
 
-async function updateUser(values: User, id: number) {
-  const res = await fetch(`${process.env.BACKEND_URL}/users/${id}`, {
-    method: "patch",
+async function updateUser(values: User, idToken: string) {
+  const res = await fetch(`${process.env.BACKEND_URL}/users/${values._id}`, {
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${id}`,
+      Authorization: `Bearer ${idToken}`,
     },
     body: JSON.stringify(values),
   });
   return await res.json();
 }
 
+// TODO: create separate form schema distinct from User
 export default function UpdateProfile() {
   const { data } = useGetCurrentUser()
+  const { idToken } = useContext(AuthContext)
   const {
     register,
     handleSubmit,
@@ -30,12 +34,11 @@ export default function UpdateProfile() {
       bio: data ? data.bio : ''
     }
   });
-  console.log({ data })
+
   const onSubmit: SubmitHandler<User> = (formData) => {
     try {
       if (data)
-        // @ts-ignore ts doesn't like mongoose id's
-        updateUser(formData, data._id)
+        updateUser({ ...formData, _id: data._id }, idToken)
     } catch (error) {
       console.log(error)
     }

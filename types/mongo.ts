@@ -41,14 +41,31 @@ export type Pool = {
 };
 
 export type User = {
+  _id: string;
   name: string;
   profile?: string;
   bio?: string;
   socials?: string;
-  wallet_address: string;
+  wallets: WalletResolvable[];
   email?: string;
-  session_cookie: string;
 };
+
+export type Wallet = {
+  type: string;
+};
+
+export type SocialLoginWallet = {
+  public_key: string;
+  curve: string;
+} & Wallet;
+
+export type ExternalWallet = {
+  address: string;
+} & Wallet;
+
+export type WalletResolvable = Partial<SocialLoginWallet> &
+  Partial<ExternalWallet> &
+  Wallet;
 
 type Sponsor = {
   logo: string;
