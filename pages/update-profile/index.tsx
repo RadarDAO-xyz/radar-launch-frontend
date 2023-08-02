@@ -30,10 +30,11 @@ export default function UpdateProfile() {
       bio: data ? data[0].bio : ''
     }
   });
-  const onSubmit: SubmitHandler<User> = (data) => {
+  const onSubmit: SubmitHandler<User> = (formData) => {
     try {
+      if(data)
       // @ts-ignore
-      updateUser(data, data._id)
+      updateUser(formData, data._id)
     } catch (error) {
       console.log(error)
     }
