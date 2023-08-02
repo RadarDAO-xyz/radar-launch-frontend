@@ -10,13 +10,15 @@ export enum ProjectStatus {
 export type Project = {
   _id: string;
   title: string;
+  founder: string;
+  description: string;
   video_url: string;
   tldr: string;
   brief: string;
+  tags: string[];
   inspiration: string;
   team: Team[];
-  description: string;
-  collaborators: string;
+  collaborators?: string;
   waitlist: boolean;
   milestones: AmountText[];
   edition_price: number;
@@ -25,6 +27,7 @@ export type Project = {
   admin_address: string;
   supporter_count: number;
   status: ProjectStatus;
+  launched_at: string; // ISO Datestring
   curation: {
     start: string; // ISO Datestring
     end: string; // ISO Datestring

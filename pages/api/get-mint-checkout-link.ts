@@ -16,8 +16,8 @@ export default async function handler(
     return res.status(404).send("Not found");
   }
   try {
-    const { fee, address, id } = req.body;
-
+    const { editionId, value } = req.body;
+    console.log({ editionId, value });
     const options = {
       method: "POST",
       headers: {
@@ -27,18 +27,23 @@ export default async function handler(
       },
       body: JSON.stringify({
         contractId: isTestnet() ? GOERLI_CONTRACT_ID : MAINNET_CONTRACT_ID,
-        title: "RADAR Editions - Create Project",
+        title: "RADAR Editions - Mint Project",
         // description: "Describe your project *with Markdown!*",
         // imageUrl: "https://unsplash.it/240/240",
         successCallbackUrl: "https://radarlaunch.app",
         cancelCallbackUrl: "https://radarlaunch.app",
         sendEmailOnCreation: true,
-        // quantity: 1,
+        quantity: 1,
         metadata: {},
         mintMethod: {
-          name: "createEdition",
-          args: { payer: "$WALLET", fee, owner: address, id },
-          payment: { currency: "ETH", value: "0" },
+          name: "mintEdition",
+          args: {
+            editionId,
+            buyer: "$WALLET",
+            amount: "$QUANTITY",
+            data: "0x0000000000000000000000000000000000000000000000000000000000000000",
+          },
+          payment: { currency: "ETH", value },
         },
         // contractArgs: "string",
         feeBearer: "BUYER",
