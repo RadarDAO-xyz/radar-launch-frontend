@@ -55,6 +55,8 @@ import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "@/components/AuthProvider";
 import { isAddress } from "viem";
+import { retrieveYoutubeId } from "../../../lib/retrieveYoutubeId";
+import { YOUTUBE_REGEX } from "../../../constants/regex";
 
 async function createProject(
   idToken: string,
@@ -97,16 +99,6 @@ async function getCheckoutLink(
   }
   return "";
 }
-
-function retrieveYoutubeId(url: string) {
-  const match = YOUTUBE_REGEX.exec(url);
-  if (match !== null) {
-    return match[1];
-  }
-  return "";
-}
-
-const YOUTUBE_REGEX = /(?<=\d\/|\.be\/|v[=\/])([\w\-]{11,})|^([\w\-]{11})$/;
 
 const formSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
