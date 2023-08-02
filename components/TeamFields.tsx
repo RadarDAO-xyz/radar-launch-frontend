@@ -1,15 +1,14 @@
-import React, { useState, useEffect, ReactNode } from "react";
-import { useFormContext } from "react-hook-form";
+import { ReactNode } from "react";
+import { useFieldArray, useFormContext } from "react-hook-form";
+import { Button } from "./ui/button";
 import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
-  FormMessage,
+  FormMessage
 } from "./ui/form";
-import { Textarea } from "./ui/textarea";
 import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Textarea } from "./ui/textarea";
 
 interface Row {
   key: string;
@@ -20,34 +19,18 @@ interface Props {
 }
 
 export const TeamFields = ({ children }: Props) => {
-  const [rows, setRows] = useState<Row[]>([]);
-  const {
-    register,
-    control,
-    formState: { errors },
-  } = useFormContext();
-
-  useEffect(() => {
-    setRows([...rows, { key: "default" }]);
-  }, []);
-
-  function addRow() {
-    let key = "milestone-" + (rows.length + 2);
-    setRows([...rows, { key }]);
-  }
-
-  function removeRow(index: string) {
-    if (index !== "default")
-      setRows((current) => current.filter((_) => _.key !== index));
-  }
+  const { control } = useFormContext()
+  const { fields, append, remove } = useFieldArray({
+    name: "team",
+    control
+  })
 
   return (
     <fieldset>
-      {rows.map((row, index) => (
-        <div key={index} className="mb-6 space-y-4">
+      {fields.map((row, index) => (
+        <div key={row.id} className="mb-6 space-y-4">
           <FormField
-            control={control}
-            name={`team.${row.key}.name`}
+            name={`team.${index}.name`}
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -58,8 +41,7 @@ export const TeamFields = ({ children }: Props) => {
             )}
           />
           <FormField
-            control={control}
-            name={`team.${row.key}.bio`}
+            name={`team.${index}.bio`}
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -70,8 +52,7 @@ export const TeamFields = ({ children }: Props) => {
             )}
           />
           <FormField
-            control={control}
-            name={`team.${row.key}.email`}
+            name={`team.${index}.email`}
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -87,7 +68,7 @@ export const TeamFields = ({ children }: Props) => {
         type="button"
         className="w-full"
         variant={"ghost"}
-        onClick={addRow}
+        onClick={append}
       >
         + add another
       </Button>

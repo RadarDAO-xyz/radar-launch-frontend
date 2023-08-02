@@ -39,7 +39,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { Brief } from "@/types/mongo";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "date-fns";
+import { format, isBefore } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useAccount, useMutation, useNetwork, useQuery } from "wagmi";
@@ -117,22 +117,22 @@ const formSchema = z.object({
       bio: z.string().min(1, { message: "Bio is required" }),
       email: z
         .string()
+        .min(1, { message: "Email is required" })
         .email({ message: "Please enter a valid email" })
-        .min(1, { message: "Email is required" }),
     })
   ),
   collaborators: z.string(),
   waitlist: z.boolean().default(true),
   milestones: z.array(
     z.object({
-      amount: z.coerce.number(),
-      // .min(0, { message: "Amount is required" }),
-      text: z.string(),
-      // .min(1, { message: "Milestone description is required" }),
+      amount: z.coerce.number()
+        .min(0, { message: "Amount is required" }),
+      text: z.string()
+        .min(1, { message: "Milestone description is required" }),
     })
   ),
   edition_price: z.coerce.number().min(0, { message: "Edition price too small, minimum 0" }).max(20, { message: "Edition price too large, maximum 20" }),
-  mint_end_date: z.date().min(new Date(), {
+  mint_end_date: z.date().refine(current => current > new Date(), {
     message: "Must end later than today",
   }),
   benefits: z.array(
@@ -161,7 +161,11 @@ export default function ProjectForm() {
       brief: "",
       video_image: "",
       inspiration: "",
-      team: [],
+      team: [{
+        name: "",
+        bio: "",
+        email: "",
+      }],
       collaborators: "",
       waitlist: true,
       milestones: [],
@@ -199,6 +203,7 @@ export default function ProjectForm() {
   );
   const router = useRouter();
   const { toast } = useToast();
+  console.log({ checkoutLink, createProjectData })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // print form errors
@@ -234,7 +239,7 @@ export default function ProjectForm() {
       <form
         id="create-project"
         onSubmit={handleSubmit(onSubmit)}
-        className="max-w-4xl mx-auto mt-40"
+        className="max-w-4xl mx-auto mt-24"
         // @ts-expect-error For netlify forms
         netlify
       >
@@ -544,8 +549,8 @@ export default function ProjectForm() {
                         <Input type="number" placeholder="0-20" {...field} />
                       </FormControl>
                       <p>$USD</p>
-                      <FormMessage />
                     </div>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
