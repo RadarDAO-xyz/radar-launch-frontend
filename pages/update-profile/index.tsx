@@ -3,7 +3,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { User } from "@/types/mongo";
 import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
 
-async function updateUser(values:User, id:number) {
+async function updateUser(values: User, id: number) {
   const res = await fetch(`${process.env.BACKEND_URL}/users/${id}`, {
     method: "patch",
     headers: {
@@ -30,11 +30,12 @@ export default function UpdateProfile() {
       bio: data ? data.bio : ''
     }
   });
+  console.log({ data })
   const onSubmit: SubmitHandler<User> = (formData) => {
     try {
-      if(data)
-      // @ts-ignore ts doesn't like mongoose id's
-      updateUser(formData, data._id)
+      if (data)
+        // @ts-ignore ts doesn't like mongoose id's
+        updateUser(formData, data._id)
     } catch (error) {
       console.log(error)
     }
@@ -88,9 +89,9 @@ export default function UpdateProfile() {
           placeholder="Something about yourself..."
         />
         <span className="text-red-600 text-xs">
-              {" "}
-              {errors.bio && errors.bio.message}
-            </span>
+          {" "}
+          {errors.bio && errors.bio.message}
+        </span>
         <hr className="border-b-1 border-slate-200 my-8" />
         <button
           className="bg-black text-white rounded leading-10 px-5"
