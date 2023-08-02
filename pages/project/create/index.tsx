@@ -54,9 +54,10 @@ import {
 import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "@/components/AuthProvider";
-import { isAddress } from "viem";
+import { isAddress, isAddressEqual } from "viem";
 import { retrieveYoutubeId } from "../../../lib/retrieveYoutubeId";
 import { YOUTUBE_REGEX } from "../../../constants/regex";
+import { WHITELISTED_ADDRESSES } from "@/constants/whitelist";
 
 async function createProject(
   idToken: string,
@@ -203,12 +204,11 @@ export default function ProjectForm() {
   );
   const router = useRouter();
   const { toast } = useToast();
-  console.log({ checkoutLink, createProjectData })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // print form errors
     if (errors) {
-      console.error(errors);
+      console.error({ errors, values });
     }
 
     try {
@@ -234,6 +234,12 @@ export default function ProjectForm() {
     }
   }, [isSubmitSuccess, createProjectData, toast, router, checkoutLink]);
 
+  useEffect(() => {
+    if (address !== undefined && !WHITELISTED_ADDRESSES.some(addr => isAddressEqual(address, addr))) {
+      router.back()
+    }
+  }, [address, router])
+
   return (
     <Form {...form}>
       <form
@@ -241,7 +247,7 @@ export default function ProjectForm() {
         onSubmit={handleSubmit(onSubmit)}
         className="max-w-4xl mx-auto mt-24"
         // @ts-expect-error For netlify forms
-        netlify
+        netlify="true"
       >
         <div className="border border-slate-200 rounded p-10 mb-10">
           <h1>The Project</h1>
