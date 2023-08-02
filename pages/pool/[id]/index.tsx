@@ -1,11 +1,11 @@
 import { FundingPoolProjectHeader } from "@/devlink";
 import { ReadyToLaunchComponent } from "@/devlink/ReadyToLaunchComponent";
 
-export default function PoolPage({ params }: { params: { slug: string } }) {
+export default function PoolPage() {
   return (
     <>
-       <FundingPoolProjectHeader />
-       <ReadyToLaunchComponent />
+      <FundingPoolProjectHeader />
+      <ReadyToLaunchComponent />
     </>
   );
 }
