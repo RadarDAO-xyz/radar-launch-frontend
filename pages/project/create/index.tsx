@@ -243,11 +243,13 @@ export default function ProjectForm() {
     }
   }, [isSubmitSuccess, createProjectData, toast, router, checkoutLink]);
 
-  useEffect(() => {
-    if (address !== undefined && !(process.env.WHITELISTED_ADDRESSES?.split(" ") || []).some(addr => isAddressEqual(address, addr as Address))) {
-      router.back()
-    }
-  }, [address, router])
+  if (address === undefined) {
+    return <div>Please login</div>
+  }
+
+  if (!process.env.WHITELISTED_ADDRESSES?.split(" ").some(addr => isAddressEqual(address, addr as Address))) {
+    return <div>Not authorized to create a project</div>
+  }
 
   return (
     <Form {...form}>
