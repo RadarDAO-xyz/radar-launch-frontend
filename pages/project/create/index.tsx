@@ -98,6 +98,16 @@ async function getCheckoutLink(
   return "";
 }
 
+function retrieveYoutubeId(url: string) {
+  const match = YOUTUBE_REGEX.exec(url);
+  if (match !== null) {
+    return match[1];
+  }
+  return "";
+}
+
+const YOUTUBE_REGEX = /(?<=\d\/|\.be\/|v[=\/])([\w\-]{11,})|^([\w\-]{11})$/;
+
 const formSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
   description: z.string().min(1, { message: "Description is required" }),
@@ -106,7 +116,7 @@ const formSchema = z.object({
     .url({ message: "Please enter a valid URL" })
     .min(1, { message: "Video URL is required" }),
   tldr: z.string().min(1, { message: "Brief description is required" }),
-  video_image: z.string(),
+  video_image: z.string().url({ message: "Please enter a valid URL" }).refine(url => YOUTUBE_REGEX.exec(url) !== null, { message: "Invalid youtube link, e.g. https://www.youtube.com/watch?v=wy8tgRbHN1U" }),
   brief: z.string().min(1, { message: "Brief is required" }),
   inspiration: z.string().min(1, { message: "Inspiration is required" }),
   team: z.array(
@@ -178,6 +188,7 @@ export default function ProjectForm() {
   } = form;
   const fee = watch("edition_price");
   const admin_address = watch("admin_address");
+  const video_image = watch("video_image");
 
   const {
     data: createProjectData,
@@ -192,7 +203,6 @@ export default function ProjectForm() {
     () => getCheckoutLink(fee, admin_address, createProjectData._id),
     { enabled: Boolean(createProjectData?._id) }
   );
-  console.log({ checkoutLink, createProjectData });
   const router = useRouter();
   const { toast } = useToast();
 
@@ -336,23 +346,24 @@ export default function ProjectForm() {
                 profile.
               </p>
             </div>
-            <FormField
-              control={control}
-              name="video_image"
-              render={({ field }) => (
-                <FormItem className="col-span-1">
-                  <FormControl>
-                    <Input
-                      type="file"
-                      className="h-full"
-                      accept="image/*"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="col-span-1 space-y-2">
+              <FormField
+                control={control}
+                name="video_image"
+                render={({ field }) => (
+                  <FormItem >
+                    <FormLabel>Enter a YouTube URL</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {video_image !== '' &&
+                <img src={`https://img.youtube.com/vi/${retrieveYoutubeId(video_image)}/0.jpg`} />
+              }
+            </div>
           </div>
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="grid grid-cols-2 gap-10">
