@@ -1,3 +1,6 @@
+"use client";
+import React, { useState, useEffect, ReactNode } from "react";
+import { Project } from "@/types/mongo";
 import { AdminNav } from "@/components/AdminNav";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,8 +12,31 @@ import {
     SelectValue,
   } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
 
 export default function Updates() {
+    const { data } = useGetCurrentUser()
+    const [projects, setProjects] = useState<Project[]>([]);
+    useEffect(() => {
+       getProjects(data._id)
+    }, [data]);
+
+    async function getProjects(id:number) {
+        const res = await fetch(`${process.env.BACKEND_URL}/users/${id}/projects`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${id}`,
+            }
+          })
+          .then(res => res.json())
+          .then(
+            (result) => {
+                setProjects(result)
+            }
+          );
+          return res;
+    } 
 
     return (
         <div className="mt-24 max-w-screen-lg mx-auto">
@@ -25,9 +51,9 @@ export default function Updates() {
                             <SelectValue placeholder="Select a vision to update" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="apple">First Choice</SelectItem>
-                            <SelectItem value="banana">Second CHoice</SelectItem>
-                            <SelectItem value="blueberry">Third Choice</SelectItem>
+                            {projects.map((project) => (
+                                <SelectItem value={project._id}>{project.title}</SelectItem>
+                            ))}
                         </SelectContent>
                     </Select>
                     <Textarea className="mb-4" />
