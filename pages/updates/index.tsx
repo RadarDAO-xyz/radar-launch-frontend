@@ -17,9 +17,18 @@ import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
 export default function Updates() {
     const { data } = useGetCurrentUser()
     const [projects, setProjects] = useState<Project[]>([]);
+    const [project, setProject] = useState<Project>();
+
     useEffect(() => {
        getProjects(data._id)
     }, [data]);
+
+    ///projects/:projectId/updates
+
+    function selectProject(projectId:string) {
+        const currentProject = projects.filter((p) => p._id === projectId)
+        setProject(currentProject[0])
+    }
 
     async function getProjects(id:number) {
         const res = await fetch(`${process.env.BACKEND_URL}/users/${id}/projects`, {
@@ -46,7 +55,7 @@ export default function Updates() {
                     <h1 className="text-lg">Share an update with your supporters</h1>
                     <p>Update your supporters with the latest intel on your project and progress. Let them know what you&apos;re looking for and how they can support you. Help them help you spread your vision!</p>
                     
-                    <Select>
+                    <Select onValueChange={selectProject}>
                         <SelectTrigger className="w-full my-6">
                             <SelectValue placeholder="Select a vision to update" />
                         </SelectTrigger>
@@ -59,23 +68,24 @@ export default function Updates() {
                     <Textarea className="mb-4" />
                     <Button>Share Update</Button>
                 </div>
-
-                <div className="flex-grow">
-                    <Accordion type="single" collapsible className="w-full">
-                        <AccordionItem value="item-1">
-                            <AccordionTrigger>Previous Updates</AccordionTrigger>
-                            <AccordionContent>
-                                There are no updates for this project.
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="item-2">
-                            <AccordionTrigger>Previous Milestones</AccordionTrigger>
-                            <AccordionContent>
-                                There are no milestones for this project.
-                            </AccordionContent>
-                        </AccordionItem>
-                    </Accordion>
-                </div>
+                {project && (
+                    <div className="flex-grow">
+                        <Accordion type="single" collapsible className="w-full">
+                            <AccordionItem value="item-1">
+                                <AccordionTrigger>Previous Updates</AccordionTrigger>
+                                <AccordionContent>
+                                    There are no updates for this project.
+                                </AccordionContent>
+                            </AccordionItem>
+                            <AccordionItem value="item-2">
+                                <AccordionTrigger>Previous Milestones</AccordionTrigger>
+                                <AccordionContent>
+                                    There are no milestones for this project.
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
+                    </div>
+                )}
             </div>
         </div>
     )
