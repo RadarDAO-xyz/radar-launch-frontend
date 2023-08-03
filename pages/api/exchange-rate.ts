@@ -19,25 +19,25 @@ export async function fetchExchangeRate(
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ExchangeRate | string>
+  res: NextApiResponse<ExchangeRate | { message: string }>
 ) {
   if (req.method !== "GET") {
-    return res.status(404).send("Not found");
+    return res.status(404).json({ message: "Not found" });
   }
   try {
     const { symbols } = req.query;
     console.log({ symbols });
 
     if (symbols === undefined) {
-      return res.status(400).send("Invalid from and to");
+      return res.status(400).json({ message: "Invalid from and to" });
     }
 
     const response = await fetchExchangeRate(symbols.toString());
     if (response !== undefined) {
-      return res.status(200).send(response);
+      return res.status(200).json(response);
     }
   } catch (e) {
     console.log(e);
   }
-  return res.status(400).send("Error has occured");
+  return res.status(400).json({ message: "Error has occured" });
 }
