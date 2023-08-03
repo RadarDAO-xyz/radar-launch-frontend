@@ -19,7 +19,7 @@ export default async function handler(
   try {
     const { editionId, value, quantity } = req.body;
     console.log({ editionId, value, quantity });
-    if (!editionId || !value || !quantity) {
+    if (editionId === undefined || !value || !quantity) {
       return res.status(400).json({ message: "Invalid editionId or value" });
     }
     const ethValue = formatEther(value).toString();
