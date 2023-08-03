@@ -1,34 +1,29 @@
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   GOERLI_CONTRACT_ADDRESS,
   MAINNET_CONTRACT_ADDRESS,
 } from "@/constants/address";
+import { useGetProject } from "@/hooks/useGetProject";
 import { useRadarEditionsGetEditions } from "@/lib/generated";
-import { cn } from "@/lib/utils";
 import isTestnet from "@/lib/utils/isTestnet";
-import { Button } from "./ui/button";
-import { id } from "date-fns/locale";
-import { MoveDown } from "lucide-react";
+import { MinusIcon, MoveDown, PlusIcon } from "lucide-react";
+import Link from "next/link";
+import { useRef, useState } from "react";
+import { formatEther } from "viem";
 import { useMutation, useQuery } from "wagmi";
 import { chains } from "./Web3Provider";
-import { useToast } from "./ui/use-toast";
-import Link from "next/link";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { useGetProject } from "@/hooks/useGetProject";
-import {
-  etherUnits,
-  formatEther,
-  parseEther,
-  parseUnits,
-  weiUnits,
-} from "viem";
-import { useRef, useState } from "react";
+import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
 async function getMintCheckoutLink(
-  editionId: number,
-  value: string, // project's mint fee
-  quantity: number
+  quantity: number,
+  editionId?: number,
+  value?: string // project's mint fee
 ): Promise<string> {
+  if (editionId === undefined || value === undefined) {
+    return "";
+  }
+
   try {
     const result = await fetch(`/api/get-mint-checkout-link`, {
       method: "POST",
@@ -128,7 +123,6 @@ export function ProjectTabs({ id }: { id: string }) {
   });
   const { data } = useGetProject(id.toString());
 
-  const { toast } = useToast();
   const [currentTab, setCurrentTab] = useState(Tab.BENEFITS);
   const [quantity, setQuantity] = useState(1);
   // TODO: use forms
@@ -171,11 +165,9 @@ export function ProjectTabs({ id }: { id: string }) {
   const editionId = onChainProjects?.findIndex((project) => project.id === id);
   const value = editionId !== undefined && onChainProjects?.[editionId]?.fee;
 
-  console.log({ editionId, value, onChainProjects });
-
   const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
     ["checkout-mint-link", editionId, value, quantity],
-    () => getMintCheckoutLink(editionId!, value!.toString(), quantity),
+    () => getMintCheckoutLink(quantity, editionId, value?.toString()),
     {
       enabled:
         editionId !== undefined &&
@@ -183,6 +175,8 @@ export function ProjectTabs({ id }: { id: string }) {
         currentTab === Tab.COLLECT,
     }
   );
+
+  console.log({ editionId, value, onChainProjects, checkoutLink });
   return (
     <div>
       <div className="">
@@ -228,10 +222,48 @@ export function ProjectTabs({ id }: { id: string }) {
           </TabsList>
           <TabsContent value={Tab.COLLECT} className="px-4 py-2 rounded border">
             {typeof value === "bigint" ? (
-              <div>
-                <span>{formatEther(value).slice(0, 6)}</span>
-                <span> ETH</span>
-                <span> x{quantity}</span>
+              <div className="p-4">
+                <div className="flex justify-between mb-4 text-gray-400">
+                  <div>
+                    <span>{formatEther(value).slice(0, 6)}</span>
+                    <span> ETH X </span>
+                    <span className="text-black">{quantity}</span>
+                  </div>
+                  <div>total</div>
+                </div>
+                <hr className="my-4" />
+                <div className="flex justify-between mb-4">
+                  <p className="text-gray-400">Total cost</p>
+                  <span>
+                    {formatEther(value * BigInt(quantity)).slice(0, 6)} ETH
+                  </span>
+                </div>
+                <div className="flex w-full space-x-4 mb-4 px-12">
+                  <Button
+                    variant={"outline"}
+                    onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))}
+                  >
+                    <MinusIcon />
+                  </Button>
+                  <Input
+                    type={"number"}
+                    value={quantity}
+                    onChange={(e) => setQuantity(+e.target.value)}
+                  />
+                  <Button
+                    variant={"outline"}
+                    onClick={() => setQuantity((prev) => prev + 1)}
+                  >
+                    <PlusIcon />
+                  </Button>
+                </div>
+                <Button
+                  className="w-full"
+                  asChild
+                  disabled={!checkoutLink || isCheckoutLinkLoading}
+                >
+                  <Link href={checkoutLink || ""}>Collect</Link>
+                </Button>
               </div>
             ) : (
               <div>Not available for collection</div>

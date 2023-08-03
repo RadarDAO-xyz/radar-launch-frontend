@@ -2,7 +2,7 @@ import { GOERLI_CONTRACT_ID, MAINNET_CONTRACT_ID } from "@/constants/paper";
 import isTestnet from "@/lib/utils/isTestnet";
 import { NextApiRequest, NextApiResponse } from "next";
 import { fetchExchangeRate } from "./exchange-rate";
-import { parseEther } from "viem";
+import { parseEther } from "@/lib/utils";
 
 interface Response {
   checkoutLinkIntentUrl: string;
@@ -35,7 +35,6 @@ export default async function handler(
       String(parseFloat(fee) / exchangeRateData.rates["ETH"]),
       "wei"
     ).toString();
-    console.log({ actualFee });
 
     const options = {
       method: "POST",

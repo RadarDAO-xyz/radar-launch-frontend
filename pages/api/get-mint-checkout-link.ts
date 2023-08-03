@@ -1,7 +1,7 @@
 import { GOERLI_CONTRACT_ID, MAINNET_CONTRACT_ID } from "@/constants/paper";
+import { formatEther } from "@/lib/utils";
 import isTestnet from "@/lib/utils/isTestnet";
 import { NextApiRequest, NextApiResponse } from "next";
-import { etherUnits, parseUnits } from "viem";
 
 interface Response {
   checkoutLinkIntentUrl: string;
@@ -22,8 +22,7 @@ export default async function handler(
     if (!editionId || !value || !quantity) {
       return res.status(400).json({ message: "Invalid editionId or value" });
     }
-    const ethValue = parseUnits(value, etherUnits.wei).toString();
-    console.log({ ethValue });
+    const ethValue = formatEther(value).toString();
     const options = {
       method: "POST",
       headers: {
