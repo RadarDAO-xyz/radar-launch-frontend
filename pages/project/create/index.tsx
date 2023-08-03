@@ -1,5 +1,7 @@
+import { AuthContext } from "@/components/AuthProvider";
 import { MilestoneFields } from "@/components/MilestoneFields";
 import { RepeatingField } from "@/components/RepeatingField";
+import { chains } from "@/components/Web3Provider";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -35,30 +37,27 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { Brief } from "@/types/mongo";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format, isBefore } from "date-fns";
+import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { useAccount, useEnsAddress, useMutation, useNetwork, useQuery } from "wagmi";
-import * as z from "zod";
-import { TeamFields } from "../../../components/TeamFields";
-import {
-  TooltipProvider,
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-} from "@/components/ui/tooltip";
 import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
-import { AuthContext } from "@/components/AuthProvider";
-import { Address, isAddress, isAddressEqual } from "viem";
-import { retrieveYoutubeId } from "../../../lib/retrieveYoutubeId";
+import { useForm } from "react-hook-form";
+import { isAddress } from "viem";
+import { useAccount, useEnsAddress, useMutation, useQuery } from "wagmi";
+import * as z from "zod";
+import { TeamFields } from "../../../components/TeamFields";
 import { YOUTUBE_REGEX } from "../../../constants/regex";
-import isTestnet from "@/lib/utils/isTestnet";
-import { chains } from "@/components/Web3Provider";
+import { retrieveYoutubeId } from "../../../lib/retrieveYoutubeId";
 
 async function createProject(
   idToken: string,
@@ -187,7 +186,6 @@ export default function ProjectForm() {
   const admin_address = watch("admin_address");
   const video_image = watch("video_image");
 
-
   const { data: ensAddressData } = useEnsAddress({
     name: admin_address,
     chainId: chains[0].id,
@@ -213,6 +211,8 @@ export default function ProjectForm() {
   );
   const router = useRouter();
   const { toast } = useToast();
+
+  console.log({ checkoutLink })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // print form errors
@@ -244,11 +244,11 @@ export default function ProjectForm() {
   }, [isSubmitSuccess, createProjectData, toast, router, checkoutLink]);
 
   if (address === undefined) {
-    return <div>Please login</div>
+    return <div className="px-[5%] py-12"><h1>Please login</h1></div>
   }
 
-  if (!process.env.WHITELISTED_ADDRESSES?.split(" ").some(addr => isAddressEqual(address, addr as Address))) {
-    return <div>Not authorized to create a project</div>
+  if (!process.env.WHITELISTED_ADDRESSES?.split(" ").some(addr => address.toLowerCase() === addr.toLowerCase())) {
+    return <div className="px-[5%] py-12"><h1>Not Authorized</h1></div>
   }
 
   return (
