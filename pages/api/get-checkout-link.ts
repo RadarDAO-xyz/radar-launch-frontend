@@ -1,6 +1,8 @@
 import { GOERLI_CONTRACT_ID, MAINNET_CONTRACT_ID } from "@/constants/paper";
 import isTestnet from "@/lib/utils/isTestnet";
 import { NextApiRequest, NextApiResponse } from "next";
+import { fetchExchangeRate } from "./exchange-rate";
+import { parseEther } from "viem";
 
 interface Response {
   checkoutLinkIntentUrl: string;
@@ -17,6 +19,23 @@ export default async function handler(
   }
   try {
     const { fee, address, id } = req.body;
+    console.log({ fee, address, id });
+
+    const exchangeRateData = await fetchExchangeRate("ETH");
+    if (
+      !exchangeRateData ||
+      !exchangeRateData.rates ||
+      !exchangeRateData.rates["ETH"]
+    ) {
+      console.error("Error fetching exchange rate data");
+      return res.status(400).send("Error has occured");
+    }
+
+    const actualFee = parseEther(
+      String(parseFloat(fee) / exchangeRateData.rates["ETH"]),
+      "wei"
+    ).toString();
+    console.log({ actualFee });
 
     const options = {
       method: "POST",
@@ -33,11 +52,11 @@ export default async function handler(
         successCallbackUrl: "https://radarlaunch.app",
         cancelCallbackUrl: "https://radarlaunch.app",
         sendEmailOnCreation: true,
-        // quantity: 1,
+        quantity: 1,
         metadata: {},
         mintMethod: {
           name: "createEdition",
-          args: { payer: "$WALLET", fee, owner: address, id },
+          args: { payer: "$WALLET", fee: actualFee, owner: address, id },
           payment: { currency: "ETH", value: "0" },
         },
         // contractArgs: "string",
