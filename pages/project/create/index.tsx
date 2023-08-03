@@ -1,6 +1,6 @@
 import { AuthContext } from "@/components/AuthProvider";
 import { MilestoneFields } from "@/components/MilestoneFields";
-import { RepeatingField } from "@/components/RepeatingField";
+import { BenefitsFields } from "@/components/BenefitsFields";
 import { chains } from "@/components/Web3Provider";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -44,6 +44,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
+import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
 import { cn } from "@/lib/utils";
 import { Brief } from "@/types/mongo";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -56,25 +57,24 @@ import { isAddress } from "viem";
 import { useAccount, useEnsAddress, useMutation, useQuery } from "wagmi";
 import * as z from "zod";
 import { TeamFields } from "../../../components/TeamFields";
-import { YOUTUBE_REGEX } from "../../../constants/regex";
-import { retrieveYoutubeId } from "../../../lib/retrieveYoutubeId";
+import { VIMEO_REGEX, YOUTUBE_REGEX } from "../../../constants/regex";
 
 async function createProject(
   idToken: string,
   values: z.infer<typeof formSchema>
 ) {
+  const finalValues = {
+    ...values,
+    mint_end_date: values.mint_end_date.toISOString(),
+  };
   const res = await fetch(`${process.env.BACKEND_URL}/projects`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${idToken}`,
     },
-    body: JSON.stringify({
-      ...values,
-      mint_end_date: values.mint_end_date.toISOString(),
-    }),
+    body: JSON.stringify(finalValues),
   });
-  console.log(res);
   return await res.json();
 }
 
@@ -117,10 +117,14 @@ const formSchema = z.object({
   video_image: z
     .string()
     .url({ message: "Please enter a valid URL" })
-    .refine((url) => YOUTUBE_REGEX.exec(url) !== null, {
-      message:
-        "Invalid youtube link, e.g. https://www.youtube.com/watch?v=wy8tgRbHN1U",
-    }),
+    .refine(
+      (url) =>
+        YOUTUBE_REGEX.exec(url) !== null || VIMEO_REGEX.exec(url) !== null,
+      {
+        message:
+          "Invalid YouTube and Vimeo link, e.g. https://www.youtube.com/watch?v=wy8tgRbHN1U",
+      }
+    ),
   brief: z.string().min(1, { message: "Brief is required" }),
   inspiration: z.string().min(1, { message: "Inspiration is required" }),
   team: z.array(
@@ -220,9 +224,7 @@ export default function ProjectForm() {
     }
     return createProject(idToken, {
       ...values,
-      video_image: `https://img.youtube.com/vi/${retrieveYoutubeId(
-        video_image
-      )}/0.jpg`,
+      video_image: generateVideoThumbnail(video_image),
       admin_address,
     });
   });
@@ -407,7 +409,7 @@ export default function ProjectForm() {
                 name="video_image"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Enter a YouTube URL</FormLabel>
+                    <FormLabel>Enter a YouTube or Vimeo URL</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -416,11 +418,7 @@ export default function ProjectForm() {
                 )}
               />
               {video_image !== "" && (
-                <img
-                  src={`https://img.youtube.com/vi/${retrieveYoutubeId(
-                    video_image
-                  )}/0.jpg`}
-                />
+                <img src={generateVideoThumbnail(video_image)} />
               )}
             </div>
           </div>
@@ -687,7 +685,7 @@ export default function ProjectForm() {
               </p>
             </div>
             <div className="col-span-1">
-              <RepeatingField />
+              <BenefitsFields />
             </div>
           </div>
           <hr className="border-b-1 border-slate-200 my-8" />

@@ -8,6 +8,14 @@ import {
 } from "@/devlink";
 import { useGetProjects } from "@/hooks/useGetProjects";
 import { ProjectStatus } from "@/types/mongo";
+import dynamic from "next/dynamic";
+
+const ProjectBlockNoSSR = dynamic(
+  () => import("@/components/ProjectBlock").then((res) => res.ProjectBlock),
+  {
+    ssr: false,
+  }
+);
 
 export default function HomePage() {
   const { data } = useGetProjects();
@@ -26,14 +34,15 @@ export default function HomePage() {
         showCreateProjectButton
         projects={
           <div className="flex flex-col md:flex-row w-full overflow-auto md:space-x-12">
-            {data?.slice(0, 4)
+            {data
+              ?.slice(0, 4)
               // ?.filter(
               //   (project) =>
               //     project?.curation?.start &&
               //     new Date(project.curation.start) > new Date()
               // )
               ?.map((project) => (
-                <ProjectBlock
+                <ProjectBlockNoSSR
                   key={project._id.toString()}
                   id={project._id.toString()}
                   briefName={project.brief}
