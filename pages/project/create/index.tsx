@@ -246,10 +246,9 @@ export default function ProjectForm() {
   if (address === undefined) {
     return <div className="px-[5%] py-12"><h1>Please login</h1></div>
   }
-
-  if (!process.env.WHITELISTED_ADDRESSES?.split(" ").some(addr => address.toLowerCase() === addr.toLowerCase())) {
-    return <div className="px-[5%] py-12"><h1>Not Authorized</h1></div>
-  }
+  // if (!process.env.WHITELISTED_ADDRESSES?.split(" ").some(addr => address.toLowerCase() === addr.toLowerCase())) {
+  //   return <div className="px-[5%] py-12"><h1>Not Authorized</h1></div>
+  // }
 
   return (
     <Form {...form}>
