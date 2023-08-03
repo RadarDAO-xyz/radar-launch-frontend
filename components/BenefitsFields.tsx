@@ -1,5 +1,5 @@
 import { Input } from "@/components/ui/input";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Button } from "./ui/button";
 import {
@@ -10,10 +10,6 @@ import {
   FormMessage,
 } from "./ui/form";
 import { Textarea } from "./ui/textarea";
-
-interface Row {
-  key: string;
-}
 
 interface Props {
   children?: ReactNode;
@@ -28,22 +24,28 @@ export const BenefitsFields = ({ children }: Props) => {
 
   return (
     <fieldset>
-      {fields.map((row, index) => (
-        <div key={row.id} className="mb-6">
+      {fields.map((field, index) => (
+        <div key={field.id} className="mb-6">
           <FormField
+            key={field.id}
             control={control}
             name={`benefits.${index}.amount`}
             render={({ field }) => (
-              <FormItem className="pb-4 flex items-center space-x-4">
-                <FormControl>
-                  <Input {...field} type="number" placeholder="#" />
-                </FormControl>
-                <FormLabel className="w-full">editions collected</FormLabel>
+              <FormItem className="pb-4">
+                <div className="flex items-center space-x-4">
+                  <FormControl>
+                    <Input {...field} type="number" placeholder="#" />
+                  </FormControl>
+                  <FormLabel className="w-full mb-0">
+                    editions collected
+                  </FormLabel>
+                </div>
                 <FormMessage />
               </FormItem>
             )}
           />
           <FormField
+            key={field.id}
             control={control}
             name={`benefits.${index}.text`}
             render={({ field }) => (
@@ -61,7 +63,7 @@ export const BenefitsFields = ({ children }: Props) => {
         variant={"ghost"}
         type="button"
         className="w-full"
-        onClick={append}
+        onClick={() => append({ amount: "", text: "" })}
       >
         + add another
       </Button>

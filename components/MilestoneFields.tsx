@@ -14,17 +14,18 @@ interface Props {
 }
 
 export const MilestoneFields = ({ children }: Props) => {
-  const { control } = useFormContext()
+  const { control } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     name: "milestones",
-    control
-  })
+    control,
+  });
 
   return (
     <fieldset>
-      {fields.map((row, index) => (
-        <div key={row.id} className="mb-6">
+      {fields.map((field, index) => (
+        <div key={field.id} className="mb-6">
           <FormField
+            key={field.id}
             name={`milestones.${index}.amount`}
             render={({ field }) => (
               <FormItem className="pb-4">
@@ -36,9 +37,10 @@ export const MilestoneFields = ({ children }: Props) => {
             )}
           />
           <FormField
+            key={field.id}
             name={`milestones.${index}.text`}
             render={({ field }) => (
-              <FormItem >
+              <FormItem>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -52,7 +54,7 @@ export const MilestoneFields = ({ children }: Props) => {
         variant={"ghost"}
         type="button"
         className="w-full"
-        onClick={append}
+        onClick={() => append({ amount: "", text: "" })}
       >
         + add another
       </Button>

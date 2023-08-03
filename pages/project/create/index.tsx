@@ -1,6 +1,7 @@
 import { AuthContext } from "@/components/AuthProvider";
-import { MilestoneFields } from "@/components/MilestoneFields";
 import { BenefitsFields } from "@/components/BenefitsFields";
+import { MilestoneFields } from "@/components/MilestoneFields";
+import { TeamFields } from "@/components/TeamFields";
 import { chains } from "@/components/Web3Provider";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -44,6 +45,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
+import { VIMEO_REGEX, YOUTUBE_REGEX } from "@/constants/regex";
 import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
 import { cn } from "@/lib/utils";
 import { Brief } from "@/types/mongo";
@@ -56,8 +58,6 @@ import { useForm } from "react-hook-form";
 import { isAddress } from "viem";
 import { useAccount, useEnsAddress, useMutation, useQuery } from "wagmi";
 import * as z from "zod";
-import { TeamFields } from "../../../components/TeamFields";
-import { VIMEO_REGEX, YOUTUBE_REGEX } from "../../../constants/regex";
 
 async function createProject(
   idToken: string,
@@ -67,6 +67,7 @@ async function createProject(
     ...values,
     mint_end_date: values.mint_end_date.toISOString(),
   };
+  console.log(finalValues);
   const res = await fetch(`${process.env.BACKEND_URL}/projects`, {
     method: "POST",
     headers: {
@@ -218,15 +219,11 @@ export default function ProjectForm() {
     isSuccess: isSubmitSuccess,
   } = useMutation(["submit-project"], () => {
     const values = form.getValues();
-    let admin_address = values.admin_address;
     if (admin_address.endsWith(".eth")) {
-      admin_address = ensAddressData || admin_address;
+      values.admin_address = ensAddressData || admin_address;
     }
-    return createProject(idToken, {
-      ...values,
-      video_image: generateVideoThumbnail(video_image),
-      admin_address,
-    });
+    values.video_image = generateVideoThumbnail(values.video_image);
+    return createProject(idToken, values);
   });
   const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
     [
