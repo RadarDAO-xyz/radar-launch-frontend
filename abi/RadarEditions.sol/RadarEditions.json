@@ -7,7 +7,7 @@
     },
     {
       "inputs": [],
-      "name": "EditionFeeExceedsProtocolFee",
+      "name": "EditionFeeExceedsMaximumFee",
       "type": "error"
     },
     {
@@ -804,6 +804,19 @@
       "type": "function"
     },
     {
+      "inputs": [],
+      "name": "maximumEditionFee",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "internalType": "uint256",
@@ -1006,6 +1019,19 @@
         }
       ],
       "name": "setApprovalForAll",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_maximumEditionFee",
+          "type": "uint256"
+        }
+      ],
+      "name": "setMaximumEditionFee",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"

@@ -4,7 +4,10 @@ import {
   MAINNET_CONTRACT_ADDRESS,
 } from "@/constants/address";
 import { useGetProject } from "@/hooks/useGetProject";
-import { useRadarEditionsGetEditions } from "@/lib/generated";
+import {
+  useRadarEditionsGetEditions,
+  useRadarEditionsProtocolFee,
+} from "@/lib/generated";
 import isTestnet from "@/lib/utils/isTestnet";
 import { MinusIcon, MoveDown, PlusIcon } from "lucide-react";
 import Link from "next/link";
@@ -121,6 +124,11 @@ export function ProjectTabs({ id }: { id: string }) {
     chainId: chains[0]?.id,
     enabled: Boolean(chains[0]?.id),
   });
+  const { data: protocolFee } = useRadarEditionsProtocolFee({
+    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    chainId: chains[0]?.id,
+    enabled: Boolean(chains[0]?.id),
+  });
   const { data } = useGetProject(id.toString());
 
   const [currentTab, setCurrentTab] = useState(Tab.BENEFITS);
@@ -162,21 +170,30 @@ export function ProjectTabs({ id }: { id: string }) {
       )
   );
 
-  const editionId = onChainProjects?.findIndex((project) => project.id === id);
-  const value = editionId !== undefined && onChainProjects?.[editionId]?.fee;
+  const editionId: number | undefined = onChainProjects?.findIndex(
+    (project) => project.id === id
+  );
+  const value =
+    editionId !== undefined ? onChainProjects?.[editionId]?.fee : undefined;
 
   const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
     ["checkout-mint-link", editionId, value, quantity],
-    () => getMintCheckoutLink(quantity, editionId, value?.toString()),
+    () =>
+      getMintCheckoutLink(
+        quantity,
+        editionId,
+        (value! + protocolFee!).toString()
+      ),
     {
       enabled:
         editionId !== undefined &&
         value !== undefined &&
+        protocolFee !== undefined &&
         currentTab === Tab.COLLECT,
     }
   );
 
-  console.log({ editionId, value, onChainProjects, checkoutLink });
+  console.log({ editionId, value, onChainProjects, checkoutLink, protocolFee });
   return (
     <div>
       <div className="">
@@ -221,7 +238,7 @@ export function ProjectTabs({ id }: { id: string }) {
             </TabsTrigger>
           </TabsList>
           <TabsContent value={Tab.COLLECT} className="px-4 py-2 rounded border">
-            {typeof value === "bigint" ? (
+            {typeof value === "bigint" && typeof protocolFee === "bigint" ? (
               <div className="p-4">
                 <div className="flex justify-between mb-4 text-gray-400">
                   <div>
@@ -229,13 +246,24 @@ export function ProjectTabs({ id }: { id: string }) {
                     <span> ETH X </span>
                     <span className="text-black">{quantity}</span>
                   </div>
-                  <div>total</div>
+                  <div>mint fee</div>
+                </div>
+                <div className="flex justify-between mb-4 text-gray-400">
+                  <div>
+                    <span>{formatEther(protocolFee).slice(0, 6)}</span>
+                    <span> ETH X </span>
+                    <span className="text-black">{quantity}</span>
+                  </div>
+                  <div>protocol fee</div>
                 </div>
                 <hr className="my-4" />
                 <div className="flex justify-between mb-4">
                   <p className="text-gray-400">Total cost</p>
                   <span>
-                    {formatEther(value * BigInt(quantity)).slice(0, 6)} ETH
+                    {formatEther(
+                      (value + protocolFee) * BigInt(quantity)
+                    ).slice(0, 6)}{" "}
+                    ETH
                   </span>
                 </div>
                 <div className="flex w-full space-x-4 mb-4 px-12">
