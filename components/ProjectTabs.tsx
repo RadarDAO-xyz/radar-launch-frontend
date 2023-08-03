@@ -12,6 +12,7 @@ import isTestnet from "@/lib/utils/isTestnet";
 import { MinusIcon, MoveDown, PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
+import ReactMarkdown from "react-markdown";
 import { formatEther } from "viem";
 import { useMutation, useQuery } from "wagmi";
 import { chains } from "./Web3Provider";
@@ -382,7 +383,7 @@ export function ProjectTabs({ id }: { id: string }) {
                     Collect {benefit.amount} or more editions and get
                   </h3>
                   <hr />
-                  <p className="p-4">{benefit.text}</p>
+                  <ReactMarkdown className="p-4">{benefit.text}</ReactMarkdown>
                 </div>
               ))
             ) : (
@@ -390,21 +391,6 @@ export function ProjectTabs({ id }: { id: string }) {
             )}
           </TabsContent>
         </Tabs>
-        {/* <Button className="w-full" variant={"ghost"} asChild disabled={isCheckoutLinkLoading || !checkoutLink}>
-        <Link href={checkoutLink || ""} className={cn(isCheckoutLinkLoading || !checkoutLink ? "pointer-events-none opacity-70" : "")} onClick={() => {
-          if (checkoutLink) {
-            toast({
-              title: "Redirecting to checkout"
-            })
-          }
-        }}>
-
-        </Link>
-      </Button>
-      <Button className="w-full" variant={"ghost"}>
-      </Button>
-      <Button className="w-full" variant={"ghost"}>
-      </Button> */}
       </div>
     </div>
   );

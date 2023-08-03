@@ -4,50 +4,46 @@ import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetProject } from "@/hooks/useGetProject";
 import { useGetUser } from "@/hooks/useGetUser";
+import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
 import { useRouter } from "next/router";
+import ReactMarkdown from "react-markdown";
 
 enum Tab {
   ONE = "ONE",
   TWO = "TWO",
 }
 
-function transformYouTubeUrl(url: string) {
-  if (!url.includes("youtube")) {
-    return ""
-  }
-  if (!url.includes("embed")) {
-    return url.replace("watch?v=", "embed/");
-  }
-  return url;
-}
-
 export default function IndividualProjectPage() {
-  const router = useRouter()
+  const router = useRouter();
   const { id } = router.query;
 
-  const { data } = useGetProject(id?.toString())
-  const { data: userData } = useGetUser(data?.founder)
+  const { data } = useGetProject(id?.toString());
+  const { data: userData } = useGetUser(data?.founder);
 
   if (!id || !data) {
-    return <div>No project found</div>
+    return (
+      <div className="px-[5%] py-20">
+        <h1 className="text-3xl text-center">No project found</h1>
+      </div>
+    );
   }
-  console.log("Video URL", data.video_url)
 
   return (
-
     <div className="grid grid-cols-6 px-[5%] bg-white py-12">
       <div className="col-span-4 pr-10 overflow-y-scroll max-h-screen">
         <div>
-          {transformYouTubeUrl(data?.video_url) !== '' ?
+          {generateVideoEmbed(data?.video_url) !== "" ? (
             <iframe
               width={"100%"}
               className="aspect-video pt-6"
-              src={transformYouTubeUrl(data?.video_url)}
+              src={generateVideoEmbed(data?.video_url)}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               title="Embedded youtube"
             />
-            : <div>Invalid project video submitted. See browser console for more information</div>}
+          ) : (
+            <div>Invalid project video submitted, {data.video_url}</div>
+          )}
         </div>
         <div className="text-lg pt-10 pb-4">
           The Brief: <span className="font-semibold">{data.brief}</span>
@@ -64,17 +60,19 @@ export default function IndividualProjectPage() {
             <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16">
               Project TLDR
             </h3>
-            <p>{data.tldr}</p>
+            <ReactMarkdown>{data.tldr}</ReactMarkdown>
             <hr />
             <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16 pt-10">
               Who is the team executing on this vision
             </h3>
             {data.team.map((teamMember, index) => (
               <div key={teamMember.name} className="space-y-2 pb-4">
-                <h4 className="font-semibold">{index + 1}. {teamMember.name}</h4>
-                <div className="text-gray-600">
+                <h4 className="font-semibold">
+                  {index + 1}. {teamMember.name}
+                </h4>
+                <ReactMarkdown className="text-gray-600">
                   {teamMember.bio}
-                </div>
+                </ReactMarkdown>
               </div>
             ))}
             <hr />
@@ -82,6 +80,9 @@ export default function IndividualProjectPage() {
               This project is looking for:
             </h3>
             <hr />
+            {data.collaborators && (
+              <ReactMarkdown>{data.collaborators}</ReactMarkdown>
+            )}
             <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16 pt-10">
               Funding Goals
             </h3>
@@ -107,14 +108,15 @@ export default function IndividualProjectPage() {
       <div className="col-span-2 px-4 pt-6 overflow-y-scroll max-h-screen">
         <div className="flex space-x-2 pb-4">
           <Avatar className="w-12 h-12">
-            <AvatarImage src={userData?.profile || "/default-avatar.png"} alt="@shadcn" />
+            <AvatarImage
+              src={userData?.profile || "/default-avatar.png"}
+              alt="@shadcn"
+            />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <div>
             <p className="pb-1">{userData?.name}</p>
-            <p className="font-mono text-gray-600">
-              {data.admin_address}
-            </p>
+            <p className="font-mono text-gray-600">{data.admin_address}</p>
           </div>
         </div>
         <hr />
