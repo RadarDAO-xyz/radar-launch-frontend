@@ -171,7 +171,7 @@ export default function ProjectForm() {
       waitlist: true,
       milestones: [],
       edition_price: 0,
-      mint_end_date: new Date(),
+      mint_end_date: new Date(Date.now() + 24 * 60 * 60 * 1000),
       benefits: [],
       admin_address: address || "",
     },
