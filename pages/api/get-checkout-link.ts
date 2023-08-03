@@ -2,7 +2,7 @@ import { GOERLI_CONTRACT_ID, MAINNET_CONTRACT_ID } from "@/constants/paper";
 import isTestnet from "@/lib/utils/isTestnet";
 import { NextApiRequest, NextApiResponse } from "next";
 import { fetchExchangeRate } from "./exchange-rate";
-import { parseEther } from "viem";
+import { parseEther } from "@/lib/utils";
 
 interface Response {
   checkoutLinkIntentUrl: string;
@@ -12,10 +12,10 @@ interface Response {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Response | string>
+  res: NextApiResponse<Response | { message: string }>
 ) {
   if (req.method !== "POST") {
-    return res.status(404).send("Not found");
+    return res.status(404).json({ message: "Not found" });
   }
   try {
     const { fee, address, id } = req.body;
@@ -28,14 +28,13 @@ export default async function handler(
       !exchangeRateData.rates["ETH"]
     ) {
       console.error("Error fetching exchange rate data");
-      return res.status(400).send("Error has occured");
+      return res.status(400).json({ message: "Error has occured" });
     }
 
     const actualFee = parseEther(
       String(parseFloat(fee) / exchangeRateData.rates["ETH"]),
       "wei"
     ).toString();
-    console.log({ actualFee });
 
     const options = {
       method: "POST",
@@ -69,9 +68,9 @@ export default async function handler(
       "https://withpaper.com/api/2022-08-12/checkout-link-intent",
       options
     ).then((response) => response.json());
-    return res.status(200).send(response);
+    return res.status(200).json(response);
   } catch (e) {
     console.log(e);
-    return res.status(400).send("Error has occured");
   }
+  return res.status(400).json({ message: "Error has occured" });
 }

@@ -1,19 +1,10 @@
-import { chains } from "@/components/Web3Provider";
+import { ProjectTabs } from "@/components/ProjectTabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast } from "@/components/ui/use-toast";
-import { GOERLI_CONTRACT_ADDRESS, MAINNET_CONTRACT_ADDRESS } from "@/constants/address";
 import { useGetProject } from "@/hooks/useGetProject";
 import { useGetUser } from "@/hooks/useGetUser";
-import { useRadarEditionsGetEditions } from "@/lib/generated";
-import { cn } from "@/lib/utils";
-import isTestnet from "@/lib/utils/isTestnet";
-import { MoveDown } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import { useQuery } from "wagmi";
 
 enum Tab {
   ONE = "ONE",
@@ -30,55 +21,14 @@ function transformYouTubeUrl(url: string) {
   return url;
 }
 
-async function getMintCheckoutLink(
-  editionId: number,
-  value: string // project's mint fee
-): Promise<string> {
-  try {
-    const result = await fetch(`/api/get-mint-checkout-link`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        editionId, value,
-      }),
-    }).then((res) => res.json());
-
-    if ("checkoutLinkIntentUrl" in result) {
-      return result.checkoutLinkIntentUrl;
-    }
-  } catch (e) {
-    console.error(e);
-  }
-  return "";
-}
-
 export default function IndividualProjectPage() {
   const router = useRouter()
   const { id } = router.query;
 
   const { data } = useGetProject(id?.toString())
   const { data: userData } = useGetUser(data?.founder)
-  const { data: onChainProjects } = useRadarEditionsGetEditions({
-    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
-    chainId: chains[0]?.id,
-    enabled: Boolean(chains[0]?.id),
-  });
-  const { toast } = useToast()
 
-  const editionId = onChainProjects?.findIndex(project => project.id === id)
-  const value = editionId !== undefined && onChainProjects?.[editionId]?.fee
-  const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
-    ["checkout-mint-link", editionId, value],
-    () => getMintCheckoutLink(editionId!, value!.toString()),
-    { enabled: editionId !== undefined && value !== undefined }
-  );
-
-  console.log({ onChainProjects, editionId, value })
-
-
-  if (!data) {
+  if (!id || !data) {
     return <div>No project found</div>
   }
   console.log("Video URL", data.video_url)
@@ -86,7 +36,7 @@ export default function IndividualProjectPage() {
   return (
 
     <div className="grid grid-cols-6 px-[5%] bg-white py-12">
-      <div className="col-span-4 pr-10">
+      <div className="col-span-4 pr-10 overflow-y-scroll max-h-screen">
         <div>
           {transformYouTubeUrl(data?.video_url) !== '' ?
             <iframe
@@ -154,7 +104,7 @@ export default function IndividualProjectPage() {
           <TabsContent value={Tab.TWO}></TabsContent>
         </Tabs>
       </div>
-      <div className="col-span-2 px-4 pt-6">
+      <div className="col-span-2 px-4 pt-6 overflow-y-scroll max-h-screen">
         <div className="flex space-x-2 pb-4">
           <Avatar className="w-12 h-12">
             <AvatarImage src={userData?.profile || "/default-avatar.png"} alt="@shadcn" />
@@ -169,44 +119,9 @@ export default function IndividualProjectPage() {
         </div>
         <hr />
 
-        <div className="pt-8 pb-4">
-          <div className="flex space-x-2 w-full">
-            <Button className="w-full" variant={"ghost"} asChild disabled={isCheckoutLinkLoading || !checkoutLink}>
-              <Link href={checkoutLink || ""} className={cn(isCheckoutLinkLoading || !checkoutLink ? "pointer-events-none opacity-70" : "")} onClick={() => {
-                if (checkoutLink) {
-                  toast({
-                    title: "Redirecting to checkout"
-                  })
-                }
-              }}>
-                Collect <MoveDown className="ml-1 w-3 h-3" />
-              </Link>
-            </Button>
-            <Button className="w-full" variant={"ghost"}>
-              Sign Up <MoveDown className="ml-1 w-3 h-3" />
-            </Button>
-            <Button className="w-full" variant={"ghost"}>
-              Contribute <MoveDown className="ml-1 w-3 h-3" />
-            </Button>
-          </div>
-          <Button
-            className="w-full mt-2 bg-gray-300 hover:bg-gray-200"
-            variant={"ghost"}
-          >
-            Benefits <MoveDown className="ml-1 w-3 h-3" />
-          </Button>
+        <div className="pt-4 pb-4">
+          <ProjectTabs id={id.toString()} />
         </div>
-
-        <hr />
-        {data.benefits.map((benefit) => (
-          <div key={benefit.text} className="mt-4 border rounded">
-            <h3 className="p-4">
-              Collect {benefit.amount} or more editions and get
-            </h3>
-            <hr />
-            <p className="p-4">{benefit.text}</p>
-          </div>
-        ))}
       </div>
     </div>
   );

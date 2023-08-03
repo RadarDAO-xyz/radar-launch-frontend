@@ -69,8 +69,12 @@ async function createProject(
       "Content-Type": "application/json",
       Authorization: `Bearer ${idToken}`,
     },
-    body: JSON.stringify(values),
+    body: JSON.stringify({
+      ...values,
+      mint_end_date: values.mint_end_date.toISOString(),
+    }),
   });
+  console.log(res);
   return await res.json();
 }
 
@@ -91,6 +95,7 @@ async function getCheckoutLink(
         id,
       }),
     }).then((res) => res.json());
+    console.log(result);
 
     if ("checkoutLinkIntentUrl" in result) {
       return result.checkoutLinkIntentUrl;
@@ -109,7 +114,13 @@ const formSchema = z.object({
     .url({ message: "Please enter a valid URL" })
     .min(1, { message: "Video URL is required" }),
   tldr: z.string().min(1, { message: "Brief description is required" }),
-  video_image: z.string().url({ message: "Please enter a valid URL" }).refine(url => YOUTUBE_REGEX.exec(url) !== null, { message: "Invalid youtube link, e.g. https://www.youtube.com/watch?v=wy8tgRbHN1U" }),
+  video_image: z
+    .string()
+    .url({ message: "Please enter a valid URL" })
+    .refine((url) => YOUTUBE_REGEX.exec(url) !== null, {
+      message:
+        "Invalid youtube link, e.g. https://www.youtube.com/watch?v=wy8tgRbHN1U",
+    }),
   brief: z.string().min(1, { message: "Brief is required" }),
   inspiration: z.string().min(1, { message: "Inspiration is required" }),
   team: z.array(
@@ -119,21 +130,22 @@ const formSchema = z.object({
       email: z
         .string()
         .min(1, { message: "Email is required" })
-        .email({ message: "Please enter a valid email" })
+        .email({ message: "Please enter a valid email" }),
     })
   ),
   collaborators: z.string(),
   waitlist: z.boolean().default(true),
   milestones: z.array(
     z.object({
-      amount: z.coerce.number()
-        .min(0, { message: "Amount is required" }),
-      text: z.string()
-        .min(1, { message: "Milestone description is required" }),
+      amount: z.coerce.number().min(0, { message: "Amount is required" }),
+      text: z.string().min(1, { message: "Milestone description is required" }),
     })
   ),
-  edition_price: z.coerce.number().min(0, { message: "Edition price too small, minimum 0" }).max(20, { message: "Edition price too large, maximum 20" }),
-  mint_end_date: z.date().refine(current => current > new Date(), {
+  edition_price: z.coerce
+    .number()
+    .min(0, { message: "Edition price too small, minimum 0" })
+    .max(20, { message: "Edition price too large, maximum 20" }),
+  mint_end_date: z.date().refine((current) => current > new Date(), {
     message: "Must end later than today",
   }),
   benefits: z.array(
@@ -145,7 +157,9 @@ const formSchema = z.object({
   admin_address: z
     .string()
     .min(1, { message: "Admin address is required" })
-    .refine(address => isAddress(address) || address.endsWith('.eth'), { message: "Invalid address" }),
+    .refine((address) => isAddress(address) || address.endsWith(".eth"), {
+      message: "Invalid address",
+    }),
 });
 
 export default function ProjectForm() {
@@ -162,16 +176,18 @@ export default function ProjectForm() {
       brief: "",
       video_image: "",
       inspiration: "",
-      team: [{
-        name: "",
-        bio: "",
-        email: "",
-      }],
+      team: [
+        {
+          name: "",
+          bio: "",
+          email: "",
+        },
+      ],
       collaborators: "",
       waitlist: true,
       milestones: [],
       edition_price: 0,
-      mint_end_date: new Date(),
+      mint_end_date: new Date(Date.now() + 24 * 60 * 60 * 1000),
       benefits: [],
       admin_address: address || "",
     },
@@ -189,8 +205,8 @@ export default function ProjectForm() {
   const { data: ensAddressData } = useEnsAddress({
     name: admin_address,
     chainId: chains[0].id,
-    enabled: admin_address.endsWith('.eth')
-  })
+    enabled: admin_address.endsWith(".eth"),
+  });
   const {
     data: createProjectData,
     mutateAsync,
@@ -198,21 +214,32 @@ export default function ProjectForm() {
     isSuccess: isSubmitSuccess,
   } = useMutation(["submit-project"], () => {
     const values = form.getValues();
-    let admin_address = values.admin_address
-    if (admin_address.endsWith('.eth')) {
-      admin_address = ensAddressData || admin_address
+    let admin_address = values.admin_address;
+    if (admin_address.endsWith(".eth")) {
+      admin_address = ensAddressData || admin_address;
     }
-    return createProject(idToken, { ...values, video_image: retrieveYoutubeId(values.video_image), admin_address })
+    return createProject(idToken, {
+      ...values,
+      video_image: `https://img.youtube.com/vi/${retrieveYoutubeId(
+        video_image
+      )}/0.jpg`,
+      admin_address,
+    });
   });
   const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
-    ["checkout-link", fee, createProjectData?._id, ensAddressData || admin_address],
+    [
+      "checkout-link",
+      fee,
+      createProjectData?._id,
+      ensAddressData || admin_address,
+    ],
     () => getCheckoutLink(fee, admin_address, createProjectData._id),
     { enabled: Boolean(createProjectData?._id) }
   );
   const router = useRouter();
   const { toast } = useToast();
 
-  console.log({ checkoutLink })
+  console.log({ checkoutLink });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // print form errors
@@ -244,7 +271,11 @@ export default function ProjectForm() {
   }, [isSubmitSuccess, createProjectData, toast, router, checkoutLink]);
 
   if (address === undefined) {
-    return <div className="px-[5%] py-12"><h1>Please login</h1></div>
+    return (
+      <div className="px-[5%] py-12">
+        <h1>Please login</h1>
+      </div>
+    );
   }
   // if (!process.env.WHITELISTED_ADDRESSES?.split(" ").some(addr => address.toLowerCase() === addr.toLowerCase())) {
   //   return <div className="px-[5%] py-12"><h1>Not Authorized</h1></div>
@@ -272,7 +303,11 @@ export default function ProjectForm() {
                 Write a Clear and Concise Title and Subtitle for Your Project
                 <br />
                 <br />
-                Your project title and subtitle will appear on your project and pre-launch pages, as well as in category pages, search results, and emails we send to our community. Make sure they accurately represent your project and are easy to understand for potential supporters.
+                Your project title and subtitle will appear on your project and
+                pre-launch pages, as well as in category pages, search results,
+                and emails we send to our community. Make sure they accurately
+                represent your project and are easy to understand for potential
+                supporters.
               </p>
             </div>
             <div className="col-span-1">
@@ -312,10 +347,14 @@ export default function ProjectForm() {
             <div className="col-span-1 pr-4">
               <h2 className="text-xl">Summary</h2>
               <p>
-                Please provide a brief summary that will motivate supporters to believe in your vision. Be genuine rather than polished!
+                Please provide a brief summary that will motivate supporters to
+                believe in your vision. Be genuine rather than polished!
                 <br />
                 <br />
-                Explain what you aim to achieve with the funding, how you intend to accomplish it, who you are, and why this project is important to you. Demonstrations and step-by-step guides are highly effective!
+                Explain what you aim to achieve with the funding, how you intend
+                to accomplish it, who you are, and why this project is important
+                to you. Demonstrations and step-by-step guides are highly
+                effective!
               </p>
             </div>
             <div className="col-span-1">
@@ -328,7 +367,8 @@ export default function ProjectForm() {
                       <Input {...field} />
                     </FormControl>
                     <FormDescription>
-                      Share a brief 3-minute video through a URL (e.g. Vimeo or YouTube) introducing your vision for a better future.
+                      Share a brief 3-minute video through a URL (e.g. Vimeo or
+                      YouTube) introducing your vision for a better future.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -366,7 +406,7 @@ export default function ProjectForm() {
                 control={control}
                 name="video_image"
                 render={({ field }) => (
-                  <FormItem >
+                  <FormItem>
                     <FormLabel>Enter a YouTube URL</FormLabel>
                     <FormControl>
                       <Input {...field} />
@@ -375,9 +415,13 @@ export default function ProjectForm() {
                   </FormItem>
                 )}
               />
-              {video_image !== '' &&
-                <img src={`https://img.youtube.com/vi/${retrieveYoutubeId(video_image)}/0.jpg`} />
-              }
+              {video_image !== "" && (
+                <img
+                  src={`https://img.youtube.com/vi/${retrieveYoutubeId(
+                    video_image
+                  )}/0.jpg`}
+                />
+              )}
             </div>
           </div>
           <hr className="border-b-1 border-slate-200 my-8" />
@@ -385,7 +429,9 @@ export default function ProjectForm() {
             <div className="col-span-1 pr-4">
               <h2 className="text-xl">Inspiration</h2>
               <p>
-                {"Choose a brief that inspires a playful future, or select one of our partner briefs and explain why you're building it. We'll use this to communicate your vision in any email newsletters, interviews or social campaigns."}
+                {
+                  "Choose a brief that inspires a playful future, or select one of our partner briefs and explain why you're building it. We'll use this to communicate your vision in any email newsletters, interviews or social campaigns."
+                }
               </p>
             </div>
             <div className="col-span-1">
@@ -442,7 +488,8 @@ export default function ProjectForm() {
             <div className="col-span-1 pr-4">
               <h2 className="text-xl">Team</h2>
               <p>
-                Please add your team members names and brief bio. Note that your email will not be visible on the platform.
+                Please add your team members names and brief bio. Note that your
+                email will not be visible on the platform.
               </p>
             </div>
             <div className="col-span-1">
@@ -458,7 +505,9 @@ export default function ProjectForm() {
             <div className="col-span-1 pr-4">
               <h2 className="text-xl">Collaborators</h2>
               <p>
-                Specify the type of collaborators you need, technical or non-technical, advisors, audiences, or allies. Provide a project description to invite people to assist you.
+                Specify the type of collaborators you need, technical or
+                non-technical, advisors, audiences, or allies. Provide a project
+                description to invite people to assist you.
               </p>
             </div>
             <div className="col-span-1">
@@ -485,15 +534,17 @@ export default function ProjectForm() {
         </div>
         <div className="border border-slate-200 rounded p-10 mb-10">
           <h1>Milestones</h1>
-          <p className="form-subheading">
-            {"What's your roadmap?"}
-          </p>
+          <p className="form-subheading">{"What's your roadmap?"}</p>
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="grid grid-cols-2 gap-10">
             <div className="col-span-1 pr-4">
               <h2 className="text-xl">Funding Milestones</h2>
               <p>
-                We believe that building is an evolutionary process and we need achievable milestones to help reach it, please list your milestones, big or small, if you are crowdfunding, you must reach the amount in milestone 1 to withdraw funds. Otherwise, supporters will receive a refund.
+                We believe that building is an evolutionary process and we need
+                achievable milestones to help reach it, please list your
+                milestones, big or small, if you are crowdfunding, you must
+                reach the amount in milestone 1 to withdraw funds. Otherwise,
+                supporters will receive a refund.
               </p>
               <br />
               <p>
@@ -508,14 +559,18 @@ export default function ProjectForm() {
         <div className="border border-slate-200 rounded p-10 mb-10">
           <h1>Crowdfund (Optional)</h1>
           <p className="form-subheading">
-            Do you want to crowdfund to reach your milestones, raise capital and offer optional benefits to inspire people to support you?
+            Do you want to crowdfund to reach your milestones, raise capital and
+            offer optional benefits to inspire people to support you?
           </p>
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="grid grid-cols-2 gap-10">
             <div className="col-span-1 pr-4">
               <h2 className="text-xl">Crowdfunding</h2>
               <p>
-                We encourage you to focus on smaller fundraising goals to reach impactful milestones, building trust and growing supporters as you go, and crowdraise again at any time for new experiments, ideas and projects on your journey.
+                We encourage you to focus on smaller fundraising goals to reach
+                impactful milestones, building trust and growing supporters as
+                you go, and crowdraise again at any time for new experiments,
+                ideas and projects on your journey.
               </p>
             </div>
             <div className="col-span-1">
@@ -547,10 +602,12 @@ export default function ProjectForm() {
                 On Launch, projects start with a default edition price of $0.
                 <br />
                 <br />
-                You can offer benefits and set an alternate price for your editions to incentivize supporters.
+                You can offer benefits and set an alternate price for your
+                editions to incentivize supporters.
                 <br />
                 <br />
-                Edition prices are set at a maximum of $20 to make supporting projects accessible.
+                Edition prices are set at a maximum of $20 to make supporting
+                projects accessible.
               </p>
             </div>
             <div className="col-span-1">
@@ -638,7 +695,8 @@ export default function ProjectForm() {
             <div className="col-span-1 pr-4">
               <h2 className="text-xl">Set your admin address</h2>
               <p>
-                Please share an Ethereum address which can withdraw your crowdfund, please ensure you have access to this address.
+                Please share an Ethereum address which can withdraw your
+                crowdfund, please ensure you have access to this address.
               </p>
             </div>
             <div className="col-span-1">
@@ -662,23 +720,21 @@ export default function ProjectForm() {
         </div>
         <div className="border border-slate-200 rounded p-10 mb-10">
           <h1>Ready to submit</h1>
-          <p className="form-subheading">
-            What happens next?
-          </p>
+          <p className="form-subheading">What happens next?</p>
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="grid grid-cols-2 gap-10">
             <div className="col-span-1 pr-4">
               <h2 className="text-xl">Project Review</h2>
               <p>
-                Selected RADAR Community members review proposals and respond within 48 hours. We are unable to provide feedback on unsuccessful briefs but you may re-apply.
+                Selected RADAR Community members review proposals and respond
+                within 48 hours. We are unable to provide feedback on
+                unsuccessful briefs but you may re-apply.
               </p>
             </div>
             <div className="col-span-1">
               <h3>Your proposal will be accepted if:</h3>
               <ul className="ml-6 list-disc [&>li]:mt-2">
-                <li>
-                  You have answered a brief
-                </li>
+                <li>You have answered a brief</li>
                 <li>
                   {
                     "You have shown you have the skills to execute on your project"
@@ -688,9 +744,9 @@ export default function ProjectForm() {
                   {"You are building something that people want to be part of"}
                 </li>
               </ul>
-              <h3>Your proposal will be denied if:</h3>
+              <h3 className="mt-4">Your proposal will be denied if:</h3>
               <ul className="ml-6 list-disc [&>li]:mt-2">
-                <li>{"You’re not answering the brief"}</li>
+                <li>{"You're not answering the brief"}</li>
                 <li>{"Your submissions contains a prohibited item"}</li>
                 <li>
                   {"Your selling a purely speculative asset with no utility"}
