@@ -247,7 +247,7 @@ export default function ProjectForm() {
     return <div>Please login</div>
   }
 
-  if (!process.env.WHITELISTED_ADDRESSES?.split(" ").some(addr => isAddressEqual(address, addr as Address))) {
+  if (!process.env.WHITELISTED_ADDRESSES?.split(" ").some(addr => address.toLowerCase() === addr.toLowerCase())) {
     return <div>Not authorized to create a project</div>
   }
 
