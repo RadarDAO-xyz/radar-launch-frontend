@@ -56,18 +56,18 @@ export default function IndividualProjectPage() {
         <p className="text-lg pt-6 pb-4 text-gray-500">{data.description}</p>
         {data.tags?.length > 0 && (
           <div className="space-x-2 pb-8">
-            <Badge className="bg-gray-600 hover:bg-gray-600/70">
+            <Badge className="bg-gray-600 text-gray-200">
               A More Play-Full Future
             </Badge>
             {data.tags.map((tag) => (
-              <Badge variant="secondary" key={tag}>
+              <Badge variant="secondary" key={tag} className="text-gray-700">
                 {tag}
               </Badge>
             ))}
           </div>
         )}
         <Tabs defaultValue={Tab.ONE} className="border rounded-lg py-6">
-          <TabsList className="grid w-full grid-cols-6 px-8">
+          <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 lg:grid-cols-6 px-8">
             <TabsTrigger value={Tab.ONE}>DETAILS</TabsTrigger>
             <TabsTrigger value={Tab.TWO}>UPDATES</TabsTrigger>
           </TabsList>
