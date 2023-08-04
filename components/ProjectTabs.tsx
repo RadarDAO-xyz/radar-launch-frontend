@@ -12,9 +12,9 @@ import isTestnet from "@/lib/utils/isTestnet";
 import { MinusIcon, MoveDown, PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
-import ReactMarkdown from "react-markdown";
 import { formatEther } from "viem";
 import { useMutation, useQuery } from "wagmi";
+import { Markdown } from "./Markdown";
 import { chains } from "./Web3Provider";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -193,6 +193,7 @@ export function ProjectTabs({ id }: { id: string }) {
         currentTab === Tab.COLLECT,
     }
   );
+  console.log({ text: data?.benefits.map((benefit) => benefit.text) });
 
   console.log({ editionId, value, onChainProjects, checkoutLink, protocolFee });
   return (
@@ -202,7 +203,7 @@ export function ProjectTabs({ id }: { id: string }) {
           defaultValue={Tab.BENEFITS}
           onValueChange={(e) => setCurrentTab(e as Tab)}
         >
-          <TabsList className="flex flex-col w-full space-y-2 h-auto">
+          <TabsList className="flex flex-col w-full space-y-2 h-auto px-0">
             <div className="flex w-full space-x-2">
               <TabsTrigger value={Tab.COLLECT} asChild>
                 <Button
@@ -372,22 +373,19 @@ export function ProjectTabs({ id }: { id: string }) {
               )}
             </div>
           </TabsContent>
-          <TabsContent
-            value={Tab.BENEFITS}
-            className="px-4 py-2 rounded border"
-          >
+          <TabsContent value={Tab.BENEFITS} className="">
             {data?.benefits.length ? (
-              data.benefits.map((benefit) => (
+              data.benefits.filter(Boolean).map((benefit) => (
                 <div key={benefit.text} className="mt-4 border rounded">
-                  <h3 className="p-4">
+                  <h3 className="p-6">
                     Collect {benefit.amount} or more editions and get
                   </h3>
                   <hr />
-                  <ReactMarkdown className="p-4">{benefit.text}</ReactMarkdown>
+                  <Markdown className="p-6">{benefit.text}</Markdown>
                 </div>
               ))
             ) : (
-              <div>No benefits found</div>
+              <div className="p-6 border rounded">No benefits found</div>
             )}
           </TabsContent>
         </Tabs>

@@ -1,4 +1,6 @@
+import { Markdown } from "@/components/Markdown";
 import { ProjectTabs } from "@/components/ProjectTabs";
+import { chains } from "@/components/Web3Provider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -7,8 +9,6 @@ import { useGetUser } from "@/hooks/useGetUser";
 import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import ReactMarkdown from "react-markdown";
-import { chains } from "@/components/Web3Provider";
 
 enum Tab {
   ONE = "ONE",
@@ -62,7 +62,7 @@ export default function IndividualProjectPage() {
             <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16">
               Project TLDR
             </h3>
-            <ReactMarkdown>{data.tldr}</ReactMarkdown>
+            <Markdown>{data.tldr}</Markdown>
             <hr />
             <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16 pt-10">
               Who is the team executing on this vision
@@ -72,9 +72,7 @@ export default function IndividualProjectPage() {
                 <h4 className="font-semibold">
                   {index + 1}. {teamMember.name}
                 </h4>
-                <ReactMarkdown className="text-gray-600">
-                  {teamMember.bio}
-                </ReactMarkdown>
+                <Markdown className="text-gray-600">{teamMember.bio}</Markdown>
               </div>
             ))}
             <hr />
@@ -82,9 +80,7 @@ export default function IndividualProjectPage() {
               This project is looking for:
             </h3>
             <hr />
-            {data.collaborators && (
-              <ReactMarkdown>{data.collaborators}</ReactMarkdown>
-            )}
+            {data.collaborators && <Markdown>{data.collaborators}</Markdown>}
             <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16 pt-10">
               Funding Goals
             </h3>
