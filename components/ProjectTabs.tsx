@@ -18,6 +18,7 @@ import { Markdown } from "./Markdown";
 import { chains } from "./Web3Provider";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { useGetExchangeRate } from "@/hooks/useGetExchangeRate";
 
 async function getMintCheckoutLink(
   quantity: number,
@@ -112,6 +113,13 @@ async function contributeProject(
   return "";
 }
 
+function convertWeiToUsdOrEth(wei: bigint, exchangeRate?: number) {
+  if (exchangeRate !== undefined) {
+    return String(+formatEther(wei) * exchangeRate);
+  }
+  return formatEther(wei);
+}
+
 enum Tab {
   COLLECT = "collect",
   SIGN_UP = "sign-up",
@@ -130,6 +138,7 @@ export function ProjectTabs({ id }: { id: string }) {
     chainId: chains[0]?.id,
     enabled: Boolean(chains[0]?.id),
   });
+  const { data: exchangeRateData } = useGetExchangeRate("ETH");
   const { data } = useGetProject(id.toString());
 
   const [currentTab, setCurrentTab] = useState(Tab.BENEFITS);
@@ -193,9 +202,7 @@ export function ProjectTabs({ id }: { id: string }) {
         currentTab === Tab.COLLECT,
     }
   );
-  console.log({ text: data?.benefits.map((benefit) => benefit.text) });
 
-  console.log({ editionId, value, onChainProjects, checkoutLink, protocolFee });
   return (
     <div>
       <div className="">
@@ -244,16 +251,32 @@ export function ProjectTabs({ id }: { id: string }) {
               <div className="p-4">
                 <div className="flex justify-between mb-4 text-gray-400">
                   <div>
-                    <span>{formatEther(value).slice(0, 6)}</span>
-                    <span> ETH X </span>
+                    <span>
+                      {convertWeiToUsdOrEth(
+                        value,
+                        exchangeRateData?.rates?.ETH
+                      ).slice(0, 10)}
+                    </span>
+                    <span>
+                      {" "}
+                      {exchangeRateData?.rates?.ETH ? "USD" : "ETH"} X{" "}
+                    </span>{" "}
                     <span className="text-black">{quantity}</span>
                   </div>
                   <div>mint fee</div>
                 </div>
                 <div className="flex justify-between mb-4 text-gray-400">
                   <div>
-                    <span>{formatEther(protocolFee).slice(0, 6)}</span>
-                    <span> ETH X </span>
+                    <span>
+                      {convertWeiToUsdOrEth(
+                        protocolFee,
+                        exchangeRateData?.rates?.ETH
+                      ).slice(0, 10)}
+                    </span>
+                    <span>
+                      {" "}
+                      {exchangeRateData?.rates?.ETH ? "USD" : "ETH"} X{" "}
+                    </span>
                     <span className="text-black">{quantity}</span>
                   </div>
                   <div>protocol fee</div>
@@ -262,10 +285,11 @@ export function ProjectTabs({ id }: { id: string }) {
                 <div className="flex justify-between mb-4">
                   <p className="text-gray-400">Total cost</p>
                   <span>
-                    {formatEther(
-                      (value + protocolFee) * BigInt(quantity)
-                    ).slice(0, 6)}{" "}
-                    ETH
+                    {convertWeiToUsdOrEth(
+                      (value + protocolFee) * BigInt(quantity),
+                      exchangeRateData?.rates?.ETH
+                    ).slice(0, 10)}
+                    <span> {exchangeRateData?.rates?.ETH ? "USD" : "ETH"}</span>
                   </span>
                 </div>
                 <div className="flex w-full space-x-4 mb-4 px-12">
@@ -277,6 +301,7 @@ export function ProjectTabs({ id }: { id: string }) {
                   </Button>
                   <Input
                     type={"number"}
+                    className="text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     value={quantity}
                     onChange={(e) => setQuantity(+e.target.value)}
                   />
