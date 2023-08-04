@@ -16,9 +16,9 @@ export function getCountdown(date: Date) {
   const minutesLeft =
     differenceInMinutes(date, today) - daysLeft * 24 * 60 - hoursLeft * 60;
 
-  return `${daysLeft < 10 ? `0${daysLeft}` : daysLeft}d ${
-    hoursLeft < 10 ? `0${hoursLeft}` : hoursLeft
-  }h ${minutesLeft < 10 ? `0${minutesLeft}` : minutesLeft}m`;
+  return `${daysLeft < 10 ? `0${Math.max(daysLeft, 0)}` : daysLeft}d ${
+    hoursLeft < 10 ? `0${Math.max(hoursLeft, 0)}` : hoursLeft
+  }h ${Math.max(30, minutesLeft)}m`;
 }
 
 // Objects and functions copied from "viem" below as there are some errors happening on Netlify functions
