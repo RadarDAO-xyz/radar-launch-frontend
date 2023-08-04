@@ -38,7 +38,7 @@ export default function Updates() {
     useEffect(() => {
         if(data)
         getProjects(data._id)
-    }, [data]);
+    }, [data, getProjects]);
 
     const onSubmit: SubmitHandler<ProjectUpdate> = (formData) => {
         try {
@@ -114,8 +114,8 @@ export default function Updates() {
                                 <SelectValue placeholder="Select a vision to update" />
                             </SelectTrigger>
                             <SelectContent>
-                                {projects.map((project) => (
-                                    <SelectItem value={project._id}>{project.title}</SelectItem>
+                                {projects.map((project, index) => (
+                                    <SelectItem key={index} value={project._id}>{project.title}</SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
@@ -132,8 +132,8 @@ export default function Updates() {
                                     {!updates && (
                                         <p>There are no updates for this project.</p>
                                     )}
-                                    {updates && updates.map((update) => (
-                                        <p>{update.text}</p>
+                                    {updates && updates.map((update, index) => (
+                                        <p key={index}>{update.text}</p>
                                     ))}
                                 </AccordionContent>
                             </AccordionItem>
@@ -143,8 +143,8 @@ export default function Updates() {
                                     {!project.milestones && (
                                         <p>There are no milestones for this project.</p>
                                     )}
-                                    {project.milestones && project.milestones.map((milestone) => (
-                                        <p>{milestone.text}: {milestone.amount}</p>
+                                    {project.milestones && project.milestones.map((milestone, index) => (
+                                        <p key={index}>{milestone.text}: {milestone.amount}</p>
                                     ))}
                                 </AccordionContent>
                             </AccordionItem>
