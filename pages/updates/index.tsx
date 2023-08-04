@@ -25,8 +25,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
 import { Project, ProjectUpdate } from "@/types/mongo";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useContext, useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useContext } from "react";
+import { useForm } from "react-hook-form";
 import { useQuery } from "wagmi";
 import * as z from "zod";
 
@@ -55,19 +55,27 @@ async function getUpdates(
   return [];
 }
 
-async function sendUpdate(idToken: string, values: ProjectUpdate) {
-  const res = await fetch(
-    `${process.env.BACKEND_URL}/projects/${values.project}/updates`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${idToken}`,
-      },
-      body: JSON.stringify(values),
-    }
-  );
-  return await res.json();
+async function sendUpdate(
+  idToken: string,
+  values: ProjectUpdate
+): Promise<ProjectUpdate | undefined> {
+  try {
+    const res = await fetch(
+      `${process.env.BACKEND_URL}/projects/${values.project}/updates`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify(values),
+      }
+    );
+    return await res.json();
+  } catch (e) {
+    console.error(e);
+  }
+  return;
 }
 
 async function getProjects(idToken: string, id?: string): Promise<Project[]> {
@@ -105,13 +113,6 @@ export default function Updates() {
       enabled: Boolean(data?._id) && Boolean(idToken),
     }
   );
-  const { data: updates } = useQuery(
-    ["updates", data?._id],
-    () => getUpdates(idToken, data?._id),
-    {
-      enabled: Boolean(data?._id) && Boolean(idToken),
-    }
-  );
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: "onBlur",
@@ -120,25 +121,27 @@ export default function Updates() {
       text: "",
     },
   });
+  const { control, handleSubmit, watch } = form;
 
-  const {
-    control,
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = form;
+  const projectId = watch("project");
+  const project = projects?.find((project) => project._id === projectId);
 
-  const onSubmit: SubmitHandler<ProjectUpdate> = (formData) => {
+  const { data: updates, refetch } = useQuery(
+    ["updates", data?._id],
+    () => getUpdates(idToken, project?._id),
+    {
+      enabled: Boolean(project?._id) && Boolean(idToken),
+    }
+  );
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      sendUpdate(idToken, formData);
+      await sendUpdate(idToken, values);
+      await refetch();
     } catch (error) {
       console.log(error);
     }
   };
-
-  const projectId = watch("project");
-  const project = projects?.find((project) => project._id === projectId);
 
   return (
     <div className="mt-24 max-w-screen-lg mx-auto">
@@ -151,49 +154,53 @@ export default function Updates() {
             progress. Let them know what you&apos;re looking for and how they
             can support you. Help them help you spread your vision!
           </p>
-          <Form {...form}>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <FormField
-                control={control}
-                name="project"
-                render={({ field }) => (
-                  <FormItem className="pb-4">
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger className="w-full mt-6">
-                        <FormControl>
-                          <SelectValue placeholder="Select a vision to update" />
-                        </FormControl>
-                      </SelectTrigger>
-                      <SelectContent>
-                        {projects?.map((project, index) => (
-                          <SelectItem key={index} value={project._id}>
-                            {project.title}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={control}
-                name="text"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Textarea className="mb-4" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit">Share Update</Button>
-            </form>
-          </Form>
+          {projects !== undefined ? (
+            <Form {...form}>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <FormField
+                  control={control}
+                  name="project"
+                  render={({ field }) => (
+                    <FormItem className="pb-4">
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger className="w-full mt-6">
+                          <FormControl>
+                            <SelectValue placeholder="Select a vision to update" />
+                          </FormControl>
+                        </SelectTrigger>
+                        <SelectContent>
+                          {projects?.map((project, index) => (
+                            <SelectItem key={index} value={project._id}>
+                              {project.title}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={control}
+                  name="text"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Textarea className="mb-4" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit">Share Update</Button>
+              </form>
+            </Form>
+          ) : (
+            <div>No projects found</div>
+          )}
         </div>
         {project && (
           <div className="flex-grow">
