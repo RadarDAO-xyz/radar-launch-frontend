@@ -5,8 +5,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetProject } from "@/hooks/useGetProject";
 import { useGetUser } from "@/hooks/useGetUser";
 import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import ReactMarkdown from "react-markdown";
+import { chains } from "@/components/Web3Provider";
 
 enum Tab {
   ONE = "ONE",
@@ -116,7 +118,13 @@ export default function IndividualProjectPage() {
           </Avatar>
           <div>
             <p className="pb-1">{userData?.name}</p>
-            <p className="font-mono text-gray-600">{data.admin_address}</p>
+            <Link
+              href={`${chains[0].blockExplorers.etherscan.url}/address/${data.admin_address}`}
+              className="font-mono text-gray-600 hover:underline"
+              target="_blank"
+            >
+              {data.admin_address.slice(0, 10) + "..."}
+            </Link>
           </div>
         </div>
         <hr />
