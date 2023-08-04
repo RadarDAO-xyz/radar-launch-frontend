@@ -1,5 +1,5 @@
 import { GOERLI_CONTRACT_ID, MAINNET_CONTRACT_ID } from "@/constants/paper";
-import isTestnet from "@/lib/utils/isTestnet";
+import isTestnet from "@/lib/isTestnet";
 import { NextApiRequest, NextApiResponse } from "next";
 import { fetchExchangeRate } from "./exchange-rate";
 import { parseEther } from "@/lib/utils";

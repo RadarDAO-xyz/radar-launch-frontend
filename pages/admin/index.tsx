@@ -12,7 +12,7 @@ import {
   useRadarEditionsGetBalances,
   useRadarEditionsGetEditions,
 } from "@/lib/generated";
-import isTestnet from "@/lib/utils/isTestnet";
+import isTestnet from "@/lib/isTestnet";
 import { Project } from "@/types/mongo";
 import { MoveUpRight } from "lucide-react";
 import Link from "next/link";

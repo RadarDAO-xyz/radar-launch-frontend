@@ -1,6 +1,6 @@
 import { GOERLI_CONTRACT_ID, MAINNET_CONTRACT_ID } from "@/constants/paper";
 import { formatEther } from "@/lib/utils";
-import isTestnet from "@/lib/utils/isTestnet";
+import isTestnet from "@/lib/isTestnet";
 import { NextApiRequest, NextApiResponse } from "next";
 
 interface Response {

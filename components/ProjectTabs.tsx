@@ -9,11 +9,10 @@ import {
   useRadarEditionsProtocolFee,
   useRadarEditionsTotalSupply,
 } from "@/lib/generated";
-import isTestnet from "@/lib/utils/isTestnet";
+import isTestnet from "@/lib/isTestnet";
 import { DotIcon, MinusIcon, MoveDown, PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { formatEther } from "viem";
 import { useMutation, useQuery } from "wagmi";
 import { Markdown } from "./Markdown";
 import { chains } from "./Web3Provider";
@@ -21,6 +20,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { useGetExchangeRate } from "@/hooks/useGetExchangeRate";
 import { getCountdown } from "@/lib/utils";
+import { convertWeiToUsdOrEth } from "../lib/convertWeiToUsdOrEth";
 
 async function getMintCheckoutLink(
   quantity: number,
@@ -113,13 +113,6 @@ async function contributeProject(
     console.error(e);
   }
   return "";
-}
-
-function convertWeiToUsdOrEth(wei: bigint, exchangeRate?: number) {
-  if (exchangeRate !== undefined) {
-    return String(+formatEther(wei) * exchangeRate);
-  }
-  return formatEther(wei);
 }
 
 enum Tab {
