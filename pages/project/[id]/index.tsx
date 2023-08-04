@@ -32,8 +32,8 @@ export default function IndividualProjectPage() {
   }
 
   return (
-    <div className="grid grid-cols-6 px-[5%] bg-white py-12">
-      <div className="col-span-4 pr-10 overflow-y-scroll max-h-screen">
+    <div className="grid grid-cols-1 md:grid-cols-6 px-[5%] bg-white py-12">
+      <div className="md:col-span-4 col-span-1 md:pr-10 md:overflow-y-scroll md:max-h-screen">
         <div>
           {generateVideoEmbed(data?.video_url) !== "" ? (
             <iframe
@@ -56,8 +56,13 @@ export default function IndividualProjectPage() {
         <p className="text-lg pt-6 pb-4 text-gray-500">{data.description}</p>
         {data.tags?.length > 0 && (
           <div className="space-x-2 pb-8">
+            <Badge className="bg-gray-600 hover:bg-gray-600/70">
+              A More Play-Full Future
+            </Badge>
             {data.tags.map((tag) => (
-              <Badge key={tag}>{tag}</Badge>
+              <Badge variant="secondary" key={tag}>
+                {tag}
+              </Badge>
             ))}
           </div>
         )}
@@ -67,16 +72,18 @@ export default function IndividualProjectPage() {
             <TabsTrigger value={Tab.TWO}>UPDATES</TabsTrigger>
           </TabsList>
           <TabsContent value={Tab.ONE} className="p-8">
-            <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16">
-              Project TLDR
-            </h3>
-            <Markdown>{data.tldr}</Markdown>
+            <div className="pb-16">
+              <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-8">
+                Project TLDR
+              </h3>
+              <Markdown>{data.tldr}</Markdown>
+            </div>
             <hr />
-            <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16 pt-10">
+            <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-8 pt-10">
               Who is the team executing on this project
             </h3>
             {data.team.map((teamMember, index) => (
-              <div key={teamMember.name} className="space-y-2 pb-4">
+              <div key={teamMember.name} className="space-y-2 pb-4 last:pb-8">
                 <h4 className="font-semibold">
                   {index + 1}. {teamMember.name}
                 </h4>
@@ -84,11 +91,13 @@ export default function IndividualProjectPage() {
               </div>
             ))}
             <hr />
-            <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16 pt-10">
-              This project is looking for:
-            </h3>
+            <div className="pb-16 pt-10">
+              <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-4">
+                This project is looking for:
+              </h3>
+              {data.collaborators && <Markdown>{data.collaborators}</Markdown>}
+            </div>
             <hr />
-            {data.collaborators && <Markdown>{data.collaborators}</Markdown>}
             <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16 pt-10">
               Funding Goals
             </h3>
@@ -113,7 +122,7 @@ export default function IndividualProjectPage() {
           </TabsContent>
         </Tabs>
       </div>
-      <div className="col-span-2 px-4 pt-6 overflow-y-scroll max-h-screen">
+      <div className="md:col-span-2 col-span-1 md:px-4 pt-6 md:overflow-y-scroll md:max-h-screen">
         <div className="flex space-x-2 pb-4">
           <Avatar className="w-12 h-12">
             <AvatarImage
