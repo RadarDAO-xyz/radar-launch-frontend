@@ -7,9 +7,10 @@ import { useGetProject } from "@/hooks/useGetProject";
 import {
   useRadarEditionsGetEditions,
   useRadarEditionsProtocolFee,
+  useRadarEditionsTotalSupply,
 } from "@/lib/generated";
 import isTestnet from "@/lib/utils/isTestnet";
-import { MinusIcon, MoveDown, PlusIcon } from "lucide-react";
+import { DotIcon, MinusIcon, MoveDown, PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { formatEther } from "viem";
@@ -19,6 +20,7 @@ import { chains } from "./Web3Provider";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { useGetExchangeRate } from "@/hooks/useGetExchangeRate";
+import { getCountdown } from "@/lib/utils";
 
 async function getMintCheckoutLink(
   quantity: number,
@@ -138,6 +140,19 @@ export function ProjectTabs({ id }: { id: string }) {
     chainId: chains[0]?.id,
     enabled: Boolean(chains[0]?.id),
   });
+
+  const editionId: number | undefined = onChainProjects?.findIndex(
+    (project) => project.id === id
+  );
+  const value =
+    editionId !== undefined ? onChainProjects?.[editionId]?.fee : undefined;
+
+  const { data: totalSupply } = useRadarEditionsTotalSupply({
+    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    chainId: chains[0]?.id,
+    args: [BigInt(editionId!)],
+    enabled: Boolean(chains[0]?.id) && editionId !== undefined,
+  });
   const { data: exchangeRateData } = useGetExchangeRate("ETH");
   const { data } = useGetProject(id.toString());
 
@@ -179,12 +194,6 @@ export function ProjectTabs({ id }: { id: string }) {
         contributeTextInputRef.current?.value
       )
   );
-
-  const editionId: number | undefined = onChainProjects?.findIndex(
-    (project) => project.id === id
-  );
-  const value =
-    editionId !== undefined ? onChainProjects?.[editionId]?.fee : undefined;
 
   const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
     ["checkout-mint-link", editionId, value, quantity],
@@ -319,6 +328,15 @@ export function ProjectTabs({ id }: { id: string }) {
                 >
                   <Link href={checkoutLink || ""}>COLLECT</Link>
                 </Button>
+                <p className="text-center pb-4 pt-8 text-gray-700">
+                  <span>
+                    {data?.mint_end_date
+                      ? getCountdown(new Date(data.mint_end_date))
+                      : ""}
+                  </span>
+                  <DotIcon className="inline" />
+                  <span>{totalSupply?.toString() || 0} collected</span>
+                </p>
               </div>
             ) : (
               <div className="py-4">Not available for collection</div>
