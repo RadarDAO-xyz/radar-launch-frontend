@@ -87,6 +87,11 @@ type AmountText = {
   text: string;
 };
 
+export type ProjectUpdate = {
+  project: string;
+  text: string;
+}
+
 export enum Brief {
   THE_ENCHANTRESS = "The Enchantress",
   THE_HEALER = "The Healer",
