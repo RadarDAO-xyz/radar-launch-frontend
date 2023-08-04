@@ -47,14 +47,14 @@ export default function IndividualProjectPage() {
             <div>Invalid project video submitted, {data.video_url}</div>
           )}
         </div>
-        <div className="text-lg pt-10 pb-4">
+        <div className="text-lg pt-10 pb-4 text-gray-400">
           The Brief: <span className="font-semibold">{data.brief}</span>
         </div>
         <h2 className="text-3xl pb-4">{data.title}</h2>
         <hr />
-        <p className="text-lg py-6">This is some text inside of a div block.</p>
-        <Tabs defaultValue={Tab.ONE} className="border py-6">
-          <TabsList className="grid w-full grid-cols-6">
+        <p className="text-lg py-6 text-gray-500">{data.description}</p>
+        <Tabs defaultValue={Tab.ONE} className="border rounded-lg py-6">
+          <TabsList className="grid w-full grid-cols-6 px-8">
             <TabsTrigger value={Tab.ONE}>DETAILS</TabsTrigger>
             <TabsTrigger value={Tab.TWO}>UPDATES</TabsTrigger>
           </TabsList>
@@ -65,7 +65,7 @@ export default function IndividualProjectPage() {
             <Markdown>{data.tldr}</Markdown>
             <hr />
             <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16 pt-10">
-              Who is the team executing on this vision
+              Who is the team executing on this project
             </h3>
             {data.team.map((teamMember, index) => (
               <div key={teamMember.name} className="space-y-2 pb-4">
@@ -88,9 +88,9 @@ export default function IndividualProjectPage() {
               <TableBody>
                 {data?.milestones.map((milestone) => (
                   <TableRow key={milestone.text}>
-                    <TableCell className="font-medium text-xl w-[200px]">
+                    <TableCell className="font-medium text-xl w-[200px] align-top">
                       ${" "}
-                      <span className="text-gray-400 text">
+                      <span className="text-gray-400">
                         {milestone.amount.toFixed(2)}
                       </span>
                     </TableCell>
@@ -100,7 +100,9 @@ export default function IndividualProjectPage() {
               </TableBody>
             </Table>
           </TabsContent>
-          <TabsContent value={Tab.TWO}></TabsContent>
+          <TabsContent value={Tab.TWO} className="p-8">
+            Coming soon...
+          </TabsContent>
         </Tabs>
       </div>
       <div className="col-span-2 px-4 pt-6 overflow-y-scroll max-h-screen">

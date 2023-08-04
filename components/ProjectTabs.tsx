@@ -292,17 +292,20 @@ export function ProjectTabs({ id }: { id: string }) {
                   asChild
                   disabled={!checkoutLink || isCheckoutLinkLoading}
                 >
-                  <Link href={checkoutLink || ""}>Collect</Link>
+                  <Link href={checkoutLink || ""}>COLLECT</Link>
                 </Button>
               </div>
             ) : (
-              <div>Not available for collection</div>
+              <div className="py-4">Not available for collection</div>
             )}
           </TabsContent>
-          <TabsContent value={Tab.SIGN_UP} className="px-4 py-2 rounded border">
+          <TabsContent
+            value={Tab.SIGN_UP}
+            className="px-4 pt-8 pb-10 rounded border"
+          >
             <div>
-              <h2 className="text-xl text-center py-6">
-                Be the first to use this Vision
+              <h2 className="text-xl text-center pb-6">
+                Be the first to use this Project
               </h2>
               {!isSignupSuccess ? (
                 <>
@@ -317,7 +320,7 @@ export function ProjectTabs({ id }: { id: string }) {
                     onClick={() => signupMutateAsync()}
                     disabled={isSignupLoading}
                   >
-                    Sign Up
+                    SIGN UP
                   </Button>
                 </>
               ) : (
@@ -329,11 +332,11 @@ export function ProjectTabs({ id }: { id: string }) {
           </TabsContent>
           <TabsContent
             value={Tab.CONTRIBUTE}
-            className="px-4 py-2 rounded border"
+            className="px-4 pt-8 pb-10 rounded border"
           >
             <div>
-              <h2 className="text-xl text-center py-6">
-                Help Build this Vision
+              <h2 className="text-xl text-center pb-6">
+                Help Build this Project
               </h2>
               {!isContributeSuccess ? (
                 <>
@@ -363,7 +366,7 @@ export function ProjectTabs({ id }: { id: string }) {
                     disabled={isContributeLoading}
                     onClick={() => contributeMutateAsync()}
                   >
-                    Apply
+                    APPLY
                   </Button>
                 </>
               ) : (
