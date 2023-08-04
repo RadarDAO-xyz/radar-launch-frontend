@@ -82,7 +82,9 @@ async function createProject(
 async function getCheckoutLink(
   fee: number,
   address: string,
-  id: string
+  id: string,
+  title: string,
+  imageUrl: string,
 ): Promise<string> {
   try {
     const result = await fetch(`/api/get-checkout-link`, {
@@ -94,6 +96,8 @@ async function getCheckoutLink(
         fee,
         address,
         id,
+        title,
+        imageUrl,
       }),
     }).then((res) => res.json());
     console.log(result);
@@ -206,6 +210,7 @@ export default function ProjectForm() {
   const fee = watch("edition_price");
   const admin_address = watch("admin_address");
   const video_image = watch("video_image");
+  const title = watch("title");
 
   const { data: ensAddressData } = useEnsAddress({
     name: admin_address,
@@ -232,8 +237,21 @@ export default function ProjectForm() {
       createProjectData?._id,
       ensAddressData || admin_address,
     ],
-    () => getCheckoutLink(fee, admin_address, createProjectData._id),
-    { enabled: Boolean(createProjectData?._id) }
+    () =>
+      getCheckoutLink(
+        fee,
+        admin_address,
+        createProjectData._id,
+        title,
+        generateVideoThumbnail(video_image)
+      ),
+    {
+      enabled:
+        Boolean(createProjectData?._id) &&
+        Boolean(admin_address) &&
+        Boolean(title) &&
+        Boolean(video_image),
+    }
   );
   const router = useRouter();
   const { toast } = useToast();

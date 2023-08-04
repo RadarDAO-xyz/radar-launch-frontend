@@ -19,15 +19,24 @@ import { chains } from "./Web3Provider";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { useGetExchangeRate } from "@/hooks/useGetExchangeRate";
-import { getCountdown } from "@/lib/utils";
+import { cn, getCountdown } from "@/lib/utils";
 import { convertWeiToUsdOrEth } from "../lib/convertWeiToUsdOrEth";
+import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
 
 async function getMintCheckoutLink(
   quantity: number,
   editionId?: number,
-  value?: string // project's mint fee
+  value?: string, // project's mint fee,
+  title?: string,
+  imageUrl?: string,
+  projectId?: string
 ): Promise<string> {
-  if (editionId === undefined || value === undefined) {
+  if (
+    editionId === undefined ||
+    value === undefined ||
+    title === undefined ||
+    imageUrl === undefined
+  ) {
     return "";
   }
 
@@ -41,6 +50,9 @@ async function getMintCheckoutLink(
         editionId,
         value,
         quantity,
+        title,
+        imageUrl,
+        projectId,
       }),
     }).then((res) => res.json());
 
@@ -63,7 +75,7 @@ async function signupProject(projectId: string, email?: string) {
     return "";
   }
   try {
-    const result = await fetch(
+    return fetch(
       `${process.env.BACKEND_URL}/projects/${projectId}/supporters`,
       {
         method: "POST",
@@ -93,7 +105,7 @@ async function contributeProject(
     return "";
   }
   try {
-    const result = await fetch(
+    return fetch(
       `${process.env.BACKEND_URL}/projects/${projectId}/supporters`,
       {
         method: "POST",
@@ -143,7 +155,7 @@ export function ProjectTabs({ id }: { id: string }) {
   const { data: totalSupply } = useRadarEditionsTotalSupply({
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
-    args: [BigInt(editionId!)],
+    args: [BigInt(Math.max(editionId!, 0))],
     enabled: Boolean(chains[0]?.id) && editionId !== undefined,
   });
   const { data: exchangeRateData } = useGetExchangeRate("ETH");
@@ -194,14 +206,18 @@ export function ProjectTabs({ id }: { id: string }) {
       getMintCheckoutLink(
         quantity,
         editionId,
-        (value! + protocolFee!).toString()
+        (value! + protocolFee!).toString(),
+        data?.title,
+        generateVideoThumbnail(data?.video_url!),
+        data?._id
       ),
     {
       enabled:
         editionId !== undefined &&
         value !== undefined &&
         protocolFee !== undefined &&
-        currentTab === Tab.COLLECT,
+        currentTab === Tab.COLLECT &&
+        data !== undefined,
     }
   );
 
@@ -305,7 +321,10 @@ export function ProjectTabs({ id }: { id: string }) {
               </Button>
             </div>
             <Button
-              className="w-full"
+              className={cn(
+                "w-full",
+                !checkoutLink ? "pointer-events-none bg-gray-600" : ""
+              )}
               asChild
               disabled={!checkoutLink || isCheckoutLinkLoading}
             >
