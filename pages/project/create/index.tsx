@@ -1,6 +1,7 @@
 import { AuthContext } from "@/components/AuthProvider";
+import { BenefitsFields } from "@/components/BenefitsFields";
 import { MilestoneFields } from "@/components/MilestoneFields";
-import { RepeatingField } from "@/components/RepeatingField";
+import { TeamFields } from "@/components/TeamFields";
 import { chains } from "@/components/Web3Provider";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -44,6 +45,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
+import { VIMEO_REGEX, YOUTUBE_REGEX } from "@/constants/regex";
+import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
 import { cn } from "@/lib/utils";
 import { Brief } from "@/types/mongo";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -55,33 +58,33 @@ import { useForm } from "react-hook-form";
 import { isAddress } from "viem";
 import { useAccount, useEnsAddress, useMutation, useQuery } from "wagmi";
 import * as z from "zod";
-import { TeamFields } from "../../../components/TeamFields";
-import { YOUTUBE_REGEX } from "../../../constants/regex";
-import { retrieveYoutubeId } from "../../../lib/retrieveYoutubeId";
 
 async function createProject(
   idToken: string,
   values: z.infer<typeof formSchema>
 ) {
+  const finalValues = {
+    ...values,
+    mint_end_date: values.mint_end_date.toISOString(),
+  };
+  console.log(finalValues);
   const res = await fetch(`${process.env.BACKEND_URL}/projects`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${idToken}`,
     },
-    body: JSON.stringify({
-      ...values,
-      mint_end_date: values.mint_end_date.toISOString(),
-    }),
+    body: JSON.stringify(finalValues),
   });
-  console.log(res);
   return await res.json();
 }
 
 async function getCheckoutLink(
   fee: number,
   address: string,
-  id: string
+  id: string,
+  title: string,
+  imageUrl: string,
 ): Promise<string> {
   try {
     const result = await fetch(`/api/get-checkout-link`, {
@@ -93,6 +96,8 @@ async function getCheckoutLink(
         fee,
         address,
         id,
+        title,
+        imageUrl,
       }),
     }).then((res) => res.json());
     console.log(result);
@@ -117,10 +122,14 @@ const formSchema = z.object({
   video_image: z
     .string()
     .url({ message: "Please enter a valid URL" })
-    .refine((url) => YOUTUBE_REGEX.exec(url) !== null, {
-      message:
-        "Invalid youtube link, e.g. https://www.youtube.com/watch?v=wy8tgRbHN1U",
-    }),
+    .refine(
+      (url) =>
+        YOUTUBE_REGEX.exec(url) !== null || VIMEO_REGEX.exec(url) !== null,
+      {
+        message:
+          "Invalid YouTube and Vimeo link, e.g. https://www.youtube.com/watch?v=wy8tgRbHN1U",
+      }
+    ),
   brief: z.string().min(1, { message: "Brief is required" }),
   inspiration: z.string().min(1, { message: "Inspiration is required" }),
   team: z.array(
@@ -201,6 +210,7 @@ export default function ProjectForm() {
   const fee = watch("edition_price");
   const admin_address = watch("admin_address");
   const video_image = watch("video_image");
+  const title = watch("title");
 
   const { data: ensAddressData } = useEnsAddress({
     name: admin_address,
@@ -214,17 +224,11 @@ export default function ProjectForm() {
     isSuccess: isSubmitSuccess,
   } = useMutation(["submit-project"], () => {
     const values = form.getValues();
-    let admin_address = values.admin_address;
     if (admin_address.endsWith(".eth")) {
-      admin_address = ensAddressData || admin_address;
+      values.admin_address = ensAddressData || admin_address;
     }
-    return createProject(idToken, {
-      ...values,
-      video_image: `https://img.youtube.com/vi/${retrieveYoutubeId(
-        video_image
-      )}/0.jpg`,
-      admin_address,
-    });
+    values.video_image = generateVideoThumbnail(values.video_image);
+    return createProject(idToken, values);
   });
   const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
     [
@@ -233,8 +237,21 @@ export default function ProjectForm() {
       createProjectData?._id,
       ensAddressData || admin_address,
     ],
-    () => getCheckoutLink(fee, admin_address, createProjectData._id),
-    { enabled: Boolean(createProjectData?._id) }
+    () =>
+      getCheckoutLink(
+        fee,
+        admin_address,
+        createProjectData._id,
+        title,
+        generateVideoThumbnail(video_image)
+      ),
+    {
+      enabled:
+        Boolean(createProjectData?._id) &&
+        Boolean(admin_address) &&
+        Boolean(title) &&
+        Boolean(video_image),
+    }
   );
   const router = useRouter();
   const { toast } = useToast();
@@ -407,7 +424,7 @@ export default function ProjectForm() {
                 name="video_image"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Enter a YouTube URL</FormLabel>
+                    <FormLabel>Enter a YouTube or Vimeo URL</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -416,11 +433,7 @@ export default function ProjectForm() {
                 )}
               />
               {video_image !== "" && (
-                <img
-                  src={`https://img.youtube.com/vi/${retrieveYoutubeId(
-                    video_image
-                  )}/0.jpg`}
-                />
+                <img src={generateVideoThumbnail(video_image)} />
               )}
             </div>
           </div>
@@ -687,7 +700,7 @@ export default function ProjectForm() {
               </p>
             </div>
             <div className="col-span-1">
-              <RepeatingField />
+              <BenefitsFields />
             </div>
           </div>
           <hr className="border-b-1 border-slate-200 my-8" />

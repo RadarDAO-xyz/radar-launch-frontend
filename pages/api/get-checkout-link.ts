@@ -1,5 +1,5 @@
 import { GOERLI_CONTRACT_ID, MAINNET_CONTRACT_ID } from "@/constants/paper";
-import isTestnet from "@/lib/utils/isTestnet";
+import isTestnet from "@/lib/isTestnet";
 import { NextApiRequest, NextApiResponse } from "next";
 import { fetchExchangeRate } from "./exchange-rate";
 import { parseEther } from "@/lib/utils";
@@ -18,8 +18,8 @@ export default async function handler(
     return res.status(404).json({ message: "Not found" });
   }
   try {
-    const { fee, address, id } = req.body;
-    console.log({ fee, address, id });
+    const { fee, address, id, title, imageUrl } = req.body;
+    console.log({ fee, address, id, title, imageUrl });
 
     const exchangeRateData = await fetchExchangeRate("ETH");
     if (
@@ -45,11 +45,13 @@ export default async function handler(
       },
       body: JSON.stringify({
         contractId: isTestnet() ? GOERLI_CONTRACT_ID : MAINNET_CONTRACT_ID,
-        title: "RADAR Editions - Create Project",
+        title: `Create Project - ${title}`,
         // description: "Describe your project *with Markdown!*",
-        // imageUrl: "https://unsplash.it/240/240",
-        successCallbackUrl: "https://radarlaunch.app",
-        cancelCallbackUrl: "https://radarlaunch.app",
+        imageUrl,
+        successCallbackUrl: id
+          ? `https://radarlaunch.app/project/${id}`
+          : "https://radarlaunch.app",
+        cancelCallbackUrl: "https://radarlaunch.app/project/create",
         sendEmailOnCreation: true,
         quantity: 1,
         metadata: {},

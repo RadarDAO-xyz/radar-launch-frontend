@@ -1,22 +1,24 @@
-"use client";
-import React, { useState, useEffect, ReactNode } from "react";
+import { Input } from "@/components/ui/input";
+import { ReactNode } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { FormControl, FormField, FormItem, FormMessage } from "./ui/form";
-import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-
-interface Row {
-  key: string;
-}
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./ui/form";
+import { Textarea } from "./ui/textarea";
 
 interface Props {
   children?: ReactNode;
 }
 
-export const MilestoneFields = ({ children }: Props) => {
+export const BenefitsFields = ({ children }: Props) => {
   const { control } = useFormContext();
   const { fields, append, remove } = useFieldArray({
-    name: "milestones",
+    name: "benefits",
     control,
   });
 
@@ -26,23 +28,30 @@ export const MilestoneFields = ({ children }: Props) => {
         <div key={field.id} className="mb-6">
           <FormField
             key={field.id}
-            name={`milestones.${index}.amount`}
+            control={control}
+            name={`benefits.${index}.amount`}
             render={({ field }) => (
               <FormItem className="pb-4">
-                <FormControl>
-                  <Input {...field} type="number" placeholder="$" />
-                </FormControl>
+                <div className="flex items-center space-x-4">
+                  <FormControl>
+                    <Input {...field} type="number" placeholder="#" />
+                  </FormControl>
+                  <FormLabel className="w-full mb-0">
+                    editions collected
+                  </FormLabel>
+                </div>
                 <FormMessage />
               </FormItem>
             )}
           />
           <FormField
             key={field.id}
-            name={`milestones.${index}.text`}
+            control={control}
+            name={`benefits.${index}.text`}
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input {...field} />
+                  <Textarea {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

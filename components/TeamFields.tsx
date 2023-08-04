@@ -1,35 +1,27 @@
 import { ReactNode } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Button } from "./ui/button";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage
-} from "./ui/form";
+import { FormControl, FormField, FormItem, FormMessage } from "./ui/form";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-
-interface Row {
-  key: string;
-}
 
 interface Props {
   children?: ReactNode;
 }
 
 export const TeamFields = ({ children }: Props) => {
-  const { control } = useFormContext()
+  const { control } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     name: "team",
-    control
-  })
+    control,
+  });
 
   return (
     <fieldset>
       {fields.map((row, index) => (
         <div key={row.id} className="mb-6 space-y-4">
           <FormField
+            key={row.id + "name"}
             name={`team.${index}.name`}
             render={({ field }) => (
               <FormItem>
@@ -41,6 +33,7 @@ export const TeamFields = ({ children }: Props) => {
             )}
           />
           <FormField
+            key={row.id + "bio"}
             name={`team.${index}.bio`}
             render={({ field }) => (
               <FormItem>
@@ -52,6 +45,7 @@ export const TeamFields = ({ children }: Props) => {
             )}
           />
           <FormField
+            key={row.id + "email"}
             name={`team.${index}.email`}
             render={({ field }) => (
               <FormItem>
@@ -68,7 +62,7 @@ export const TeamFields = ({ children }: Props) => {
         type="button"
         className="w-full"
         variant={"ghost"}
-        onClick={append}
+        onClick={() => append({ name: "", bio: "", email: "" })}
       >
         + add another
       </Button>
