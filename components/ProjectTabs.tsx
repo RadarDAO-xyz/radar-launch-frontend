@@ -329,13 +329,15 @@ export function ProjectTabs({ id }: { id: string }) {
                   <Link href={checkoutLink || ""}>COLLECT</Link>
                 </Button>
                 <p className="text-center pb-4 pt-8 text-gray-700">
-                  <span>
-                    {data?.mint_end_date
-                      ? getCountdown(new Date(data.mint_end_date))
-                      : ""}
-                  </span>
-                  <DotIcon className="inline" />
-                  <span>{totalSupply?.toString() || 0} collected</span>
+                  {data?.mint_end_date ? (
+                    <>
+                      <span>{getCountdown(new Date(data.mint_end_date))}</span>
+                      <DotIcon className="inline" />
+                    </>
+                  ) : null}
+                  {totalSupply !== undefined && (
+                    <span>{totalSupply.toString()} collected</span>
+                  )}
                 </p>
               </div>
             ) : (
@@ -422,7 +424,10 @@ export function ProjectTabs({ id }: { id: string }) {
           <TabsContent value={Tab.BENEFITS} className="">
             {data?.benefits.length ? (
               data.benefits.filter(Boolean).map((benefit) => (
-                <div key={benefit.text} className="mt-4 border rounded">
+                <div
+                  key={benefit.text}
+                  className="mt-4 border rounded last:pb-[10vh]"
+                >
                   <h3 className="p-6">
                     Collect {benefit.amount} or more editions and get
                   </h3>

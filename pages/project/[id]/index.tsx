@@ -2,6 +2,7 @@ import { Markdown } from "@/components/Markdown";
 import { ProjectTabs } from "@/components/ProjectTabs";
 import { chains } from "@/components/Web3Provider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetProject } from "@/hooks/useGetProject";
@@ -52,7 +53,14 @@ export default function IndividualProjectPage() {
         </div>
         <h2 className="text-3xl pb-4">{data.title}</h2>
         <hr />
-        <p className="text-lg py-6 text-gray-500">{data.description}</p>
+        <p className="text-lg pt-6 pb-4 text-gray-500">{data.description}</p>
+        {data.tags?.length > 0 && (
+          <div className="space-x-2 pb-8">
+            {data.tags.map((tag) => (
+              <Badge key={tag}>{tag}</Badge>
+            ))}
+          </div>
+        )}
         <Tabs defaultValue={Tab.ONE} className="border rounded-lg py-6">
           <TabsList className="grid w-full grid-cols-6 px-8">
             <TabsTrigger value={Tab.ONE}>DETAILS</TabsTrigger>
