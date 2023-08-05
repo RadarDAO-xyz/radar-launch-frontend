@@ -93,9 +93,7 @@ export function HeaderHero({
                         exchangeRateData.rates.ETH
                       )
                     : 0)
-                )
-                  .toFixed(2)
-                  .toLocaleString()}
+                ).toLocaleString()}
             </_Builtin.Heading>
             <_Builtin.Paragraph className="body-text larger">
               {"already committed to build better futures"}
