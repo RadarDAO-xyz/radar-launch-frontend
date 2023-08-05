@@ -52,6 +52,7 @@ import { Brief } from "@/types/mongo";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -59,15 +60,21 @@ import { isAddress } from "viem";
 import { useAccount, useEnsAddress, useMutation, useQuery } from "wagmi";
 import * as z from "zod";
 
+interface CreateProjectValues
+  extends Omit<z.infer<typeof formSchema>, "mint_end_date" | "tags"> {
+  mint_end_date: string;
+  tags: string[];
+}
+
 async function createProject(
   idToken: string,
   values: z.infer<typeof formSchema>
 ) {
-  const finalValues = {
+  const finalValues: CreateProjectValues = {
     ...values,
     mint_end_date: values.mint_end_date.toISOString(),
+    tags: values.tags.split(",").map((tag) => tag.trim()),
   };
-  console.log(finalValues);
   const res = await fetch(`${process.env.BACKEND_URL}/projects`, {
     method: "POST",
     headers: {
@@ -84,7 +91,7 @@ async function getCheckoutLink(
   address: string,
   id: string,
   title: string,
-  imageUrl: string,
+  imageUrl: string
 ): Promise<string> {
   try {
     const result = await fetch(`/api/get-checkout-link`, {
@@ -142,6 +149,7 @@ const formSchema = z.object({
         .email({ message: "Please enter a valid email" }),
     })
   ),
+  tags: z.string(),
   collaborators: z.string(),
   waitlist: z.boolean().default(true),
   milestones: z.array(
@@ -289,7 +297,7 @@ export default function ProjectForm() {
 
   if (address === undefined) {
     return (
-      <div className="px-[5%] py-12">
+      <div className="px-[5%] py-12 min-h-[calc(100vh-200px)] flex items-center justify-center">
         <h1>Please login</h1>
       </div>
     );
@@ -308,14 +316,14 @@ export default function ProjectForm() {
         netlify="true"
       >
         <div className="border border-slate-200 rounded p-10 mb-10">
-          <h1>The Project</h1>
+          <h1 className="font-base">The Project</h1>
           <p className="form-subheading">
             {"Hey there future maker, what's your project?"}
           </p>
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="grid grid-cols-2 gap-10">
             <div className="col-span-1 pr-4">
-              <h2 className="text-xl">Basic Info</h2>
+              <h2 className="text-xl font-base">Basic Info</h2>
               <p>
                 Write a Clear and Concise Title and Subtitle for Your Project
                 <br />
@@ -362,7 +370,7 @@ export default function ProjectForm() {
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="grid grid-cols-2 gap-10">
             <div className="col-span-1 pr-4">
-              <h2 className="text-xl">Summary</h2>
+              <h2 className="text-xl font-base">Summary</h2>
               <p>
                 Please provide a brief summary that will motivate supporters to
                 believe in your vision. Be genuine rather than polished!
@@ -409,7 +417,7 @@ export default function ProjectForm() {
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="grid grid-cols-2 gap-10">
             <div className="col-span-1 pr-4">
-              <h2 className="text-xl">Video Image</h2>
+              <h2 className="text-xl font-base">Video Image</h2>
               <p>
                 This image is taken from the thumbnail of your uploaded video.
                 <br />
@@ -440,7 +448,7 @@ export default function ProjectForm() {
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="grid grid-cols-2 gap-10">
             <div className="col-span-1 pr-4">
-              <h2 className="text-xl">Inspiration</h2>
+              <h2 className="text-xl font-base">Inspiration</h2>
               <p>
                 {
                   "Choose a brief that inspires a playful future, or select one of our partner briefs and explain why you're building it. We'll use this to communicate your vision in any email newsletters, interviews or social campaigns."
@@ -492,14 +500,41 @@ export default function ProjectForm() {
               />
             </div>
           </div>
+          <hr className="border-b-1 border-slate-200 my-8" />
+          <div className="grid grid-cols-2 gap-10">
+            <div className="col-span-1 pr-4">
+              <h2 className="text-xl font-base">Tags</h2>
+              <p>
+                Give your project tags that you believe reflect a future it is
+                building towards. These are one word tags like:
+              </p>
+              <br />
+              <p>AI, crypto, worldbuilding, storytelling</p>
+            </div>
+            <div className="col-span-1">
+              <FormField
+                control={control}
+                name="tags"
+                render={({ field }) => (
+                  <FormItem className="pb-4">
+                    <FormLabel>Enter your tags separated by commas</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
         </div>
         <div className="border border-slate-200 rounded p-10 mb-10">
-          <h1>The Team</h1>
+          <h1 className="font-base">The Team</h1>
           <p className="form-subheading">{"Who's building this project?"}</p>
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="grid grid-cols-2 gap-10">
             <div className="col-span-1 pr-4">
-              <h2 className="text-xl">Team</h2>
+              <h2 className="text-xl font-base">Team</h2>
               <p>
                 Please add your team members names and brief bio. Note that your
                 email will not be visible on the platform.
@@ -511,12 +546,12 @@ export default function ProjectForm() {
           </div>
         </div>
         <div className="border border-slate-200 rounded p-10 mb-10">
-          <h1>Support</h1>
+          <h1 className="font-base">Support</h1>
           <p className="form-subheading">What support are you looking for?</p>
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="grid grid-cols-2 gap-10">
             <div className="col-span-1 pr-4">
-              <h2 className="text-xl">Collaborators</h2>
+              <h2 className="text-xl font-base">Collaborators</h2>
               <p>
                 Specify the type of collaborators you need, technical or
                 non-technical, advisors, audiences, or allies. Provide a project
@@ -546,12 +581,12 @@ export default function ProjectForm() {
           </div>
         </div>
         <div className="border border-slate-200 rounded p-10 mb-10">
-          <h1>Milestones</h1>
+          <h1 className="font-base">Milestones</h1>
           <p className="form-subheading">{"What's your roadmap?"}</p>
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="grid grid-cols-2 gap-10">
             <div className="col-span-1 pr-4">
-              <h2 className="text-xl">Funding Milestones</h2>
+              <h2 className="text-xl font-base">Funding Milestones</h2>
               <p>
                 We believe that building is an evolutionary process and we need
                 achievable milestones to help reach it, please list your
@@ -570,7 +605,7 @@ export default function ProjectForm() {
           </div>
         </div>
         <div className="border border-slate-200 rounded p-10 mb-10">
-          <h1>Crowdfund (Optional)</h1>
+          <h1 className="font-base">Crowdfund (Optional)</h1>
           <p className="form-subheading">
             Do you want to crowdfund to reach your milestones, raise capital and
             offer optional benefits to inspire people to support you?
@@ -578,7 +613,7 @@ export default function ProjectForm() {
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="grid grid-cols-2 gap-10">
             <div className="col-span-1 pr-4">
-              <h2 className="text-xl">Crowdfunding</h2>
+              <h2 className="text-xl font-base">Crowdfunding</h2>
               <p>
                 We encourage you to focus on smaller fundraising goals to reach
                 impactful milestones, building trust and growing supporters as
@@ -610,7 +645,7 @@ export default function ProjectForm() {
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="grid grid-cols-2 gap-10">
             <div className="col-span-1 pr-4">
-              <h2 className="text-xl">Editions</h2>
+              <h2 className="text-xl font-base">Editions</h2>
               <p>
                 On Launch, projects start with a default edition price of $0.
                 <br />
@@ -685,7 +720,9 @@ export default function ProjectForm() {
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="grid grid-cols-2 gap-10">
             <div className="col-span-1 pr-4">
-              <h2 className="text-xl">Optional Benefits for supporters</h2>
+              <h2 className="text-xl font-base">
+                Optional Benefits for supporters
+              </h2>
               <p>
                 Set benefits for collectors of your editions, this will be
                 listed on your project page.
@@ -706,7 +743,7 @@ export default function ProjectForm() {
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="grid grid-cols-2 gap-10">
             <div className="col-span-1 pr-4">
-              <h2 className="text-xl">Set your admin address</h2>
+              <h2 className="text-xl font-base">Set your admin address</h2>
               <p>
                 Please share an Ethereum address which can withdraw your
                 crowdfund, please ensure you have access to this address.
@@ -732,12 +769,12 @@ export default function ProjectForm() {
           </div>
         </div>
         <div className="border border-slate-200 rounded p-10 mb-10">
-          <h1>Ready to submit</h1>
+          <h1 className="font-base">Ready to submit</h1>
           <p className="form-subheading">What happens next?</p>
           <hr className="border-b-1 border-slate-200 my-8" />
           <div className="grid grid-cols-2 gap-10">
             <div className="col-span-1 pr-4">
-              <h2 className="text-xl">Project Review</h2>
+              <h2 className="text-xl font-base">Project Review</h2>
               <p>
                 Selected RADAR Community members review proposals and respond
                 within 48 hours. We are unable to provide feedback on
@@ -801,7 +838,15 @@ export default function ProjectForm() {
                   You will be redirected to a separate website to make payments.
                 </DialogDescription>
               </DialogHeader>
-              <DialogFooter>
+              <DialogFooter className="flex space-x-0 space-y-2 sm:flex-col sm:space-x-0">
+                <Button asChild variant="ghost">
+                  <Link
+                    href="https://airtable.com/appGvDqIhUSP0caqo/shrkX6fnUJrcYreUy"
+                    target="_blank"
+                  >
+                    Join our Email Newsletter
+                  </Link>
+                </Button>
                 <Button
                   className="w-full"
                   disabled={isSubmitLoading || isCheckoutLinkLoading}
