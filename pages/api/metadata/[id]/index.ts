@@ -7,7 +7,14 @@ export default async function handler(
   if (req.method !== "GET") {
     return res.status(404).json({});
   }
-  return fetch(`${process.env.BACKEND_URL}/metadata/${req.query.id}`).then(
-    (res) => res.json()
-  );
+  try {
+    const response = await fetch(
+      `${process.env.BACKEND_URL}/metadata/${req.query.id}`
+    ).then((res) => res.json());
+    return res.status(200).json(response);
+  } catch (e) {
+    console.error(e);
+  }
+
+  return res.status(400).json({});
 }
