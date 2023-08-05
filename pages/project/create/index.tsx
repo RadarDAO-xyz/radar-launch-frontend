@@ -296,7 +296,7 @@ export default function ProjectForm() {
 
   if (address === undefined) {
     return (
-      <div className="px-[5%] py-12">
+      <div className="px-[5%] py-12 min-h-[calc(100vh-200px)] flex items-center justify-center">
         <h1>Please login</h1>
       </div>
     );
