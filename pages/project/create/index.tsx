@@ -52,6 +52,7 @@ import { Brief } from "@/types/mongo";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -837,7 +838,15 @@ export default function ProjectForm() {
                   You will be redirected to a separate website to make payments.
                 </DialogDescription>
               </DialogHeader>
-              <DialogFooter>
+              <DialogFooter className="flex space-x-0 space-y-2 sm:flex-col sm:space-x-0">
+                <Button asChild variant="ghost">
+                  <Link
+                    href="https://airtable.com/appGvDqIhUSP0caqo/shrkX6fnUJrcYreUy"
+                    target="_blank"
+                  >
+                    Join our Email Newsletter
+                  </Link>
+                </Button>
                 <Button
                   className="w-full"
                   disabled={isSubmitLoading || isCheckoutLinkLoading}
