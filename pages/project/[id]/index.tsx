@@ -126,7 +126,9 @@ export default function IndividualProjectPage() {
                       <TableCell className="font-medium text-xl w-[200px] align-top">
                         ${" "}
                         <span className="text-gray-400">
-                          {milestone.amount.toFixed(2)}
+                          {typeof milestone.amount === "number"
+                            ? milestone.amount.toFixed(2)
+                            : milestone.amount}
                         </span>
                       </TableCell>
                       <TableCell className="border-l">
