@@ -21,7 +21,7 @@ export function Markdown({
     <ReactMarkdown
       {...props}
       remarkPlugins={[remarkGfm]}
-      className={cn("whitespace-pre-wrap", className)}
+      className={cn("whitespace-pre-wrap react-markdown", className)}
     >
       {transformText(children)}
     </ReactMarkdown>

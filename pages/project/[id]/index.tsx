@@ -111,7 +111,9 @@ export default function IndividualProjectPage() {
                         {milestone.amount.toFixed(2)}
                       </span>
                     </TableCell>
-                    <TableCell className="border-l">{milestone.text}</TableCell>
+                    <TableCell className="border-l">
+                      <Markdown>{milestone.text}</Markdown>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

@@ -75,6 +75,18 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  ul {
+    @apply ml-6 list-disc
+  }
+
+  .react-markdown a {
+    @apply underline hover:text-gray-600
+  }
+
+  .react-markdown ul {
+    @apply -mt-6 -mb-3 -space-y-2
+  }
 }
 
 h1 {
