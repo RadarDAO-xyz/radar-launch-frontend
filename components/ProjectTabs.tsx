@@ -262,7 +262,7 @@ export function ProjectTabs({ id }: { id: string }) {
       </TabsList>
       <TabsContent value={Tab.COLLECT} className="px-4 py-2 rounded border">
         {typeof value === "bigint" && typeof protocolFee === "bigint" ? (
-          <div className="p-4">
+          <div className="p-6">
             <div className="flex justify-between mb-4 text-gray-400">
               <div>
                 <span>
@@ -427,7 +427,7 @@ export function ProjectTabs({ id }: { id: string }) {
                 more editions and get
               </h3>
               <hr />
-              <Markdown className="p-6">{benefit.text}</Markdown>
+              <Markdown className="p-6 px-10">{benefit.text}</Markdown>
             </div>
           ))
         ) : (
