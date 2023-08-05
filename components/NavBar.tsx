@@ -41,12 +41,12 @@ export function NavBar() {
                 loading="lazy"
                 width="auto"
                 height="auto"
-                src="https://uploads-ssl.webflow.com/64548f6f8feacfafa79c9592/645ddcb1ed7bc34887f6efc9_Asset%204%402x-8.png"
+                src="/logo.png"
               />
             </Link>
           </div>
           <NavigationMenu className="z-50 lg:flex hidden">
-            <NavigationMenuList>
+            <NavigationMenuList className="space-x-0">
               <NavigationMenuItem>
                 <Link href="/pool" legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
