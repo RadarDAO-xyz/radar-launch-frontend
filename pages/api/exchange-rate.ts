@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import cache from "memory-cache";
 
 interface ExchangeRate {
   rates: Record<string, number>;
@@ -32,8 +33,15 @@ export default async function handler(
       return res.status(400).json({ message: "Invalid from and to" });
     }
 
-    const response = await fetchExchangeRate(symbols.toString());
+    let response: ExchangeRate | null | undefined = cache.get("exchange-rate");
+    if (response != null) {
+      return res.status(200).json(response);
+    }
+
+    response = await fetchExchangeRate(symbols.toString());
     if (response !== undefined) {
+      // cache for a whole day
+      cache.put("exchange-rate", response, 1000 * 60 * 60 * 24);
       return res.status(200).json(response);
     }
   } catch (e) {
