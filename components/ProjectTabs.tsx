@@ -422,8 +422,9 @@ export function ProjectTabs({ id }: { id: string }) {
         {data?.benefits.length ? (
           data.benefits.filter(Boolean).map((benefit) => (
             <div key={benefit.text} className="mt-4 border rounded last:pb-12">
-              <h3 className="p-6">
-                Collect {benefit.amount} or more editions and get
+              <h3 className="p-6 text-gray-500">
+                Collect <span className="text-black">{benefit.amount}</span> or
+                more editions and get
               </h3>
               <hr />
               <Markdown className="p-6">{benefit.text}</Markdown>

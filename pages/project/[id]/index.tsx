@@ -12,8 +12,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 enum Tab {
-  ONE = "ONE",
-  TWO = "TWO",
+  DETAILS = "ONE",
+  UPDATES = "TWO",
 }
 
 export default function IndividualProjectPage() {
@@ -48,12 +48,12 @@ export default function IndividualProjectPage() {
             <div>Invalid project video submitted, {data.video_url}</div>
           )}
         </div>
-        <div className="text-lg pt-10 pb-4 text-gray-400">
+        <div className="text-normal pt-10 pb-4 text-gray-400">
           The Brief: <span className="font-semibold">{data.brief}</span>
         </div>
         <h2 className="text-3xl pb-4">{data.title}</h2>
         <hr />
-        <p className="text-lg pt-6 pb-4 text-gray-500">{data.description}</p>
+        <p className="text-normal pt-4 pb-4 text-gray-500">{data.description}</p>
         {data.tags?.length > 0 && (
           <div className="space-x-2 pb-8">
             <Badge className="bg-gray-600 text-gray-200">
@@ -66,12 +66,12 @@ export default function IndividualProjectPage() {
             ))}
           </div>
         )}
-        <Tabs defaultValue={Tab.ONE} className="border rounded-lg py-6">
+        <Tabs defaultValue={Tab.DETAILS} className="border rounded-lg py-6">
           <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 lg:grid-cols-6 px-8">
-            <TabsTrigger value={Tab.ONE}>DETAILS</TabsTrigger>
-            <TabsTrigger value={Tab.TWO}>UPDATES</TabsTrigger>
+            <TabsTrigger value={Tab.DETAILS}>DETAILS</TabsTrigger>
+            <TabsTrigger value={Tab.UPDATES}>UPDATES</TabsTrigger>
           </TabsList>
-          <TabsContent value={Tab.ONE} className="p-8">
+          <TabsContent value={Tab.DETAILS} className="p-8">
             <div className="pb-16">
               <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-8">
                 Project TLDR
@@ -119,7 +119,7 @@ export default function IndividualProjectPage() {
               </TableBody>
             </Table>
           </TabsContent>
-          <TabsContent value={Tab.TWO} className="p-8">
+          <TabsContent value={Tab.UPDATES} className="p-8">
             Coming soon...
           </TabsContent>
         </Tabs>
@@ -134,10 +134,10 @@ export default function IndividualProjectPage() {
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <div>
-            <p className="pb-1">{userData?.name}</p>
+            <p className="text-[16px]">{userData?.name}</p>
             <Link
               href={`${chains[0].blockExplorers.etherscan.url}/address/${data.admin_address}`}
-              className="font-mono text-gray-600 hover:underline"
+              className="font-mono text-gray-500 hover:underline"
               target="_blank"
             >
               {data.admin_address.slice(0, 10) + "..."}
