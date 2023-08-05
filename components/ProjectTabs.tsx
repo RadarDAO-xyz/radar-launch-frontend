@@ -262,7 +262,7 @@ export function ProjectTabs({ id }: { id: string }) {
       </TabsList>
       <TabsContent value={Tab.COLLECT} className="px-4 py-2 rounded border">
         {typeof value === "bigint" && typeof protocolFee === "bigint" ? (
-          <div className="p-6">
+          <div className="p-4 lg:p-6">
             <div className="flex justify-between mb-4 text-gray-400">
               <div>
                 <span>
@@ -300,9 +300,10 @@ export function ProjectTabs({ id }: { id: string }) {
                 <span> {exchangeRateData?.rates?.ETH ? "USD" : "ETH"}</span>
               </span>
             </div>
-            <div className="flex w-full space-x-4 mb-4 px-12">
+            <div className="flex w-full space-x-4 mb-4 px-12 md:px-4 xl:px-12">
               <Button
                 variant={"outline"}
+                className="px-2"
                 onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))}
               >
                 <MinusIcon />
@@ -315,6 +316,7 @@ export function ProjectTabs({ id }: { id: string }) {
               />
               <Button
                 variant={"outline"}
+                className="px-2"
                 onClick={() => setQuantity((prev) => prev + 1)}
               >
                 <PlusIcon />
