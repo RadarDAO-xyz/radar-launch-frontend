@@ -59,15 +59,21 @@ import { isAddress } from "viem";
 import { useAccount, useEnsAddress, useMutation, useQuery } from "wagmi";
 import * as z from "zod";
 
+interface CreateProjectValues
+  extends Omit<z.infer<typeof formSchema>, "mint_end_date" | "tags"> {
+  mint_end_date: string;
+  tags: string[];
+}
+
 async function createProject(
   idToken: string,
   values: z.infer<typeof formSchema>
 ) {
-  const finalValues = {
+  const finalValues: CreateProjectValues = {
     ...values,
     mint_end_date: values.mint_end_date.toISOString(),
+    tags: values.tags.split(",").map((tag) => tag.trim()),
   };
-  console.log(finalValues);
   const res = await fetch(`${process.env.BACKEND_URL}/projects`, {
     method: "POST",
     headers: {
@@ -84,7 +90,7 @@ async function getCheckoutLink(
   address: string,
   id: string,
   title: string,
-  imageUrl: string,
+  imageUrl: string
 ): Promise<string> {
   try {
     const result = await fetch(`/api/get-checkout-link`, {
@@ -142,6 +148,7 @@ const formSchema = z.object({
         .email({ message: "Please enter a valid email" }),
     })
   ),
+  tags: z.string(),
   collaborators: z.string(),
   waitlist: z.boolean().default(true),
   milestones: z.array(
@@ -485,6 +492,33 @@ export default function ProjectForm() {
                     </FormLabel>
                     <FormControl>
                       <Textarea {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+          <hr className="border-b-1 border-slate-200 my-8" />
+          <div className="grid grid-cols-2 gap-10">
+            <div className="col-span-1 pr-4">
+              <h2 className="text-xl">Tags</h2>
+              <p>
+                Give your project tags that you believe reflect a future it is
+                building towards. These are one word tags like:
+              </p>
+              <br />
+              <p>AI, crypto, worldbuilding, storytelling</p>
+            </div>
+            <div className="col-span-1">
+              <FormField
+                control={control}
+                name="tags"
+                render={({ field }) => (
+                  <FormItem className="pb-4">
+                    <FormLabel>Enter your tags separated by commas</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
