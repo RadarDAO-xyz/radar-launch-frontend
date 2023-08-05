@@ -38,7 +38,7 @@ export default function IndividualProjectPage() {
           {generateVideoEmbed(data?.video_url) !== "" ? (
             <iframe
               width={"100%"}
-              className="aspect-video pt-6"
+              className="aspect-video"
               src={generateVideoEmbed(data?.video_url)}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen

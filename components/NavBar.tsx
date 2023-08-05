@@ -46,7 +46,7 @@ export function NavBar() {
             </Link>
           </div>
           <NavigationMenu className="z-50 lg:flex hidden">
-            <NavigationMenuList>
+            <NavigationMenuList className="space-x-0">
               <NavigationMenuItem>
                 <Link href="/pool" legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
