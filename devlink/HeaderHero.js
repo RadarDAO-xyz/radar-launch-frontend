@@ -13,6 +13,8 @@ import Link from "next/link";
 import { useGetExchangeRate } from "@/hooks/useGetExchangeRate";
 import { convertWeiToUsdOrEth } from "@/lib/convertWeiToUsdOrEth";
 
+const numberFormatter = Intl.NumberFormat("en-US");
+
 export function HeaderHero({
   as: _Component = _Builtin.Section,
   visionOfTheWeekSlot,
@@ -93,7 +95,9 @@ export function HeaderHero({
                         exchangeRateData.rates.ETH
                       )
                     : 0)
-                ).toLocaleString()}
+                ).toLocaleString("en-US", {
+                  maximumFractionDigits: 0,
+                })}
             </_Builtin.Heading>
             <_Builtin.Paragraph className="body-text larger">
               {"already committed to build better futures"}
