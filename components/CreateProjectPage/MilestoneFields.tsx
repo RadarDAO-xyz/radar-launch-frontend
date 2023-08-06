@@ -1,9 +1,9 @@
 "use client";
 import { ReactNode } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { Button } from "./ui/button";
-import { FormControl, FormField, FormItem, FormMessage } from "./ui/form";
-import { Input } from "./ui/input";
+import { Button } from "../ui/button";
+import { FormControl, FormField, FormItem, FormMessage } from "../ui/form";
+import { Input } from "../ui/input";
 
 export const MilestoneFields = () => {
   const { control } = useFormContext();
