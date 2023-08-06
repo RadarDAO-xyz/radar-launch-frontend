@@ -1,17 +1,14 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import https from "https";
-import { ethers } from "ethers";
-import { optimism, optimismGoerli } from "wagmi/chains";
-import isTestnet from "../../../../lib/isTestnet";
+import abi from "@/abi/RadarEditions.sol/RadarEditions.json";
 import {
   GOERLI_CONTRACT_ADDRESS,
   MAINNET_CONTRACT_ADDRESS,
 } from "@/constants/address";
-import abi from "@/abi/RadarEditions.sol/RadarEditions.json";
 import { getProject } from "@/lib/backend";
-import { retrieveVideoThumbnail } from "../../../../../radar-launch/src/util/regex";
-
-const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
+import isTestnet from "@/lib/isTestnet";
+import { ethers } from "ethers";
+import { NextApiRequest, NextApiResponse } from "next";
+import { optimism, optimismGoerli } from "wagmi/chains";
 
 export default async function handler(
   req: NextApiRequest,
@@ -42,7 +39,7 @@ export default async function handler(
     }
     return res.status(200).json({
       name: project.title,
-      image: retrieveVideoThumbnail(project.video_url),
+      image: generateVideoThumbnail(project.video_url),
       description: project.description,
       external_url: `https://radarlaunch.app/projects/${id}`,
     });
