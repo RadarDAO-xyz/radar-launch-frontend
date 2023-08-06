@@ -208,7 +208,7 @@ export function ProjectTabs({ id }: { id: string }) {
         editionId,
         (value! + protocolFee!).toString(),
         data?.title,
-        generateVideoThumbnail(data?.video_url!),
+        data?.project_image || generateVideoThumbnail(data?.video_url!),
         data?._id
       ),
     {
@@ -350,10 +350,10 @@ export function ProjectTabs({ id }: { id: string }) {
       </TabsContent>
       <TabsContent
         value={Tab.SIGN_UP}
-        className="px-4 pt-8 pb-10 rounded border"
+        className="px-8 py-6 pb-10 rounded border"
       >
         <div>
-          <h2 className="text-xl text-center pb-6">
+          <h2 className="text-xl text-center pt-4 pb-6">
             Be the first to use this Project
           </h2>
           {!isSignupSuccess ? (
@@ -383,7 +383,7 @@ export function ProjectTabs({ id }: { id: string }) {
         value={Tab.CONTRIBUTE}
         className="px-4 pt-8 pb-10 rounded border"
       >
-        <div>
+        <div className="p-4">
           <h2 className="text-xl text-center pb-6">Help Build this Project</h2>
           {!isContributeSuccess ? (
             <>

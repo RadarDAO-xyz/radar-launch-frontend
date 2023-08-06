@@ -1,11 +1,9 @@
 import { AuthContext } from "@/components/AuthProvider";
-import { BenefitsFields } from "@/components/BenefitsFields";
-import { MilestoneFields } from "@/components/MilestoneFields";
-import { TeamFields } from "@/components/TeamFields";
+import { ProjectSection } from "@/components/CreateProjectPage/ProjectSection";
+import { SupportSection } from "@/components/CreateProjectPage/SupportSection";
+import { TeamSection } from "@/components/CreateProjectPage/TeamSection";
 import { chains } from "@/components/Web3Provider";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -15,29 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+import { Form } from "@/components/ui/form";
 import {
   Tooltip,
   TooltipContent,
@@ -47,11 +23,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { VIMEO_REGEX, YOUTUBE_REGEX } from "@/constants/regex";
 import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
-import { cn } from "@/lib/utils";
-import { Brief } from "@/types/mongo";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
@@ -59,16 +31,18 @@ import { useForm } from "react-hook-form";
 import { isAddress } from "viem";
 import { useAccount, useEnsAddress, useMutation, useQuery } from "wagmi";
 import * as z from "zod";
+import { CrowdFundSection } from "../../../components/CreateProjectPage/CrowdFundSection";
+import { MilestoneSection } from "../../../components/CreateProjectPage/MilestoneSection";
 
 interface CreateProjectValues
-  extends Omit<z.infer<typeof formSchema>, "mint_end_date" | "tags"> {
+  extends Omit<z.infer<typeof createFormSchema>, "mint_end_date" | "tags"> {
   mint_end_date: string;
   tags: string[];
 }
 
 async function createProject(
   idToken: string,
-  values: z.infer<typeof formSchema>
+  values: z.infer<typeof createFormSchema>
 ) {
   const finalValues: CreateProjectValues = {
     ...values,
@@ -118,7 +92,7 @@ async function getCheckoutLink(
   return "";
 }
 
-const formSchema = z.object({
+export const createFormSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
   description: z.string().min(1, { message: "Description is required" }),
   video_url: z
@@ -154,7 +128,7 @@ const formSchema = z.object({
   waitlist: z.boolean().default(true),
   milestones: z.array(
     z.object({
-      amount: z.coerce.number().min(0, { message: "Amount is required" }),
+      amount: z.string().min(1, { message: "Milestone is required" }),
       text: z.string().min(1, { message: "Milestone description is required" }),
     })
   ),
@@ -183,8 +157,8 @@ export default function ProjectForm() {
   const { address } = useAccount();
   const { idToken } = useContext(AuthContext);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof createFormSchema>>({
+    resolver: zodResolver(createFormSchema),
     mode: "onBlur",
     defaultValues: {
       title: "",
@@ -266,7 +240,7 @@ export default function ProjectForm() {
 
   console.log({ checkoutLink });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof createFormSchema>) {
     // print form errors
     if (errors) {
       console.error({ errors, values });
@@ -315,459 +289,11 @@ export default function ProjectForm() {
         // @ts-expect-error For netlify forms
         netlify="true"
       >
-        <div className="border border-slate-200 rounded p-10 mb-10">
-          <h1 className="font-base">The Project</h1>
-          <p className="form-subheading">
-            {"Hey there future maker, what's your project?"}
-          </p>
-          <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="grid grid-cols-2 gap-10">
-            <div className="col-span-1 pr-4">
-              <h2 className="text-xl font-base">Basic Info</h2>
-              <p>
-                Write a Clear and Concise Title and Subtitle for Your Project
-                <br />
-                <br />
-                Your project title and subtitle will appear on your project and
-                pre-launch pages, as well as in category pages, search results,
-                and emails we send to our community. Make sure they accurately
-                represent your project and are easy to understand for potential
-                supporters.
-              </p>
-            </div>
-            <div className="col-span-1">
-              <FormField
-                control={control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem className="pb-4">
-                    <FormLabel>What is the name of your project?</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Describe your idea in a sentence</FormLabel>
-                    <FormDescription className="text-xs">
-                      This will be featured on homepage alongside your video
-                    </FormDescription>
-                    <FormControl>
-                      <Textarea {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-          <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="grid grid-cols-2 gap-10">
-            <div className="col-span-1 pr-4">
-              <h2 className="text-xl font-base">Summary</h2>
-              <p>
-                Please provide a brief summary that will motivate supporters to
-                believe in your vision. Be genuine rather than polished!
-                <br />
-                <br />
-                Explain what you aim to achieve with the funding, how you intend
-                to accomplish it, who you are, and why this project is important
-                to you. Demonstrations and step-by-step guides are highly
-                effective!
-              </p>
-            </div>
-            <div className="col-span-1">
-              <FormField
-                control={control}
-                name="video_url"
-                render={({ field }) => (
-                  <FormItem className="pb-4">
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Share a brief 3-minute video through a URL (e.g. Vimeo or
-                      YouTube) introducing your vision for a better future.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={control}
-                name="tldr"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Project TLDR</FormLabel>
-                    <FormControl>
-                      <Textarea {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-          <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="grid grid-cols-2 gap-10">
-            <div className="col-span-1 pr-4">
-              <h2 className="text-xl font-base">Video Image</h2>
-              <p>
-                This image is taken from the thumbnail of your uploaded video.
-                <br />
-                <br />
-                This will appear for collectors in their wallet and on their
-                profile.
-              </p>
-            </div>
-            <div className="col-span-1 space-y-2">
-              <FormField
-                control={control}
-                name="video_image"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Enter a YouTube or Vimeo URL</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {video_image !== "" && (
-                <img src={generateVideoThumbnail(video_image)} />
-              )}
-            </div>
-          </div>
-          <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="grid grid-cols-2 gap-10">
-            <div className="col-span-1 pr-4">
-              <h2 className="text-xl font-base">Inspiration</h2>
-              <p>
-                {
-                  "Choose a brief that inspires a playful future, or select one of our partner briefs and explain why you're building it. We'll use this to communicate your vision in any email newsletters, interviews or social campaigns."
-                }
-              </p>
-            </div>
-            <div className="col-span-1">
-              <FormField
-                control={control}
-                name="brief"
-                render={({ field }) => (
-                  <FormItem className="pb-4">
-                    <FormLabel>Select a brief you are answering:</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a Brief" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {Object.values(Brief).map((brief) => (
-                          <SelectItem key={brief} value={brief}>
-                            {brief}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={control}
-                name="inspiration"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      What was the inspiration for this idea?
-                    </FormLabel>
-                    <FormControl>
-                      <Textarea {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-          <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="grid grid-cols-2 gap-10">
-            <div className="col-span-1 pr-4">
-              <h2 className="text-xl font-base">Tags</h2>
-              <p>
-                Give your project tags that you believe reflect a future it is
-                building towards. These are one word tags like:
-              </p>
-              <br />
-              <p>AI, crypto, worldbuilding, storytelling</p>
-            </div>
-            <div className="col-span-1">
-              <FormField
-                control={control}
-                name="tags"
-                render={({ field }) => (
-                  <FormItem className="pb-4">
-                    <FormLabel>Enter your tags separated by commas</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="border border-slate-200 rounded p-10 mb-10">
-          <h1 className="font-base">The Team</h1>
-          <p className="form-subheading">{"Who's building this project?"}</p>
-          <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="grid grid-cols-2 gap-10">
-            <div className="col-span-1 pr-4">
-              <h2 className="text-xl font-base">Team</h2>
-              <p>
-                Please add your team members names and brief bio. Note that your
-                email will not be visible on the platform.
-              </p>
-            </div>
-            <div className="col-span-1">
-              <TeamFields />
-            </div>
-          </div>
-        </div>
-        <div className="border border-slate-200 rounded p-10 mb-10">
-          <h1 className="font-base">Support</h1>
-          <p className="form-subheading">What support are you looking for?</p>
-          <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="grid grid-cols-2 gap-10">
-            <div className="col-span-1 pr-4">
-              <h2 className="text-xl font-base">Collaborators</h2>
-              <p>
-                Specify the type of collaborators you need, technical or
-                non-technical, advisors, audiences, or allies. Provide a project
-                description to invite people to assist you.
-              </p>
-            </div>
-            <div className="col-span-1">
-              <FormField
-                control={control}
-                name="collaborators"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      {"List the collaborators you're looking for"}
-                    </FormLabel>
-                    <FormControl>
-                      <Textarea {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      {"Leave blank if you don't need any collaborators"}
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="border border-slate-200 rounded p-10 mb-10">
-          <h1 className="font-base">Milestones</h1>
-          <p className="form-subheading">{"What's your roadmap?"}</p>
-          <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="grid grid-cols-2 gap-10">
-            <div className="col-span-1 pr-4">
-              <h2 className="text-xl font-base">Funding Milestones</h2>
-              <p>
-                We believe that building is an evolutionary process and we need
-                achievable milestones to help reach it, please list your
-                milestones, big or small, if you are crowdfunding, you must
-                reach the amount in milestone 1 to withdraw funds. Otherwise,
-                supporters will receive a refund.
-              </p>
-              <br />
-              <p>
-                If you are not crowdfunding, leave the funding amounts blank.
-              </p>
-            </div>
-            <div className="col-span-1">
-              <MilestoneFields />
-            </div>
-          </div>
-        </div>
-        <div className="border border-slate-200 rounded p-10 mb-10">
-          <h1 className="font-base">Crowdfund (Optional)</h1>
-          <p className="form-subheading">
-            Do you want to crowdfund to reach your milestones, raise capital and
-            offer optional benefits to inspire people to support you?
-          </p>
-          <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="grid grid-cols-2 gap-10">
-            <div className="col-span-1 pr-4">
-              <h2 className="text-xl font-base">Crowdfunding</h2>
-              <p>
-                We encourage you to focus on smaller fundraising goals to reach
-                impactful milestones, building trust and growing supporters as
-                you go, and crowdraise again at any time for new experiments,
-                ideas and projects on your journey.
-              </p>
-            </div>
-            <div className="col-span-1">
-              <FormField
-                control={control}
-                name="waitlist"
-                render={({ field }) => (
-                  <FormItem className="flex items-center space-x-2">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormLabel>
-                      I want to set benefits and crowdfund on Launch
-                    </FormLabel>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-          <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="grid grid-cols-2 gap-10">
-            <div className="col-span-1 pr-4">
-              <h2 className="text-xl font-base">Editions</h2>
-              <p>
-                On Launch, projects start with a default edition price of $0.
-                <br />
-                <br />
-                You can offer benefits and set an alternate price for your
-                editions to incentivize supporters.
-                <br />
-                <br />
-                Edition prices are set at a maximum of $20 to make supporting
-                projects accessible.
-              </p>
-            </div>
-            <div className="col-span-1">
-              <FormField
-                control={control}
-                name="edition_price"
-                render={({ field }) => (
-                  <FormItem className="pb-4">
-                    <FormLabel>Edition Price</FormLabel>
-                    <div className="flex items-center space-x-2">
-                      <FormControl>
-                        <Input type="number" placeholder="0-20" {...field} />
-                      </FormControl>
-                      <p>$USD</p>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={control}
-                name="mint_end_date"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Mint End Date</FormLabel>
-                    <FormControl>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant={"outline"}
-                              className={cn(
-                                "w-full pl-3 text-left font-normal",
-                                !field.value && "text-muted-foreground"
-                              )}
-                            >
-                              {field.value ? (
-                                format(field.value, "PPP")
-                              ) : (
-                                <span>Pick a date</span>
-                              )}
-                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                            initialFocus
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-          <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="grid grid-cols-2 gap-10">
-            <div className="col-span-1 pr-4">
-              <h2 className="text-xl font-base">
-                Optional Benefits for supporters
-              </h2>
-              <p>
-                Set benefits for collectors of your editions, this will be
-                listed on your project page.
-                <br />
-                <br />
-                Think of incentives to support you, it could be first access to
-                a product, a physical redemption, membership to community.
-                <br />
-                <br />
-                At the current time, you cannot offer equity or revenue share
-                through Launch.
-              </p>
-            </div>
-            <div className="col-span-1">
-              <BenefitsFields />
-            </div>
-          </div>
-          <hr className="border-b-1 border-slate-200 my-8" />
-          <div className="grid grid-cols-2 gap-10">
-            <div className="col-span-1 pr-4">
-              <h2 className="text-xl font-base">Set your admin address</h2>
-              <p>
-                Please share an Ethereum address which can withdraw your
-                crowdfund, please ensure you have access to this address.
-              </p>
-            </div>
-            <div className="col-span-1">
-              <FormField
-                control={control}
-                name={`admin_address`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input {...field} placeholder="Your ETH / ENS address" />
-                    </FormControl>
-                    <FormDescription>
-                      This should start with 0x... or end with .eth
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-        </div>
+        <ProjectSection />
+        <TeamSection />
+        <SupportSection />
+        <MilestoneSection />
+        <CrowdFundSection />
         <div className="border border-slate-200 rounded p-10 mb-10">
           <h1 className="font-base">Ready to submit</h1>
           <p className="form-subheading">What happens next?</p>

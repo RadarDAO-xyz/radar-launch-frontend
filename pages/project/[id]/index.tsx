@@ -8,10 +8,7 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetFooter,
-  SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
@@ -44,7 +41,7 @@ export default function IndividualProjectPage() {
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-6 px-[5%] bg-white py-12">
+      <div className="grid grid-cols-1 md:grid-cols-6 px-[5%] bg-white">
         <div className="md:col-span-4 col-span-1 md:pr-10 md:overflow-y-scroll md:max-h-screen">
           <div>
             {generateVideoEmbed(data?.video_url) !== "" ? (
@@ -124,12 +121,16 @@ export default function IndividualProjectPage() {
                   {data?.milestones.map((milestone) => (
                     <TableRow key={milestone.text}>
                       <TableCell className="font-medium text-xl w-[200px] align-top">
-                        ${" "}
-                        <span className="text-gray-400">
-                          {typeof milestone.amount === "number"
-                            ? milestone.amount.toFixed(2)
-                            : milestone.amount}
-                        </span>
+                        {typeof milestone.amount === "number" ? (
+                          <span>
+                            ${" "}
+                            <span className="text-gray-400">
+                              {milestone.amount.toFixed(2)}
+                            </span>
+                          </span>
+                        ) : (
+                          milestone.amount
+                        )}
                       </TableCell>
                       <TableCell className="border-l">
                         <Markdown>{milestone.text}</Markdown>

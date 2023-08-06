@@ -20,7 +20,7 @@ export type Project = {
   team: Team[];
   collaborators?: string;
   waitlist: boolean;
-  milestones: AmountText[];
+  milestones: MilestoneAmountText[];
   edition_price: number;
   mint_end_date: string;
   benefits: AmountText[];
@@ -32,6 +32,7 @@ export type Project = {
     start: string; // ISO Datestring
     end: string; // ISO Datestring
   };
+  project_image?: string;
 };
 
 export type Pool = {
@@ -82,6 +83,11 @@ type Team = {
   email: string;
 };
 
+type MilestoneAmountText = {
+  amount: number | string;
+  text: string;
+};
+
 type AmountText = {
   amount: number;
   text: string;
@@ -90,7 +96,7 @@ type AmountText = {
 export type ProjectUpdate = {
   project: string;
   text: string;
-}
+};
 
 export enum Brief {
   THE_ENCHANTRESS = "The Enchantress",

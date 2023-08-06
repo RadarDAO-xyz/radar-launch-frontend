@@ -1,19 +1,10 @@
-"use client";
-import React, { useState, useEffect, ReactNode } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { FormControl, FormField, FormItem, FormMessage } from "./ui/form";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
+import { FormControl, FormField, FormItem, FormMessage } from "../ui/form";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 
-interface Row {
-  key: string;
-}
-
-interface Props {
-  children?: ReactNode;
-}
-
-export const MilestoneFields = ({ children }: Props) => {
+export const MilestoneFields = () => {
   const { control } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     name: "milestones",
@@ -30,7 +21,7 @@ export const MilestoneFields = ({ children }: Props) => {
             render={({ field }) => (
               <FormItem className="pb-4">
                 <FormControl>
-                  <Input {...field} type="number" placeholder="$" />
+                  <Input {...field} placeholder="$" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -42,7 +33,7 @@ export const MilestoneFields = ({ children }: Props) => {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input {...field} />
+                  <Textarea {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
