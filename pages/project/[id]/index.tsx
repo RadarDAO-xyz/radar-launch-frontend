@@ -9,7 +9,7 @@ import {
   SheetClose,
   SheetContent,
   SheetFooter,
-  SheetTrigger
+  SheetTrigger,
 } from "@/components/ui/sheet";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -121,12 +121,16 @@ export default function IndividualProjectPage() {
                   {data?.milestones.map((milestone) => (
                     <TableRow key={milestone.text}>
                       <TableCell className="font-medium text-xl w-[200px] align-top">
-                        ${" "}
-                        <span className="text-gray-400">
-                          {typeof milestone.amount === "number"
-                            ? milestone.amount.toFixed(2)
-                            : milestone.amount}
-                        </span>
+                        {typeof milestone.amount === "number" ? (
+                          <span>
+                            ${" "}
+                            <span className="text-gray-400">
+                              {milestone.amount.toFixed(2)}
+                            </span>
+                          </span>
+                        ) : (
+                          milestone.amount
+                        )}
                       </TableCell>
                       <TableCell className="border-l">
                         <Markdown>{milestone.text}</Markdown>
