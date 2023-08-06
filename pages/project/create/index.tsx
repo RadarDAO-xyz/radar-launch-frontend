@@ -154,7 +154,7 @@ const formSchema = z.object({
   waitlist: z.boolean().default(true),
   milestones: z.array(
     z.object({
-      amount: z.coerce.number().min(0, { message: "Amount is required" }),
+      amount: z.string().min(1, { message: "Milestone is required" }),
       text: z.string().min(1, { message: "Milestone description is required" }),
     })
   ),
