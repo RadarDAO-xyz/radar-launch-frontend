@@ -8,11 +8,8 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
+  SheetTrigger
 } from "@/components/ui/sheet";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -44,7 +41,7 @@ export default function IndividualProjectPage() {
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-6 px-[5%] bg-white py-12">
+      <div className="grid grid-cols-1 md:grid-cols-6 px-[5%] bg-white">
         <div className="md:col-span-4 col-span-1 md:pr-10 md:overflow-y-scroll md:max-h-screen">
           <div>
             {generateVideoEmbed(data?.video_url) !== "" ? (
