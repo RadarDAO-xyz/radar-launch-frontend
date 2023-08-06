@@ -1,13 +1,8 @@
-import { useAccount, useQuery } from "wagmi";
-
-async function fetchExchangeRate(symbols: string) {
-  return fetch(`/api/exchange-rate?symbols=${symbols}`).then((res) =>
-    res.json()
-  );
-}
+import { getExchangeRate } from "@/lib/backend";
+import { useQuery } from "wagmi";
 
 export function useGetExchangeRate(symbols: string) {
-  return useQuery(["exchangeRate", symbols], () => fetchExchangeRate(symbols), {
+  return useQuery(["exchangeRate", symbols], () => getExchangeRate(symbols), {
     enabled: Boolean(symbols),
   });
 }
