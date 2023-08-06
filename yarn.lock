@@ -1677,6 +1677,14 @@
     "@tanstack/query-core" "4.32.0"
     use-sync-external-store "^1.2.0"
 
+"@tinymce/tinymce-react@^4.3.0":
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/@tinymce/tinymce-react/-/tinymce-react-4.3.0.tgz#5e2f5a58526a1bba9710f54f5fcf16abd4c742a1"
+  integrity sha512-iB4cUsYfcJL4NGuKhqCGYuTmFTje3nPxyPv1HxprTsp/YMGuuiiSNWrv3zwI31QX5Cn8qeq9MrMDnbxuRugHyg==
+  dependencies:
+    prop-types "^15.6.2"
+    tinymce "^6.3.1"
+
 "@toruslabs/base-controllers@^3.0.1", "@toruslabs/base-controllers@^3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@toruslabs/base-controllers/-/base-controllers-3.1.0.tgz#143bc2aafc4a18c85a70f1505b4af98f0aa2e2f8"
@@ -6378,7 +6386,7 @@ process@^0.11.10:
   resolved "https://registry.yarnpkg.com/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
   integrity sha512-cdGef/drWFoydD1JsMzuFf8100nZl+GT+yacc2bEced5f9Rjk4z+WtFUTBu9PhOi9j/jfmBPu0mMEY4wIdAF8A==
 
-prop-types@^15.0.0, prop-types@^15.8.1:
+prop-types@^15.0.0, prop-types@^15.6.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -7213,6 +7221,11 @@ thread-stream@^0.15.1:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
   integrity sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==
+
+tinymce@^6.3.1:
+  version "6.6.1"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-6.6.1.tgz#02aacf662c546047225f66444301a0b488b6fe26"
+  integrity sha512-n1ub/Jq6c5o2mju6A1HPFoR5/X7eH8720yDzLchg4MbKKJg6tthTGr+lBPHzQyrImwbfo7LVgx28mN5InzVMmw==
 
 titleize@^3.0.0:
   version "3.0.0"

@@ -1,4 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import https from "https";
+
+const httpsAgent = new https.Agent({ rejectUnauthorized: false });
 
 export default async function handler(
   req: NextApiRequest,
@@ -9,7 +12,10 @@ export default async function handler(
   }
   try {
     const response = await fetch(
-      `${process.env.BACKEND_URL}/metadata/${req.query.id}`
+      `${process.env.BACKEND_URL}/metadata/${req.query.id}`,
+      {
+        agent: httpsAgent,
+      }
     ).then((res) => res.json());
     return res.status(200).json(response);
   } catch (e) {

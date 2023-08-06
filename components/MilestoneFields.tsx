@@ -5,11 +5,7 @@ import { Button } from "./ui/button";
 import { FormControl, FormField, FormItem, FormMessage } from "./ui/form";
 import { Input } from "./ui/input";
 
-interface Props {
-  children?: ReactNode;
-}
-
-export const MilestoneFields = ({ children }: Props) => {
+export const MilestoneFields = () => {
   const { control } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     name: "milestones",

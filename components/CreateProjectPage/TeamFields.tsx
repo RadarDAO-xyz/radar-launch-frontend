@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { Button } from "./ui/button";
-import { FormControl, FormField, FormItem, FormMessage } from "./ui/form";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
+import { Button } from "../ui/button";
+import { FormControl, FormField, FormItem, FormMessage } from "../ui/form";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 
 interface Props {
   children?: ReactNode;
