@@ -208,7 +208,7 @@ export function ProjectTabs({ id }: { id: string }) {
         editionId,
         (value! + protocolFee!).toString(),
         data?.title,
-        data?.project_image || generateVideoThumbnail(data?.video_url!),
+        generateVideoThumbnail(data?.video_url!),
         data?._id
       ),
     {
