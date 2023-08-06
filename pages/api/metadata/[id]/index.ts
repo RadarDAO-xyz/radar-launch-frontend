@@ -12,7 +12,7 @@ import { optimism, optimismGoerli } from "wagmi/chains";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Record<string, string>>
+  res: NextApiResponse<Record<string, any>>
 ) {
   if (req.method !== "GET") {
     return res.status(404).json({});
@@ -42,6 +42,10 @@ export default async function handler(
       image: generateVideoThumbnail(project.video_url),
       description: project.description,
       external_url: `https://radarlaunch.app/projects/${id}`,
+      attributes: project.tags.map((tag) => ({
+        trait_type: "Future of:",
+        value: tag,
+      })),
     });
   } catch (e) {
     console.error(e);
