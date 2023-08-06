@@ -25,7 +25,7 @@ import {
 
 const WalletNoSSR = dynamic(() => import("./Wallet").then((res) => res.Wallet));
 
-const WALLET_ENABLED_PATHS = ["/project/create", "/updates"];
+const WALLET_ENABLED_PATHS = ["/project/create", "/updates", "/admin"];
 
 export function NavBar() {
   const router = useRouter();
