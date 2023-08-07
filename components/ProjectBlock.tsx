@@ -6,6 +6,17 @@ import { Project, ProjectStatus } from "@/types/mongo";
 import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
 import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
 import { generateHoverVideoLink } from "@/lib/generateHoverVideoLink";
+import { DotIcon } from "lucide-react";
+import {
+  GOERLI_CONTRACT_ADDRESS,
+  MAINNET_CONTRACT_ADDRESS,
+} from "@/constants/address";
+import {
+  useRadarEditionsGetEditions,
+  useRadarEditionsTotalSupply,
+} from "@/lib/generated";
+import isTestnet from "@/lib/isTestnet";
+import { chains } from "./Web3Provider";
 
 // date formatter to convert dates to DD.MM.YYYY format
 const dateFormatter = new Intl.DateTimeFormat("en-GB", {
@@ -47,6 +58,25 @@ export function ProjectBlock({
   supporter_count,
 }: Project) {
   const isDisabled = status !== ProjectStatus.LIVE;
+
+  const { data: onChainProjects } = useRadarEditionsGetEditions({
+    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    chainId: chains[0]?.id,
+    enabled: Boolean(chains[0]?.id),
+  });
+  const editionId: number | undefined = onChainProjects?.findIndex(
+    (project) => project.id === _id
+  );
+  const value =
+    editionId !== undefined ? onChainProjects?.[editionId]?.fee : undefined;
+
+  const { data: totalSupply } = useRadarEditionsTotalSupply({
+    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    chainId: chains[0]?.id,
+    args: [BigInt(Math.max(editionId!, 0))],
+    enabled: Boolean(chains[0]?.id) && editionId !== undefined,
+  });
+
   return (
     <div
       className={cn(
@@ -82,7 +112,7 @@ export function ProjectBlock({
           href={`/project/${_id}`}
         >
           <div className="div-block-96">
-            <p className="project-title font-bolded">{title}</p>
+            <p className="project-title capitalize leading-4 font-bolded">{title}</p>
             <div className="arrow-diagonal">{"↗"}</div>
           </div>
           <div className="featured-project-bio">
@@ -94,15 +124,19 @@ export function ProjectBlock({
       </div>
       <div className="bottom-half-of-content">
         <div className="collect-wrapper">
-          <div className="data pt-1">
-            {supporter_count > 0 ? (
-              <>
-                <div className="supporters">
-                  <div className="amount-of-supporters">{supporter_count}</div>
-                  <div className="small-text">{"• Supporters"}</div>
-                </div>
-                <span>{getCountdown(new Date(mint_end_date))}</span>
-              </>
+          <div className="data pt-1 justify-center">
+            {status === ProjectStatus.LIVE ? (
+              <p className="text-center text-xs text-gray-700">
+                {mint_end_date ? (
+                  <>
+                    <span>{getCountdown(new Date(mint_end_date))}</span>
+                    <DotIcon className="inline" />
+                  </>
+                ) : null}
+                {totalSupply !== undefined && (
+                  <span>{totalSupply.toString()} collected</span>
+                )}
+              </p>
             ) : (
               <div className="count-block flex items-center justify-center">
                 {getCountdown(new Date(mint_end_date))} until drop

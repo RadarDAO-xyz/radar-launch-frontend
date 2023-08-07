@@ -173,13 +173,6 @@ export default function IndividualProjectPage() {
             </Avatar>
             <div>
               <p className="text-[16px]">{userData?.name}</p>
-              <Link
-                href={`${chains[0].blockExplorers.etherscan.url}/address/${data.admin_address}`}
-                className="font-mono text-gray-500 hover:underline"
-                target="_blank"
-              >
-                {data.admin_address.slice(0, 10) + "..."}
-              </Link>
             </div>
           </div>
           <hr />

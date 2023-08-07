@@ -4,8 +4,35 @@ import { getCountdown } from "@/lib/utils";
 import HoverVideoPlayer from "react-hover-video-player";
 import { useGetProject } from "@/hooks/useGetProject";
 import { generateHoverVideoLink } from "@/lib/generateHoverVideoLink";
+import { DotIcon } from "lucide-react";
+import { ProjectStatus } from "@/types/mongo";
+import {
+  useRadarEditionsGetEditions,
+  useRadarEditionsTotalSupply,
+} from "@/lib/generated";
+import isTestnet from "@/lib/isTestnet";
+import {
+  GOERLI_CONTRACT_ADDRESS,
+  MAINNET_CONTRACT_ADDRESS,
+} from "@/constants/address";
+import { chains } from "../components/Web3Provider";
 
 export function VisionOfTheWeekProject({ projectId }) {
+  const { data: onChainProjects } = useRadarEditionsGetEditions({
+    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    chainId: chains[0]?.id,
+    enabled: Boolean(chains[0]?.id),
+  });
+
+  const editionId = onChainProjects?.findIndex(
+    (project) => project.id === projectId
+  );
+  const { data: totalSupply } = useRadarEditionsTotalSupply({
+    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    chainId: chains[0]?.id,
+    args: [BigInt(Math.max(editionId || 0, 0))],
+    enabled: Boolean(chains[0]?.id) && editionId !== undefined,
+  });
   const { data } = useGetProject(projectId);
   return (
     <_Builtin.Block className="featured-project-wrapper" tag="div">
@@ -36,7 +63,7 @@ export function VisionOfTheWeekProject({ projectId }) {
           className="link-block-3"
           button={false}
           options={{
-            href: "#",
+            href: "/project/" + projectId,
           }}
         >
           <_Builtin.Block className="div-block-97" tag="div">
@@ -62,7 +89,23 @@ export function VisionOfTheWeekProject({ projectId }) {
           tag="div"
         >
           <_Builtin.Block className="text-xs text-gray-400" tag="div">
-            {getCountdown(new Date("2023-08-03T23:00:00+02:00"))} until drop
+            {data?.status === ProjectStatus.LIVE ? (
+              <p className="text-center text-gray-700">
+                {data?.mint_end_date ? (
+                  <>
+                    <span>{getCountdown(new Date(data.mint_end_date))}</span>
+                    <DotIcon className="inline" />
+                  </>
+                ) : null}
+                {totalSupply !== undefined && (
+                  <span>{totalSupply.toString()} collected</span>
+                )}
+              </p>
+            ) : (
+              <div>
+                {getCountdown(new Date("2023-08-03T23:00:00+02:00"))} until drop
+              </div>
+            )}
           </_Builtin.Block>
         </_Builtin.Block>
       </_Builtin.Block>
