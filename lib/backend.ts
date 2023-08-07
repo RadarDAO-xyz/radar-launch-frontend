@@ -1,4 +1,4 @@
-import type { Pool, Project, User } from "@/types/mongo";
+import { SupportType, type Pool, type Project, type User } from "@/types/mongo";
 
 export async function getPools(): Promise<Pool[]> {
   try {
@@ -60,4 +60,61 @@ export async function getProjects(): Promise<Project[]> {
     console.error(e);
     return [];
   }
+}
+
+export async function signupProject(projectId: string, email?: string) {
+  if (!email) {
+    return "";
+  }
+  try {
+    return fetch(
+      `${process.env.BACKEND_URL}/projects/${projectId}/supporters`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          type: SupportType.SIGN_UP,
+        }),
+      }
+    ).then((res) => res.json());
+  } catch (e) {
+    console.error(e);
+  }
+  return "";
+}
+
+export async function contributeProject(
+  projectId: string,
+  social?: string,
+  email?: string,
+  skillset?: string,
+  contribution?: string
+) {
+  if (!email || !social || !skillset || !contribution) {
+    return "";
+  }
+  try {
+    return fetch(
+      `${process.env.BACKEND_URL}/projects/${projectId}/supporters`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          social,
+          skillset,
+          contribution,
+          type: SupportType.CONTRIBUTE,
+        }),
+      }
+    ).then((res) => res.json());
+  } catch (e) {
+    console.error(e);
+  }
+  return "";
 }

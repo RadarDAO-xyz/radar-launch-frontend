@@ -1,5 +1,5 @@
 import { Markdown } from "@/components/Markdown";
-import { ProjectTabs } from "@/components/ProjectTabs";
+import { ProjectTabs } from "@/components/ProjectPage/ProjectTabs";
 import { chains } from "@/components/Web3Provider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -77,7 +77,11 @@ export default function IndividualProjectPage() {
                 A More Play-Full Future
               </Badge>
               {data.tags.map((tag) => (
-                <Badge variant="secondary" key={tag} className="text-gray-700 text-sm px-4 py-1">
+                <Badge
+                  variant="secondary"
+                  key={tag}
+                  className="text-gray-700 text-sm px-4 py-1"
+                >
                   {tag}
                 </Badge>
               ))}
