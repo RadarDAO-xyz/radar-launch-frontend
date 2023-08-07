@@ -16,6 +16,7 @@ import { useGetProject } from "@/hooks/useGetProject";
 import { useGetUser } from "@/hooks/useGetUser";
 import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 import { useRouter } from "next/router";
 
 enum Tab {
@@ -166,7 +167,17 @@ export default function IndividualProjectPage() {
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <div className="flex items-center">
-              <p className="text-[16px]">{userData?.name}</p>
+              {userData?.socials ? (
+                <Link
+                  href={userData.socials}
+                  target="_blank"
+                  className="text-[16px] hover:underline"
+                >
+                  {userData?.name}
+                </Link>
+              ) : (
+                <p className="text-[16px]">{userData?.name}</p>
+              )}
             </div>
           </div>
           <hr />
