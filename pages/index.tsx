@@ -1,17 +1,21 @@
 import { FundingPoolHome } from "@/components/FundingPoolHome";
-import { ProjectBlock } from "@/components/ProjectBlock";
 import { ProjectDiv } from "@/components/ProjectDiv";
-import {
-  HeaderHero,
-  InspirationFooter,
-  VisionOfTheWeekProject,
-} from "@/devlink";
+import { HeaderHero, InspirationFooter } from "@/devlink";
 import { useGetProjects } from "@/hooks/useGetProjects";
-import { ProjectStatus } from "@/types/mongo";
 import dynamic from "next/dynamic";
 
 const ProjectBlockNoSSR = dynamic(
   () => import("@/components/ProjectBlock").then((res) => res.ProjectBlock),
+  {
+    ssr: false,
+  }
+);
+
+const VisionOfTheWeekProjectNoSSR = dynamic(
+  () =>
+    import("@/devlink/VisionOfTheWeekProject").then(
+      (res) => res.VisionOfTheWeekProject
+    ),
   {
     ssr: false,
   }
@@ -42,7 +46,7 @@ export default function HomePage() {
       {/* <Banner /> */}
       <HeaderHero
         visionOfTheWeekSlot={
-          <VisionOfTheWeekProject projectId={FEATURED_PROJECT_ID} />
+          <VisionOfTheWeekProjectNoSSR projectId={FEATURED_PROJECT_ID} />
         }
       />
       <ProjectDiv

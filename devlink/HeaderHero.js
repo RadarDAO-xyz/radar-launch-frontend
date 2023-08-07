@@ -12,8 +12,14 @@ import { chains } from "@/components/Web3Provider";
 import Link from "next/link";
 import { useGetExchangeRate } from "@/hooks/useGetExchangeRate";
 import { convertWeiToUsdOrEth } from "@/lib/convertWeiToUsdOrEth";
+import dynamic from "next/dynamic";
 
-const numberFormatter = Intl.NumberFormat("en-US");
+const HeroSectionAmountNoSSR = dynamic(
+  () => Promise.resolve(HeroSectionAmount),
+  {
+    ssr: false,
+  }
+);
 
 export function HeaderHero({
   as: _Component = _Builtin.Section,
@@ -82,23 +88,10 @@ export function HeaderHero({
             <br />
           </_Builtin.Paragraph>
           <_Builtin.Block className="div-block-99" tag="div">
-            <_Builtin.Heading className="heading-5" tag="h1">
-              {"$" +
-                (
-                  12400 +
-                  (data && exchangeRateData?.rates?.ETH
-                    ? +convertWeiToUsdOrEth(
-                        data.reduce(
-                          (acc, edition) => acc + edition.balance,
-                          0n
-                        ),
-                        exchangeRateData.rates.ETH
-                      )
-                    : 0)
-                ).toLocaleString("en-US", {
-                  maximumFractionDigits: 0,
-                })}
-            </_Builtin.Heading>
+            <HeroSectionAmountNoSSR
+              data={data}
+              exchangeRateData={exchangeRateData}
+            />
             <_Builtin.Paragraph className="body-text larger">
               {"already committed to build better futures"}
               <_Builtin.Span className="arrow-diagonal">{""}</_Builtin.Span>
@@ -144,5 +137,24 @@ export function HeaderHero({
         </Link>
       </div>
     </_Component>
+  );
+}
+
+function HeroSectionAmount({ data, exchangeRateData }) {
+  return (
+    <_Builtin.Heading className="heading-5" tag="h1">
+      {"$" +
+        (
+          12400 +
+          (data && exchangeRateData?.rates?.ETH
+            ? +convertWeiToUsdOrEth(
+                data.reduce((acc, edition) => acc + edition.balance, 0n),
+                exchangeRateData.rates.ETH
+              )
+            : 0)
+        ).toLocaleString("en-US", {
+          maximumFractionDigits: 0,
+        })}
+    </_Builtin.Heading>
   );
 }
