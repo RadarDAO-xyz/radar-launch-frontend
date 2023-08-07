@@ -17,7 +17,7 @@ const ProjectBlockNoSSR = dynamic(
   }
 );
 
-const FEATURED_PROJECT_ID = "64cc1fdaa7c27d4528c2ca00";
+const FEATURED_PROJECT_ID = "64d10e4fa67c3abf0508808c";
 
 export default function HomePage() {
   const { data } = useGetProjects();

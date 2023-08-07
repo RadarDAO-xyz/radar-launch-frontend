@@ -40,7 +40,7 @@ export function VisionOfTheWeekProject({ projectId }) {
           }}
         >
           <_Builtin.Block className="div-block-97" tag="div">
-            <_Builtin.Paragraph className="featured-project-title font-bolded text-2xl">
+            <_Builtin.Paragraph className="featured-project-title font-bolded text-2xl leading-7">
               {data?.title || "FUTURES DROP #1"}
             </_Builtin.Paragraph>
             <_Builtin.Block className="arrow-diagonal" tag="div">
