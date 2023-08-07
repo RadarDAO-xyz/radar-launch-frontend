@@ -101,7 +101,7 @@ export function ProjectTabs({ id }: { id: string }) {
   const { data: exchangeRateData } = useGetExchangeRate("ETH");
   const { data } = useGetProject(id.toString());
 
-  const [currentTab, setCurrentTab] = useState(Tab.BENEFITS);
+  const [currentTab, setCurrentTab] = useState(Tab.COLLECT);
   const [quantity, setQuantity] = useState(1);
 
   const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
