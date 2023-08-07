@@ -112,7 +112,9 @@ export function ProjectBlock({
           href={`/project/${_id}`}
         >
           <div className="div-block-96">
-            <p className="project-title capitalize leading-4 font-bolded">{title}</p>
+            <p className="project-title uppercase leading-4 font-bolded">
+              {title}
+            </p>
             <div className="arrow-diagonal">{"↗"}</div>
           </div>
           <div className="featured-project-bio">
@@ -124,19 +126,16 @@ export function ProjectBlock({
       </div>
       <div className="bottom-half-of-content">
         <div className="collect-wrapper">
-          <div className="data pt-1 justify-center">
+          <div className="pt-2 flex border-t w-full border-t-[var(--line-83d2b2f6)] items-center">
             {status === ProjectStatus.LIVE ? (
-              <p className="text-center text-xs text-gray-700">
+              <div className="text-center w-full flex justify-between text-xs text-gray-700">
                 {mint_end_date ? (
-                  <>
-                    <span>{getCountdown(new Date(mint_end_date))}</span>
-                    <DotIcon className="inline" />
-                  </>
+                  <p>{getCountdown(new Date(mint_end_date))}</p>
                 ) : null}
                 {totalSupply !== undefined && (
-                  <span>{totalSupply.toString()} collected</span>
+                  <p>{totalSupply.toString()} collected</p>
                 )}
-              </p>
+              </div>
             ) : (
               <div className="count-block flex items-center justify-center">
                 {getCountdown(new Date(mint_end_date))} until drop

@@ -85,22 +85,19 @@ export function VisionOfTheWeekProject({ projectId }) {
         )}
         <_Builtin.Block className="_10px-div" tag="div" />
         <_Builtin.Block
-          className="collect-wrapper main flex justify-center bottom-1 md:bottom-[5%] pt-3"
+          className="collect-wrapper main w-full bottom-1 md:bottom-[5%] pt-3"
           tag="div"
         >
-          <_Builtin.Block className="text-xs text-gray-400" tag="div">
+          <_Builtin.Block className="text-xs text-gray-400 w-full" tag="div">
             {data?.status === ProjectStatus.LIVE ? (
-              <p className="text-center text-gray-700">
+              <div className="flex justify-between text-center text-gray-700 w-full">
                 {data?.mint_end_date ? (
-                  <>
-                    <span>{getCountdown(new Date(data.mint_end_date))}</span>
-                    <DotIcon className="inline" />
-                  </>
+                  <p>{getCountdown(new Date(data.mint_end_date))}</p>
                 ) : null}
                 {totalSupply !== undefined && (
-                  <span>{totalSupply.toString()} collected</span>
+                  <p>{totalSupply.toString()} collected</p>
                 )}
-              </p>
+              </div>
             ) : (
               <div>
                 {getCountdown(new Date("2023-08-03T23:00:00+02:00"))} until drop
