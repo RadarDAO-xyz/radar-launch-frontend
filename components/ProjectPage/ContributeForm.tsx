@@ -72,7 +72,7 @@ export function ContributeForm({ id }: Props) {
 
   return (
     <div className="p-4">
-      <h2 className="text-xl text-center pb-6">Help Build this Project</h2>
+      <h2 className="text-xl text-center pb-6 font-base">Help Build this Project</h2>
       {!isSuccess ? (
         <Form {...form}>
           {/* @ts-expect-error Netlify form submission */}

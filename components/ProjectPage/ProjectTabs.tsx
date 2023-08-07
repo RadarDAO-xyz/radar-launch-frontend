@@ -13,7 +13,6 @@ import {
 } from "@/lib/generated";
 import isTestnet from "@/lib/isTestnet";
 import { cn, getCountdown } from "@/lib/utils";
-import { SupportType } from "@/types/mongo";
 import { DotIcon, MinusIcon, MoveDown, PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";

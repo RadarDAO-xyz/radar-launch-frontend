@@ -66,7 +66,7 @@ export default function IndividualProjectPage() {
           <div className="text-normal pt-10 pb-4 text-gray-400">
             The Brief: <span className="font-semibold">{data.brief}</span>
           </div>
-          <h2 className="text-3xl pb-4">{data.title}</h2>
+          <h2 className="text-3xl pb-4 font-base">{data.title}</h2>
           <hr />
           <p className="text-normal pt-4 pb-4 text-gray-500">
             {data.description}

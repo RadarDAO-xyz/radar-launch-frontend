@@ -62,7 +62,7 @@ export function SignUpForm({ id }: Props) {
   }
   return (
     <div>
-      <h2 className="text-xl text-center pt-4 pb-6">
+      <h2 className="text-xl text-center pt-4 pb-6 font-base">
         Be the first to use this Project
       </h2>
       {!isSuccess ? (
