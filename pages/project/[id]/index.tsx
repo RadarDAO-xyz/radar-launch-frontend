@@ -28,8 +28,18 @@ export default function IndividualProjectPage() {
   const router = useRouter();
   const { id } = router.query;
 
-  const { data } = useGetProject(id?.toString());
-  const { data: userData } = useGetUser(data?.founder);
+  const { data, isLoading: isProjectLoading } = useGetProject(id?.toString());
+  const { data: userData, isLoading: isUserLoading } = useGetUser(
+    data?.founder
+  );
+
+  if (isProjectLoading || isUserLoading) {
+    return (
+      <div className="px-[5%] py-20">
+        <h1 className="text-3xl text-center">Loading...</h1>
+      </div>
+    );
+  }
 
   if (!id || !data) {
     return (
