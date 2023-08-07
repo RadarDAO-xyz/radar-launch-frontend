@@ -1,18 +1,18 @@
-import React from "react";
-import * as _Builtin from "./_Builtin";
-import { VisionOfTheWeekProject } from "./VisionOfTheWeekProject";
-import { useAccount, useNetwork } from "wagmi";
-import { useRadarEditionsGetEditions } from "@/lib/generated";
-import isTestnet from "@/lib/isTestnet";
+import { chains } from "@/components/Web3Provider";
 import {
   GOERLI_CONTRACT_ADDRESS,
   MAINNET_CONTRACT_ADDRESS,
 } from "@/constants/address";
-import { chains } from "@/components/Web3Provider";
-import Link from "next/link";
 import { useGetExchangeRate } from "@/hooks/useGetExchangeRate";
 import { convertWeiToUsdOrEth } from "@/lib/convertWeiToUsdOrEth";
+import { useRadarEditionsGetEditions } from "@/lib/generated";
+import isTestnet from "@/lib/isTestnet";
 import dynamic from "next/dynamic";
+import Link from "next/link";
+import React from "react";
+import { useAccount } from "wagmi";
+import { VisionOfTheWeekProject } from "./VisionOfTheWeekProject";
+import * as _Builtin from "./_Builtin";
 
 const HeroSectionAmountNoSSR = dynamic(
   () => Promise.resolve(HeroSectionAmount),
