@@ -57,7 +57,7 @@ export default function IndividualProjectPage() {
                 src={generateVideoEmbed(data?.video_url)}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
-                title="Embedded youtube"
+                title="Embedded Project Video"
               />
             ) : (
               <div>Invalid project video submitted, {data.video_url}</div>

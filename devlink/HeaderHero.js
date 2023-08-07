@@ -53,7 +53,7 @@ export function HeaderHero({
         </Link>
       </_Builtin.Block>
       <_Builtin.Block
-        className="featured-project-tabs  md:w-[80%] lg:w-[80%] space-x-4 lg:space-x-8"
+        className="featured-project-tabs md:w-[80%] lg:w-[80%] space-x-4 lg:space-x-8"
         tag="div"
       >
         <_Builtin.Block className="about-div home px-[5%]" tag="div">
@@ -106,7 +106,7 @@ export function HeaderHero({
             </_Builtin.Paragraph>
           </_Builtin.Block>
         </_Builtin.Block>
-        <_Builtin.Block className="visionoftheweek" tag="div">
+        <_Builtin.Block className="visionoftheweek md:flex hidden" tag="div">
           {visionOfTheWeekSlot ?? (
             <>
               <VisionOfTheWeekProject />

@@ -17,6 +17,8 @@ const ProjectBlockNoSSR = dynamic(
   }
 );
 
+const FEATURED_PROJECT_ID = "64cc1fdaa7c27d4528c2ca00";
+
 export default function HomePage() {
   const { data } = useGetProjects();
 
@@ -29,7 +31,11 @@ export default function HomePage() {
       </div>
 
       {/* <Banner /> */}
-      <HeaderHero visionOfTheWeekSlot={<VisionOfTheWeekProject />} />
+      <HeaderHero
+        visionOfTheWeekSlot={
+          <VisionOfTheWeekProject projectId={FEATURED_PROJECT_ID} />
+        }
+      />
       <ProjectDiv
         projectSectionTitle="CURATED VISIONS"
         projectSectionDescription="Every month we invite a guest curator to spotlight 4 projects building a better future"
