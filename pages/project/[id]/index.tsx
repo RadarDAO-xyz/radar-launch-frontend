@@ -16,6 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetProject } from "@/hooks/useGetProject";
 import { useGetUser } from "@/hooks/useGetUser";
 import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -118,9 +119,16 @@ export default function IndividualProjectPage() {
               </h3>
               <Table>
                 <TableBody>
-                  {data?.milestones.map((milestone) => (
+                  {data?.milestones.map((milestone, index) => (
                     <TableRow key={milestone.text}>
-                      <TableCell className="font-medium text-xl w-[200px] align-top">
+                      <TableCell
+                        className={cn(
+                          "font-medium text-xl align-top",
+                          typeof milestone.amount === "number"
+                            ? "w-[200px]"
+                            : "w-[60px]"
+                        )}
+                      >
                         {typeof milestone.amount === "number" ? (
                           <span className="text-normal">
                             ${" "}
@@ -129,7 +137,7 @@ export default function IndividualProjectPage() {
                             </span>
                           </span>
                         ) : (
-                          milestone.amount
+                          `${index + 1}.`
                         )}
                       </TableCell>
                       <TableCell className="border-l">
