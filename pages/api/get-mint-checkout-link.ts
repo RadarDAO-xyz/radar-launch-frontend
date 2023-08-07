@@ -66,6 +66,7 @@ export default async function handler(
     if (response.error) {
       throw response.error;
     }
+    res.setHeader("Cache-Control", "no-store, max-age=0");
     return res.status(200).json(response);
   } catch (e) {
     console.log(e);
