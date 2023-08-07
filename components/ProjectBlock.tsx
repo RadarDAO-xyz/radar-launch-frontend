@@ -56,6 +56,7 @@ export function ProjectBlock({
   title,
   mint_end_date,
   supporter_count,
+  brief,
 }: Project) {
   const isDisabled = status !== ProjectStatus.LIVE;
 
@@ -67,9 +68,6 @@ export function ProjectBlock({
   const editionId: number | undefined = onChainProjects?.findIndex(
     (project) => project.id === _id
   );
-  const value =
-    editionId !== undefined ? onChainProjects?.[editionId]?.fee : undefined;
-
   const { data: totalSupply } = useRadarEditionsTotalSupply({
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
@@ -91,7 +89,9 @@ export function ProjectBlock({
             {/* <div className="briefs-labels" fs-cmsfilter-field="brief">
             </div> */}
           </div>
-          {isDisabled && <div className="text-xs text-gray-500">LOADING</div>}
+          <div className={cn("text-xs", isDisabled ? "text-gray-500" : "")}>
+            {isDisabled ? "LOADING" : brief}
+          </div>
         </div>
         <div className="_10px-div" />
         <div className="project-image w-full">
