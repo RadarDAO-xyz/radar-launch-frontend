@@ -3,7 +3,7 @@ import * as _Builtin from "./_Builtin";
 import { getCountdown } from "@/lib/utils";
 import HoverVideoPlayer from "react-hover-video-player";
 import { useGetProject } from "@/hooks/useGetProject";
-import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
+import { generateHoverVideoLink } from "@/lib/generateHoverVideoLink";
 
 export function VisionOfTheWeekProject({ projectId }) {
   const { data } = useGetProject(projectId);
@@ -22,7 +22,11 @@ export function VisionOfTheWeekProject({ projectId }) {
         <HoverVideoPlayer
           focused
           loop
-          videoSrc={"/RL1.mp4"}
+          videoSrc={
+            data?.video_url
+              ? generateHoverVideoLink(data.video_url)
+              : "/RL1.mp4"
+          }
           className="!hidden md:!inline-block"
         />
       </_Builtin.Block>
@@ -49,7 +53,9 @@ export function VisionOfTheWeekProject({ projectId }) {
             {"byline"}
           </_Builtin.Paragraph>
         </_Builtin.Block> */}
-        {data?.description && <p className="text-xs text-gray-700">{data.description}</p>}
+        {data?.description && (
+          <p className="text-xs text-gray-700">{data.description}</p>
+        )}
         <_Builtin.Block className="_10px-div" tag="div" />
         <_Builtin.Block
           className="collect-wrapper main flex justify-center bottom-1 md:bottom-[5%] pt-3"

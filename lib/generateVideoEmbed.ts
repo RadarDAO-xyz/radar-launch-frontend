@@ -7,7 +7,7 @@ export function generateVideoEmbed(videoUrl: string) {
     return `https://youtube.com/embed/${retrieveYoutubeId(videoUrl)}`;
   }
   if (VIMEO_REGEX.exec(videoUrl) !== null) {
-    const vimeoId = retrieveVimeoId(videoUrl).split("/")[1];
+    const vimeoId = retrieveVimeoId(videoUrl);
     return `https://player.vimeo.com/video/${vimeoId}`;
   }
   return "";
