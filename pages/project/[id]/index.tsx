@@ -122,9 +122,9 @@ export default function IndividualProjectPage() {
                     <TableRow key={milestone.text}>
                       <TableCell className="font-medium text-xl w-[200px] align-top">
                         {typeof milestone.amount === "number" ? (
-                          <span>
+                          <span className="text-normal">
                             ${" "}
-                            <span className="text-gray-400">
+                            <span className="text-gray-400 text-lg">
                               {milestone.amount.toFixed(2)}
                             </span>
                           </span>
