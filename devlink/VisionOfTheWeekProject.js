@@ -48,7 +48,12 @@ export function VisionOfTheWeekProject({ projectId }) {
       <_Builtin.Block className="project-image" tag="div">
         {data?.video_url.startsWith("https://") ? (
           <iframe
-            src={generateVideoEmbed(data.video_url)}
+            src={generateVideoEmbed(
+              data.video_url,
+              data.video_url.includes("vimeo")
+                ? "?title=0&byline=0&portrait=0&sidedock=0&loop=1"
+                : ""
+            )}
             className="aspect-video w-full"
             allow="autoplay; fullscreen; picture-in-picture"
             allowfullscreen

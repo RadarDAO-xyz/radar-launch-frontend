@@ -97,17 +97,23 @@ export function ProjectBlock({
         <div className="project-image w-full">
           {video_url.startsWith("https://") ? (
             <iframe
-              src={generateVideoEmbed(video_url)}
+              src={generateVideoEmbed(
+                video_url,
+                video_url.includes("vimeo")
+                  ? "?title=0&byline=0&portrait=0&sidedock=0&loop=1"
+                  : ""
+              )}
               className="aspect-video w-full"
               allow="autoplay; fullscreen; picture-in-picture"
             />
           ) : (
-            <HoverVideoPlayer
-              focused
-              loop
-              videoSrc={generateHoverVideoLink(video_url)}
-              className="!hidden md:!inline-block"
-            />
+            <img src={generateVideoThumbnail(video_url)} className="w-full" />
+            // <HoverVideoPlayer
+            //   focused
+            //   loop
+            //   videoSrc={generateHoverVideoLink(video_url)}
+            //   className="!hidden md:!inline-block"
+            // />
           )}
         </div>
         <div className="_20px-div" />

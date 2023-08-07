@@ -9,5 +9,9 @@ export function generateVideoThumbnail(videoUrl: string) {
   if (VIMEO_REGEX.exec(videoUrl) !== null) {
     return `https://vumbnail.com/${retrieveVimeoId(videoUrl)}.jpg`;
   }
+  if (videoUrl.startsWith("/RL")) {
+    const [fileName] = videoUrl.split(".");
+    return `${fileName}.png`;
+  }
   return videoUrl;
 }
