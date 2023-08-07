@@ -66,7 +66,7 @@ export default function IndividualProjectPage() {
             {data.description}
           </p>
           {data.tags?.length > 0 && (
-            <div className="space-x-2 pb-8">
+            <div className="flex flex-wrap gap-2 pb-8">
               <Badge className="bg-gray-600 hover:bg-gray-600 text-gray-200 text-sm px-4 py-1">
                 A More Play-Full Future
               </Badge>
