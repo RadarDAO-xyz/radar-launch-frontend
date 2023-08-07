@@ -3,25 +3,27 @@ import {
   GOERLI_CONTRACT_ADDRESS,
   MAINNET_CONTRACT_ADDRESS,
 } from "@/constants/address";
+import { useGetExchangeRate } from "@/hooks/useGetExchangeRate";
 import { useGetProject } from "@/hooks/useGetProject";
+import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
 import {
   useRadarEditionsGetEditions,
   useRadarEditionsProtocolFee,
   useRadarEditionsTotalSupply,
 } from "@/lib/generated";
 import isTestnet from "@/lib/isTestnet";
+import { cn, getCountdown } from "@/lib/utils";
 import { DotIcon, MinusIcon, MoveDown, PlusIcon } from "lucide-react";
 import Link from "next/link";
-import { useRef, useState } from "react";
-import { useMutation, useQuery } from "wagmi";
-import { Markdown } from "./Markdown";
-import { chains } from "./Web3Provider";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { useGetExchangeRate } from "@/hooks/useGetExchangeRate";
-import { cn, getCountdown } from "@/lib/utils";
-import { convertWeiToUsdOrEth } from "../lib/convertWeiToUsdOrEth";
-import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
+import { useState } from "react";
+import { useQuery } from "wagmi";
+import { convertWeiToUsdOrEth } from "../../lib/convertWeiToUsdOrEth";
+import { Markdown } from "../Markdown";
+import { chains } from "../Web3Provider";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { ContributeForm } from "./ContributeForm";
+import { SignUpForm } from "./SignUpForm";
 
 async function getMintCheckoutLink(
   quantity: number,
@@ -65,68 +67,6 @@ async function getMintCheckoutLink(
   return "";
 }
 
-enum SupportType {
-  SIGN_UP,
-  CONTRIBUTE,
-}
-
-async function signupProject(projectId: string, email?: string) {
-  if (!email) {
-    return "";
-  }
-  try {
-    return fetch(
-      `${process.env.BACKEND_URL}/projects/${projectId}/supporters`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          type: SupportType.SIGN_UP,
-        }),
-      }
-    ).then((res) => res.json());
-  } catch (e) {
-    console.error(e);
-  }
-  return "";
-}
-
-async function contributeProject(
-  projectId: string,
-  social?: string,
-  email?: string,
-  skillset?: string,
-  contribution?: string
-) {
-  if (!email || !social || !skillset || !contribution) {
-    return "";
-  }
-  try {
-    return fetch(
-      `${process.env.BACKEND_URL}/projects/${projectId}/supporters`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          social,
-          skillset,
-          contribution,
-          type: SupportType.CONTRIBUTE,
-        }),
-      }
-    ).then((res) => res.json());
-  } catch (e) {
-    console.error(e);
-  }
-  return "";
-}
-
 enum Tab {
   COLLECT = "collect",
   SIGN_UP = "sign-up",
@@ -163,42 +103,6 @@ export function ProjectTabs({ id }: { id: string }) {
 
   const [currentTab, setCurrentTab] = useState(Tab.BENEFITS);
   const [quantity, setQuantity] = useState(1);
-  // TODO: use forms
-  const signupInputRef = useRef<HTMLInputElement>(null);
-
-  const socialMediaInputRef = useRef<HTMLInputElement>(null);
-  const contributeEmailInputRef = useRef<HTMLInputElement>(null);
-  const skillsetInputRef = useRef<HTMLInputElement>(null);
-  const contributeTextInputRef = useRef<HTMLInputElement>(null);
-
-  const {
-    mutateAsync: signupMutateAsync,
-    isSuccess: isSignupSuccess,
-    isLoading: isSignupLoading,
-  } = useMutation(
-    ["signup-project", SupportType.SIGN_UP, id, signupInputRef.current?.value],
-    () => signupProject(id, signupInputRef.current?.value)
-  );
-  const {
-    mutateAsync: contributeMutateAsync,
-    isSuccess: isContributeSuccess,
-    isLoading: isContributeLoading,
-  } = useMutation(
-    [
-      "signup-project",
-      SupportType.CONTRIBUTE,
-      id,
-      signupInputRef.current?.value,
-    ],
-    () =>
-      contributeProject(
-        id,
-        socialMediaInputRef.current?.value,
-        contributeEmailInputRef.current?.value,
-        skillsetInputRef.current?.value,
-        contributeTextInputRef.current?.value
-      )
-  );
 
   const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
     ["checkout-mint-link", editionId, value, quantity],
@@ -352,78 +256,21 @@ export function ProjectTabs({ id }: { id: string }) {
         value={Tab.SIGN_UP}
         className="px-8 py-6 pb-10 rounded-md border"
       >
-        <div>
-          <h2 className="text-xl text-center pt-4 pb-6">
-            Be the first to use this Project
-          </h2>
-          {!isSignupSuccess ? (
-            <>
-              <Input
-                ref={signupInputRef}
-                placeholder="Enter your email"
-                type="email"
-                className="mb-4"
-              />
-              <Button
-                className="w-full"
-                onClick={() => signupMutateAsync()}
-                disabled={isSignupLoading}
-              >
-                SIGN UP
-              </Button>
-            </>
-          ) : (
-            <div className="text-center p-4">
-              Thank you! Your submission has been received!
-            </div>
-          )}
-        </div>
+        <SignUpForm id={id} />
       </TabsContent>
       <TabsContent
         value={Tab.CONTRIBUTE}
         className="px-4 pt-8 pb-10 rounded-md border"
       >
-        <div className="p-4">
-          <h2 className="text-xl text-center pb-6">Help Build this Project</h2>
-          {!isContributeSuccess ? (
-            <>
-              <div className="flex sm:space-x-4 space-y-4 sm:space-y-0 mb-4 sm:flex-row flex-col">
-                <Input ref={socialMediaInputRef} placeholder="Social Media" />
-                <Input
-                  ref={contributeEmailInputRef}
-                  placeholder="Your email"
-                  type="email"
-                />
-              </div>
-              <Input
-                ref={skillsetInputRef}
-                placeholder="Your skillset"
-                className="mb-4"
-              />
-              <Input
-                ref={contributeTextInputRef}
-                placeholder="How do you want to contribute?"
-                className="mb-4"
-              />
-              <Button
-                className="w-full"
-                disabled={isContributeLoading}
-                onClick={() => contributeMutateAsync()}
-              >
-                APPLY
-              </Button>
-            </>
-          ) : (
-            <div className="p-4 text-center">
-              Thank you! Your submission has been received!
-            </div>
-          )}
-        </div>
+        <ContributeForm id={id} />
       </TabsContent>
       <TabsContent value={Tab.BENEFITS} className="">
         {data?.benefits.length ? (
           data.benefits.filter(Boolean).map((benefit) => (
-            <div key={benefit.text} className="mt-4 border rounded-md last:pb-12">
+            <div
+              key={benefit.text}
+              className="mt-4 border rounded-md last:pb-12"
+            >
               <h3 className="p-6 text-gray-500">
                 Collect <span className="text-black">{benefit.amount}</span> or
                 more editions and get

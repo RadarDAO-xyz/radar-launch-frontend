@@ -106,3 +106,8 @@ export enum Brief {
   THE_ARTIST = "The Artist",
   OTHER = "Other",
 }
+
+export enum SupportType {
+  SIGN_UP,
+  CONTRIBUTE,
+}
