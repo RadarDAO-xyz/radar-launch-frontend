@@ -8,11 +8,15 @@ import { Toaster } from "@/components/ui/toaster";
 import { DevLinkProvider, PreLaunchFooter } from "@/devlink";
 import type { AppProps } from "next/app";
 import Script from "next/script";
+import Head from "next/head";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <Web3Provider>
-      <Script async src="https://www.googletagmanager.com/gtag/js?id=G-RXHTNDF4RP%22%3E" />
+      <Script
+        async
+        src="https://www.googletagmanager.com/gtag/js?id=G-RXHTNDF4RP%22%3E"
+      />
       <Script id="google-analytics">
         {`
         window.dataLayer = window.dataLayer || [];
@@ -22,6 +26,10 @@ export default function App({ Component, pageProps }: AppProps) {
         gtag('config', 'G-RXHTNDF4RP');
         `}
       </Script>
+      <Head>
+        <title>RADAR Launch</title>
+        <link rel="icon" href="/favicon.png" sizes="any" />
+      </Head>
       <DevLinkProvider>
         <AuthProvider>
           <NavBar />
