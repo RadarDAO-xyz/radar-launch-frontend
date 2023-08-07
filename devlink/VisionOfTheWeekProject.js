@@ -1,21 +1,21 @@
-import React from "react";
-import * as _Builtin from "./_Builtin";
-import { getCountdown } from "@/lib/utils";
-import HoverVideoPlayer from "react-hover-video-player";
+import {
+  GOERLI_CONTRACT_ADDRESS,
+  MAINNET_CONTRACT_ADDRESS,
+} from "@/constants/address";
 import { useGetProject } from "@/hooks/useGetProject";
-import { generateHoverVideoLink } from "@/lib/generateHoverVideoLink";
-import { DotIcon } from "lucide-react";
-import { ProjectStatus } from "@/types/mongo";
+import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
 import {
   useRadarEditionsGetEditions,
   useRadarEditionsTotalSupply,
 } from "@/lib/generated";
 import isTestnet from "@/lib/isTestnet";
-import {
-  GOERLI_CONTRACT_ADDRESS,
-  MAINNET_CONTRACT_ADDRESS,
-} from "@/constants/address";
+import { getCountdown } from "@/lib/utils";
+import { ProjectStatus } from "@/types/mongo";
+import React from "react";
+import HoverVideoPlayer from "react-hover-video-player";
 import { chains } from "../components/Web3Provider";
+import { generateHoverVideoLink } from "@/lib/generateHoverVideoLink";
+import * as _Builtin from "./_Builtin";
 
 export function VisionOfTheWeekProject({ projectId }) {
   const { data: onChainProjects } = useRadarEditionsGetEditions({
@@ -46,16 +46,25 @@ export function VisionOfTheWeekProject({ projectId }) {
         {"✨ DROP OF THE WEEK ✨"}
       </_Builtin.Block>
       <_Builtin.Block className="project-image" tag="div">
-        <HoverVideoPlayer
-          focused
-          loop
-          videoSrc={
-            data?.video_url
-              ? generateHoverVideoLink(data.video_url)
-              : "/RL1.mp4"
-          }
-          className="!hidden md:!inline-block"
-        />
+        {data?.video_url.startsWith("https://") ? (
+          <iframe
+            src={generateVideoEmbed(data.video_url)}
+            className="aspect-video w-full"
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowfullscreen
+          />
+        ) : (
+          <HoverVideoPlayer
+            focused
+            loop
+            videoSrc={
+              data?.video_url
+                ? generateHoverVideoLink(data.video_url)
+                : "/RL1.mp4"
+            }
+            className="!hidden md:!inline-block"
+          />
+        )}
       </_Builtin.Block>
       <_Builtin.Block className="feature-project-div" tag="div">
         <_Builtin.Block className="_20px-div" tag="div" />

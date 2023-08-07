@@ -95,13 +95,20 @@ export function ProjectBlock({
         </div>
         <div className="_10px-div" />
         <div className="project-image w-full">
-          <HoverVideoPlayer
-            focused
-            loop
-            videoSrc={generateHoverVideoLink(video_url)}
-            className="!hidden md:!inline-block"
-          />
-          <img src={generateVideoThumbnail(video_url)} className="md:hidden" />
+          {video_url.startsWith("https://") ? (
+            <iframe
+              src={generateVideoEmbed(video_url)}
+              className="aspect-video w-full"
+              allow="autoplay; fullscreen; picture-in-picture"
+            />
+          ) : (
+            <HoverVideoPlayer
+              focused
+              loop
+              videoSrc={generateHoverVideoLink(video_url)}
+              className="!hidden md:!inline-block"
+            />
+          )}
         </div>
         <div className="_20px-div" />
         <Link

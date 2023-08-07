@@ -8,7 +8,7 @@ export function generateVideoEmbed(videoUrl: string) {
   }
   if (VIMEO_REGEX.exec(videoUrl) !== null) {
     const vimeoId = retrieveVimeoId(videoUrl);
-    return `https://player.vimeo.com/video/${vimeoId}`;
+    return `https://player.vimeo.com/video/${vimeoId}?title=0&byline=0&portrait=0&sidedock=0&controls=0&autoplay=1`;
   }
-  return "";
+  return videoUrl;
 }
