@@ -13,9 +13,14 @@ import {
 } from "@/components/ui/sheet";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  GOERLI_CONTRACT_ADDRESS,
+  MAINNET_CONTRACT_ADDRESS,
+} from "@/constants/address";
 import { useGetProject } from "@/hooks/useGetProject";
 import { useGetUser } from "@/hooks/useGetUser";
 import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
+import isTestnet from "@/lib/isTestnet";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -83,7 +88,7 @@ export default function IndividualProjectPage() {
               <TabsTrigger value={Tab.DETAILS}>DETAILS</TabsTrigger>
               <TabsTrigger value={Tab.UPDATES}>UPDATES</TabsTrigger>
             </TabsList>
-            <TabsContent value={Tab.DETAILS} className="p-8">
+            <TabsContent value={Tab.DETAILS} className="px-10 py-6">
               <div className="pb-16">
                 <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-8">
                   Project TLDR
@@ -197,11 +202,18 @@ export default function IndividualProjectPage() {
               <div>
                 <p className="text-[16px]">{userData?.name}</p>
                 <Link
-                  href={`${chains[0].blockExplorers.etherscan.url}/address/${data.admin_address}`}
+                  href={`${chains[0].blockExplorers.etherscan.url}/address/${
+                    isTestnet()
+                      ? GOERLI_CONTRACT_ADDRESS
+                      : MAINNET_CONTRACT_ADDRESS
+                  }`}
                   className="font-mono text-gray-500 hover:underline"
                   target="_blank"
                 >
-                  {data.admin_address.slice(0, 10) + "..."}
+                  {(isTestnet()
+                    ? GOERLI_CONTRACT_ADDRESS
+                    : MAINNET_CONTRACT_ADDRESS
+                  ).slice(0, 10) + "..."}
                 </Link>
               </div>
             </div>
