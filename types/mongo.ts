@@ -49,7 +49,7 @@ export type User = {
   name: string;
   profile?: string;
   bio?: string;
-  socials?: string;
+  socials?: string; // must be a twitter link for now
   wallets: WalletResolvable[];
   email?: string;
 };

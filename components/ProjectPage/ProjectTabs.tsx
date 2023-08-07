@@ -24,6 +24,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { ContributeForm } from "./ContributeForm";
 import { SignUpForm } from "./SignUpForm";
+import { useGetUser } from "@/hooks/useGetUser";
 
 async function getMintCheckoutLink(
   quantity: number,
@@ -31,7 +32,8 @@ async function getMintCheckoutLink(
   value?: string, // project's mint fee,
   title?: string,
   imageUrl?: string,
-  projectId?: string
+  projectId?: string,
+  socials?: string
 ): Promise<string> {
   if (
     editionId === undefined ||
@@ -55,6 +57,7 @@ async function getMintCheckoutLink(
         title,
         imageUrl,
         projectId,
+        socials,
       }),
     }).then((res) => res.json());
 
@@ -100,6 +103,7 @@ export function ProjectTabs({ id }: { id: string }) {
   });
   const { data: exchangeRateData } = useGetExchangeRate("ETH");
   const { data } = useGetProject(id.toString());
+  const { data: userData } = useGetUser(data?.founder.toString());
 
   const [currentTab, setCurrentTab] = useState(Tab.COLLECT);
   const [quantity, setQuantity] = useState(1);
@@ -113,7 +117,8 @@ export function ProjectTabs({ id }: { id: string }) {
         (value! + protocolFee!).toString(),
         data?.title,
         generateVideoThumbnail(data?.video_url!),
-        data?._id
+        data?._id,
+        userData?.socials?.replace("https://twitter.com/", "")
       ),
     {
       enabled:

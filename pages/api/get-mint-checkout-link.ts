@@ -17,8 +17,17 @@ export default async function handler(
     return res.status(404).json({ message: "Not found" });
   }
   try {
-    const { editionId, value, quantity, title, imageUrl, projectId } = req.body;
-    console.log({ editionId, value, quantity, title, imageUrl, projectId });
+    const { editionId, value, quantity, title, imageUrl, projectId, socials } =
+      req.body;
+    console.log({
+      editionId,
+      value,
+      quantity,
+      title,
+      imageUrl,
+      projectId,
+      socials,
+    });
     if (editionId === undefined || !value || !quantity || !title || !imageUrl) {
       return res.status(400).json({ message: "Invalid editionId or value" });
     }
@@ -35,6 +44,7 @@ export default async function handler(
         contractId: isTestnet() ? GOERLI_CONTRACT_ID : MAINNET_CONTRACT_ID,
         title,
         imageUrl,
+        twitterHandleOverride: socials,
         // description: "Describe your project *with Markdown!*",
         successCallbackUrl: projectId
           ? `https://radarlaunch.app/project/${projectId}`
