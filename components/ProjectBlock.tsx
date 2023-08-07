@@ -1,23 +1,11 @@
 import { cn } from "@/lib/utils";
-import {
-  differenceInDays,
-  differenceInHours,
-  differenceInMinutes,
-} from "date-fns";
 import Link from "next/link";
 import HoverVideoPlayer from "react-hover-video-player";
-import { getCountdown } from '../lib/utils';
-
-interface ProjectBlockProps {
-  id: string;
-  briefName: string;
-  projectTitle: string;
-  projectByline: string;
-  supporters: number;
-  projectDate: Date;
-  videoUrl: string;
-  isDisabled?: boolean;
-}
+import { getCountdown } from "../lib/utils";
+import { Project, ProjectStatus } from "@/types/mongo";
+import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
+import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
+import { generateHoverVideoLink } from "@/lib/generateHoverVideoLink";
 
 // date formatter to convert dates to DD.MM.YYYY format
 const dateFormatter = new Intl.DateTimeFormat("en-GB", {
@@ -51,16 +39,14 @@ function formatDate(date: Date) {
 }
 
 export function ProjectBlock({
-  id,
-  briefName,
-  isDisabled,
-  supporters,
-  videoUrl,
-  projectByline,
-  projectTitle,
-  projectDate,
-}: ProjectBlockProps) {
-
+  _id,
+  status,
+  video_url,
+  title,
+  mint_end_date,
+  supporter_count,
+}: Project) {
+  const isDisabled = status !== ProjectStatus.LIVE;
   return (
     <div
       className={cn(
@@ -78,45 +64,50 @@ export function ProjectBlock({
           {isDisabled && <div className="text-xs text-gray-500">LOADING</div>}
         </div>
         <div className="_10px-div" />
-        <div className="project-image">
+        <div className="project-image w-full">
           <HoverVideoPlayer
             focused
             loop
-            videoSrc={videoUrl}
+            videoSrc={generateHoverVideoLink(video_url)}
             className="!hidden md:!inline-block"
           />
-          {/* TODO: figure out why videos not loading on mobile */}
-          <img src={`${videoUrl.split(".")[0]}.png`} className="md:hidden" />
+          <img src={generateVideoThumbnail(video_url)} className="md:hidden" />
         </div>
         <div className="_20px-div" />
         <Link
-          className={cn("project-copy", isDisabled ? "pointer-events-none" : "")}
-          href={`/project/${id}`}
+          className={cn(
+            "project-copy",
+            isDisabled ? "pointer-events-none" : ""
+          )}
+          href={`/project/${_id}`}
         >
           <div className="div-block-96">
-            <p className="project-title font-bolded">{projectTitle}</p>
+            <p className="project-title font-bolded">{title}</p>
             <div className="arrow-diagonal">{"↗"}</div>
           </div>
           <div className="featured-project-bio">
-            <p className="project-byline">{formatDate(projectDate)}</p>
+            <p className="project-byline">
+              {formatDate(new Date(mint_end_date))}
+            </p>
           </div>
         </Link>
       </div>
       <div className="bottom-half-of-content">
         <div className="collect-wrapper">
           <div className="data pt-1">
-            {supporters > 0 ?
+            {supporter_count > 0 ? (
               <>
                 <div className="supporters">
-                  <div className="amount-of-supporters">{supporters}</div>
+                  <div className="amount-of-supporters">{supporter_count}</div>
                   <div className="small-text">{"• Supporters"}</div>
                 </div>
-                <span>{getCountdown(projectDate)}</span>
-              </> : <div className="count-block flex items-center justify-center">
-                {getCountdown(projectDate)}{" "}
-                until drop
+                <span>{getCountdown(new Date(mint_end_date))}</span>
+              </>
+            ) : (
+              <div className="count-block flex items-center justify-center">
+                {getCountdown(new Date(mint_end_date))} until drop
               </div>
-            }
+            )}
           </div>
         </div>
       </div>

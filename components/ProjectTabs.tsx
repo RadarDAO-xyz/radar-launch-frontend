@@ -223,7 +223,7 @@ export function ProjectTabs({ id }: { id: string }) {
 
   return (
     <Tabs
-      defaultValue={Tab.BENEFITS}
+      defaultValue={Tab.COLLECT}
       onValueChange={(e) => setCurrentTab(e as Tab)}
     >
       <TabsList className="w-full gap-2 h-auto px-0 grid grid-cols-2 lg:grid-cols-3">
@@ -260,7 +260,7 @@ export function ProjectTabs({ id }: { id: string }) {
           </Button>
         </TabsTrigger>
       </TabsList>
-      <TabsContent value={Tab.COLLECT} className="px-4 py-2 rounded border">
+      <TabsContent value={Tab.COLLECT} className="px-4 py-2 rounded-md border">
         {typeof value === "bigint" && typeof protocolFee === "bigint" ? (
           <div className="p-4 lg:p-6">
             <div className="flex justify-between mb-4 text-gray-400">
@@ -350,7 +350,7 @@ export function ProjectTabs({ id }: { id: string }) {
       </TabsContent>
       <TabsContent
         value={Tab.SIGN_UP}
-        className="px-8 py-6 pb-10 rounded border"
+        className="px-8 py-6 pb-10 rounded-md border"
       >
         <div>
           <h2 className="text-xl text-center pt-4 pb-6">
@@ -381,7 +381,7 @@ export function ProjectTabs({ id }: { id: string }) {
       </TabsContent>
       <TabsContent
         value={Tab.CONTRIBUTE}
-        className="px-4 pt-8 pb-10 rounded border"
+        className="px-4 pt-8 pb-10 rounded-md border"
       >
         <div className="p-4">
           <h2 className="text-xl text-center pb-6">Help Build this Project</h2>
@@ -423,7 +423,7 @@ export function ProjectTabs({ id }: { id: string }) {
       <TabsContent value={Tab.BENEFITS} className="">
         {data?.benefits.length ? (
           data.benefits.filter(Boolean).map((benefit) => (
-            <div key={benefit.text} className="mt-4 border rounded last:pb-12">
+            <div key={benefit.text} className="mt-4 border rounded-md last:pb-12">
               <h3 className="p-6 text-gray-500">
                 Collect <span className="text-black">{benefit.amount}</span> or
                 more editions and get
@@ -433,7 +433,7 @@ export function ProjectTabs({ id }: { id: string }) {
             </div>
           ))
         ) : (
-          <div className="p-6 border rounded">No benefits found</div>
+          <div className="p-6 border rounded-md">No benefits found</div>
         )}
       </TabsContent>
     </Tabs>
