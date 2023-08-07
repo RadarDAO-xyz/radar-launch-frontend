@@ -223,7 +223,7 @@ export function ProjectTabs({ id }: { id: string }) {
 
   return (
     <Tabs
-      defaultValue={Tab.BENEFITS}
+      defaultValue={Tab.COLLECT}
       onValueChange={(e) => setCurrentTab(e as Tab)}
     >
       <TabsList className="w-full gap-2 h-auto px-0 grid grid-cols-2 lg:grid-cols-3">
