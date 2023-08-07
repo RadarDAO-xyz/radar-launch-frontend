@@ -167,11 +167,12 @@ export default function IndividualProjectPage() {
             <Avatar className="w-12 h-12">
               <AvatarImage
                 src={userData?.profile || "/default-avatar.png"}
+                className="object-contain"
                 alt="@shadcn"
               />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
-            <div>
+            <div className="flex items-center">
               <p className="text-[16px]">{userData?.name}</p>
             </div>
           </div>
