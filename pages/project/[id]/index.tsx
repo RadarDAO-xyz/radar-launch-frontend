@@ -1,6 +1,5 @@
 import { Markdown } from "@/components/Markdown";
 import { ProjectTabs } from "@/components/ProjectPage/ProjectTabs";
-import { chains } from "@/components/Web3Provider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,16 +12,10 @@ import {
 } from "@/components/ui/sheet";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  GOERLI_CONTRACT_ADDRESS,
-  MAINNET_CONTRACT_ADDRESS,
-} from "@/constants/address";
 import { useGetProject } from "@/hooks/useGetProject";
 import { useGetUser } from "@/hooks/useGetUser";
 import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
-import isTestnet from "@/lib/isTestnet";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 import { useRouter } from "next/router";
 
 enum Tab {
@@ -168,7 +161,7 @@ export default function IndividualProjectPage() {
               <AvatarImage
                 src={userData?.profile || "/default-avatar.png"}
                 className="object-contain"
-                alt="@shadcn"
+                alt="avatar"
               />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
@@ -193,26 +186,13 @@ export default function IndividualProjectPage() {
               <Avatar className="w-12 h-12">
                 <AvatarImage
                   src={userData?.profile || "/default-avatar.png"}
-                  alt="@shadcn"
+                  className="object-contain"
+                  alt="avatar"
                 />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
-              <div>
+              <div className="flex items-center">
                 <p className="text-[16px]">{userData?.name}</p>
-                <Link
-                  href={`${chains[0].blockExplorers.etherscan.url}/address/${
-                    isTestnet()
-                      ? GOERLI_CONTRACT_ADDRESS
-                      : MAINNET_CONTRACT_ADDRESS
-                  }`}
-                  className="font-mono text-gray-500 hover:underline"
-                  target="_blank"
-                >
-                  {(isTestnet()
-                    ? GOERLI_CONTRACT_ADDRESS
-                    : MAINNET_CONTRACT_ADDRESS
-                  ).slice(0, 10) + "..."}
-                </Link>
               </div>
             </div>
             <hr />

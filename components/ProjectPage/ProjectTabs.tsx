@@ -251,7 +251,7 @@ export function ProjectTabs({ id }: { id: string }) {
               href={`${chains[0].blockExplorers.etherscan.url}/address/${
                 isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS
               }`}
-              className="text-gray-500 hover:underline text-center mx-auto w-full"
+              className="text-gray-500 hover:underline text-center mx-auto w-full block"
               target="_blank"
             >
               contract
