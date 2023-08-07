@@ -73,11 +73,11 @@ export default function IndividualProjectPage() {
           </p>
           {data.tags?.length > 0 && (
             <div className="space-x-2 pb-8">
-              <Badge className="bg-gray-600 text-gray-200">
+              <Badge className="bg-gray-600 hover:bg-gray-600 text-gray-200 text-sm px-4 py-1">
                 A More Play-Full Future
               </Badge>
               {data.tags.map((tag) => (
-                <Badge variant="secondary" key={tag} className="text-gray-700">
+                <Badge variant="secondary" key={tag} className="text-gray-700 text-sm px-4 py-1">
                   {tag}
                 </Badge>
               ))}
