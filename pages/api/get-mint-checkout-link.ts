@@ -32,6 +32,7 @@ export default async function handler(
       return res.status(400).json({ message: "Invalid editionId or value" });
     }
     const ethValue = formatEther(value).toString();
+    console.log(ethValue);
     const options = {
       method: "POST",
       headers: {
