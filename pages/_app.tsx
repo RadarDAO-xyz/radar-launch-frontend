@@ -5,10 +5,10 @@ import { AuthProvider } from "@/components/AuthProvider";
 import { NavBar } from "@/components/NavBar";
 import { Web3Provider } from "@/components/Web3Provider";
 import { Toaster } from "@/components/ui/toaster";
-import { DevLinkProvider, PreLaunchFooter } from "@/devlink";
 import type { AppProps } from "next/app";
 import Script from "next/script";
 import Head from "next/head";
+import { PreLaunchFooter } from "@/components/Layout/PreLaunchFooter";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -30,14 +30,12 @@ export default function App({ Component, pageProps }: AppProps) {
         <title>RADAR Launch</title>
         <link rel="icon" href="/favicon.png" sizes="any" />
       </Head>
-      <DevLinkProvider>
-        <AuthProvider>
-          <NavBar />
-          <Component {...pageProps} />
-          <PreLaunchFooter />
-          <Toaster />
-        </AuthProvider>
-      </DevLinkProvider>
+      <AuthProvider>
+        <NavBar />
+        <Component {...pageProps} />
+        <PreLaunchFooter />
+        <Toaster />
+      </AuthProvider>
     </Web3Provider>
   );
 }
