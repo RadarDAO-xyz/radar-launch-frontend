@@ -16,6 +16,7 @@ import HoverVideoPlayer from "react-hover-video-player";
 import { chains } from "../components/Web3Provider";
 import { generateHoverVideoLink } from "@/lib/generateHoverVideoLink";
 import * as _Builtin from "./_Builtin";
+import Link from "next/link";
 
 export function VisionOfTheWeekProject({ projectId }) {
   const { data: onChainProjects } = useRadarEditionsGetEditions({
@@ -73,22 +74,13 @@ export function VisionOfTheWeekProject({ projectId }) {
       </_Builtin.Block>
       <_Builtin.Block className="feature-project-div" tag="div">
         <_Builtin.Block className="_20px-div" tag="div" />
-        <_Builtin.Link
-          className="link-block-3"
-          button={false}
-          options={{
-            href: "/project/" + projectId,
-          }}
-        >
+        <Link className="link-block-3 hover:opacity-70 transition-opacity" href={"/project/" + projectId}>
           <_Builtin.Block className="div-block-97" tag="div">
             <_Builtin.Paragraph className="featured-project-title font-bolded text-2xl leading-7">
               {data?.title || "FUTURES DROP #1"}
             </_Builtin.Paragraph>
-            <_Builtin.Block className="arrow-diagonal" tag="div">
-              {"↗"}
-            </_Builtin.Block>
           </_Builtin.Block>
-        </_Builtin.Link>
+        </Link>
         {/* <_Builtin.Block className="featured-project-bio" tag="div">
           <_Builtin.Paragraph className="project-byline">
             {"byline"}
@@ -108,9 +100,12 @@ export function VisionOfTheWeekProject({ projectId }) {
                 {data?.mint_end_date ? (
                   <p>{getCountdown(new Date(data.mint_end_date))}</p>
                 ) : null}
-                {totalSupply !== undefined && (
-                  <p>{totalSupply.toString()} collected</p>
-                )}
+                <Link href={"/project/" + projectId} className="underline">
+                  SUPPORT THIS PROJECT ↗
+                </Link>
+                {/* {totalSupply !== undefined && ( */}
+                {/* <p>{totalSupply.toString()} collected</p> */}
+                {/* )} */}
               </div>
             ) : (
               <div>
