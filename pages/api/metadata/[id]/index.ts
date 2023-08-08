@@ -41,7 +41,7 @@ export default async function handler(
       name: project.title,
       image: project.thumbnail || generateVideoThumbnail(project.video_url),
       description: project.description,
-      external_url: `https://radarlaunch.app/projects/${id}`,
+      external_url: `https://radarlaunch.app/project/${id}`,
       attributes: project.tags.map((tag) => ({
         trait_type: "Future of:",
         value: tag,
