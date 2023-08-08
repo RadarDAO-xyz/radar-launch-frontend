@@ -7,7 +7,9 @@ import { useGetExchangeRate } from "@/hooks/useGetExchangeRate";
 import { useGetProject } from "@/hooks/useGetProject";
 import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
 import {
+  usePrepareRadarEditionsMintEdition,
   useRadarEditionsGetEditions,
+  useRadarEditionsMintEdition,
   useRadarEditionsProtocolFee,
   useRadarEditionsTotalSupply,
 } from "@/lib/generated";
@@ -16,7 +18,7 @@ import { cn, getCountdown } from "@/lib/utils";
 import { DotIcon, MinusIcon, MoveDown, PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import { useQuery } from "wagmi";
+import { useAccount, useQuery } from "wagmi";
 import { convertWeiToUsdOrEth } from "../../lib/convertWeiToUsdOrEth";
 import { Markdown } from "../Markdown";
 import { chains } from "../Web3Provider";
@@ -25,6 +27,16 @@ import { Input } from "../ui/input";
 import { ContributeForm } from "./ContributeForm";
 import { SignUpForm } from "./SignUpForm";
 import { useGetUser } from "@/hooks/useGetUser";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import { useAuth } from "@/hooks/useAuth";
 
 async function getMintCheckoutLink(
   quantity: number,
@@ -78,6 +90,11 @@ enum Tab {
 }
 
 export function ProjectTabs({ id }: { id: string }) {
+  const [currentTab, setCurrentTab] = useState(Tab.COLLECT);
+  const [quantity, setQuantity] = useState(1);
+
+  const { address } = useAccount();
+  const { login, isLoggedIn } = useAuth();
   const { data: onChainProjects } = useRadarEditionsGetEditions({
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
@@ -101,12 +118,23 @@ export function ProjectTabs({ id }: { id: string }) {
     args: [BigInt(Math.max(editionId!, 0))],
     enabled: Boolean(chains[0]?.id) && editionId !== undefined,
   });
+
+  const { config } = usePrepareRadarEditionsMintEdition({
+    account: address,
+    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    chainId: chains[0]?.id,
+    args: [
+      BigInt(editionId || 0),
+      BigInt(quantity),
+      address!,
+      "0x0000000000000000000000000000000000000000000000000000000000000000",
+    ],
+    value: BigInt((value || 0n) + (protocolFee || 0n)) * BigInt(quantity),
+  });
+  const { writeAsync } = useRadarEditionsMintEdition(config);
   const { data: exchangeRateData } = useGetExchangeRate("ETH");
   const { data } = useGetProject(id.toString());
   const { data: userData } = useGetUser(data?.founder.toString());
-
-  const [currentTab, setCurrentTab] = useState(Tab.COLLECT);
-  const [quantity, setQuantity] = useState(1);
 
   const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
     ["checkout-mint-link", editionId, value, quantity],
@@ -231,16 +259,53 @@ export function ProjectTabs({ id }: { id: string }) {
                 <PlusIcon />
               </Button>
             </div>
-            <Button
-              className={cn(
-                "w-full",
-                !checkoutLink ? "pointer-events-none bg-gray-600" : ""
-              )}
-              asChild
-              disabled={!checkoutLink || isCheckoutLinkLoading}
-            >
-              <Link href={checkoutLink || ""}>COLLECT</Link>
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="w-full">COLLECT</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>
+                    Collect with your credit card or wallet
+                  </DialogTitle>
+                </DialogHeader>
+                <DialogFooter>
+                  <div className="flex flex-col gap-2 w-full">
+                    <Button
+                      className={cn(
+                        "w-full",
+                        !checkoutLink ? "pointer-events-none bg-gray-600" : ""
+                      )}
+                      variant="ghost"
+                      asChild
+                      disabled={!checkoutLink || isCheckoutLinkLoading}
+                    >
+                      <Link href={checkoutLink || ""}>
+                        Collect with Card / ETH
+                      </Link>
+                    </Button>
+                    <Button
+                      className="w-full"
+                      onClick={() => {
+                        if (!isLoggedIn) {
+                          login();
+                        } else {
+                          try {
+                            writeAsync?.();
+                          } catch (e) {
+                            // prevent error from crashing the app
+                            console.log(e);
+                          }
+                        }
+                      }}
+                    >
+                      Collect with Optimism
+                    </Button>
+                  </div>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+
             <p className="text-center pb-4 pt-8 text-gray-700">
               {data?.mint_end_date ? (
                 <>
