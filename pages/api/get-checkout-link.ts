@@ -70,6 +70,7 @@ export default async function handler(
       "https://withpaper.com/api/2022-08-12/checkout-link-intent",
       options
     ).then((response) => response.json());
+    res.setHeader("Cache-Control", "no-store, max-age=0");
     return res.status(200).json(response);
   } catch (e) {
     console.log(e);

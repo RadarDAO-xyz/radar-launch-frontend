@@ -1,23 +1,22 @@
 import { cn } from "@/lib/utils";
-import {
-  differenceInDays,
-  differenceInHours,
-  differenceInMinutes,
-} from "date-fns";
 import Link from "next/link";
 import HoverVideoPlayer from "react-hover-video-player";
-import { getCountdown } from '../lib/utils';
-
-interface ProjectBlockProps {
-  id: string;
-  briefName: string;
-  projectTitle: string;
-  projectByline: string;
-  supporters: number;
-  projectDate: Date;
-  videoUrl: string;
-  isDisabled?: boolean;
-}
+import { getCountdown } from "../lib/utils";
+import { Project, ProjectStatus } from "@/types/mongo";
+import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
+import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
+import { generateHoverVideoLink } from "@/lib/generateHoverVideoLink";
+import { DotIcon } from "lucide-react";
+import {
+  GOERLI_CONTRACT_ADDRESS,
+  MAINNET_CONTRACT_ADDRESS,
+} from "@/constants/address";
+import {
+  useRadarEditionsGetEditions,
+  useRadarEditionsTotalSupply,
+} from "@/lib/generated";
+import isTestnet from "@/lib/isTestnet";
+import { chains } from "./Web3Provider";
 
 // date formatter to convert dates to DD.MM.YYYY format
 const dateFormatter = new Intl.DateTimeFormat("en-GB", {
@@ -51,15 +50,30 @@ function formatDate(date: Date) {
 }
 
 export function ProjectBlock({
-  id,
-  briefName,
-  isDisabled,
-  supporters,
-  videoUrl,
-  projectByline,
-  projectTitle,
-  projectDate,
-}: ProjectBlockProps) {
+  _id,
+  status,
+  video_url,
+  title,
+  mint_end_date,
+  supporter_count,
+  brief,
+}: Project) {
+  const isDisabled = status !== ProjectStatus.LIVE;
+
+  const { data: onChainProjects } = useRadarEditionsGetEditions({
+    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    chainId: chains[0]?.id,
+    enabled: Boolean(chains[0]?.id),
+  });
+  const editionId: number | undefined = onChainProjects?.findIndex(
+    (project) => project.id === _id
+  );
+  const { data: totalSupply } = useRadarEditionsTotalSupply({
+    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    chainId: chains[0]?.id,
+    args: [BigInt(Math.max(editionId!, 0))],
+    enabled: Boolean(chains[0]?.id) && editionId !== undefined,
+  });
 
   return (
     <div
@@ -75,48 +89,71 @@ export function ProjectBlock({
             {/* <div className="briefs-labels" fs-cmsfilter-field="brief">
             </div> */}
           </div>
-          {isDisabled && <div className="text-xs text-gray-500">LOADING</div>}
+          <div className={cn("text-xs", isDisabled ? "text-gray-500" : "")}>
+            {isDisabled ? "LOADING" : brief}
+          </div>
         </div>
         <div className="_10px-div" />
-        <div className="project-image">
-          <HoverVideoPlayer
-            focused
-            loop
-            videoSrc={videoUrl}
-            className="!hidden md:!inline-block"
-          />
-          {/* TODO: figure out why videos not loading on mobile */}
-          <img src={`${videoUrl.split(".")[0]}.png`} className="md:hidden" />
+        <div className="project-image w-full">
+          {video_url.startsWith("https://") ? (
+            <iframe
+              src={generateVideoEmbed(
+                video_url,
+                video_url.includes("vimeo")
+                  ? "?title=0&byline=0&portrait=0&sidedock=0&loop=1"
+                  : ""
+              )}
+              className="aspect-video w-full"
+              allow="autoplay; fullscreen; picture-in-picture"
+            />
+          ) : (
+            <img src={generateVideoThumbnail(video_url)} className="w-full" />
+            // <HoverVideoPlayer
+            //   focused
+            //   loop
+            //   videoSrc={generateHoverVideoLink(video_url)}
+            //   className="!hidden md:!inline-block"
+            // />
+          )}
         </div>
         <div className="_20px-div" />
         <Link
-          className={cn("project-copy", isDisabled ? "pointer-events-none" : "")}
-          href={`/project/${id}`}
+          className={cn(
+            "project-copy",
+            isDisabled ? "pointer-events-none" : ""
+          )}
+          href={`/project/${_id}`}
         >
           <div className="div-block-96">
-            <p className="project-title font-bolded">{projectTitle}</p>
+            <p className="project-title uppercase leading-4 font-bolded">
+              {title}
+            </p>
             <div className="arrow-diagonal">{"↗"}</div>
           </div>
           <div className="featured-project-bio">
-            <p className="project-byline">{formatDate(projectDate)}</p>
+            <p className="project-byline">
+              {formatDate(new Date(mint_end_date))}
+            </p>
           </div>
         </Link>
       </div>
       <div className="bottom-half-of-content">
         <div className="collect-wrapper">
-          <div className="data pt-1">
-            {supporters > 0 ?
-              <>
-                <div className="supporters">
-                  <div className="amount-of-supporters">{supporters}</div>
-                  <div className="small-text">{"• Supporters"}</div>
-                </div>
-                <span>{getCountdown(projectDate)}</span>
-              </> : <div className="count-block flex items-center justify-center">
-                {getCountdown(projectDate)}{" "}
-                until drop
+          <div className="pt-2 flex border-t w-full border-t-[var(--line-83d2b2f6)] items-center">
+            {status === ProjectStatus.LIVE ? (
+              <div className="text-center w-full flex justify-between text-xs text-gray-700">
+                {mint_end_date ? (
+                  <p>{getCountdown(new Date(mint_end_date))}</p>
+                ) : null}
+                {totalSupply !== undefined && (
+                  <p>{totalSupply.toString()} collected</p>
+                )}
               </div>
-            }
+            ) : (
+              <div className="count-block flex items-center justify-center">
+                {getCountdown(new Date(mint_end_date))} until drop
+              </div>
+            )}
           </div>
         </div>
       </div>

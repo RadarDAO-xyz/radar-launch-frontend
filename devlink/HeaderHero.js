@@ -1,19 +1,25 @@
-import React from "react";
-import * as _Builtin from "./_Builtin";
-import { VisionOfTheWeekProject } from "./VisionOfTheWeekProject";
-import { useAccount, useNetwork } from "wagmi";
-import { useRadarEditionsGetEditions } from "@/lib/generated";
-import isTestnet from "@/lib/isTestnet";
+import { chains } from "@/components/Web3Provider";
 import {
   GOERLI_CONTRACT_ADDRESS,
   MAINNET_CONTRACT_ADDRESS,
 } from "@/constants/address";
-import { chains } from "@/components/Web3Provider";
-import Link from "next/link";
 import { useGetExchangeRate } from "@/hooks/useGetExchangeRate";
 import { convertWeiToUsdOrEth } from "@/lib/convertWeiToUsdOrEth";
+import { useRadarEditionsGetEditions } from "@/lib/generated";
+import isTestnet from "@/lib/isTestnet";
+import dynamic from "next/dynamic";
+import Link from "next/link";
+import React from "react";
+import { useAccount } from "wagmi";
+import { VisionOfTheWeekProject } from "./VisionOfTheWeekProject";
+import * as _Builtin from "./_Builtin";
 
-const numberFormatter = Intl.NumberFormat("en-US");
+const HeroSectionAmountNoSSR = dynamic(
+  () => Promise.resolve(HeroSectionAmount),
+  {
+    ssr: false,
+  }
+);
 
 export function HeaderHero({
   as: _Component = _Builtin.Section,
@@ -53,7 +59,7 @@ export function HeaderHero({
         </Link>
       </_Builtin.Block>
       <_Builtin.Block
-        className="featured-project-tabs  md:w-[80%] lg:w-[80%] space-x-4 lg:space-x-8"
+        className="featured-project-tabs md:w-[80%] lg:w-[80%] space-x-4 lg:space-x-8"
         tag="div"
       >
         <_Builtin.Block className="about-div home px-[5%]" tag="div">
@@ -82,23 +88,10 @@ export function HeaderHero({
             <br />
           </_Builtin.Paragraph>
           <_Builtin.Block className="div-block-99" tag="div">
-            <_Builtin.Heading className="heading-5" tag="h1">
-              {"$" +
-                (
-                  12400 +
-                  (data && exchangeRateData?.rates?.ETH
-                    ? +convertWeiToUsdOrEth(
-                        data.reduce(
-                          (acc, edition) => acc + edition.balance,
-                          0n
-                        ),
-                        exchangeRateData.rates.ETH
-                      )
-                    : 0)
-                ).toLocaleString("en-US", {
-                  maximumFractionDigits: 0,
-                })}
-            </_Builtin.Heading>
+            <HeroSectionAmountNoSSR
+              data={data}
+              exchangeRateData={exchangeRateData}
+            />
             <_Builtin.Paragraph className="body-text larger">
               {"already committed to build better futures"}
               <_Builtin.Span className="arrow-diagonal">{""}</_Builtin.Span>
@@ -106,7 +99,7 @@ export function HeaderHero({
             </_Builtin.Paragraph>
           </_Builtin.Block>
         </_Builtin.Block>
-        <_Builtin.Block className="visionoftheweek" tag="div">
+        <_Builtin.Block className="visionoftheweek md:flex hidden" tag="div">
           {visionOfTheWeekSlot ?? (
             <>
               <VisionOfTheWeekProject />
@@ -144,5 +137,24 @@ export function HeaderHero({
         </Link>
       </div>
     </_Component>
+  );
+}
+
+function HeroSectionAmount({ data, exchangeRateData }) {
+  return (
+    <_Builtin.Heading className="heading-5" tag="h1">
+      {"$" +
+        (
+          12400 +
+          (data && exchangeRateData?.rates?.ETH
+            ? +convertWeiToUsdOrEth(
+                data.reduce((acc, edition) => acc + edition.balance, 0n),
+                exchangeRateData.rates.ETH
+              )
+            : 0)
+        ).toLocaleString("en-US", {
+          maximumFractionDigits: 0,
+        })}
+    </_Builtin.Heading>
   );
 }

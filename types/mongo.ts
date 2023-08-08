@@ -49,7 +49,7 @@ export type User = {
   name: string;
   profile?: string;
   bio?: string;
-  socials?: string;
+  socials?: string; // must be a twitter link for now
   wallets: WalletResolvable[];
   email?: string;
 };
@@ -105,4 +105,9 @@ export enum Brief {
   THE_TEACHER = "The Teacher",
   THE_ARTIST = "The Artist",
   OTHER = "Other",
+}
+
+export enum SupportType {
+  SIGN_UP,
+  CONTRIBUTE,
 }
