@@ -7,7 +7,6 @@ const nextConfig = {
     BACKEND_URL: process.env.BACKEND_URL,
     WHITELISTED_ADDRESSES: process.env.WHITELISTED_ADDRESSES,
   },
-  swcMinify: false,
 };
 
 module.exports = nextConfig;
