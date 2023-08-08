@@ -1,4 +1,3 @@
-import { _Builtin } from "@/devlink";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
 import Link from "next/link";
 import React from "react";
