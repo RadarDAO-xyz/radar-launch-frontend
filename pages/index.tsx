@@ -13,8 +13,8 @@ const ProjectBlockNoSSR = dynamic(
 
 const VisionOfTheWeekProjectNoSSR = dynamic(
   () =>
-    import("@/devlink/VisionOfTheWeekProject").then(
-      (res) => res.VisionOfTheWeekProject
+    import("@/components/HomePage/VisionOfTheWeek").then(
+      (res) => res.VisionOfTheWeek
     ),
   {
     ssr: false,
