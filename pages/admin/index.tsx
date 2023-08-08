@@ -17,6 +17,7 @@ import { Project } from "@/types/mongo";
 import { MoveUpRight } from "lucide-react";
 import Link from "next/link";
 import { useAccount, useNetwork } from "wagmi";
+import { shortenAddress } from "@/lib/utils";
 
 export interface OnChainProject {
   status: number;
@@ -112,18 +113,18 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="mt-[80px] pt-6 pb-12 container max-w-7xl">
-      <div className="flex items-center justify-between">
+    <div className="mt-[80px] md:pt-6 pb-12 container max-w-7xl">
+      <div className="flex items-center justify-between flex-col md:flex-row">
         <div className="flex items-center space-x-4">
           <Avatar className="w-16 h-16">
             <AvatarImage src="/default-avatar.png" />
           </Avatar>
           <div className="space-y-1">
             <h2 className="text-2xl">Founder Name</h2>
-            <p className="font-mono text-gray-600">{address}</p>
+            <p className="font-mono text-gray-600">{address ? shortenAddress(address): ''}</p>
           </div>
         </div>
-        <div className="flex space-x-4">
+        <div className="flex space-x-4 mt-4 md:mt-0">
           <Link href="/">
             Share Update <MoveUpRight className="inline h-3 w-3" />
           </Link>
