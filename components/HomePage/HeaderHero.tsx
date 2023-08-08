@@ -81,8 +81,6 @@ export function HeaderHero({ visionOfTheWeekSlot }: Props) {
             />
             <p className="body-text larger">
               {"already committed to build better futures"}
-              <span className="arrow-diagonal">{""}</span>
-              <br />
             </p>
           </div>
         </div>

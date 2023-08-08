@@ -39,7 +39,7 @@ export default async function handler(
     }
     return res.status(200).json({
       name: project.title,
-      image: generateVideoThumbnail(project.video_url),
+      image: project.thumbnail || generateVideoThumbnail(project.video_url),
       description: project.description,
       external_url: `https://radarlaunch.app/projects/${id}`,
       attributes: project.tags.map((tag) => ({

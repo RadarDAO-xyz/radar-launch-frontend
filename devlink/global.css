@@ -4602,8 +4602,8 @@ blockquote {
 @media screen and (max-width: 479px) {
   .navbar-logo-center-container.shadow-three {
     display: flex;
-    padding-right: 20px;
-    padding-left: 20px;
+    padding-right: 5px;
+    padding-left: 5px;
   }
 }
 

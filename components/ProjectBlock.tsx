@@ -1,21 +1,18 @@
-import { cn } from "@/lib/utils";
-import Link from "next/link";
-import HoverVideoPlayer from "react-hover-video-player";
-import { getCountdown } from "../lib/utils";
-import { Project, ProjectStatus } from "@/types/mongo";
-import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
-import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
-import { generateHoverVideoLink } from "@/lib/generateHoverVideoLink";
-import { DotIcon } from "lucide-react";
 import {
   GOERLI_CONTRACT_ADDRESS,
   MAINNET_CONTRACT_ADDRESS,
 } from "@/constants/address";
+import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
+import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
 import {
   useRadarEditionsGetEditions,
   useRadarEditionsTotalSupply,
 } from "@/lib/generated";
 import isTestnet from "@/lib/isTestnet";
+import { cn } from "@/lib/utils";
+import { Project, ProjectStatus } from "@/types/mongo";
+import Link from "next/link";
+import { getCountdown } from "../lib/utils";
 import { chains } from "./Web3Provider";
 
 // date formatter to convert dates to DD.MM.YYYY format
