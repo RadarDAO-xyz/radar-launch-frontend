@@ -17,8 +17,8 @@ import isTestnet from "@/lib/isTestnet";
 import { cn, getCountdown } from "@/lib/utils";
 import { DotIcon, MinusIcon, MoveDown, PlusIcon } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
-import { useAccount, useQuery } from "wagmi";
+import { useEffect, useState } from "react";
+import { useAccount, useQuery, useWaitForTransaction } from "wagmi";
 import { convertWeiToUsdOrEth } from "../../lib/convertWeiToUsdOrEth";
 import { Markdown } from "../Markdown";
 import { chains } from "../Web3Provider";
@@ -37,6 +37,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "../ui/use-toast";
 
 async function getMintCheckoutLink(
   quantity: number,
@@ -131,7 +132,13 @@ export function ProjectTabs({ id }: { id: string }) {
     ],
     value: BigInt((value || 0n) + (protocolFee || 0n)) * BigInt(quantity),
   });
-  const { writeAsync } = useRadarEditionsMintEdition(config);
+  const { data: mintEditionData, writeAsync } =
+    useRadarEditionsMintEdition(config);
+  const { isLoading, isSuccess } = useWaitForTransaction({
+    hash: mintEditionData?.hash,
+    enabled: mintEditionData?.hash !== undefined,
+  });
+
   const { data: exchangeRateData } = useGetExchangeRate("ETH");
   const { data } = useGetProject(id.toString());
   const { data: userData } = useGetUser(data?.founder.toString());
@@ -157,6 +164,27 @@ export function ProjectTabs({ id }: { id: string }) {
         data !== undefined,
     }
   );
+
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (isLoading && mintEditionData?.hash) {
+      toast({
+        title: "Transaction sent!",
+        description:
+          "Please wait for confirmation, your hash is " + mintEditionData?.hash,
+      });
+    }
+  }, [isLoading, mintEditionData?.hash]);
+
+  useEffect(() => {
+    if (isSuccess && mintEditionData?.hash) {
+      toast({
+        title: "Success!",
+        description: "Your NFT has been minted!",
+      });
+    }
+  }, [isSuccess, mintEditionData?.hash]);
 
   return (
     <Tabs
