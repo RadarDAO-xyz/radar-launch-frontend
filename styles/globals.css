@@ -87,6 +87,10 @@
   .react-markdown ul {
     @apply -mt-6 -mb-3 -space-y-2
   }
+
+  #w3a-parent-container {
+    z-index: 99999999 !important;
+  }
 }
 
 h1 {

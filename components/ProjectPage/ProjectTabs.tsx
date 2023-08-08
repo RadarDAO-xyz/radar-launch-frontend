@@ -93,6 +93,7 @@ enum Tab {
 export function ProjectTabs({ id }: { id: string }) {
   const [currentTab, setCurrentTab] = useState(Tab.COLLECT);
   const [quantity, setQuantity] = useState(1);
+  const [hasToasted, setHasToasted] = useState(false);
 
   const { address } = useAccount();
   const { login, isLoggedIn } = useAuth();
@@ -119,7 +120,6 @@ export function ProjectTabs({ id }: { id: string }) {
     args: [BigInt(Math.max(editionId!, 0))],
     enabled: Boolean(chains[0]?.id) && editionId !== undefined,
   });
-
   const { config } = usePrepareRadarEditionsMintEdition({
     account: address,
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
@@ -131,6 +131,11 @@ export function ProjectTabs({ id }: { id: string }) {
       "0x0000000000000000000000000000000000000000000000000000000000000000",
     ],
     value: BigInt((value || 0n) + (protocolFee || 0n)) * BigInt(quantity),
+    enabled:
+      value !== undefined &&
+      editionId !== undefined &&
+      address !== undefined &&
+      isLoggedIn,
   });
   const { data: mintEditionData, writeAsync } =
     useRadarEditionsMintEdition(config);
@@ -171,18 +176,18 @@ export function ProjectTabs({ id }: { id: string }) {
     if (isLoading && mintEditionData?.hash) {
       toast({
         title: "Transaction sent!",
-        description:
-          "Please wait for confirmation, your hash is " + mintEditionData?.hash,
+        description: "Awaiting for confirmation...",
       });
     }
   }, [isLoading, mintEditionData?.hash]);
 
   useEffect(() => {
-    if (isSuccess && mintEditionData?.hash) {
+    if (isSuccess && mintEditionData?.hash && !hasToasted) {
       toast({
         title: "Success!",
         description: "Your NFT has been minted!",
       });
+      setHasToasted(true);
     }
   }, [isSuccess, mintEditionData?.hash]);
 
@@ -287,7 +292,7 @@ export function ProjectTabs({ id }: { id: string }) {
                 <PlusIcon />
               </Button>
             </div>
-            <Dialog>
+            <Dialog modal={false}>
               <DialogTrigger asChild>
                 <Button className="w-full">COLLECT</Button>
               </DialogTrigger>
@@ -320,6 +325,7 @@ export function ProjectTabs({ id }: { id: string }) {
                         } else {
                           try {
                             writeAsync?.();
+                            setHasToasted(false);
                           } catch (e) {
                             // prevent error from crashing the app
                             console.log(e);
@@ -327,7 +333,7 @@ export function ProjectTabs({ id }: { id: string }) {
                         }
                       }}
                     >
-                      Collect with Optimism
+                      Collect with Optimism {!isLoggedIn ? "(sign in)" : ""}
                     </Button>
                   </div>
                 </DialogFooter>

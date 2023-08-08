@@ -1,5 +1,5 @@
 import isTestnet from "@/lib/isTestnet";
-import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from "@web3auth/base";
+import { CHAIN_NAMESPACES } from "@web3auth/base";
 import { MetamaskAdapter } from "@web3auth/metamask-adapter";
 import { Web3Auth } from "@web3auth/modal";
 import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
@@ -7,8 +7,8 @@ import { ReactNode, createContext, useEffect, useState } from "react";
 import { WagmiConfig, configureChains, createConfig } from "wagmi";
 import { optimism, optimismGoerli } from "wagmi/chains";
 import { InjectedConnector } from "wagmi/connectors/injected";
-import { publicProvider } from "wagmi/providers/public";
 import { infuraProvider } from "wagmi/providers/infura";
+import { publicProvider } from "wagmi/providers/public";
 
 export const { chains, publicClient, webSocketPublicClient } = configureChains(
   [isTestnet() ? optimismGoerli : optimism],
@@ -19,10 +19,10 @@ const openloginAdapter = new OpenloginAdapter({
   adapterSettings: {
     uxMode: "popup",
     whiteLabel: {
-      name: "RADARDao Launch",
-      url: "https://radar-launch.netlify.app",
-      logoLight: "https://web3auth.io/images/w3a-L-Favicon-1.svg",
-      logoDark: "https://web3auth.io/images/w3a-D-Favicon-1.svg",
+      name: "RADAR Launch",
+      url: "https://radarlaunch.app",
+      logoLight: "https://radarlaunch.app/project-image.png",
+      logoDark: "https://radarlaunch.app/project-image.png",
       defaultLanguage: "en", // en, de, ja, ko, zh, es, fr, pt, nl
       dark: true, // whether to enable dark mode. defaultValue: false
       theme: {
@@ -87,6 +87,8 @@ export const Web3Provider = ({ children }: { children?: ReactNode }) => {
         uiConfig: {
           // theme: "dark",
           loginMethodsOrder: ["google", "email_passwordless"],
+          appName: "blockchain",
+          appLogo: "https://radarlaunch.app/project-image.png",
         },
       });
 

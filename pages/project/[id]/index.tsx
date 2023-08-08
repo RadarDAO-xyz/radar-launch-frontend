@@ -198,7 +198,7 @@ export default function IndividualProjectPage() {
         </div>
       </div>
       <div className="md:hidden bottom-0 px-[5%] border py-4 bg-white sticky">
-        <Sheet>
+        <Sheet modal={false}>
           <SheetTrigger asChild>
             <Button className="w-full">SUPPORT</Button>
           </SheetTrigger>

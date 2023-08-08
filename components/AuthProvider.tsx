@@ -30,18 +30,19 @@ export const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider = ({ children }: { children?: ReactNode }) => {
-  const { connectAsync } = useConnect();
-  const { disconnectAsync } = useDisconnect({});
+  const { connectAsync, connectors } = useConnect();
+  const { disconnectAsync } = useDisconnect();
   const { web3Auth } = useContext(Web3Context) ?? {};
   const { address } = useAccount();
 
   const [idToken, setIdToken] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(address !== undefined);
+  // logged in status is dependent on backend as well, hence we use idToken and not isConnected
+  const [isLoggedIn, setIsLoggedIn] = useState(idToken !== "");
   const [isWalletLogin, setIsWalletLoggedIn] = useState(false);
   const [appPubKey, setAppPubKey] = useState("");
 
   // backend auth
-  useQuery(
+  const { data } = useQuery(
     ["login", isWalletLogin, idToken],
     () => authenticateUser({ idToken, isWalletLogin, address, appPubKey }),
     {
@@ -51,14 +52,15 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
         (address !== undefined || appPubKey !== ""),
     }
   );
-
+  console.log({ data, address, isLoggedIn });
   useEffect(() => {
-    if (address) {
+    if (data?.name && address) {
       setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
+    } else if (!data?.name) {
+      disconnectAsync();
     }
-  }, [address]);
+    setIsLoggedIn(false);
+  }, [data, address]);
 
   useEffect(() => {
     (async () => {
@@ -84,23 +86,23 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
 
   async function login() {
     if (web3Auth && !isLoggedIn) {
-      await web3Auth?.connect();
-
-      await connectAsync({
-        connector: new Web3AuthConnector({
-          options: {
-            web3AuthInstance: web3Auth!,
-          },
-        }),
-      });
-      setIsLoggedIn(true);
+      await web3Auth.connect();
+      await connectAsync(
+      //   {
+      //   connector: new Web3AuthConnector({
+      //     options: {
+      //       web3AuthInstance: web3Auth!,
+      //     },
+      //   }),
+      // }
+      );
     }
   }
 
   async function logout() {
     if (web3Auth && isLoggedIn) {
-      await disconnectAsync();
-      setIsLoggedIn(false);
+      await web3Auth.logout();
+      // await disconnectAsync();
     }
   }
 
