@@ -1,4 +1,4 @@
-import { Markdown } from "@/components/Markdown";
+import { Markdown } from "@/components/Layout/Markdown";
 import { ProjectTabs } from "@/components/ProjectPage/ProjectTabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";

@@ -1,9 +1,16 @@
 import { ReactNode } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Button } from "../ui/button";
-import { FormControl, FormField, FormItem, FormMessage } from "../ui/form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import { TinyMCE } from "../Layout/TinyMCE";
 
 interface Props {
   children?: ReactNode;
@@ -35,14 +42,25 @@ export const TeamFields = ({ children }: Props) => {
           <FormField
             key={row.id + "bio"}
             name={`team.${index}.bio`}
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Textarea {...field} placeholder="Bio" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            render={({ field }) => {
+              const { onChange, ...rest } = field;
+              return (
+                <FormItem>
+                  <FormControl>
+                    <TinyMCE
+                      {...rest}
+                      init={{
+                        placeholder: "Bio",
+                      }}
+                      onEditorChange={(value, editor) => {
+                        onChange(value);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
           <FormField
             key={row.id + "email"}

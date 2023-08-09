@@ -1,6 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { ReactNode } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
+import { TinyMCE } from "./Layout/TinyMCE";
 import { Button } from "./ui/button";
 import {
   FormControl,
@@ -9,7 +10,6 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
-import { Textarea } from "./ui/textarea";
 
 interface Props {
   children?: ReactNode;
@@ -27,7 +27,7 @@ export const BenefitsFields = ({ children }: Props) => {
       {fields.map((field, index) => (
         <div key={field.id} className="mb-6">
           <FormField
-            key={field.id}
+            key={field.id + "amount"}
             control={control}
             name={`benefits.${index}.amount`}
             render={({ field }) => (
@@ -45,17 +45,25 @@ export const BenefitsFields = ({ children }: Props) => {
             )}
           />
           <FormField
-            key={field.id}
+            key={field.id + "text"}
             control={control}
             name={`benefits.${index}.text`}
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Textarea {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            render={({ field }) => {
+              const { onChange, ...rest } = field;
+              return (
+                <FormItem>
+                  <FormControl>
+                    <TinyMCE
+                      {...rest}
+                      onEditorChange={(value, editor) => {
+                        onChange(value);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
         </div>
       ))}

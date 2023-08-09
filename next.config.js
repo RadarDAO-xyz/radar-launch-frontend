@@ -6,6 +6,7 @@ const nextConfig = {
     VITE_INFURA_KEY: process.env.VITE_INFURA_KEY,
     BACKEND_URL: process.env.BACKEND_URL,
     WHITELISTED_ADDRESSES: process.env.WHITELISTED_ADDRESSES,
+    TINYMCE_API_KEY: process.env.TINYMCE_API_KEY,
   },
   // see https://github.com/vercel/next.js/pull/53483/files
   // modularizeImports: {

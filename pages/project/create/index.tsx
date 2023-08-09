@@ -186,7 +186,6 @@ export default function ProjectForm() {
   const {
     handleSubmit,
     watch,
-    control,
     formState: { errors, isValid, isDirty },
   } = form;
   const fee = watch("edition_price");
@@ -237,8 +236,6 @@ export default function ProjectForm() {
   );
   const router = useRouter();
   const { toast } = useToast();
-
-  console.log({ checkoutLink });
 
   async function onSubmit(values: z.infer<typeof createFormSchema>) {
     // print form errors

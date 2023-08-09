@@ -1,6 +1,9 @@
 import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
+import { createFormSchema } from "@/pages/project/create";
 import { Brief } from "@/types/mongo";
 import { useFormContext } from "react-hook-form";
+import * as z from "zod";
+import { TinyMCE } from "../Layout/TinyMCE";
 import {
   FormControl,
   FormDescription,
@@ -17,13 +20,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { Textarea } from "../ui/textarea";
-import { createFormSchema } from "@/pages/project/create";
-import * as z from "zod";
 
 export function ProjectSection() {
   const { control, watch } = useFormContext<z.infer<typeof createFormSchema>>();
-
   const video_image = watch("video_image");
 
   return (
@@ -63,18 +62,26 @@ export function ProjectSection() {
           <FormField
             control={control}
             name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Describe your idea in a sentence</FormLabel>
-                <FormDescription className="text-xs">
-                  This will be featured on homepage alongside your video
-                </FormDescription>
-                <FormControl>
-                  <Textarea {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            render={({ field }) => {
+              const { onChange, ...rest } = field;
+              return (
+                <FormItem>
+                  <FormLabel>Describe your idea in a sentence</FormLabel>
+                  <FormDescription className="text-xs">
+                    This will be featured on homepage alongside your video
+                  </FormDescription>
+                  <FormControl>
+                    <TinyMCE
+                      {...rest}
+                      onEditorChange={(value, editor) => {
+                        onChange(value);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
         </div>
       </div>
@@ -112,15 +119,23 @@ export function ProjectSection() {
           <FormField
             control={control}
             name="tldr"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Project TLDR</FormLabel>
-                <FormControl>
-                  <Textarea {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            render={({ field }) => {
+              const { onChange, ...rest } = field;
+              return (
+                <FormItem>
+                  <FormLabel>Project TLDR</FormLabel>
+                  <FormControl>
+                    <TinyMCE
+                      {...rest}
+                      onEditorChange={(value, editor) => {
+                        onChange(value);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
         </div>
       </div>
@@ -196,15 +211,23 @@ export function ProjectSection() {
           <FormField
             control={control}
             name="inspiration"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>What was the inspiration for this idea?</FormLabel>
-                <FormControl>
-                  <Textarea {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            render={({ field }) => {
+              const { onChange, ...rest } = field;
+              return (
+                <FormItem>
+                  <FormLabel>What was the inspiration for this idea?</FormLabel>
+                  <FormControl>
+                    <TinyMCE
+                      {...rest}
+                      onEditorChange={(value, editor) => {
+                        onChange(value);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
         </div>
       </div>
