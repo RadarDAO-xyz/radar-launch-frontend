@@ -5,7 +5,10 @@ import {
 import { useGetProject } from "@/hooks/useGetProject";
 import { generateHoverVideoLink } from "@/lib/generateHoverVideoLink";
 import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
-import { useRadarEditionsGetEditions } from "@/lib/generated";
+import {
+  useRadarEditionsGetEditions,
+  useRadarEditionsTotalSupply,
+} from "@/lib/generated";
 import isTestnet from "@/lib/isTestnet";
 import { getCountdown } from "@/lib/utils";
 import { ProjectStatus } from "@/types/mongo";
@@ -23,17 +26,17 @@ export function VisionOfTheWeek({ projectId }: Props) {
     chainId: chains[0]?.id,
     enabled: Boolean(chains[0]?.id),
   });
-
   const editionId = onChainProjects?.findIndex(
     (project) => project.id === projectId
   );
-  // const { data: totalSupply } = useRadarEditionsTotalSupply({
-  //   address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
-  //   chainId: chains[0]?.id,
-  //   args: [BigInt(Math.max(editionId || 0, 0))],
-  //   enabled: Boolean(chains[0]?.id) && editionId !== undefined,
-  // });
+  const { data: totalSupply } = useRadarEditionsTotalSupply({
+    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    chainId: chains[0]?.id,
+    args: [BigInt(Math.max(editionId || 0, 0))],
+    enabled: Boolean(chains[0]?.id) && editionId !== undefined,
+  });
   const { data } = useGetProject(projectId);
+
   return (
     <div className="featured-project-wrapper">
       <p className="mobile-subtitle">{"Featured Project"}</p>
@@ -69,7 +72,7 @@ export function VisionOfTheWeek({ projectId }: Props) {
         <div className="_20px-div" />
         <Link
           className="link-block-3 hover:opacity-70 transition-opacity"
-          href={"/project/" + projectId}
+          href={`/project/${projectId}`}
         >
           <div className="div-block-97">
             <p className="featured-project-title font-bolded text-2xl leading-7">
@@ -77,34 +80,40 @@ export function VisionOfTheWeek({ projectId }: Props) {
             </p>
           </div>
         </Link>
-        {/* <div className="featured-project-bio" >
-          <p className="project-byline">
-            {"byline"}
-          </p>
-        </div> */}
-        {data?.description && (
-          <p className="text-xs text-gray-700">{data.description}</p>
-        )}
-        <div className="_10px-div" />
-        <div className="collect-wrapper main w-full bottom-1 md:bottom-[5%] pt-3">
-          <div className="text-xs text-gray-400 w-full">
-            {data?.status === ProjectStatus.LIVE ? (
-              <div className="flex justify-between text-center text-gray-700 w-full">
-                {data?.mint_end_date ? (
-                  <p>{getCountdown(new Date(data.mint_end_date))}</p>
-                ) : null}
-                <Link href={"/project/" + projectId} className="underline">
-                  SUPPORT THIS PROJECT ↗
-                </Link>
-                {/* {totalSupply !== undefined && ( */}
-                {/* <p>{totalSupply.toString()} collected</p> */}
-                {/* )} */}
-              </div>
-            ) : (
-              <div>
-                {getCountdown(new Date("2023-08-03T23:00:00+02:00"))} until drop
-              </div>
-            )}
+        <div className="">
+          {data?.description && (
+            <p className="text-xs text-gray-700">{data.description}</p>
+          )}
+          <div className="_10px-div" />
+          <div className="collect-wrapper main w-full bottom-1 md:bottom-[5%]">
+            <div className="text-xs text-gray-400 w-full">
+              {data?.status === ProjectStatus.LIVE ? (
+                <div className="flex gap-3 text-gray-700 w-full">
+                  {data?.mint_end_date ? (
+                    <span className="border-r pr-3">
+                      {getCountdown(new Date(data.mint_end_date))}
+                    </span>
+                  ) : null}
+                  <span>
+                    {(
+                      (totalSupply || 0n) + BigInt(data.supporter_count || 0)
+                    ).toString()}{" "}
+                    supporters
+                  </span>
+                </div>
+              ) : (
+                <div>
+                  {getCountdown(new Date("2023-08-03T23:00:00+02:00"))} until
+                  drop
+                </div>
+              )}
+            </div>
+            <Link
+              className="arrow-diagonal text-3xl cursor-pointer hover:opacity-60 transition-opacity"
+              href={`/project/${projectId}`}
+            >
+              ↗
+            </Link>
           </div>
         </div>
       </div>
