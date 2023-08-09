@@ -4,6 +4,8 @@ import {
   ReactMarkdownOptions,
 } from "react-markdown/lib/react-markdown";
 import remarkGfm from "remark-gfm";
+import rehypeRaw from 'rehype-raw'
+
 
 function transformText(text: string) {
   // transform \\n to \n
@@ -20,7 +22,7 @@ export function Markdown({
   return (
     <ReactMarkdown
       {...props}
-      remarkPlugins={[remarkGfm]}
+      remarkPlugins={[remarkGfm, rehypeRaw]}
       className={cn("whitespace-pre-wrap react-markdown", className)}
     >
       {transformText(children)}

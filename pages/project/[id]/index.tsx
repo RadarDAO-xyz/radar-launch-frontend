@@ -1,4 +1,3 @@
-import { Markdown } from "@/components/Layout/Markdown";
 import { ProjectTabs } from "@/components/ProjectPage/ProjectTabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -16,6 +15,7 @@ import { useGetProject } from "@/hooks/useGetProject";
 import { useGetUser } from "@/hooks/useGetUser";
 import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
 import { cn } from "@/lib/utils";
+import parse from "html-react-parser";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -101,7 +101,7 @@ export default function IndividualProjectPage() {
                 <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-8">
                   Project TLDR
                 </h3>
-                <Markdown>{data.tldr}</Markdown>
+                {parse(data.tldr)}
               </div>
               <hr />
               <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-8 pt-10">
@@ -112,9 +112,7 @@ export default function IndividualProjectPage() {
                   <h4 className="font-semibold">
                     {index + 1}. {teamMember.name}
                   </h4>
-                  <Markdown className="text-gray-600">
-                    {teamMember.bio}
-                  </Markdown>
+                  <div className="text-gray-600">{parse(teamMember.bio)}</div>
                 </div>
               ))}
               <hr />
@@ -122,9 +120,7 @@ export default function IndividualProjectPage() {
                 <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-4">
                   This project is looking for:
                 </h3>
-                {data.collaborators && (
-                  <Markdown>{data.collaborators}</Markdown>
-                )}
+                {data.collaborators && <p>{parse(data.collaborators)}</p>}
               </div>
               <hr />
               <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16 pt-10">
@@ -154,7 +150,7 @@ export default function IndividualProjectPage() {
                         )}
                       </TableCell>
                       <TableCell className="border-l">
-                        <Markdown>{milestone.text}</Markdown>
+                        <p>{parse(milestone.text)}</p>
                       </TableCell>
                     </TableRow>
                   ))}
