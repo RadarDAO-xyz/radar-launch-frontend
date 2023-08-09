@@ -20,7 +20,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAccount, useQuery, useWaitForTransaction } from "wagmi";
 import { convertWeiToUsdOrEth } from "../../lib/convertWeiToUsdOrEth";
-import { Markdown } from "../Markdown";
+import { Markdown } from "../Layout/Markdown";
 import { chains } from "../Web3Provider";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";

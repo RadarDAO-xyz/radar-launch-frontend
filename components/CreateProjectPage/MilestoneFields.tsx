@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import { FormControl, FormField, FormItem, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import { TinyMCE } from "../Layout/TinyMCE";
 
 export const MilestoneFields = () => {
   const { control } = useFormContext();
@@ -16,7 +17,7 @@ export const MilestoneFields = () => {
       {fields.map((field, index) => (
         <div key={field.id} className="mb-6">
           <FormField
-            key={field.id}
+            key={field.id + "amount"}
             name={`milestones.${index}.amount`}
             render={({ field }) => (
               <FormItem className="pb-4">
@@ -28,16 +29,24 @@ export const MilestoneFields = () => {
             )}
           />
           <FormField
-            key={field.id}
+            key={field.id + "text"}
             name={`milestones.${index}.text`}
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Textarea {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            render={({ field }) => {
+              const { onChange, ...rest } = field;
+              return (
+                <FormItem>
+                  <FormControl>
+                    <TinyMCE
+                      {...rest}
+                      onEditorChange={(value, editor) => {
+                        onChange(value);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
         </div>
       ))}
