@@ -93,7 +93,7 @@ export function ProjectTabs({
   user,
 }: {
   project: Project;
-  user: User | null;
+  user?: User;
 }) {
   const [currentTab, setCurrentTab] = useState(Tab.COLLECT);
   const [quantity, setQuantity] = useState(1);
