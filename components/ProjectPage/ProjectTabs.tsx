@@ -3,8 +3,10 @@ import {
   GOERLI_CONTRACT_ADDRESS,
   MAINNET_CONTRACT_ADDRESS,
 } from "@/constants/address";
+import { useAuth } from "@/hooks/useAuth";
 import { useGetExchangeRate } from "@/hooks/useGetExchangeRate";
 import { useGetProject } from "@/hooks/useGetProject";
+import { useGetUser } from "@/hooks/useGetUser";
 import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
 import {
   usePrepareRadarEditionsMintEdition,
@@ -23,21 +25,18 @@ import { convertWeiToUsdOrEth } from "../../lib/convertWeiToUsdOrEth";
 import { Markdown } from "../Layout/Markdown";
 import { chains } from "../Web3Provider";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { ContributeForm } from "./ContributeForm";
-import { SignUpForm } from "./SignUpForm";
-import { useGetUser } from "@/hooks/useGetUser";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { useAuth } from "@/hooks/useAuth";
+import { Input } from "../ui/input";
 import { useToast } from "../ui/use-toast";
+import { ContributeForm } from "./ContributeForm";
+import { SignUpForm } from "./SignUpForm";
 
 async function getMintCheckoutLink(
   quantity: number,
@@ -117,7 +116,7 @@ export function ProjectTabs({ id }: { id: string }) {
   const { data: totalSupply } = useRadarEditionsTotalSupply({
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
-    args: [BigInt(Math.max(editionId! || 0, 0))],
+    args: [BigInt(Math.max(editionId || 0, 0))],
     enabled: Boolean(chains[0]?.id) && editionId !== undefined,
   });
   const { config } = usePrepareRadarEditionsMintEdition({
@@ -145,8 +144,8 @@ export function ProjectTabs({ id }: { id: string }) {
   });
 
   const { data: exchangeRateData } = useGetExchangeRate("ETH");
-  const { data } = useGetProject(id.toString());
-  const { data: userData } = useGetUser(data?.founder.toString());
+  const { data: projectData } = useGetProject(id.toString());
+  const { data: userData } = useGetUser(projectData?.founder.toString());
 
   const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
     ["checkout-mint-link", editionId, value, quantity],
@@ -155,9 +154,9 @@ export function ProjectTabs({ id }: { id: string }) {
         quantity,
         editionId,
         (value! + protocolFee!).toString(),
-        data?.title,
-        generateVideoThumbnail(data?.video_url!),
-        data?._id,
+        projectData?.title,
+        generateVideoThumbnail(projectData?.video_url!),
+        projectData?._id,
         userData?.socials?.replace("https://twitter.com/", "")
       ),
     {
@@ -166,7 +165,7 @@ export function ProjectTabs({ id }: { id: string }) {
         value !== undefined &&
         protocolFee !== undefined &&
         currentTab === Tab.COLLECT &&
-        data !== undefined,
+        projectData !== undefined,
     }
   );
 
@@ -341,14 +340,21 @@ export function ProjectTabs({ id }: { id: string }) {
             </Dialog>
 
             <p className="text-center pb-4 pt-8 text-gray-700">
-              {data?.mint_end_date ? (
+              {projectData?.mint_end_date ? (
                 <>
-                  <span>{getCountdown(new Date(data.mint_end_date))}</span>
+                  <span>
+                    {getCountdown(new Date(projectData.mint_end_date))}
+                  </span>
                   <DotIcon className="inline" />
                 </>
               ) : null}
               {totalSupply !== undefined && (
-                <span>{totalSupply.toString()} collected</span>
+                <span>
+                  {(
+                    totalSupply + BigInt(projectData?.supporter_count || 0)
+                  ).toString()}{" "}
+                  supporters
+                </span>
               )}
             </p>
             <Link
@@ -378,8 +384,8 @@ export function ProjectTabs({ id }: { id: string }) {
         <ContributeForm id={id} />
       </TabsContent>
       <TabsContent value={Tab.BENEFITS} className="">
-        {data?.benefits.length ? (
-          data.benefits.filter(Boolean).map((benefit) => (
+        {projectData?.benefits.length ? (
+          projectData.benefits.filter(Boolean).map((benefit) => (
             <div
               key={benefit.text}
               className="mt-4 border rounded-md last:pb-12"
