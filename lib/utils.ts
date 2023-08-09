@@ -13,7 +13,7 @@ export const shortenAddress: (arg0: string) => string = (address) => {
   const start = address.slice(0, 6);
   const end = address.slice(address.length - 4);
   return `${start}...${end}`;
- };
+};
 
 export function getCountdown(date: Date) {
   const today = new Date();
@@ -23,9 +23,13 @@ export function getCountdown(date: Date) {
   const minutesLeft =
     differenceInMinutes(date, today) - daysLeft * 24 * 60 - hoursLeft * 60;
 
-  return `${daysLeft < 10 ? `0${Math.max(daysLeft, 0)}` : daysLeft}d ${
-    hoursLeft < 10 ? `0${Math.max(hoursLeft, 0)}` : hoursLeft
-  }h ${Math.max(30, minutesLeft)}m`;
+  const daysLeftString = daysLeft < 10 ? `0${Math.max(daysLeft, 0)}` : daysLeft;
+  const hoursLeftString =
+    hoursLeft < 10 ? `0${Math.max(hoursLeft, 0)}` : hoursLeft;
+  const minutesLeftString =
+    minutesLeft < 10 ? `0${Math.max(minutesLeft, 0)}` : minutesLeft;
+
+  return `${daysLeftString}d ${hoursLeftString}h ${minutesLeftString}m`;
 }
 
 // Objects and functions copied from "viem" below as there are some errors happening on Netlify functions

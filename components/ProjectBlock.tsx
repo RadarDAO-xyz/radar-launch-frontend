@@ -116,31 +116,30 @@ export function ProjectBlock({
         <div className="_20px-div" />
         <Link
           className={cn(
-            "project-copy",
-            isDisabled ? "pointer-events-none" : ""
+            "project-copy transition-opacity mb-1",
+            isDisabled ? "pointer-events-none" : "hover:opacity-70"
           )}
           href={`/project/${_id}`}
         >
-          <div className="div-block-96">
-            <p className="project-title uppercase leading-4 font-bolded">
-              {title}
-            </p>
-            <div className="arrow-diagonal">{"↗"}</div>
-          </div>
-          <div className="featured-project-bio">
-            <p className="project-byline">
-              {formatDate(new Date(mint_end_date))}
-            </p>
-          </div>
+          <p className="project-title pb-0 uppercase leading-4 font-bolded">
+            {title}
+          </p>
         </Link>
+        <div className="featured-project-bio mb-2">
+          <p className="project-byline">
+            {formatDate(new Date(mint_end_date))}
+          </p>
+        </div>
       </div>
       <div className="bottom-half-of-content">
-        <div className="collect-wrapper">
-          <div className="pt-2 flex border-t w-full border-t-[var(--line-83d2b2f6)] items-center">
+        <div className="collect-wrapper flex-row">
+          <div className="pt-3 flex border-t w-full border-t-[var(--line-83d2b2f6)] items-center">
             {status === ProjectStatus.LIVE ? (
-              <div className="text-center w-full flex justify-between text-xs text-gray-700">
+              <div className="text-center w-full flex gap-3 text-xs text-gray-700">
                 {mint_end_date ? (
-                  <p>{getCountdown(new Date(mint_end_date))}</p>
+                  <p className="border-r pr-3">
+                    {getCountdown(new Date(mint_end_date))}
+                  </p>
                 ) : null}
                 {totalSupply !== undefined && (
                   <p>
@@ -155,6 +154,12 @@ export function ProjectBlock({
               </div>
             )}
           </div>
+          <Link
+            href={`/project/${_id}`}
+            className="arrow-diagonal text-2xl cursor-pointer hover:opacity-60 transition-opacity"
+          >
+            {"↗"}
+          </Link>
         </div>
       </div>
     </div>
