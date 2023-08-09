@@ -14,6 +14,7 @@ import { Project, ProjectStatus } from "@/types/mongo";
 import Link from "next/link";
 import { getCountdown } from "../lib/utils";
 import { chains } from "./Web3Provider";
+import { isValidVideoLink } from "@/lib/isValidVideoLink";
 
 // date formatter to convert dates to DD.MM.YYYY format
 const dateFormatter = new Intl.DateTimeFormat("en-GB", {
@@ -92,13 +93,14 @@ export function ProjectBlock({
         </div>
         <div className="_10px-div" />
         <div className="project-image w-full">
-          {video_url.startsWith("https://") ? (
+          {isValidVideoLink(video_url) ? (
             <iframe
+              frameBorder={0}
               src={generateVideoEmbed(
                 video_url,
-                video_url.includes("vimeo")
-                  ? "?title=0&byline=0&portrait=0&sidedock=0&loop=1"
-                  : ""
+                video_url.startsWith("https://www.youtube")
+                  ? "?controls=0&fs=0&loop=1&modestbranding=1&playsinline=1&iv_load_policy=3"
+                  : "?title=0&byline=0&portrait=0&sidedock=0&loop=1"
               )}
               className="aspect-video w-full"
               allow="autoplay; fullscreen; picture-in-picture"
