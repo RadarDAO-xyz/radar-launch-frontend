@@ -17,6 +17,18 @@ async function updateUser(values: User, idToken: string) {
   return await res.json();
 }
 
+async function updateAvatar(values: any, idToken: string, userId: string) {
+  const res = await fetch(`${process.env.BACKEND_URL}/users/${userId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${idToken}`,
+    },
+    body: JSON.stringify(values),
+  });
+  return await res.json();
+}
+
 // TODO: create separate form schema distinct from User
 export default function UpdateProfile() {
   const { data } = useGetCurrentUser()
@@ -46,8 +58,10 @@ export default function UpdateProfile() {
 
   const uploadFiles = () => {
     const files = getFiles()
+    debugger
     try {
-      updateUser(files[0], idToken)
+      if(data)
+      updateAvatar(files[0], idToken, data?._id)
     } catch (error) {
       console.log(error)
     }
@@ -69,7 +83,7 @@ export default function UpdateProfile() {
           <div>
             <label>Profile Image</label>
             <input className="text-sm italic w-full" type="file" />
-            <button onClick={uploadFiles} className="bg-black text-white rounded leading-10 px-5 mt-4">
+            <button onClick={uploadFiles} type="button" className="bg-black text-white rounded leading-10 px-5 mt-4">
               Upload
             </button>
           </div>
