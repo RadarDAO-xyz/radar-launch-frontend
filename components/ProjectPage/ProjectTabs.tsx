@@ -17,12 +17,12 @@ import {
 } from "@/lib/generated";
 import isTestnet from "@/lib/isTestnet";
 import { cn, getCountdown } from "@/lib/utils";
+import parse from "html-react-parser";
 import { DotIcon, MinusIcon, MoveDown, PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAccount, useQuery, useWaitForTransaction } from "wagmi";
 import { convertWeiToUsdOrEth } from "../../lib/convertWeiToUsdOrEth";
-import { Markdown } from "../Layout/Markdown";
 import { chains } from "../Web3Provider";
 import { Button } from "../ui/button";
 import {
@@ -395,7 +395,7 @@ export function ProjectTabs({ id }: { id: string }) {
                 more editions and get
               </h3>
               <hr />
-              <Markdown className="p-6 px-10">{benefit.text}</Markdown>
+              <div className="p-6 px-10">{parse(benefit.text)}</div>
             </div>
           ))
         ) : (

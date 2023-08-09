@@ -1,4 +1,4 @@
-import { Markdown } from "@/components/Layout/Markdown";
+import { HTMLParsedComponent } from "@/components/Layout/HTMLParsedComponent";
 import { ProjectTabs } from "@/components/ProjectPage/ProjectTabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -101,7 +101,7 @@ export default function IndividualProjectPage() {
                 <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-8">
                   Project TLDR
                 </h3>
-                <Markdown>{data.tldr}</Markdown>
+                <HTMLParsedComponent text={data.tldr} />
               </div>
               <hr />
               <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-8 pt-10">
@@ -112,9 +112,10 @@ export default function IndividualProjectPage() {
                   <h4 className="font-semibold">
                     {index + 1}. {teamMember.name}
                   </h4>
-                  <Markdown className="text-gray-600">
-                    {teamMember.bio}
-                  </Markdown>
+                  <HTMLParsedComponent
+                    className="text-gray-600"
+                    text={teamMember.bio}
+                  />
                 </div>
               ))}
               <hr />
@@ -123,7 +124,7 @@ export default function IndividualProjectPage() {
                   This project is looking for:
                 </h3>
                 {data.collaborators && (
-                  <Markdown>{data.collaborators}</Markdown>
+                  <HTMLParsedComponent text={data.collaborators} />
                 )}
               </div>
               <hr />
@@ -154,7 +155,7 @@ export default function IndividualProjectPage() {
                         )}
                       </TableCell>
                       <TableCell className="border-l">
-                        <Markdown>{milestone.text}</Markdown>
+                        <HTMLParsedComponent text={milestone.text} />
                       </TableCell>
                     </TableRow>
                   ))}
