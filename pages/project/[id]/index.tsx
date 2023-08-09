@@ -1,4 +1,5 @@
 import { Markdown } from "@/components/Markdown";
+import { ProjectTabs } from "@/components/ProjectPage/ProjectTabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,12 +12,10 @@ import {
 } from "@/components/ui/sheet";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getProject, getUser } from "@/lib/backend";
+import { useGetProject } from "@/hooks/useGetProject";
+import { useGetUser } from "@/hooks/useGetUser";
 import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
 import { cn } from "@/lib/utils";
-import { Project, User } from "@/types/mongo";
-import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -25,44 +24,24 @@ enum Tab {
   UPDATES = "TWO",
 }
 
-export const getServerSideProps: GetServerSideProps<{
-  user?: User;
-  project?: Project;
-}> = async (context) => {
-  const { id } = context.query;
-  if (id === undefined) {
-    return {
-      props: { project: undefined, user: undefined },
-    };
-  }
-  const project = await getProject(id.toString());
-  let user: User | undefined;
-
-  if (project?.founder) {
-    user = await getUser(project.founder);
-  }
-
-  return { props: { project, user } };
-};
-
-const ProjectTabsNoSSR = dynamic(
-  () =>
-    import("@/components/ProjectPage/ProjectTabs").then(
-      (mod) => mod.ProjectTabs
-    ),
-  {
-    ssr: false,
-  }
-);
-
-export default function IndividualProjectPage({
-  project,
-  user,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function IndividualProjectPage() {
   const router = useRouter();
   const { id } = router.query;
 
-  if (!id || !project) {
+  const { data, isLoading: isProjectLoading } = useGetProject(id?.toString());
+  const { data: userData, isLoading: isUserLoading } = useGetUser(
+    data?.founder
+  );
+
+  if (isProjectLoading || isUserLoading) {
+    return (
+      <div className="px-[5%] py-20">
+        <h1 className="text-3xl text-center">Loading...</h1>
+      </div>
+    );
+  }
+
+  if (!id || !data) {
     return (
       <div className="px-[5%] py-20">
         <h1 className="text-3xl text-center">No project found</h1>
@@ -75,33 +54,33 @@ export default function IndividualProjectPage({
       <div className="grid grid-cols-1 md:grid-cols-6 px-[5%] bg-white">
         <div className="md:col-span-4 col-span-1 md:pr-10 md:overflow-y-scroll md:max-h-screen">
           <div>
-            {generateVideoEmbed(project?.video_url) !== "" ? (
+            {generateVideoEmbed(data?.video_url) !== "" ? (
               <iframe
                 width={"100%"}
                 className="aspect-video"
-                src={generateVideoEmbed(project?.video_url)}
+                src={generateVideoEmbed(data?.video_url)}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 title="Embedded Project Video"
               />
             ) : (
-              <div>Invalid project video submitted, {project.video_url}</div>
+              <div>Invalid project video submitted, {data.video_url}</div>
             )}
           </div>
           <div className="text-normal pt-10 pb-4 text-gray-400">
-            The Brief: <span className="font-semibold">{project.brief}</span>
+            The Brief: <span className="font-semibold">{data.brief}</span>
           </div>
-          <h2 className="text-3xl pb-4 font-base">{project.title}</h2>
+          <h2 className="text-3xl pb-4 font-base">{data.title}</h2>
           <hr />
           <p className="text-normal pt-4 pb-4 text-gray-500">
-            {project.description}
+            {data.description}
           </p>
-          {project.tags?.length > 0 && (
+          {data.tags?.length > 0 && (
             <div className="flex flex-wrap gap-2 pb-8">
               <Badge className="bg-gray-600 hover:bg-gray-600 text-gray-200 text-sm px-4 py-1">
                 A More Play-Full Future
               </Badge>
-              {project.tags.map((tag) => (
+              {data.tags.map((tag) => (
                 <Badge
                   variant="secondary"
                   key={tag}
@@ -122,13 +101,13 @@ export default function IndividualProjectPage({
                 <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-8">
                   Project TLDR
                 </h3>
-                <Markdown>{project.tldr}</Markdown>
+                <Markdown>{data.tldr}</Markdown>
               </div>
               <hr />
               <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-8 pt-10">
                 Who is the team executing on this project
               </h3>
-              {project.team.map((teamMember, index) => (
+              {data.team.map((teamMember, index) => (
                 <div key={teamMember.name} className="space-y-2 pb-4 last:pb-8">
                   <h4 className="font-semibold">
                     {index + 1}. {teamMember.name}
@@ -143,8 +122,8 @@ export default function IndividualProjectPage({
                 <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-4">
                   This project is looking for:
                 </h3>
-                {project.collaborators && (
-                  <Markdown>{project.collaborators}</Markdown>
+                {data.collaborators && (
+                  <Markdown>{data.collaborators}</Markdown>
                 )}
               </div>
               <hr />
@@ -153,7 +132,7 @@ export default function IndividualProjectPage({
               </h3>
               <Table>
                 <TableBody>
-                  {project?.milestones.map((milestone, index) => (
+                  {data?.milestones.map((milestone, index) => (
                     <TableRow key={milestone.text}>
                       <TableCell
                         className={cn(
@@ -191,30 +170,30 @@ export default function IndividualProjectPage({
           <div className="flex space-x-2 pb-4">
             <Avatar className="w-12 h-12">
               <AvatarImage
-                src={user?.profile || "/default-avatar.png"}
+                src={userData?.profile || "/default-avatar.png"}
                 className="object-contain"
                 alt="avatar"
               />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <div className="flex items-center">
-              {user?.socials ? (
+              {userData?.socials ? (
                 <Link
-                  href={user.socials}
+                  href={userData.socials}
                   target="_blank"
                   className="text-[16px] hover:underline"
                 >
-                  {user?.name}
+                  {userData?.name}
                 </Link>
               ) : (
-                <p className="text-[16px]">{user?.name}</p>
+                <p className="text-[16px]">{userData?.name}</p>
               )}
             </div>
           </div>
           <hr />
 
           <div className="pt-4 pb-4">
-            <ProjectTabsNoSSR key={project._id} project={project} user={user} />
+            <ProjectTabs id={id.toString()} />
           </div>
         </div>
       </div>
@@ -227,23 +206,19 @@ export default function IndividualProjectPage({
             <div className="flex space-x-2 pb-4">
               <Avatar className="w-12 h-12">
                 <AvatarImage
-                  src={user?.profile || "/default-avatar.png"}
+                  src={userData?.profile || "/default-avatar.png"}
                   className="object-contain"
                   alt="avatar"
                 />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
               <div className="flex items-center">
-                <p className="text-[16px]">{user?.name}</p>
+                <p className="text-[16px]">{userData?.name}</p>
               </div>
             </div>
             <hr />
             <div>
-              <ProjectTabsNoSSR
-                key={project._id}
-                project={project}
-                user={user}
-              />
+              <ProjectTabs id={id.toString()} />
             </div>
             <SheetFooter className="w-full py-6">
               <SheetClose asChild>
