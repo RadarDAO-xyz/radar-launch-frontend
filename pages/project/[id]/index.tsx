@@ -1,4 +1,4 @@
-import { Markdown } from "@/components/Markdown";
+import { HTMLParsedComponent } from "@/components/Layout/HTMLParsedComponent";
 import { ProjectTabs } from "@/components/ProjectPage/ProjectTabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +15,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetProject } from "@/hooks/useGetProject";
 import { useGetUser } from "@/hooks/useGetUser";
 import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
+import { isValidVideoLink } from "@/lib/isValidVideoLink";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -54,11 +55,17 @@ export default function IndividualProjectPage() {
       <div className="grid grid-cols-1 md:grid-cols-6 px-[5%] bg-white">
         <div className="md:col-span-4 col-span-1 md:pr-10 md:overflow-y-scroll md:max-h-screen">
           <div>
-            {generateVideoEmbed(data?.video_url) !== "" ? (
+            {isValidVideoLink(data?.video_url || "") ? (
               <iframe
                 width={"100%"}
                 className="aspect-video"
-                src={generateVideoEmbed(data?.video_url)}
+                frameBorder={0}
+                src={generateVideoEmbed(
+                  data?.video_url,
+                  data?.video_url.includes("youtube")
+                    ? "?controls=0&fs=0&loop=1&modestbranding=1&playsinline=1&iv_load_policy=3"
+                    : ""
+                )}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 title="Embedded Project Video"
@@ -72,9 +79,10 @@ export default function IndividualProjectPage() {
           </div>
           <h2 className="text-3xl pb-4 font-base">{data.title}</h2>
           <hr />
-          <p className="text-normal pt-4 pb-4 text-gray-500">
-            {data.description}
-          </p>
+          <HTMLParsedComponent
+            className="text-normal pt-4 pb-4 text-gray-500"
+            text={data.description}
+          />
           {data.tags?.length > 0 && (
             <div className="flex flex-wrap gap-2 pb-8">
               <Badge className="bg-gray-600 hover:bg-gray-600 text-gray-200 text-sm px-4 py-1">
@@ -101,7 +109,7 @@ export default function IndividualProjectPage() {
                 <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-8">
                   Project TLDR
                 </h3>
-                <Markdown>{data.tldr}</Markdown>
+                <HTMLParsedComponent text={data.tldr} />
               </div>
               <hr />
               <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-8 pt-10">
@@ -112,9 +120,10 @@ export default function IndividualProjectPage() {
                   <h4 className="font-semibold">
                     {index + 1}. {teamMember.name}
                   </h4>
-                  <Markdown className="text-gray-600">
-                    {teamMember.bio}
-                  </Markdown>
+                  <HTMLParsedComponent
+                    className="text-gray-600"
+                    text={teamMember.bio}
+                  />
                 </div>
               ))}
               <hr />
@@ -123,7 +132,7 @@ export default function IndividualProjectPage() {
                   This project is looking for:
                 </h3>
                 {data.collaborators && (
-                  <Markdown>{data.collaborators}</Markdown>
+                  <HTMLParsedComponent text={data.collaborators} />
                 )}
               </div>
               <hr />
@@ -154,7 +163,7 @@ export default function IndividualProjectPage() {
                         )}
                       </TableCell>
                       <TableCell className="border-l">
-                        <Markdown>{milestone.text}</Markdown>
+                        <HTMLParsedComponent text={milestone.text} />
                       </TableCell>
                     </TableRow>
                   ))}
@@ -198,7 +207,7 @@ export default function IndividualProjectPage() {
         </div>
       </div>
       <div className="md:hidden bottom-0 px-[5%] border py-4 bg-white sticky">
-        <Sheet>
+        <Sheet modal={false}>
           <SheetTrigger asChild>
             <Button className="w-full">SUPPORT</Button>
           </SheetTrigger>

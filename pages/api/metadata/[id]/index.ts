@@ -8,7 +8,10 @@ import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
 import isTestnet from "@/lib/isTestnet";
 import { ethers } from "ethers";
 import { NextApiRequest, NextApiResponse } from "next";
+import TurndownService from "turndown";
 import { optimism, optimismGoerli } from "wagmi/chains";
+
+const turndownService = new TurndownService();
 
 export default async function handler(
   req: NextApiRequest,
@@ -39,9 +42,9 @@ export default async function handler(
     }
     return res.status(200).json({
       name: project.title,
-      image: generateVideoThumbnail(project.video_url),
-      description: project.description,
-      external_url: `https://radarlaunch.app/projects/${id}`,
+      image: project.thumbnail || generateVideoThumbnail(project.video_url),
+      description: turndownService.turndown(project.description),
+      external_url: `https://radarlaunch.app/project/${id}`,
       attributes: project.tags.map((tag) => ({
         trait_type: "Future of:",
         value: tag,

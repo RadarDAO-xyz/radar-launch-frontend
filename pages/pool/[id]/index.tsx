@@ -1,5 +1,5 @@
-import { FundingPoolProjectHeader } from "@/devlink";
-import { ReadyToLaunchComponent } from "@/devlink/ReadyToLaunchComponent";
+import { ReadyToLaunchComponent } from "@/components/PoolPage/ReadyToLaunchComponent";
+import { FundingPoolProjectHeader } from "@/components/PoolPage/FundingPoolProjectHeader";
 
 export default function PoolPage() {
   return (

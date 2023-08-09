@@ -3,28 +3,40 @@ import {
   GOERLI_CONTRACT_ADDRESS,
   MAINNET_CONTRACT_ADDRESS,
 } from "@/constants/address";
+import { useAuth } from "@/hooks/useAuth";
 import { useGetExchangeRate } from "@/hooks/useGetExchangeRate";
 import { useGetProject } from "@/hooks/useGetProject";
+import { useGetUser } from "@/hooks/useGetUser";
 import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
 import {
+  usePrepareRadarEditionsMintEdition,
   useRadarEditionsGetEditions,
+  useRadarEditionsMintEdition,
   useRadarEditionsProtocolFee,
   useRadarEditionsTotalSupply,
 } from "@/lib/generated";
 import isTestnet from "@/lib/isTestnet";
 import { cn, getCountdown } from "@/lib/utils";
+import parse from "html-react-parser";
 import { DotIcon, MinusIcon, MoveDown, PlusIcon } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
-import { useQuery } from "wagmi";
+import { useEffect, useState } from "react";
+import { useAccount, useQuery, useWaitForTransaction } from "wagmi";
 import { convertWeiToUsdOrEth } from "../../lib/convertWeiToUsdOrEth";
-import { Markdown } from "../Markdown";
 import { chains } from "../Web3Provider";
 import { Button } from "../ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 import { Input } from "../ui/input";
+import { useToast } from "../ui/use-toast";
 import { ContributeForm } from "./ContributeForm";
 import { SignUpForm } from "./SignUpForm";
-import { useGetUser } from "@/hooks/useGetUser";
 
 async function getMintCheckoutLink(
   quantity: number,
@@ -78,6 +90,12 @@ enum Tab {
 }
 
 export function ProjectTabs({ id }: { id: string }) {
+  const [currentTab, setCurrentTab] = useState(Tab.COLLECT);
+  const [quantity, setQuantity] = useState(1);
+  const [hasToasted, setHasToasted] = useState(false);
+
+  const { address } = useAccount();
+  const { login, isLoggedIn } = useAuth();
   const { data: onChainProjects } = useRadarEditionsGetEditions({
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
@@ -98,15 +116,36 @@ export function ProjectTabs({ id }: { id: string }) {
   const { data: totalSupply } = useRadarEditionsTotalSupply({
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
-    args: [BigInt(Math.max(editionId!, 0))],
+    args: [BigInt(Math.max(editionId || 0, 0))],
     enabled: Boolean(chains[0]?.id) && editionId !== undefined,
   });
-  const { data: exchangeRateData } = useGetExchangeRate("ETH");
-  const { data } = useGetProject(id.toString());
-  const { data: userData } = useGetUser(data?.founder.toString());
+  const { config } = usePrepareRadarEditionsMintEdition({
+    account: address,
+    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    chainId: chains[0]?.id,
+    args: [
+      BigInt(editionId || 0),
+      BigInt(quantity),
+      address!,
+      "0x0000000000000000000000000000000000000000000000000000000000000000",
+    ],
+    value: BigInt((value || 0n) + (protocolFee || 0n)) * BigInt(quantity),
+    enabled:
+      value !== undefined &&
+      editionId !== undefined &&
+      address !== undefined &&
+      isLoggedIn,
+  });
+  const { data: mintEditionData, writeAsync } =
+    useRadarEditionsMintEdition(config);
+  const { isLoading, isSuccess } = useWaitForTransaction({
+    hash: mintEditionData?.hash,
+    enabled: mintEditionData?.hash !== undefined,
+  });
 
-  const [currentTab, setCurrentTab] = useState(Tab.COLLECT);
-  const [quantity, setQuantity] = useState(1);
+  const { data: exchangeRateData } = useGetExchangeRate("ETH");
+  const { data: projectData } = useGetProject(id.toString());
+  const { data: userData } = useGetUser(projectData?.founder.toString());
 
   const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
     ["checkout-mint-link", editionId, value, quantity],
@@ -115,9 +154,9 @@ export function ProjectTabs({ id }: { id: string }) {
         quantity,
         editionId,
         (value! + protocolFee!).toString(),
-        data?.title,
-        generateVideoThumbnail(data?.video_url!),
-        data?._id,
+        projectData?.title,
+        generateVideoThumbnail(projectData?.video_url!),
+        projectData?._id,
         userData?.socials?.replace("https://twitter.com/", "")
       ),
     {
@@ -126,9 +165,30 @@ export function ProjectTabs({ id }: { id: string }) {
         value !== undefined &&
         protocolFee !== undefined &&
         currentTab === Tab.COLLECT &&
-        data !== undefined,
+        projectData !== undefined,
     }
   );
+
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (isLoading && mintEditionData?.hash) {
+      toast({
+        title: "Transaction sent!",
+        description: "Awaiting for confirmation...",
+      });
+    }
+  }, [isLoading, mintEditionData?.hash]);
+
+  useEffect(() => {
+    if (isSuccess && mintEditionData?.hash && !hasToasted) {
+      toast({
+        title: "Success!",
+        description: "Your NFT has been minted!",
+      });
+      setHasToasted(true);
+    }
+  }, [isSuccess, mintEditionData?.hash]);
 
   return (
     <Tabs
@@ -231,25 +291,70 @@ export function ProjectTabs({ id }: { id: string }) {
                 <PlusIcon />
               </Button>
             </div>
-            <Button
-              className={cn(
-                "w-full",
-                !checkoutLink ? "pointer-events-none bg-gray-600" : ""
-              )}
-              asChild
-              disabled={!checkoutLink || isCheckoutLinkLoading}
-            >
-              <Link href={checkoutLink || ""}>COLLECT</Link>
-            </Button>
+            <Dialog modal={false}>
+              <DialogTrigger asChild>
+                <Button className="w-full">COLLECT</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>
+                    Collect with your credit card or wallet
+                  </DialogTitle>
+                </DialogHeader>
+                <DialogFooter>
+                  <div className="flex flex-col gap-2 w-full">
+                    <Button
+                      className={cn(
+                        "w-full",
+                        !checkoutLink ? "pointer-events-none bg-gray-600" : ""
+                      )}
+                      variant="ghost"
+                      asChild
+                      disabled={!checkoutLink || isCheckoutLinkLoading}
+                    >
+                      <Link href={checkoutLink || ""}>
+                        Collect with Card / ETH
+                      </Link>
+                    </Button>
+                    <Button
+                      className="w-full"
+                      onClick={() => {
+                        if (!isLoggedIn) {
+                          login();
+                        } else {
+                          try {
+                            writeAsync?.();
+                            setHasToasted(false);
+                          } catch (e) {
+                            // prevent error from crashing the app
+                            console.log(e);
+                          }
+                        }
+                      }}
+                    >
+                      Collect with Optimism {!isLoggedIn ? "(sign in)" : ""}
+                    </Button>
+                  </div>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+
             <p className="text-center pb-4 pt-8 text-gray-700">
-              {data?.mint_end_date ? (
+              {projectData?.mint_end_date ? (
                 <>
-                  <span>{getCountdown(new Date(data.mint_end_date))}</span>
+                  <span>
+                    {getCountdown(new Date(projectData.mint_end_date))}
+                  </span>
                   <DotIcon className="inline" />
                 </>
               ) : null}
               {totalSupply !== undefined && (
-                <span>{totalSupply.toString()} collected</span>
+                <span>
+                  {(
+                    totalSupply + BigInt(projectData?.supporter_count || 0)
+                  ).toString()}{" "}
+                  supporters
+                </span>
               )}
             </p>
             <Link
@@ -279,8 +384,8 @@ export function ProjectTabs({ id }: { id: string }) {
         <ContributeForm id={id} />
       </TabsContent>
       <TabsContent value={Tab.BENEFITS} className="">
-        {data?.benefits.length ? (
-          data.benefits.filter(Boolean).map((benefit) => (
+        {projectData?.benefits.length ? (
+          projectData.benefits.filter(Boolean).map((benefit) => (
             <div
               key={benefit.text}
               className="mt-4 border rounded-md last:pb-12"
@@ -290,7 +395,7 @@ export function ProjectTabs({ id }: { id: string }) {
                 more editions and get
               </h3>
               <hr />
-              <Markdown className="p-6 px-10">{benefit.text}</Markdown>
+              <div className="p-6 px-10">{parse(benefit.text)}</div>
             </div>
           ))
         ) : (

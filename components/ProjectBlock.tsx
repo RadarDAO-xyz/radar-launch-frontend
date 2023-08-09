@@ -1,22 +1,20 @@
-import { cn } from "@/lib/utils";
-import Link from "next/link";
-import HoverVideoPlayer from "react-hover-video-player";
-import { getCountdown } from "../lib/utils";
-import { Project, ProjectStatus } from "@/types/mongo";
-import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
-import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
-import { generateHoverVideoLink } from "@/lib/generateHoverVideoLink";
-import { DotIcon } from "lucide-react";
 import {
   GOERLI_CONTRACT_ADDRESS,
   MAINNET_CONTRACT_ADDRESS,
 } from "@/constants/address";
+import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
+import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
 import {
   useRadarEditionsGetEditions,
   useRadarEditionsTotalSupply,
 } from "@/lib/generated";
 import isTestnet from "@/lib/isTestnet";
+import { cn } from "@/lib/utils";
+import { Project, ProjectStatus } from "@/types/mongo";
+import Link from "next/link";
+import { getCountdown } from "../lib/utils";
 import { chains } from "./Web3Provider";
+import { isValidVideoLink } from "@/lib/isValidVideoLink";
 
 // date formatter to convert dates to DD.MM.YYYY format
 const dateFormatter = new Intl.DateTimeFormat("en-GB", {
@@ -71,7 +69,7 @@ export function ProjectBlock({
   const { data: totalSupply } = useRadarEditionsTotalSupply({
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
-    args: [BigInt(Math.max(editionId!, 0))],
+    args: [BigInt(Math.max(editionId! || 0, 0))],
     enabled: Boolean(chains[0]?.id) && editionId !== undefined,
   });
 
@@ -95,13 +93,14 @@ export function ProjectBlock({
         </div>
         <div className="_10px-div" />
         <div className="project-image w-full">
-          {video_url.startsWith("https://") ? (
+          {isValidVideoLink(video_url) ? (
             <iframe
+              frameBorder={0}
               src={generateVideoEmbed(
                 video_url,
-                video_url.includes("vimeo")
-                  ? "?title=0&byline=0&portrait=0&sidedock=0&loop=1"
-                  : ""
+                video_url.startsWith("https://www.youtube")
+                  ? "?controls=0&fs=0&loop=1&modestbranding=1&playsinline=1&iv_load_policy=3"
+                  : "?title=0&byline=0&portrait=0&sidedock=0&loop=1"
               )}
               className="aspect-video w-full"
               allow="autoplay; fullscreen; picture-in-picture"
@@ -119,34 +118,36 @@ export function ProjectBlock({
         <div className="_20px-div" />
         <Link
           className={cn(
-            "project-copy",
-            isDisabled ? "pointer-events-none" : ""
+            "project-copy transition-opacity mb-1",
+            isDisabled ? "pointer-events-none" : "hover:opacity-70"
           )}
           href={`/project/${_id}`}
         >
-          <div className="div-block-96">
-            <p className="project-title uppercase leading-4 font-bolded">
-              {title}
-            </p>
-            <div className="arrow-diagonal">{"↗"}</div>
-          </div>
-          <div className="featured-project-bio">
-            <p className="project-byline">
-              {formatDate(new Date(mint_end_date))}
-            </p>
-          </div>
+          <p className="project-title pb-0 uppercase leading-4 font-bolded">
+            {title}
+          </p>
         </Link>
+        <div className="featured-project-bio mb-2">
+          <p className="project-byline">
+            {formatDate(new Date(mint_end_date))}
+          </p>
+        </div>
       </div>
       <div className="bottom-half-of-content">
-        <div className="collect-wrapper">
-          <div className="pt-2 flex border-t w-full border-t-[var(--line-83d2b2f6)] items-center">
+        <div className="collect-wrapper flex-row">
+          <div className="pt-3 flex border-t w-full border-t-[var(--line-83d2b2f6)] items-center">
             {status === ProjectStatus.LIVE ? (
-              <div className="text-center w-full flex justify-between text-xs text-gray-700">
+              <div className="text-center w-full flex gap-3 text-xs text-gray-700">
                 {mint_end_date ? (
-                  <p>{getCountdown(new Date(mint_end_date))}</p>
+                  <p className="border-r pr-3">
+                    {getCountdown(new Date(mint_end_date))}
+                  </p>
                 ) : null}
                 {totalSupply !== undefined && (
-                  <p>{totalSupply.toString()} collected</p>
+                  <p>
+                    {(totalSupply + BigInt(supporter_count || 0)).toString()}{" "}
+                    supporters
+                  </p>
                 )}
               </div>
             ) : (
@@ -155,6 +156,12 @@ export function ProjectBlock({
               </div>
             )}
           </div>
+          <Link
+            href={`/project/${_id}`}
+            className="arrow-diagonal text-2xl cursor-pointer hover:opacity-60 transition-opacity"
+          >
+            {"↗"}
+          </Link>
         </div>
       </div>
     </div>

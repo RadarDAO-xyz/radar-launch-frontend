@@ -87,6 +87,26 @@
   .react-markdown ul {
     @apply -mt-6 -mb-3 -space-y-2
   }
+
+  #w3a-parent-container {
+    z-index: 99999999 !important;
+  }
+
+  .html-parse p {
+    @apply mb-5
+  }
+
+  .html-parse ul {
+    @apply mb-3
+  }
+
+  .html-parse li {
+    @apply mb-2
+  }
+
+  .html-parse a {
+    @apply underline
+  }
 }
 
 h1 {

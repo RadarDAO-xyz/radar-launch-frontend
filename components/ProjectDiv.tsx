@@ -1,4 +1,3 @@
-import { _Builtin } from "@/devlink";
 import React, { ReactNode } from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
@@ -28,7 +27,7 @@ export function ProjectDiv({
         )}
         <div className="_10px-div" />
         {projectSectionDescription && (
-          <div className="div-block-103 pb-8 flex md:flex-row items-center flex-col self-end md:space-y-0 space-y-4 space-x-2">
+          <div className="div-block-103 pb-8 flex md:flex-row items-center flex-col self-end md:space-y-0 space-y-4 space-x-0">
             <p className="body-text left">
               {projectSectionDescription}
               <br />

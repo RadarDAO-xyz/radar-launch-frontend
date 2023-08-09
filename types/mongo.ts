@@ -32,7 +32,7 @@ export type Project = {
     start: string; // ISO Datestring
     end: string; // ISO Datestring
   };
-  project_image?: string;
+  thumbnail?: string;
 };
 
 export type Pool = {

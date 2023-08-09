@@ -1,6 +1,7 @@
 import { FundingPoolHome } from "@/components/FundingPoolHome";
+import { HeaderHero } from "@/components/HomePage/HeaderHero";
+import { InspirationFooter } from "@/components/HomePage/InspirationFooter";
 import { ProjectDiv } from "@/components/ProjectDiv";
-import { HeaderHero, InspirationFooter } from "@/devlink";
 import { useGetProjects } from "@/hooks/useGetProjects";
 import dynamic from "next/dynamic";
 
@@ -13,8 +14,8 @@ const ProjectBlockNoSSR = dynamic(
 
 const VisionOfTheWeekProjectNoSSR = dynamic(
   () =>
-    import("@/devlink/VisionOfTheWeekProject").then(
-      (res) => res.VisionOfTheWeekProject
+    import("@/components/HomePage/VisionOfTheWeek").then(
+      (res) => res.VisionOfTheWeek
     ),
   {
     ssr: false,
@@ -25,17 +26,6 @@ const FEATURED_PROJECT_ID = "64d10e4fa67c3abf0508808c";
 
 export default function HomePage() {
   const { data } = useGetProjects();
-
-  console.log({
-    data,
-    asd: data?.filter(
-      (project) =>
-        project.curation?.start &&
-        new Date(project.curation.start) <= new Date() &&
-        // if no curation end date, show it indefinitely
-        (!project.curation?.end || new Date(project.curation.end) >= new Date())
-    ),
-  });
 
   return (
     <section className="mt-[80px]">

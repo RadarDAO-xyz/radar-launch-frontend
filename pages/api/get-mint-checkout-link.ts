@@ -63,6 +63,7 @@ export default async function handler(
           },
           payment: { currency: "ETH", value: `${ethValue} * $QUANTITY` },
         },
+        hideNativeMint: true,
         // contractArgs: "string",
         feeBearer: "BUYER",
         sendEmailOnTransferSucceeded: true,

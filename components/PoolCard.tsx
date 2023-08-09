@@ -2,6 +2,7 @@ import { cn, getCountdown } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
+import dynamic from "next/dynamic";
 
 interface Props {
   title: string;
@@ -9,6 +10,10 @@ interface Props {
   projectSubmitted: number;
   dropDate?: Date;
 }
+
+const PoolCardFooterNoSSR = dynamic(() => Promise.resolve(PoolCardFooter), {
+  ssr: false,
+});
 
 export function PoolCard({
   title,
@@ -28,7 +33,12 @@ export function PoolCard({
           dropDate ? "grayscale" : ""
         )}
       />
-      <h2 className={cn("text-xl text-center pt-4", dropDate ? "text-gray-400" : "")}>
+      <h2
+        className={cn(
+          "text-xl text-center pt-4",
+          dropDate ? "text-gray-400" : ""
+        )}
+      >
         {title}
       </h2>
       <div className="flex justify-between w-full space-y-2 md:space-y-0 md:space-x-2 pt-2 px-2 flex-col md:flex-row">
@@ -57,17 +67,7 @@ export function PoolCard({
           </div>
         </div>
       </div>
-      <div className="w-full pt-6">
-        {dropDate === undefined ? (
-          <Button className={"w-full"} asChild>
-            <Link href="/pool">SEE POOL</Link>
-          </Button>
-        ) : (
-          <Button disabled className="w-full text-gray-500" variant={"ghost"}>
-            BRIEF DROPPING IN {getCountdown(dropDate)}
-          </Button>
-        )}
-      </div>
+      <PoolCardFooterNoSSR dropDate={dropDate} />
       <Image
         className="sponsor-image _50 floating"
         loading="lazy"
@@ -84,6 +84,22 @@ export function PoolCard({
         height={77}
         src="/hand.jpg"
       />
+    </div>
+  );
+}
+
+function PoolCardFooter({ dropDate }: { dropDate?: Date }) {
+  return (
+    <div className="w-full pt-6">
+      {dropDate === undefined ? (
+        <Button className={"w-full"} asChild>
+          <Link href="/pool">SEE POOL</Link>
+        </Button>
+      ) : (
+        <Button disabled className="w-full text-gray-500" variant={"ghost"}>
+          BRIEF DROPPING IN {getCountdown(dropDate)}
+        </Button>
+      )}
     </div>
   );
 }

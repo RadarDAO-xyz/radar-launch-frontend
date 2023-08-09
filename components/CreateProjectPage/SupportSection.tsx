@@ -10,6 +10,7 @@ import {
 import { Textarea } from "../ui/textarea";
 import { createFormSchema } from "@/pages/project/create";
 import * as z from "zod";
+import { TinyMCE } from "../Layout/TinyMCE";
 
 export function SupportSection() {
   const { control } = useFormContext<z.infer<typeof createFormSchema>>();
@@ -32,20 +33,28 @@ export function SupportSection() {
           <FormField
             control={control}
             name="collaborators"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  {"List the collaborators you're looking for"}
-                </FormLabel>
-                <FormControl>
-                  <Textarea {...field} />
-                </FormControl>
-                <FormDescription>
-                  {"Leave blank if you don't need any collaborators"}
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
+            render={({ field }) => {
+              const { onChange, ...rest } = field;
+              return (
+                <FormItem>
+                  <FormLabel>
+                    {"List the collaborators you're looking for"}
+                  </FormLabel>
+                  <FormControl>
+                    <TinyMCE
+                      {...rest}
+                      onEditorChange={(value, editor) => {
+                        onChange(value);
+                      }}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    {"Leave blank if you don't need any collaborators"}
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
         </div>
       </div>
