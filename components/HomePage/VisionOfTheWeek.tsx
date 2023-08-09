@@ -10,7 +10,7 @@ import {
   useRadarEditionsTotalSupply,
 } from "@/lib/generated";
 import isTestnet from "@/lib/isTestnet";
-import { getCountdown } from "@/lib/utils";
+import { cn, getCountdown } from "@/lib/utils";
 import { ProjectStatus } from "@/types/mongo";
 import Link from "next/link";
 import HoverVideoPlayer from "react-hover-video-player";
@@ -109,7 +109,7 @@ export function VisionOfTheWeek({ projectId }: Props) {
               )}
             </div>
             <Link
-              className="arrow-diagonal text-3xl cursor-pointer hover:opacity-60 transition-opacity"
+              className={cn("arrow-diagonal text-3xl cursor-pointer hover:opacity-60 transition-opacity", data?.status)}
               href={`/project/${projectId}`}
             >
               ↗
