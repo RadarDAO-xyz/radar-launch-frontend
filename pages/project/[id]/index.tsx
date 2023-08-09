@@ -26,23 +26,31 @@ enum Tab {
 }
 
 export const getServerSideProps: GetServerSideProps<{
-  user?: User;
-  project?: Project;
+  user: User | null;
+  project: Project | null;
 }> = async (context) => {
   const { id } = context.query;
+  let project: Project | null = null;
+  let user: User | null = null;
   if (id === undefined) {
     return {
-      props: { project: undefined, user: undefined },
+      props: { project, user },
     };
   }
-  const project = await getProject(id.toString());
-  let user: User | undefined;
+  try {
+    project = await getProject(id.toString());
 
-  if (project?.founder) {
-    user = await getUser(project.founder);
+    if (project?.founder) {
+      user = await getUser(project.founder);
+    }
+
+    return { props: { project, user } };
+  } catch (e) {
+    console.error(e);
+    return {
+      props: { project, user },
+    };
   }
-
-  return { props: { project, user } };
 };
 
 const ProjectTabsNoSSR = dynamic(
@@ -62,7 +70,7 @@ export default function IndividualProjectPage({
   const router = useRouter();
   const { id } = router.query;
 
-  if (!id || !project) {
+  if (!id || project === null) {
     return (
       <div className="px-[5%] py-20">
         <h1 className="text-3xl text-center">No project found</h1>

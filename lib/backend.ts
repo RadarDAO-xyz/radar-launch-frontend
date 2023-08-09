@@ -40,7 +40,7 @@ export async function getCurrentUser(idToken: string): Promise<User> {
   return response.json();
 }
 
-export async function getProject(id: string): Promise<Project | undefined> {
+export async function getProject(id: string): Promise<Project> {
   const response = await fetch(`${process.env.BACKEND_URL}/projects/${id}`);
 
   if (!response.ok) {
