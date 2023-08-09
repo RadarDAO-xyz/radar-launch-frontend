@@ -117,7 +117,7 @@ export function ProjectTabs({ id }: { id: string }) {
   const { data: totalSupply } = useRadarEditionsTotalSupply({
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
-    args: [BigInt(Math.max(editionId!, 0))],
+    args: [BigInt(Math.max(editionId! || 0, 0))],
     enabled: Boolean(chains[0]?.id) && editionId !== undefined,
   });
   const { config } = usePrepareRadarEditionsMintEdition({
