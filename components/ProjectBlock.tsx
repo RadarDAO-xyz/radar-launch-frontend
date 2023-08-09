@@ -143,7 +143,10 @@ export function ProjectBlock({
                   <p>{getCountdown(new Date(mint_end_date))}</p>
                 ) : null}
                 {totalSupply !== undefined && (
-                  <p>{totalSupply.toString()} collected</p>
+                  <p>
+                    {(totalSupply + BigInt(supporter_count || 0)).toString()}{" "}
+                    supporters
+                  </p>
                 )}
               </div>
             ) : (
