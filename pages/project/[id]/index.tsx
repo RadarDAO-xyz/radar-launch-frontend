@@ -72,9 +72,10 @@ export default function IndividualProjectPage() {
           </div>
           <h2 className="text-3xl pb-4 font-base">{data.title}</h2>
           <hr />
-          <p className="text-normal pt-4 pb-4 text-gray-500">
-            {data.description}
-          </p>
+          <HTMLParsedComponent
+            className="text-normal pt-4 pb-4 text-gray-500"
+            text={data.description}
+          />
           {data.tags?.length > 0 && (
             <div className="flex flex-wrap gap-2 pb-8">
               <Badge className="bg-gray-600 hover:bg-gray-600 text-gray-200 text-sm px-4 py-1">
