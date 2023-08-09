@@ -44,6 +44,20 @@ export default function UpdateProfile() {
     }
   };
 
+  const uploadFiles = () => {
+    const files = getFiles()
+    try {
+      updateUser(files[0], idToken)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  function getFiles () {
+    const fileInput:any = document.querySelector('input[type="file"]')
+    return fileInput?.files
+  }
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -55,7 +69,7 @@ export default function UpdateProfile() {
           <div>
             <label>Profile Image</label>
             <input className="text-sm italic w-full" type="file" />
-            <button className="bg-black text-white rounded leading-10 px-5 mt-4">
+            <button onClick={uploadFiles} className="bg-black text-white rounded leading-10 px-5 mt-4">
               Upload
             </button>
           </div>
