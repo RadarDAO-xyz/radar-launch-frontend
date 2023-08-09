@@ -3,8 +3,8 @@ import {
   GOERLI_CONTRACT_ADDRESS,
   MAINNET_CONTRACT_ADDRESS,
 } from "@/constants/address";
+import { useAuth } from "@/hooks/useAuth";
 import { useGetExchangeRate } from "@/hooks/useGetExchangeRate";
-import { useGetProject } from "@/hooks/useGetProject";
 import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
 import {
   usePrepareRadarEditionsMintEdition,
@@ -15,6 +15,7 @@ import {
 } from "@/lib/generated";
 import isTestnet from "@/lib/isTestnet";
 import { cn, getCountdown } from "@/lib/utils";
+import { Project, User } from "@/types/mongo";
 import { DotIcon, MinusIcon, MoveDown, PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -23,21 +24,18 @@ import { convertWeiToUsdOrEth } from "../../lib/convertWeiToUsdOrEth";
 import { Markdown } from "../Markdown";
 import { chains } from "../Web3Provider";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { ContributeForm } from "./ContributeForm";
-import { SignUpForm } from "./SignUpForm";
-import { useGetUser } from "@/hooks/useGetUser";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { useAuth } from "@/hooks/useAuth";
+import { Input } from "../ui/input";
 import { useToast } from "../ui/use-toast";
+import { ContributeForm } from "./ContributeForm";
+import { SignUpForm } from "./SignUpForm";
 
 async function getMintCheckoutLink(
   quantity: number,
@@ -90,7 +88,13 @@ enum Tab {
   BENEFITS = "benefits",
 }
 
-export function ProjectTabs({ id }: { id: string }) {
+export function ProjectTabs({
+  project,
+  user,
+}: {
+  project: Project;
+  user?: User;
+}) {
   const [currentTab, setCurrentTab] = useState(Tab.COLLECT);
   const [quantity, setQuantity] = useState(1);
   const [hasToasted, setHasToasted] = useState(false);
@@ -109,7 +113,7 @@ export function ProjectTabs({ id }: { id: string }) {
   });
 
   const editionId: number | undefined = onChainProjects?.findIndex(
-    (project) => project.id === id
+    (onChainProject) => onChainProject.id === project._id
   );
   const value =
     editionId !== undefined ? onChainProjects?.[editionId]?.fee : undefined;
@@ -117,7 +121,7 @@ export function ProjectTabs({ id }: { id: string }) {
   const { data: totalSupply } = useRadarEditionsTotalSupply({
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
-    args: [BigInt(Math.max(editionId!, 0))],
+    args: [BigInt(Math.max(editionId || 0, 0))],
     enabled: Boolean(chains[0]?.id) && editionId !== undefined,
   });
   const { config } = usePrepareRadarEditionsMintEdition({
@@ -145,8 +149,6 @@ export function ProjectTabs({ id }: { id: string }) {
   });
 
   const { data: exchangeRateData } = useGetExchangeRate("ETH");
-  const { data } = useGetProject(id.toString());
-  const { data: userData } = useGetUser(data?.founder.toString());
 
   const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
     ["checkout-mint-link", editionId, value, quantity],
@@ -155,10 +157,10 @@ export function ProjectTabs({ id }: { id: string }) {
         quantity,
         editionId,
         (value! + protocolFee!).toString(),
-        data?.title,
-        generateVideoThumbnail(data?.video_url!),
-        data?._id,
-        userData?.socials?.replace("https://twitter.com/", "")
+        project.title,
+        generateVideoThumbnail(project.video_url!),
+        project._id,
+        user?.socials?.replace("https://twitter.com/", "")
       ),
     {
       enabled:
@@ -166,7 +168,7 @@ export function ProjectTabs({ id }: { id: string }) {
         value !== undefined &&
         protocolFee !== undefined &&
         currentTab === Tab.COLLECT &&
-        data !== undefined,
+        project !== undefined,
     }
   );
 
@@ -341,9 +343,9 @@ export function ProjectTabs({ id }: { id: string }) {
             </Dialog>
 
             <p className="text-center pb-4 pt-8 text-gray-700">
-              {data?.mint_end_date ? (
+              {project.mint_end_date ? (
                 <>
-                  <span>{getCountdown(new Date(data.mint_end_date))}</span>
+                  <span>{getCountdown(new Date(project.mint_end_date))}</span>
                   <DotIcon className="inline" />
                 </>
               ) : null}
@@ -369,17 +371,17 @@ export function ProjectTabs({ id }: { id: string }) {
         value={Tab.SIGN_UP}
         className="px-8 py-6 pb-10 rounded-md border"
       >
-        <SignUpForm id={id} />
+        <SignUpForm id={project._id} />
       </TabsContent>
       <TabsContent
         value={Tab.CONTRIBUTE}
         className="px-4 pt-8 pb-10 rounded-md border"
       >
-        <ContributeForm id={id} />
+        <ContributeForm id={project._id} />
       </TabsContent>
       <TabsContent value={Tab.BENEFITS} className="">
-        {data?.benefits.length ? (
-          data.benefits.filter(Boolean).map((benefit) => (
+        {project.benefits.length ? (
+          project.benefits.filter(Boolean).map((benefit) => (
             <div
               key={benefit.text}
               className="mt-4 border rounded-md last:pb-12"
