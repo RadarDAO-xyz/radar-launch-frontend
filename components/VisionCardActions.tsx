@@ -1,22 +1,16 @@
-import { Project, ProjectStatus } from "@/types/mongo";
+import { ProjectWithChainData } from "@/pages/profile/[id]";
+import { ProjectStatus } from "@/types/mongo";
+import { WithdrawETHButton } from "./ProfilePage/WithdrawETHButton";
 import { Button } from "./ui/button";
 
-export function VisionCardActions({ status }: Project) {
+export function VisionCardActions(props: ProjectWithChainData) {
+  const { status } = props;
   return (
     <div className="flex flex-col space-y-1">
       {status === ProjectStatus.IN_REVIEW && <Button>Cancel Submission</Button>}
       {status === ProjectStatus.APPROVED && <Button>Launch Project</Button>}
       {status !== ProjectStatus.CANCELLED &&
-        status !== ProjectStatus.REJECTED && (
-          <Button
-            disabled={
-              status === ProjectStatus.IN_REVIEW ||
-              status === ProjectStatus.APPROVED
-            }
-          >
-            Withdraw ETH
-          </Button>
-        )}
+        status !== ProjectStatus.REJECTED && <WithdrawETHButton {...props} />}
       {status !== ProjectStatus.CANCELLED &&
         status !== ProjectStatus.REJECTED && (
           <Button

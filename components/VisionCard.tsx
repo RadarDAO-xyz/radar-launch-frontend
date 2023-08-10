@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { Project, ProjectStatus } from "@/types/mongo";
 import { VisionCardActions } from "./VisionCardActions";
 import { Badge } from "./ui/badge";
-import { ProjectWithBalance } from "@/pages/profile/[id]";
+import { ProjectWithChainData } from "@/pages/profile/[id]";
 import { formatEther } from "viem";
 import Link from "next/link";
 import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
@@ -45,7 +45,7 @@ function convertStatusToColour(status: ProjectStatus) {
   }
 }
 
-export function VisionCard(props: ProjectWithBalance) {
+export function VisionCard(props: ProjectWithChainData) {
   const { _id, status, video_url, title, collaborators, balance } = props;
   return (
     <div className="p-2 col-span-1">

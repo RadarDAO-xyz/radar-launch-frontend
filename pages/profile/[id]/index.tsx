@@ -35,18 +35,20 @@ export interface ProjectIdWithBalance {
   amount: bigint;
 }
 
-export interface ProjectWithBalance extends Project {
+export interface ProjectWithChainData extends Project {
   balance: bigint;
+  editionId: number;
 }
 
 export interface ProjectWithOwnedAmount extends Project {
   ownedAmount: bigint;
+  editionId: number;
 }
 
 function transformYourVisionsProjects(
   databaseProjects?: Project[],
   chainProjects?: OnChainProject[]
-): ProjectWithBalance[] {
+): ProjectWithChainData[] {
   if (!databaseProjects || !chainProjects) {
     return [];
   }
@@ -59,10 +61,20 @@ function transformYourVisionsProjects(
   chainProjects.forEach((project) => {
     projectBalances[project.id] = project.balance;
   });
+  const projectIdToEditionId: Record<string, number> = chainProjects.reduce<
+    Record<string, number>
+  >((acc, project, index) => {
+    acc[project.id] = index;
+    return acc;
+  }, {});
 
   return databaseProjects
     .filter((project) => projectIds.has(project._id))
-    .map((project) => ({ ...project, balance: projectBalances[project._id] }));
+    .map((project) => ({
+      ...project,
+      balance: projectBalances[project._id],
+      editionId: projectIdToEditionId[project._id],
+    }));
 }
 
 function transformCollectionVisionsProject(
@@ -77,12 +89,19 @@ function transformCollectionVisionsProject(
   chainBalances.forEach((balance) => {
     projectBalances[balance.id] = balance.amount;
   });
+  const projectIdToEditionId: Record<string, number> = chainBalances.reduce<
+    Record<string, number>
+  >((acc, project, index) => {
+    acc[project.id] = index;
+    return acc;
+  }, {});
 
   return databaseProjects
     .filter((project) => projectBalances[project._id] > 0n)
     .map((project) => ({
       ...project,
       ownedAmount: projectBalances[project._id],
+      editionId: projectIdToEditionId[project._id],
     }));
 }
 
@@ -178,10 +197,15 @@ export default function AdminPage() {
           </TabsList>
           <TabsContent value="your-visions">
             <YourVisions
-              projects={transformYourVisionsProjects(
-                databaseProjects,
-                onChainProjects as OnChainProject[]
-              )}
+              projects={
+                transformYourVisionsProjects(
+                  databaseProjects,
+                  onChainProjects as OnChainProject[]
+                )
+                // .filter(
+                //   (project) => project.admin_address === address?.toUpperCase()
+                // )
+              }
             />
           </TabsContent>
           <TabsContent value="collected-visions">
