@@ -36,6 +36,7 @@ export type Project = {
 };
 
 export type Pool = {
+  _id: string;
   title: string;
   subtitle: string;
   description: string;

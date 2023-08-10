@@ -13,9 +13,9 @@ export function FundingPoolProjectHeader({
   video,
 }: Pool) {
   return (
-    <section className="pl-[5%]">
-      <div className="grid grid-cols-8 gap-6">
-        <div className="col-span-3 border-r pr-6 py-20">
+    <section className="pl-[5%] lg:pr-0 pr-[5%] lg:border-b-2">
+      <div className="grid grid-cols-1 lg:grid-cols-8 gap-6">
+        <div className="col-span-3 lg:border-r pr-6 pt-20 lg:pb-20">
           <div>
             <h2 className="text-xl text-gray-500 font-base mb-1">{subtitle}</h2>
             <h1 className="heading-trending-launch-page text-4xl">{title}</h1>
@@ -31,7 +31,7 @@ export function FundingPoolProjectHeader({
             </Button>
           </div>
         </div>
-        <div className="col-span-2 px-5 py-20">
+        <div className="col-span-2 lg:px-5 py-20">
           <div className="div-block-99 no-line">
             <h1 className="heading-5 text-gray-500">
               ${pool_amount.toLocaleString()}
@@ -39,7 +39,7 @@ export function FundingPoolProjectHeader({
           </div>
           <p className="small-text">{"FUNDED BY:"}</p>
           {sponsors.map((sponsor) => (
-            <div className="columns-27" key={sponsor.name}>
+            <div className="columns-27 lg:border-b-2 border-b-0" key={sponsor.name}>
               <div>
                 <img
                   className="image-26"
@@ -59,7 +59,7 @@ export function FundingPoolProjectHeader({
           ))}
         </div>
         <div className="col-span-3">
-          <img src={hero_image} className="w-full h-full object-fill rounded-none shadow-lg" alt="Pool hero" />
+          <img src={hero_image} className="w-full h-full object-fill rounded-none lg:shadow-lg" alt="Pool hero" />
         </div>
       </div>
     </section>

@@ -28,7 +28,7 @@ export default function PoolPage() {
   return (
     <>
       <FundingPoolProjectHeader {...data} />
-      <ProjectSection poolId={id.toString()} />
+      <ProjectSection {...data} />
       <ReadyToLaunchComponent />
     </>
   );
