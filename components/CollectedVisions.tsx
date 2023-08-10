@@ -1,4 +1,4 @@
-import { ProjectWithOwnedAmount } from "@/pages/admin";
+import { ProjectWithOwnedAmount } from "@/pages/profile/[id]";
 import { CollectedVision } from "./CollectedVision";
 
 export function CollectedVisions({

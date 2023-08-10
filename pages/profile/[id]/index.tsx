@@ -18,6 +18,10 @@ import { MoveUpRight } from "lucide-react";
 import Link from "next/link";
 import { useAccount, useNetwork } from "wagmi";
 import { shortenAddress } from "@/lib/utils";
+import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
+import { useRouter } from "next/router";
+import { useGetUser } from "@/hooks/useGetUser";
+import { chains } from "@/components/Web3Provider";
 
 export interface OnChainProject {
   status: number;
@@ -32,18 +36,20 @@ export interface ProjectIdWithBalance {
   amount: bigint;
 }
 
-export interface ProjectWithBalance extends Project {
+export interface ProjectWithChainData extends Project {
   balance: bigint;
+  editionId: number;
 }
 
 export interface ProjectWithOwnedAmount extends Project {
   ownedAmount: bigint;
+  editionId: number;
 }
 
 function transformYourVisionsProjects(
   databaseProjects?: Project[],
   chainProjects?: OnChainProject[]
-): ProjectWithBalance[] {
+): ProjectWithChainData[] {
   if (!databaseProjects || !chainProjects) {
     return [];
   }
@@ -56,10 +62,20 @@ function transformYourVisionsProjects(
   chainProjects.forEach((project) => {
     projectBalances[project.id] = project.balance;
   });
+  const projectIdToEditionId: Record<string, number> = chainProjects.reduce<
+    Record<string, number>
+  >((acc, project, index) => {
+    acc[project.id] = index;
+    return acc;
+  }, {});
 
   return databaseProjects
     .filter((project) => projectIds.has(project._id))
-    .map((project) => ({ ...project, balance: projectBalances[project._id] }));
+    .map((project) => ({
+      ...project,
+      balance: projectBalances[project._id],
+      editionId: projectIdToEditionId[project._id],
+    }));
 }
 
 function transformCollectionVisionsProject(
@@ -74,29 +90,40 @@ function transformCollectionVisionsProject(
   chainBalances.forEach((balance) => {
     projectBalances[balance.id] = balance.amount;
   });
+  const projectIdToEditionId: Record<string, number> = chainBalances.reduce<
+    Record<string, number>
+  >((acc, project, index) => {
+    acc[project.id] = index;
+    return acc;
+  }, {});
 
   return databaseProjects
     .filter((project) => projectBalances[project._id] > 0n)
     .map((project) => ({
       ...project,
       ownedAmount: projectBalances[project._id],
+      editionId: projectIdToEditionId[project._id],
     }));
 }
 
 export default function AdminPage() {
+  const router = useRouter();
+  const { id } = router.query;
+
+  const { data: userData } = useGetUser(id?.toString());
   const { address, status } = useAccount();
   const { chain } = useNetwork();
   const { data: onChainProjects } = useRadarEditionsGetEditions({
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
-    chainId: chain?.id,
-    enabled: Boolean(chain),
+    chainId: chains[0].id,
+    enabled: Boolean(chains[0].id),
   });
   const { data: ownedOnChainProjects } = useRadarEditionsGetBalances({
     account: address,
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
-    chainId: chain?.id,
+    chainId: chains[0].id,
     args: [address!],
-    enabled: Boolean(chain) && Boolean(address),
+    enabled: Boolean(chains[0].id) && Boolean(address),
   });
   const { data: databaseProjects } = useGetProjects();
 
@@ -112,6 +139,20 @@ export default function AdminPage() {
     );
   }
 
+  if (userData === undefined) {
+    return (
+      <div className="mt-36 container mb-20 text-center">
+        <h1>No user data found, please try logging in again.</h1>
+        <p>
+          When you login, you will need to sign a message with your wallet to
+          use our platform.
+        </p>
+      </div>
+    );
+  }
+
+  console.log({ databaseProjects, onChainProjects });
+
   return (
     <div className="mt-[80px] md:pt-6 pb-12 container max-w-7xl">
       <div className="flex items-center justify-between flex-col md:flex-row">
@@ -120,15 +161,17 @@ export default function AdminPage() {
             <AvatarImage src="/default-avatar.png" />
           </Avatar>
           <div className="space-y-1">
-            <h2 className="text-2xl">Founder Name</h2>
-            <p className="font-mono text-gray-600">{address ? shortenAddress(address): ''}</p>
+            <h2 className="text-2xl">{userData.name}</h2>
+            <p className="font-mono text-gray-600">
+              {address ? shortenAddress(address) : ""}
+            </p>
           </div>
         </div>
         <div className="flex space-x-4 mt-4 md:mt-0">
           <Link href="/">
             Share Update <MoveUpRight className="inline h-3 w-3" />
           </Link>
-          <Link href="/">
+          <Link href={`/profile/${userData._id}/edit`}>
             Edit Profile <MoveUpRight className="inline h-3 w-3" />
           </Link>
         </div>
@@ -157,10 +200,15 @@ export default function AdminPage() {
           </TabsList>
           <TabsContent value="your-visions">
             <YourVisions
-              projects={transformYourVisionsProjects(
-                databaseProjects,
-                onChainProjects as OnChainProject[]
-              )}
+              projects={
+                transformYourVisionsProjects(
+                  databaseProjects,
+                  onChainProjects as OnChainProject[]
+                )
+                // .filter(
+                //   (project) => project.admin_address === address?.toUpperCase()
+                // )
+              }
             />
           </TabsContent>
           <TabsContent value="collected-visions">

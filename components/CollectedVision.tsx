@@ -1,4 +1,4 @@
-import { ProjectWithOwnedAmount } from "@/pages/admin";
+import { ProjectWithOwnedAmount } from "@/pages/profile/[id]";
 import { Project } from "@/types/mongo";
 import { Button } from "./ui/button";
 import Link from "next/link";

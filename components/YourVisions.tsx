@@ -1,8 +1,12 @@
 import { Project, ProjectStatus } from "@/types/mongo";
-import { VisionCard } from "./VisionCard";
-import { ProjectWithBalance } from "@/pages/admin";
+import { VisionCard } from "./ProfilePage/VisionCard";
+import { ProjectWithChainData } from "@/pages/profile/[id]";
 
-export function YourVisions({ projects }: { projects: ProjectWithBalance[] }) {
+export function YourVisions({
+  projects,
+}: {
+  projects: ProjectWithChainData[];
+}) {
   return (
     <div>
       <div className="p-8 rounded-lg border mb-6">

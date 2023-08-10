@@ -29,7 +29,7 @@ const WALLET_ENABLED_PATHS = [
   "/project/create",
   "/updates",
   "/admin",
-  "/user/[id]",
+  "/profile/[id]",
 ];
 
 export function NavBar() {
