@@ -1,4 +1,5 @@
 import { FundingPoolProjectHeader } from "@/components/PoolPage/FundingPoolProjectHeader";
+import { ProjectSection } from "@/components/PoolPage/ProjectSection";
 import { ReadyToLaunchComponent } from "@/components/PoolPage/ReadyToLaunchComponent";
 import { useGetPool } from "@/hooks/useGetPool";
 import { useRouter } from "next/router";
@@ -27,6 +28,7 @@ export default function PoolPage() {
   return (
     <>
       <FundingPoolProjectHeader {...data} />
+      <ProjectSection poolId={id.toString()} />
       <ReadyToLaunchComponent />
     </>
   );
