@@ -21,6 +21,7 @@ import { shortenAddress } from "@/lib/utils";
 import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
 import { useRouter } from "next/router";
 import { useGetUser } from "@/hooks/useGetUser";
+import { chains } from "@/components/Web3Provider";
 
 export interface OnChainProject {
   status: number;
@@ -114,15 +115,15 @@ export default function AdminPage() {
   const { chain } = useNetwork();
   const { data: onChainProjects } = useRadarEditionsGetEditions({
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
-    chainId: chain?.id,
-    enabled: Boolean(chain),
+    chainId: chains[0].id,
+    enabled: Boolean(chains[0].id),
   });
   const { data: ownedOnChainProjects } = useRadarEditionsGetBalances({
     account: address,
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
-    chainId: chain?.id,
+    chainId: chains[0].id,
     args: [address!],
-    enabled: Boolean(chain) && Boolean(address),
+    enabled: Boolean(chains[0].id) && Boolean(address),
   });
   const { data: databaseProjects } = useGetProjects();
 
@@ -149,6 +150,8 @@ export default function AdminPage() {
       </div>
     );
   }
+
+  console.log({ databaseProjects, onChainProjects });
 
   return (
     <div className="mt-[80px] md:pt-6 pb-12 container max-w-7xl">

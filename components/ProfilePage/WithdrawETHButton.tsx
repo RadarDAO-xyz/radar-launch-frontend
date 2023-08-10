@@ -1,30 +1,30 @@
-import { Project, ProjectStatus } from "@/types/mongo";
-import { Button } from "../ui/button";
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
-  DialogTitle,
   DialogDescription,
+  DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { DialogHeader, DialogFooter } from "../ui/dialog";
-import { Input } from "../ui/input";
-import { useEffect, useRef } from "react";
-import {
-  usePrepareRadarEditionsWithdrawEditionBalance,
-  useRadarEditionsWithdrawEditionBalance,
-} from "@/lib/generated";
-import { useAccount } from "wagmi";
-import isTestnet from "@/lib/isTestnet";
 import {
   GOERLI_CONTRACT_ADDRESS,
   MAINNET_CONTRACT_ADDRESS,
 } from "@/constants/address";
-import { chains } from "../Web3Provider";
+import {
+  usePrepareRadarEditionsWithdrawEditionBalance,
+  useRadarEditionsWithdrawEditionBalance,
+} from "@/lib/generated";
+import isTestnet from "@/lib/isTestnet";
+import { parseEther } from "@/lib/utils";
 import { ProjectWithChainData } from "@/pages/profile/[id]";
+import { ProjectStatus } from "@/types/mongo";
+import { useEffect, useRef } from "react";
+import { useAccount } from "wagmi";
+import { chains } from "../Web3Provider";
+import { Button } from "../ui/button";
+import { DialogFooter, DialogHeader } from "../ui/dialog";
+import { Input } from "../ui/input";
 import { useToast } from "../ui/use-toast";
-import { formatEther, parseEther } from "@/lib/utils";
 
 export function WithdrawETHButton({ status, editionId }: ProjectWithChainData) {
   const amountRef = useRef<HTMLInputElement>(null);

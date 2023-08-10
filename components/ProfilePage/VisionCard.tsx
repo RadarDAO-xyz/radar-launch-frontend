@@ -1,11 +1,20 @@
 import { cn } from "@/lib/utils";
 import { Project, ProjectStatus } from "@/types/mongo";
 import { VisionCardActions } from "./VisionCardActions";
-import { Badge } from "./ui/badge";
+import { Badge } from "../ui/badge";
 import { ProjectWithChainData } from "@/pages/profile/[id]";
 import { formatEther } from "viem";
 import Link from "next/link";
 import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
+import {
+  GOERLI_CONTRACT_ADDRESS,
+  MAINNET_CONTRACT_ADDRESS,
+} from "@/constants/address";
+import { useRadarEditionsTotalSupply } from "@/lib/generated";
+import isTestnet from "@/lib/isTestnet";
+import { chains } from "../Web3Provider";
+import { useGetProjectSupporters } from "@/hooks/useGetProjectSupporters";
+import { useAuth } from "@/hooks/useAuth";
 
 function convertStatusName(status: ProjectStatus) {
   switch (status) {
@@ -46,7 +55,28 @@ function convertStatusToColour(status: ProjectStatus) {
 }
 
 export function VisionCard(props: ProjectWithChainData) {
-  const { _id, status, video_url, title, collaborators, balance } = props;
+  const { _id, status, video_url, title, supporter_count, balance, editionId } =
+    props;
+  const { data: totalSupply } = useRadarEditionsTotalSupply({
+    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    chainId: chains[0]?.id,
+    args: [BigInt(Math.max(editionId! || 0, 0))],
+    enabled: Boolean(chains[0]?.id) && editionId !== undefined,
+  });
+  // const { idToken } = useAuth();
+  // const { data: signupsData } = useGetProjectSupporters(
+  //   _id,
+  //   idToken,
+  //   true,
+  //   false
+  // );
+  // const { data: contributorsData } = useGetProjectSupporters(
+  //   _id,
+  //   idToken,
+  //   false,
+  //   true
+  // );
+
   return (
     <div className="p-2 col-span-1">
       <div className="flex justify-between items-center pb-2">
@@ -69,7 +99,7 @@ export function VisionCard(props: ProjectWithChainData) {
             NFTs Sold
           </div>
           <div className="border border-l-0 rounded-lg rounded-l-none p-3">
-            0
+            {totalSupply?.toString() || 0}
           </div>
         </div>
         <div className="grid grid-cols-2">
@@ -82,20 +112,20 @@ export function VisionCard(props: ProjectWithChainData) {
         </div>
         <div className="grid grid-cols-2">
           <div className="border rounded-lg p-3 rounded-r-none text-gray-400">
-            Waitlist
+            Supporters
           </div>
           <div className=" border border-l-0 rounded-lg rounded-l-none p-3">
-            0
+            {supporter_count}
           </div>
         </div>
-        <div className="grid grid-cols-2">
+        {/* <div className="grid grid-cols-2">
           <div className="border rounded-lg p-3 rounded-r-none text-gray-400">
             Collaborators
           </div>
           <div className="border border-l-0 rounded-lg rounded-l-none p-3">
             0
           </div>
-        </div>
+        </div> */}
       </div>
       <VisionCardActions {...props} />
     </div>

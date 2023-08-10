@@ -29,6 +29,34 @@ export async function getPoolProjects(poolId: string): Promise<Project[]> {
   return response.json();
 }
 
+export async function getProjectSupporters(
+  projectId: string,
+  idToken: string,
+  signups: boolean,
+  contributors: boolean
+) {
+  const data = {
+    signups: signups ? "true" : "false",
+    contributors: contributors ? "true" : "false",
+  };
+  const params = new URLSearchParams(data);
+  const response = await fetch(
+    `${
+      process.env.BACKEND_URL
+    }/projects/${projectId}/supporters/?${params.toString()}`,
+    {
+      headers: {
+        Authorization: `Bearer ${idToken}`,
+      },
+    }
+  );
+  if (!response.ok) {
+    console.error(response);
+    throw new Error("Failed to fetch project supporters");
+  }
+  return response.json();
+}
+
 export async function getExchangeRate(symbols: string) {
   const response = await fetch(`/api/exchange-rate?symbols=${symbols}`);
   if (!response.ok) {
@@ -165,6 +193,17 @@ export async function authenticateUser({
   if (!response.ok) {
     console.error(response);
     throw new Error("Failed to authenticate user");
+  }
+  return response.json();
+}
+
+export async function deleteProject(projectId: string, idToken: string) {
+  const response = await fetch(
+    `${process.env.BACKEND_URL}/projects/${projectId}`
+  );
+  if (!response.ok) {
+    console.error(response);
+    throw new Error("Failed to delete project");
   }
   return response.json();
 }

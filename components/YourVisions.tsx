@@ -1,5 +1,5 @@
 import { Project, ProjectStatus } from "@/types/mongo";
-import { VisionCard } from "./VisionCard";
+import { VisionCard } from "./ProfilePage/VisionCard";
 import { ProjectWithChainData } from "@/pages/profile/[id]";
 
 export function YourVisions({
