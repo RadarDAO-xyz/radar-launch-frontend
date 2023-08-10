@@ -58,8 +58,8 @@ export function FundingPoolProjectHeader({
             </div>
           ))}
         </div>
-        <div className="col-span-3">
-          <img src={hero_image} className="w-full h-full object-fill rounded-none lg:shadow-lg" alt="Pool hero" />
+        <div className="col-span-3 overflow-hidden max-h-[520px] text-center">
+          <img src={hero_image} className="min-w-full min-h-full max-w-none rounded-none lg:shadow-lg" alt="Pool hero" />
         </div>
       </div>
     </section>
