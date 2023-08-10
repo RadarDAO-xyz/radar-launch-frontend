@@ -24,10 +24,10 @@ export function FundingPoolProjectHeader({
           </div>
           <div>
             <Button asChild className="w-full mb-3">
-              <Link href="/">{"READ THE BRIEF"}</Link>
+              <Link target="_blank" href="https://docsend.com/view/hpkv9gtxdgdpszn8">{"READ THE BRIEF"}</Link>
             </Button>
             <Button variant={"ghost"} className="w-full" asChild>
-              <Link href="/">{"SIGN UP TO NPC DAY"}</Link>
+              <Link target="_blank" href="https://partiful.com/e/sEZdyAoor2KxsZIhdZAo">{"SIGN UP TO NPC DAY"}</Link>
             </Button>
           </div>
         </div>
