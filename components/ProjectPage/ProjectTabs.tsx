@@ -235,11 +235,13 @@ export function ProjectTabs({ id }: { id: string }) {
             <div className="flex justify-between mb-4 text-gray-400">
               <div>
                 <span>
-                  {//@ts-ignore
-                  Math.round(convertWeiToUsdOrEth(
-                    value,
-                    exchangeRateData?.rates?.ETH
-                  ).slice(0, 10))}
+                  {Math.round(
+                    parseFloat(
+                      convertWeiToUsdOrEth(value, exchangeRateData?.rates?.ETH)
+                    )
+                  )
+                    .toString()
+                    .slice(0, 10)}
                 </span>
                 <span> {exchangeRateData?.rates?.ETH ? "USD" : "ETH"} X </span>{" "}
                 <span className="text-black">{quantity}</span>
@@ -249,11 +251,16 @@ export function ProjectTabs({ id }: { id: string }) {
             <div className="flex justify-between mb-4 text-gray-400">
               <div>
                 <span>
-                  {//@ts-ignore
-                  Math.round(convertWeiToUsdOrEth(
-                    protocolFee,
-                    exchangeRateData?.rates?.ETH
-                  ).slice(0, 10))}
+                  {Math.round(
+                    parseFloat(
+                      convertWeiToUsdOrEth(
+                        protocolFee,
+                        exchangeRateData?.rates?.ETH
+                      )
+                    )
+                  )
+                    .toString()
+                    .slice(0, 10)}
                 </span>
                 <span> {exchangeRateData?.rates?.ETH ? "USD" : "ETH"} X </span>
                 <span className="text-black">{quantity}</span>
@@ -264,11 +271,15 @@ export function ProjectTabs({ id }: { id: string }) {
             <div className="flex justify-between mb-4">
               <p className="text-gray-400">Total cost</p>
               <span>
-                {//@ts-ignore
-                Math.round(convertWeiToUsdOrEth(
-                  (value + protocolFee) * BigInt(quantity),
-                  exchangeRateData?.rates?.ETH
-                ).slice(0, 10))}
+                {
+                  //@ts-ignore
+                  Math.round(
+                    convertWeiToUsdOrEth(
+                      (value + protocolFee) * BigInt(quantity),
+                      exchangeRateData?.rates?.ETH
+                    ).slice(0, 10)
+                  )
+                }
                 <span> {exchangeRateData?.rates?.ETH ? "USD" : "ETH"}</span>
               </span>
             </div>
