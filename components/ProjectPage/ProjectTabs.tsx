@@ -235,7 +235,7 @@ export function ProjectTabs({ id }: { id: string }) {
             <div className="flex justify-between mb-4 text-gray-400">
               <div>
                 <span>
-                  {convertWeiToUsdOrEth(
+                  ${convertWeiToUsdOrEth(
                     value,
                     exchangeRateData?.rates?.ETH
                   ).slice(0, 10)}
@@ -248,7 +248,7 @@ export function ProjectTabs({ id }: { id: string }) {
             <div className="flex justify-between mb-4 text-gray-400">
               <div>
                 <span>
-                  {convertWeiToUsdOrEth(
+                  ${convertWeiToUsdOrEth(
                     protocolFee,
                     exchangeRateData?.rates?.ETH
                   ).slice(0, 10)}
@@ -262,7 +262,7 @@ export function ProjectTabs({ id }: { id: string }) {
             <div className="flex justify-between mb-4">
               <p className="text-gray-400">Total cost</p>
               <span>
-                {convertWeiToUsdOrEth(
+                ${convertWeiToUsdOrEth(
                   (value + protocolFee) * BigInt(quantity),
                   exchangeRateData?.rates?.ETH
                 ).slice(0, 10)}
