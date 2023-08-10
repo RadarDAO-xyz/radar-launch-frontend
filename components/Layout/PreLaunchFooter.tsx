@@ -46,7 +46,7 @@ export function PreLaunchFooter() {
             .
           </p>
         </div>
-        <ul className="footer-list">
+        <ul className="footer-list ml-0">
           <li className="footer-list-item right">
             <Link
               className="black-link hover:underline"
