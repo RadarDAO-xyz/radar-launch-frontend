@@ -8,7 +8,7 @@ export function ReadyToLaunchComponent() {
         <h2 className={cn("heading-25 pb-8")}>{"Ready to launch?"}</h2>
         <div
           className={cn(
-            "grid grid-cols-1 lg:grid-cols-5 items-stretch justify-around gap-10 max-w-[300px] lg:w-full mx-auto"
+            "grid grid-cols-1 lg:grid-cols-5 items-stretch justify-around gap-10 max-w-[300px] md:max-w-full mx-auto"
           )}
         >
           <div

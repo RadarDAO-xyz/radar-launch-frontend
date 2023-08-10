@@ -22,11 +22,11 @@ export function ProjectSection({ _id, title }: Pool) {
         </div>
       </div>
       <div className="pt-12 relative">
-        <div className="grid grid-cols-1 lg:grid-cols-4">
-          <div className="max-w-80 w-full h-80 bg-gray-200 rounded-lg" />
-          <div className="max-w-80 hidden lg:block w-full h-80 bg-gray-200 rounded-lg" />
-          <div className="max-w-80 hidden lg:block w-full h-80 bg-gray-200 rounded-lg" />
-          <div className="max-w-80 hidden lg:block w-full h-80 bg-gray-200 rounded-lg" />
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <div className="max-w-80 w-full h-80 border border-slate-200 rounded-lg" />
+          <div className="max-w-80 hidden lg:block border w-full h-80 border-slate-200 rounded-lg" />
+          <div className="max-w-80 hidden lg:block border w-full h-80 border-slate-200 rounded-lg" />
+          <div className="max-w-80 hidden lg:block border w-full h-80 border-slate-200 rounded-lg" />
         </div>
         <div className="absolute left-0 right-0 px-[5%] mx-auto max-w-[800px] w-full top-[calc(50%-20px)] text-center ">
           <h2 className=" text-3xl">NOTHING TO SUPPORT YET</h2>
