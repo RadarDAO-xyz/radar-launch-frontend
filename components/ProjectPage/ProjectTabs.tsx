@@ -280,7 +280,9 @@ export function ProjectTabs({ id }: { id: string }) {
                       (value + protocolFee) * BigInt(quantity),
                       exchangeRateData?.rates?.ETH
                     )
-                  ).slice(0, 10)
+                  )
+                    .toString()
+                    .slice(0, 10)
                 )}
                 <span> {exchangeRateData?.rates?.ETH ? "USD" : "ETH"}</span>
               </span>
