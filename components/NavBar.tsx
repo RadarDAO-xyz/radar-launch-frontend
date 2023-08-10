@@ -25,7 +25,12 @@ import {
 
 const WalletNoSSR = dynamic(() => import("./Wallet").then((res) => res.Wallet));
 
-const WALLET_ENABLED_PATHS = ["/project/create", "/updates", "/admin"];
+const WALLET_ENABLED_PATHS = [
+  "/project/create",
+  "/updates",
+  "/admin",
+  "/user/[id]",
+];
 
 export function NavBar() {
   const router = useRouter();
@@ -116,7 +121,7 @@ export function NavBar() {
           <nav className="w-full flex justify-end" role="navigation">
             <div className="flex">
               <div className="space-x-3 lg:pr-0 hidden sm:flex">
-                {WALLET_ENABLED_PATHS.includes(router.asPath) ? (
+                {WALLET_ENABLED_PATHS.includes(router.pathname) ? (
                   <WalletNoSSR />
                 ) : (
                   <>
