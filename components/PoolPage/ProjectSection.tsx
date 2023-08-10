@@ -10,7 +10,7 @@ export function ProjectSection({ _id, title }: Pool) {
     <section className="px-[5%] py-12">
       <h2 className="text-2xl border-none py-8">{title}</h2>
       <hr />
-      <div className="pt-8 flex justify-between">
+      <div className="pt-8 flex flex-col-reverse gap-4 md:flex-row justify-between">
         <div className="flex gap-4 w-full">
           <Button variant="ghost">Recently backed</Button>
           <Button variant="ghost">Most popular</Button>
