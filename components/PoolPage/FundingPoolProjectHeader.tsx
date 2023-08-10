@@ -31,7 +31,7 @@ export function FundingPoolProjectHeader({
             </Button>
           </div>
         </div>
-        <div className="col-span-2 lg:px-5 py-20">
+        <div className="col-span-2 lg:px-5 py-20 ml-8">
           <div className="div-block-99 no-line">
             <h1 className="heading-5 text-gray-500">
               ${pool_amount.toLocaleString()}
