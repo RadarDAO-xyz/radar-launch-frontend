@@ -4,6 +4,8 @@ import { VisionCardActions } from "./VisionCardActions";
 import { Badge } from "./ui/badge";
 import { ProjectWithBalance } from "@/pages/admin";
 import { formatEther } from "viem";
+import Link from "next/link";
+import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
 
 function convertStatusName(status: ProjectStatus) {
   switch (status) {
@@ -49,42 +51,48 @@ export function VisionCard(props: ProjectWithBalance) {
     <div className="p-2 col-span-1">
       <div className="flex justify-between items-center pb-2">
         <p>{convertStatusName(status)}</p>
-        <Badge className={cn(convertStatusToColour(status), "h-3 w-3 p-0")} />
+        <Badge
+          variant="none"
+          className={cn(convertStatusToColour(status), "h-3 w-3 p-0")}
+        />
       </div>
-      {/* TODO: replace with video  */}
-      <div className="w-full h-44 bg-black"></div>
-      <p className="py-4">{title}</p>
+      <img src={generateVideoThumbnail(video_url)} alt={title + " thumbnail"} />
+      <div className="my-4">
+        <Link href={`/project/${_id}`} className="hover:opacity-70">
+          {title}
+        </Link>
+      </div>
       <hr className="mb-3" />
       <div className="space-y-2 pb-8">
-        <div className="grid grid-cols-3">
-          <div className="col-span-2 border rounded-lg p-3 rounded-r-none text-gray-400">
+        <div className="grid grid-cols-2">
+          <div className="border rounded-lg p-3 rounded-r-none text-gray-400">
             NFTs Sold
           </div>
-          <div className="col-span-1 border border-l-0 rounded-lg rounded-l-none p-3">
+          <div className="border border-l-0 rounded-lg rounded-l-none p-3">
             0
           </div>
         </div>
-        <div className="grid grid-cols-3">
-          <div className="col-span-2 border rounded-lg p-3 rounded-r-none text-gray-400">
+        <div className="grid grid-cols-2">
+          <div className="border rounded-lg p-3 rounded-r-none text-gray-400">
             Funding Raised
           </div>
-          <div className="col-span-1 border border-l-0 rounded-lg rounded-l-none p-3">
-            {formatEther(balance)} ETH
+          <div className=" border border-l-0 rounded-lg rounded-l-none p-3">
+            {formatEther(balance).slice(0, 9)} ETH
           </div>
         </div>
-        <div className="grid grid-cols-3">
-          <div className="col-span-2 border rounded-lg p-3 rounded-r-none text-gray-400">
+        <div className="grid grid-cols-2">
+          <div className="border rounded-lg p-3 rounded-r-none text-gray-400">
             Waitlist
           </div>
-          <div className="col-span-1 border border-l-0 rounded-lg rounded-l-none p-3">
+          <div className=" border border-l-0 rounded-lg rounded-l-none p-3">
             0
           </div>
         </div>
-        <div className="grid grid-cols-3">
-          <div className="col-span-2 border rounded-lg p-3 rounded-r-none text-gray-400">
+        <div className="grid grid-cols-2">
+          <div className="border rounded-lg p-3 rounded-r-none text-gray-400">
             Collaborators
           </div>
-          <div className="col-span-1 border border-l-0 rounded-lg rounded-l-none p-3">
+          <div className="border border-l-0 rounded-lg rounded-l-none p-3">
             0
           </div>
         </div>
