@@ -1,6 +1,6 @@
 import { Project, ProjectStatus } from "@/types/mongo";
 import { VisionCard } from "./VisionCard";
-import { ProjectWithBalance } from "@/pages/admin";
+import { ProjectWithBalance } from "@/pages/profile/[id]";
 
 export function YourVisions({ projects }: { projects: ProjectWithBalance[] }) {
   return (

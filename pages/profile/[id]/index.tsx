@@ -18,6 +18,9 @@ import { MoveUpRight } from "lucide-react";
 import Link from "next/link";
 import { useAccount, useNetwork } from "wagmi";
 import { shortenAddress } from "@/lib/utils";
+import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
+import { useRouter } from "next/router";
+import { useGetUser } from "@/hooks/useGetUser";
 
 export interface OnChainProject {
   status: number;
@@ -84,6 +87,10 @@ function transformCollectionVisionsProject(
 }
 
 export default function AdminPage() {
+  const router = useRouter();
+  const { id } = router.query;
+
+  const { data: userData } = useGetUser(id?.toString());
   const { address, status } = useAccount();
   const { chain } = useNetwork();
   const { data: onChainProjects } = useRadarEditionsGetEditions({
@@ -112,6 +119,18 @@ export default function AdminPage() {
     );
   }
 
+  if (userData === undefined) {
+    return (
+      <div className="mt-36 container mb-20 text-center">
+        <h1>No user data found, please try logging in again.</h1>
+        <p>
+          When you login, you will need to sign a message with your wallet to
+          use our platform.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="mt-[80px] md:pt-6 pb-12 container max-w-7xl">
       <div className="flex items-center justify-between flex-col md:flex-row">
@@ -120,15 +139,17 @@ export default function AdminPage() {
             <AvatarImage src="/default-avatar.png" />
           </Avatar>
           <div className="space-y-1">
-            <h2 className="text-2xl">Founder Name</h2>
-            <p className="font-mono text-gray-600">{address ? shortenAddress(address): ''}</p>
+            <h2 className="text-2xl">{userData.name}</h2>
+            <p className="font-mono text-gray-600">
+              {address ? shortenAddress(address) : ""}
+            </p>
           </div>
         </div>
         <div className="flex space-x-4 mt-4 md:mt-0">
           <Link href="/">
             Share Update <MoveUpRight className="inline h-3 w-3" />
           </Link>
-          <Link href="/">
+          <Link href={`/profile/${userData._id}/edit`}>
             Edit Profile <MoveUpRight className="inline h-3 w-3" />
           </Link>
         </div>

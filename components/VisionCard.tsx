@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { Project, ProjectStatus } from "@/types/mongo";
 import { VisionCardActions } from "./VisionCardActions";
 import { Badge } from "./ui/badge";
-import { ProjectWithBalance } from "@/pages/admin";
+import { ProjectWithBalance } from "@/pages/profile/[id]";
 import { formatEther } from "viem";
 import Link from "next/link";
 import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
