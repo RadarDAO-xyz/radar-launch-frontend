@@ -36,10 +36,12 @@ export type Project = {
 };
 
 export type Pool = {
+  _id: string;
   title: string;
   subtitle: string;
   description: string;
   pool_amount: number;
+  hero_image?: string;
   sponsors: Sponsor[];
   video: string;
 };
@@ -72,7 +74,7 @@ export type WalletResolvable = Partial<SocialLoginWallet> &
   Wallet;
 
 type Sponsor = {
-  logo: string;
+  logo?: string;
   name: string;
   contribution: number;
 };
@@ -104,7 +106,7 @@ export enum Brief {
   THE_MEDIATOR = "The Mediator",
   THE_TEACHER = "The Teacher",
   THE_ARTIST = "The Artist",
-  OTHER = "Other",
+  THE_NEW_PLAYERS = "The New Players",
 }
 
 export enum SupportType {

@@ -4,15 +4,19 @@ import { cn } from "@/lib/utils";
 export function ReadyToLaunchComponent() {
   return (
     <section className={cn("section", "top-line")}>
-      <div className={cn("container-3", "vertical")}>
-        <h2 className={cn("heading-25")}>{"Ready to launch?"}</h2>
-        <div className={cn("pricing-grid")}>
+      <div className={"px-[5%]"}>
+        <h2 className={cn("heading-25 pb-8")}>{"Ready to launch?"}</h2>
+        <div
+          className={cn(
+            "grid grid-cols-1 lg:grid-cols-5 items-stretch justify-around gap-10 max-w-[300px] lg:w-full mx-auto"
+          )}
+        >
           <div
-            className={cn("pricing-card-three")}
+            className={cn("pricing-card-three w-full")}
             id={cn("w-node-eabcc396-b4d7-fd44-0fcc-1f2698d1552f-98d1552a")}
           >
             <img
-              className={cn("pricing-image")}
+              className={cn("pricing-image px-4")}
               loading="lazy"
               width="auto"
               height="auto"
@@ -26,11 +30,11 @@ export function ReadyToLaunchComponent() {
             </p>
           </div>
           <div
-            className={cn("pricing-card-three")}
+            className={cn("pricing-card-three w-full")}
             id={cn("w-node-eabcc396-b4d7-fd44-0fcc-1f2698d15535-98d1552a")}
           >
             <img
-              className={cn("pricing-image")}
+              className={cn("pricing-image px-4")}
               loading="lazy"
               width={100}
               height={100}
@@ -44,11 +48,11 @@ export function ReadyToLaunchComponent() {
             </p>
           </div>
           <div
-            className={cn("pricing-card-three")}
+            className={cn("pricing-card-three w-full")}
             id={cn("w-node-eabcc396-b4d7-fd44-0fcc-1f2698d1553b-98d1552a")}
           >
             <img
-              className={cn("pricing-image")}
+              className={cn("pricing-image px-4")}
               loading="lazy"
               width="auto"
               height="auto"
@@ -62,11 +66,11 @@ export function ReadyToLaunchComponent() {
             </p>
           </div>
           <div
-            className={cn("pricing-card-three")}
+            className={cn("pricing-card-three w-full")}
             id={cn("w-node-eabcc396-b4d7-fd44-0fcc-1f2698d15541-98d1552a")}
           >
             <img
-              className={cn("pricing-image")}
+              className={cn("pricing-image px-4")}
               loading="lazy"
               width="auto"
               height="auto"
@@ -80,11 +84,11 @@ export function ReadyToLaunchComponent() {
             </p>
           </div>
           <div
-            className={cn("pricing-card-three")}
+            className={cn("pricing-card-three w-full")}
             id={cn("w-node-eabcc396-b4d7-fd44-0fcc-1f2698d15547-98d1552a")}
           >
             <img
-              className={cn("pricing-image")}
+              className={cn("pricing-image px-4")}
               loading="lazy"
               width="auto"
               height="auto"
