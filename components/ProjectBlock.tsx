@@ -8,6 +8,7 @@ import {
   useRadarEditionsGetEditions,
   useRadarEditionsTotalSupply,
 } from "@/lib/generated";
+import { useRouter } from "next/navigation";
 import isTestnet from "@/lib/isTestnet";
 import { cn } from "@/lib/utils";
 import { Project, ProjectStatus } from "@/types/mongo";
@@ -15,6 +16,7 @@ import Link from "next/link";
 import { getCountdown } from "../lib/utils";
 import { chains } from "./Web3Provider";
 import { isValidVideoLink } from "@/lib/isValidVideoLink";
+import { Button } from "./ui/button";
 
 // date formatter to convert dates to DD.MM.YYYY format
 const dateFormatter = new Intl.DateTimeFormat("en-GB", {
@@ -57,6 +59,7 @@ export function ProjectBlock({
   brief,
 }: Project) {
   const isDisabled = status !== ProjectStatus.LIVE;
+  const router = useRouter();
 
   const { data: onChainProjects } = useRadarEditionsGetEditions({
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
@@ -156,12 +159,16 @@ export function ProjectBlock({
               </div>
             )}
           </div>
-          <Link
-            href={`/project/${_id}`}
-            className="arrow-diagonal text-2xl cursor-pointer hover:opacity-60 transition-opacity"
+          <Button
+            onClick={() => router.push(`/project/${_id}`)}
+            className="arrow-diagonal text-2xl cursor-pointer hover:opacity-60 transition-opacity bg-transparent text-black hover:bg-transparent disabled:opacity-40"
+            disabled={
+              status === ProjectStatus.IN_REVIEW ||
+              status === ProjectStatus.APPROVED
+            }
           >
             {"↗"}
-          </Link>
+          </Button>
         </div>
       </div>
     </div>
