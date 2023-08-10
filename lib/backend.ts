@@ -9,6 +9,15 @@ export async function getPools(): Promise<Pool[]> {
   return response.json();
 }
 
+export async function getPool(poolId: string): Promise<Pool> {
+  const response = await fetch(`${process.env.BACKEND_URL}/pools/${poolId}`);
+  if (!response.ok) {
+    console.error(response);
+    throw new Error("Failed to fetch pool");
+  }
+  return response.json();
+}
+
 export async function getExchangeRate(symbols: string) {
   const response = await fetch(`/api/exchange-rate?symbols=${symbols}`);
   if (!response.ok) {

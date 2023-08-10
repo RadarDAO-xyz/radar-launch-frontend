@@ -79,10 +79,10 @@ export function PoolCard({
       <Image
         className="sponsor-image absolute rounded-full top-[2%] left-[calc(2%+80px)] floating"
         loading="lazy"
-        alt="OP Games sponsor image"
+        alt="Future Primitive sponsor image"
         width={77}
         height={77}
-        src="/hand.jpg"
+        src="/future-primitive.jpg"
       />
     </div>
   );
