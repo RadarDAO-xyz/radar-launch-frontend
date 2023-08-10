@@ -109,7 +109,7 @@ export default function IndividualProjectPage() {
                 <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-8">
                   Project TLDR
                 </h3>
-                <HTMLParsedComponent text={data.tldr} />
+                <HTMLParsedComponent className="mx-10" text={data.tldr} />
               </div>
               <hr />
               <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-8 pt-10">
