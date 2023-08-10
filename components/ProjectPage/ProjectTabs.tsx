@@ -240,9 +240,7 @@ export function ProjectTabs({ id }: { id: string }) {
                     parseFloat(
                       convertWeiToUsdOrEth(value, exchangeRateData?.rates?.ETH)
                     )
-                  )
-                    .toString()
-                    .slice(0, 10)}
+                  ).toString()}
                 </span>
                 <span> {exchangeRateData?.rates?.ETH ? "USD" : "ETH"} X </span>{" "}
                 <span className="text-black">{quantity}</span>
@@ -260,9 +258,7 @@ export function ProjectTabs({ id }: { id: string }) {
                         exchangeRateData?.rates?.ETH
                       )
                     )
-                  )
-                    .toString()
-                    .slice(0, 10)}
+                  ).toString()}
                 </span>
                 <span> {exchangeRateData?.rates?.ETH ? "USD" : "ETH"} X </span>
                 <span className="text-black">{quantity}</span>
@@ -281,9 +277,7 @@ export function ProjectTabs({ id }: { id: string }) {
                       exchangeRateData?.rates?.ETH
                     )
                   )
-                    .toString()
-                    .slice(0, 10)
-                )}
+                ).toString()}
                 <span> {exchangeRateData?.rates?.ETH ? "USD" : "ETH"}</span>
               </span>
             </div>
