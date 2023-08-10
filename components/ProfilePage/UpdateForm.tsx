@@ -1,4 +1,3 @@
-import { AdminNav } from "@/components/AdminNav";
 import { AuthContext } from "@/components/AuthProvider";
 import { TinyMCE } from "@/components/Layout/TinyMCE";
 import { Button } from "@/components/ui/button";
@@ -23,13 +22,8 @@ async function updateUser(
 ) {
   const formData = new FormData();
   const newValues = { ...values, profile: values.profile.name };
+  formData.append("payload_json", JSON.stringify(newValues));
 
-  for (const key in newValues) {
-    if (newValues[key as keyof typeof newValues] !== undefined) {
-      console.log(key, newValues[key as keyof typeof newValues]);
-      formData.append(key, newValues[key as keyof typeof newValues]);
-    }
-  }
   const res = await fetch(`${process.env.BACKEND_URL}/users/${userId}`, {
     method: "PATCH",
     headers: {
@@ -64,7 +58,7 @@ export function UpdateForm() {
       email: data ? data.email : "",
     },
   });
-  const { handleSubmit, watch, control } = form;
+  const { handleSubmit, control } = form;
 
   const onSubmit = (formData: z.infer<typeof schema>) => {
     try {
@@ -82,7 +76,6 @@ export function UpdateForm() {
         onSubmit={handleSubmit(onSubmit)}
         className="mt-24 max-w-screen-lg mx-auto"
       >
-        <AdminNav isUpdateProfile={true} />
         <div className="border border-slate-200 rounded p-10 mb-10">
           <div className="flex gap-4">
             <div>
@@ -178,8 +171,11 @@ export function UpdateForm() {
           <Button
             className="bg-black text-white rounded leading-10 px-5"
             type="submit"
+            disabled={data === undefined || idToken === ""}
           >
-            Update Your Bio
+            {data === undefined || idToken === ""
+              ? "Please Sign In"
+              : "Update Your Bio"}
           </Button>
         </div>
       </form>

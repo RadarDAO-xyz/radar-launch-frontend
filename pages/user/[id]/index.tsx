@@ -1,3 +1,5 @@
+import { AdminNav } from "@/components/AdminNav";
+import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
 import dynamic from "next/dynamic";
 
 const UpdateFormNoSSR = dynamic(
@@ -7,5 +9,12 @@ const UpdateFormNoSSR = dynamic(
 );
 
 export default function ProfilePage() {
-  return <UpdateFormNoSSR />;
+  const { data } = useGetCurrentUser();
+
+  return (
+    <section className="max-w-screen-lg mx-auto mt-[80px]">
+      <AdminNav isUpdateProfile user={data} />
+      <UpdateFormNoSSR />
+    </section>
+  );
 }
