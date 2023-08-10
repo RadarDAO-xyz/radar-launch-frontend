@@ -16,14 +16,14 @@ export function AdminNav({ isUpdateProfile = false, user }: Props) {
       />
       <div>
         <h1>{user?.name || "Your Name"}</h1>
-        <p>{user?.wallets[0].address || "0x..."}</p>
+        <p>{user?.wallets?.[0].address || "0x..."}</p>
       </div>
       <div className="admin-links ml-auto">
-        {isUpdateProfile && (
+        {/* {isUpdateProfile && (
           <Link className="admin-link" href="/updates">
             Share Update ↗
           </Link>
-        )}
+        )} */}
         {!isUpdateProfile && (
           <Link className="admin-link" href="/update-profile">
             Edit Profile ↗
