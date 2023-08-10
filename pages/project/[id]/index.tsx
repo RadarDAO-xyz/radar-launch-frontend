@@ -99,17 +99,17 @@ export default function IndividualProjectPage() {
               ))}
             </div>
           )}
-          <Tabs defaultValue={Tab.DETAILS} className="border rounded-lg py-6">
-            <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 lg:grid-cols-6 px-8">
+          <Tabs defaultValue={Tab.DETAILS} className="border rounded-lg py-8">
+            <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 lg:grid-cols-6 px-14">
               <TabsTrigger value={Tab.DETAILS}>DETAILS</TabsTrigger>
               <TabsTrigger value={Tab.UPDATES}>UPDATES</TabsTrigger>
             </TabsList>
-            <TabsContent value={Tab.DETAILS} className="px-10 py-6">
+            <TabsContent value={Tab.DETAILS} className="px-14 py-6">
               <div className="pb-16">
                 <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-8">
                   Project TLDR
                 </h3>
-                <HTMLParsedComponent className="mx-10" text={data.tldr} />
+                <HTMLParsedComponent text={data.tldr} />
               </div>
               <hr />
               <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-8 pt-10">
