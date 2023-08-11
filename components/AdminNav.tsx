@@ -1,38 +1,51 @@
+import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
 import { shortenAddress } from "@/lib/utils";
 import { User, WalletResolvable } from "@/types/mongo";
 import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 interface Props {
   isUpdateProfile?: boolean;
-  user?: Omit<User, "wallets"> & { wallets: WalletResolvable[] };
+  user?: Omit<User, "wallets"> & { wallets: WalletResolvable[] | string[] };
 }
 
 export function AdminNav({ isUpdateProfile = false, user }: Props) {
-  return (
-    <div className="flex mb-10 items-center">
-      <img
-        alt="User Avatar"
-        className="admin-founder-image"
-        src={user?.profile || "/default-avatar.png"}
-      />
-      <div>
-        <h1>{user?.name || "Your Name"}</h1>
-        <p className="font-mono text-gray-600">
-          {shortenAddress(user?.wallets?.[0].address || "0x...")}
-        </p>
-      </div>
-      <div className="admin-links ml-auto">
-        {/* {isUpdateProfile && (
+  const { data } = useGetCurrentUser();
+
+  if (data !== undefined && data._id === user?._id) {
+    console.log("here", data, user);
+    return (
+      <div className="flex items-center justify-between flex-col md:flex-row">
+        <div className="flex items-center space-x-4">
+          <Avatar className="w-16 h-16">
+            <AvatarImage src={user?.profile || "/default-avatar.png"} />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          <div className="space-y-1">
+            <h2 className="text-2xl">{user.name}</h2>
+            <p className="font-mono text-gray-600">
+              {typeof user.wallets?.[0] === "string"
+                ? shortenAddress(user.wallets[0] || "")
+                : ""}
+            </p>
+          </div>
+        </div>
+        <div className="flex space-x-4 mt-4 md:mt-0">
+          {/* {isUpdateProfile && (
           <Link className="admin-link" href="/updates">
             Share Update ↗
           </Link>
         )} */}
-        {!isUpdateProfile && (
-          <Link className="admin-link" href="/update-profile">
-            Edit Profile ↗
-          </Link>
-        )}
+          {!isUpdateProfile && (
+            <Link className="admin-link" href="/update-profile">
+              Edit Profile ↗
+            </Link>
+          )}
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  // other user's view of your page
+  return <div>asdad</div>;
 }

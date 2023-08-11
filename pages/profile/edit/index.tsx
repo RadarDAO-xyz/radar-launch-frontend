@@ -12,7 +12,6 @@ const UpdateFormNoSSR = dynamic(
 export default function ProfilePage() {
   const { data } = useGetCurrentUser();
   const { idToken } = useAuth();
-  console.log({ data, idToken });
 
   if (!idToken || !data) {
     return (

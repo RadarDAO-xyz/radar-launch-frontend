@@ -1,14 +1,13 @@
+import { AdminNav } from "@/components/AdminNav";
 import { CollectedVisions } from "@/components/CollectedVisions";
 import { chains } from "@/components/Web3Provider";
 import { YourVisions } from "@/components/YourVisions";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   GOERLI_CONTRACT_ADDRESS,
   MAINNET_CONTRACT_ADDRESS,
 } from "@/constants/address";
-import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
 import { useGetProjects } from "@/hooks/useGetProjects";
 import { useGetUser } from "@/hooks/useGetUser";
 import {
@@ -16,13 +15,10 @@ import {
   useRadarEditionsGetEditions,
 } from "@/lib/generated";
 import isTestnet from "@/lib/isTestnet";
-import { shortenAddress } from "@/lib/utils";
-import { Project } from "@/types/mongo";
-import { AvatarFallback } from "@radix-ui/react-avatar";
-import { MoveUpRight } from "lucide-react";
+import { Project, WalletResolvable } from "@/types/mongo";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useAccount } from "wagmi";
+import { Address, useAccount } from "wagmi";
 
 export interface OnChainProject {
   status: number;
@@ -111,19 +107,24 @@ export default function AdminPage() {
   const router = useRouter();
   const { id } = router.query;
 
-  const { data: currentUserData } = useGetCurrentUser();
   const { data: userData } = useGetUser(id?.toString());
-  const { address } = useAccount();
+  const address =
+    typeof userData?.wallets[0] === "string"
+      ? userData.wallets[0]
+      : typeof userData?.wallets[0] === "object" &&
+        "address" in userData?.wallets[0]
+      ? (userData.wallets[0] as WalletResolvable).address
+      : "";
   const { data: onChainProjects } = useRadarEditionsGetEditions({
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
     chainId: chains[0].id,
     enabled: Boolean(chains[0].id),
   });
   const { data: ownedOnChainProjects } = useRadarEditionsGetBalances({
-    account: address,
+    account: address as Address,
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
     chainId: chains[0].id,
-    args: [address!],
+    args: [address as Address],
     enabled: Boolean(chains[0].id) && Boolean(address),
   });
   const { data: databaseProjects } = useGetProjects();
@@ -146,34 +147,10 @@ export default function AdminPage() {
     databaseProjects,
     ownedOnChainProjects as ProjectIdWithBalance[]
   );
+
   return (
     <div className="mt-[80px] md:pt-6 pb-12 container max-w-7xl">
-      <div className="flex items-center justify-between flex-col md:flex-row">
-        <div className="flex items-center space-x-4">
-          <Avatar className="w-16 h-16">
-            <AvatarImage src={userData?.profile || "/default-avatar.png"} />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-          <div className="space-y-1">
-            <h2 className="text-2xl">{userData.name}</h2>
-            <p className="font-mono text-gray-600">
-              {typeof userData.wallets?.[0] === "string"
-                ? shortenAddress(userData.wallets[0] || "")
-                : ""}
-            </p>
-          </div>
-        </div>
-        <div className="flex space-x-4 mt-4 md:mt-0">
-          {/* <Link href="/">
-            Share Update <MoveUpRight className="inline h-3 w-3" />
-          </Link> */}
-          {userData._id === currentUserData?._id && (
-            <Link href={`/profile/edit`}>
-              Edit Profile <MoveUpRight className="inline h-3 w-3" />
-            </Link>
-          )}
-        </div>
-      </div>
+      <AdminNav user={userData} />
       <hr className="mt-6" />
       <div className="py-4 flex justify-between items-center">
         <p>Bio</p>
@@ -199,16 +176,10 @@ export default function AdminPage() {
           <TabsContent value="your-visions">
             {yourVisionsProjects.length === 0 ? (
               <div className="py-20 text-center">
-                {address !== undefined ? (
-                  <>
-                    <p className="text-2xl pb-4">Nothing to see here yet...</p>
-                    <Link href="/project" className="underline">
-                      Be inspired
-                    </Link>
-                  </>
-                ) : (
-                  <p className="text-2xl pb-4">Please login</p>
-                )}
+                <p className="text-2xl pb-4">Nothing to see here yet...</p>
+                <Link href="/project" className="underline">
+                  Be inspired
+                </Link>
               </div>
             ) : (
               <YourVisions projects={yourVisionsProjects} />
