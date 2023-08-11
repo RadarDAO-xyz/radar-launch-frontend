@@ -10,6 +10,9 @@ export function cn(...inputs: ClassValue[]) {
 
 export const shortenAddress: (arg0: string) => string = (address) => {
   if (!address) return "no address provided";
+  if (address.length < 6) {
+    return address;
+  }
   const start = address.slice(0, 6);
   const end = address.slice(address.length - 4);
   return `${start}...${end}`;
