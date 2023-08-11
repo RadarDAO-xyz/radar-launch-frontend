@@ -177,7 +177,10 @@ export default function IndividualProjectPage() {
           <div className="flex space-x-2 pb-4">
             <Avatar className="w-12 h-12">
               <AvatarImage
-                src={userData?.profile || "/default-avatar.png"}
+                src={
+                  userData?.profile ||
+                  "https://bafybeibsyfcoo4ert7hlwn2wzmjlj7w33knpy6bhzwytbvxdfkggiz3cdu.ipfs.nftstorage.link/"
+                }
                 className="object-contain"
                 alt="avatar"
               />
@@ -213,7 +216,10 @@ export default function IndividualProjectPage() {
             <div className="flex space-x-2 pb-4">
               <Avatar className="w-12 h-12">
                 <AvatarImage
-                  src={userData?.profile || "/default-avatar.png"}
+                  src={
+                    userData?.profile ||
+                    "https://bafybeibsyfcoo4ert7hlwn2wzmjlj7w33knpy6bhzwytbvxdfkggiz3cdu.ipfs.nftstorage.link/"
+                  }
                   className="object-contain"
                   alt="avatar"
                 />

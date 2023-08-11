@@ -17,7 +17,12 @@ export function AdminNav({ isUpdateProfile = false, user }: Props) {
       <div className="flex items-center justify-between flex-col md:flex-row">
         <div className="flex items-center space-x-4">
           <Avatar className="w-16 h-16">
-            <AvatarImage src={user?.profile || "/default-avatar.png"} />
+            <AvatarImage
+              src={
+                user?.profile ||
+                "https://bafybeibsyfcoo4ert7hlwn2wzmjlj7w33knpy6bhzwytbvxdfkggiz3cdu.ipfs.nftstorage.link/"
+              }
+            />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <div className="space-y-1">
