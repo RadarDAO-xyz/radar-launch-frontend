@@ -25,13 +25,6 @@ import {
 
 const WalletNoSSR = dynamic(() => import("./Wallet").then((res) => res.Wallet));
 
-const WALLET_ENABLED_PATHS = [
-  "/project/create",
-  "/updates",
-  "/admin",
-  "/profile/[id]",
-];
-
 export function NavBar() {
   const router = useRouter();
 
@@ -121,28 +114,10 @@ export function NavBar() {
           <nav className="w-full flex justify-end" role="navigation">
             <div className="flex">
               <div className="space-x-3 lg:pr-0 hidden sm:flex">
-                {WALLET_ENABLED_PATHS.includes(router.pathname) ? (
-                  <WalletNoSSR />
-                ) : (
-                  <>
-                    <Button variant={"ghost"} asChild>
-                      <Link
-                        href="https://airtable.com/appGvDqIhUSP0caqo/shrMcuu3zvWEfRqGM"
-                        target="_blank"
-                      >
-                        SIGN UP FOR DROPS
-                      </Link>
-                    </Button>
-                    <Button asChild>
-                      <Link
-                        href="https://airtable.com/appGvDqIhUSP0caqo/shrvi09PTUP5mTSHN"
-                        target="_blank"
-                      >
-                        {"SHARE YOUR PROJECT"}
-                      </Link>
-                    </Button>
-                  </>
-                )}
+                <WalletNoSSR />
+                <Button asChild>
+                  <Link href="/project/create">SUBMIT</Link>
+                </Button>
               </div>
             </div>
           </nav>
@@ -197,28 +172,10 @@ export function NavBar() {
               </div>
               <SheetFooter>
                 <div className="flex justify-between flex-col space-y-2 w-full">
-                  {WALLET_ENABLED_PATHS.includes(router.asPath) ? (
-                    <WalletNoSSR />
-                  ) : (
-                    <>
-                      <Button variant={"ghost"} asChild>
-                        <Link
-                          href="https://airtable.com/appGvDqIhUSP0caqo/shrMcuu3zvWEfRqGM"
-                          target="_blank"
-                        >
-                          SIGN UP FOR DROPS
-                        </Link>
-                      </Button>
-                      <Button asChild className="w-full">
-                        <Link
-                          href="https://airtable.com/appGvDqIhUSP0caqo/shrvi09PTUP5mTSHN"
-                          target="_blank"
-                        >
-                          {"SHARE YOUR PROJECT"}
-                        </Link>
-                      </Button>
-                    </>
-                  )}
+                  <WalletNoSSR />
+                  <Button asChild>
+                    <Link href="/project/create">SUBMIT</Link>
+                  </Button>
                 </div>
               </SheetFooter>
             </SheetContent>
