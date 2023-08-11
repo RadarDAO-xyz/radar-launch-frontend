@@ -76,7 +76,12 @@ export default function HomePage() {
               )
               .slice(0, 4)
               .map((project) => (
-                <ProjectBlockNoSSR key={project._id} {...project} />
+                <ProjectBlockNoSSR
+                  key={project._id}
+                  {...project}
+                  showDropDate
+                  showMintEndDate
+                />
               ))}
           </div>
         }
@@ -96,7 +101,7 @@ export default function HomePage() {
             {data
               ?.filter((project) => CENTAUR_PROEJCT_IDS.includes(project._id))
               .map((project) => (
-                <ProjectBlockNoSSR key={project._id} {...project} />
+                <ProjectBlockNoSSR key={project._id} {...project} showPrice />
               ))}
           </div>
         }
