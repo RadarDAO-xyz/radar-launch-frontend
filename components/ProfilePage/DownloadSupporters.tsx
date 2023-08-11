@@ -23,8 +23,8 @@ export function DownloadSupporters({
   title,
 }: ProjectWithChainData) {
   const { toast } = useToast();
-  const { idToken } = useAuth();
-  const { mutateAsync, error, data, isSuccess } = useMutation(
+  const { idToken, isLoggedIn } = useAuth();
+  const { mutateAsync, error, data } = useMutation(
     ["download-project", _id, idToken],
     () => downloadProjectSupporters(_id, idToken)
   );
@@ -80,9 +80,16 @@ export function DownloadSupporters({
               await mutateAsync?.();
               downloadCsv();
             }}
+            disabled={!isLoggedIn}
           >
-            <DownloadIcon className="w-4 h-4 mr-2" />
-            DOWNLOAD
+            {!isLoggedIn ? (
+              "Please Sign In"
+            ) : (
+              <>
+                <DownloadIcon className="w-4 h-4 mr-2" />
+                DOWNLOAD
+              </>
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>
