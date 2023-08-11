@@ -151,11 +151,7 @@ export default function AdminPage() {
   return (
     <div className="mt-[80px] md:pt-6 pb-12 container max-w-7xl">
       <AdminNav user={userData} />
-      <hr className="mt-6" />
-      <div className="py-4 flex justify-between items-center">
-        <p>Bio</p>
-        <Button variant={"ghost"}>Find out more</Button>
-      </div>
+
 
       <div className="mt-8">
         <Tabs defaultValue="your-visions">
