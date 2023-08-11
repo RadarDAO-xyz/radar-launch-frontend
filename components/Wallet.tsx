@@ -42,6 +42,9 @@ export function Wallet() {
           <DropdownMenuItem className="cursor-pointer" asChild>
             <Link href={`/profile/${currentUserData._id}`}>Profile</Link>
           </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer" asChild>
+            <Link href={`/profile/edit`}>Edit Profile</Link>
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => logout()} className="cursor-pointer">
             Log Out
