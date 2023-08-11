@@ -17,6 +17,8 @@ import { getCountdown } from "../lib/utils";
 import { chains } from "./Web3Provider";
 import { isValidVideoLink } from "@/lib/isValidVideoLink";
 import { Button } from "./ui/button";
+import { convertWeiToUsdOrEth } from "@/lib/convertWeiToUsdOrEth";
+import { useGetExchangeRate } from "@/hooks/useGetExchangeRate";
 
 // date formatter to convert dates to DD.MM.YYYY format
 const dateFormatter = new Intl.DateTimeFormat("en-GB", {
@@ -49,6 +51,12 @@ function formatDate(date: Date) {
     .join("");
 }
 
+interface Props extends Project {
+  showDropDate?: boolean;
+  showMintEndDate?: boolean;
+  showPrice?: boolean;
+}
+
 export function ProjectBlock({
   _id,
   status,
@@ -57,7 +65,11 @@ export function ProjectBlock({
   mint_end_date,
   supporter_count,
   brief,
-}: Project) {
+  edition_price,
+  showDropDate,
+  showMintEndDate,
+  showPrice,
+}: Props) {
   const isDisabled = status !== ProjectStatus.LIVE;
   const router = useRouter();
 
@@ -75,6 +87,7 @@ export function ProjectBlock({
     args: [BigInt(Math.max(editionId! || 0, 0))],
     enabled: Boolean(chains[0]?.id) && editionId !== undefined,
   });
+  const { data: exchangeRateData } = useGetExchangeRate("ETH");
 
   return (
     <div
@@ -130,11 +143,14 @@ export function ProjectBlock({
             {title}
           </p>
         </Link>
-        <div className="featured-project-bio mb-2">
-          <p className="project-byline">
-            {formatDate(new Date(mint_end_date))}
-          </p>
-        </div>
+        {showDropDate && (
+          <div className="featured-project-bio mb-2">
+            <p className="project-byline">
+              {/* TODO: change to launch_date */}
+              {formatDate(new Date(mint_end_date))}
+            </p>
+          </div>
+        )}
       </div>
       <div className="bottom-half-of-content">
         <div className="collect-wrapper flex-row">
@@ -142,11 +158,21 @@ export function ProjectBlock({
             <div>
               {status === ProjectStatus.LIVE ? (
                 <div className="text-center w-full flex gap-3 text-xs text-gray-700">
-                  {mint_end_date ? (
+                  {showMintEndDate && mint_end_date && (
                     <p className="border-r pr-3">
                       {getCountdown(new Date(mint_end_date))}
                     </p>
-                  ) : null}
+                  )}
+                  {/* TODO: change this to onchain fee / exchange rate */}
+                  {showPrice && (
+                    <p className="border-r pr-3">
+                      $
+                      {edition_price.toLocaleString("en-US", {
+                        maximumFractionDigits: 0,
+                      })}{" "}
+                      USD
+                    </p>
+                  )}
                   {totalSupply !== undefined && (
                     <p>
                       {(totalSupply + BigInt(supporter_count || 0)).toString()}{" "}
