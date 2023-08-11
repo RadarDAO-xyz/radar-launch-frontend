@@ -3,9 +3,12 @@ import { Pool } from "@/types/mongo";
 import { SearchIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { ProjectBlock } from "../ProjectBlock";
+import Link from "next/link";
 
 export function ProjectSection({ _id, title }: Pool) {
   const { data } = useGetPoolProjects(_id);
+  console.log(data);
   return (
     <section className="px-[5%] py-12">
       <h2 className="text-2xl border-none py-8">{title}</h2>
@@ -23,15 +26,33 @@ export function ProjectSection({ _id, title }: Pool) {
       </div>
       <div className="pt-12 relative">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          <div className="max-w-80 w-full h-80 border border-slate-200 rounded-lg" />
-          <div className="max-w-80 hidden lg:block border w-full h-80 border-slate-200 rounded-lg" />
-          <div className="max-w-80 hidden lg:block border w-full h-80 border-slate-200 rounded-lg" />
-          <div className="max-w-80 hidden lg:block border w-full h-80 border-slate-200 rounded-lg" />
+          {data && data.length > 0 ? (
+            data.map((project) => (
+              <ProjectBlock
+                key={project._id}
+                {...project}
+                showMintEndDate
+                showSupporters
+              />
+            ))
+          ) : (
+            <>
+              <div className="max-w-80 w-full h-80 border border-slate-200 rounded-lg" />
+              <div className="max-w-80 hidden lg:block border w-full h-80 border-slate-200 rounded-lg" />
+              <div className="max-w-80 hidden lg:block border w-full h-80 border-slate-200 rounded-lg" />
+              <div className="max-w-80 hidden lg:block border w-full h-80 border-slate-200 rounded-lg" />
+            </>
+          )}
         </div>
-        <div className="absolute left-0 right-0 px-[5%] mx-auto max-w-[800px] w-full top-[calc(50%-20px)] text-center ">
-          <h2 className=" text-3xl">NOTHING TO SUPPORT YET</h2>
-          <Button className="mt-3">SUBMIT YOUR PROJECT</Button>
-        </div>
+        {data === undefined ||
+          (data.length === 0 && (
+            <div className="absolute left-0 right-0 px-[5%] mx-auto max-w-[800px] w-full top-[calc(50%-20px)] text-center ">
+              <h2 className=" text-3xl">NOTHING TO SUPPORT YET</h2>
+              <Button className="mt-3" asChild>
+                <Link href="/project/create">SUBMIT YOUR PROJECT</Link>
+              </Button>
+            </div>
+          ))}
       </div>
     </section>
   );
