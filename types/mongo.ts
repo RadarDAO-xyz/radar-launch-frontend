@@ -52,7 +52,7 @@ export type User = {
   profile?: string;
   bio?: string;
   socials?: string; // must be a twitter link for now
-  wallets: WalletResolvable[];
+  wallets: string[];
   email?: string;
 };
 

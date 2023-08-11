@@ -17,10 +17,14 @@ import { Button } from "../ui/button";
 import { useToast } from "../ui/use-toast";
 import { DownloadIcon } from "lucide-react";
 
-export function DownloadSupporters({ status, _id }: ProjectWithChainData) {
+export function DownloadSupporters({
+  status,
+  _id,
+  title,
+}: ProjectWithChainData) {
   const { toast } = useToast();
   const { idToken } = useAuth();
-  const { mutateAsync, error, data } = useMutation(
+  const { mutateAsync, error, data, isSuccess } = useMutation(
     ["download-project", _id, idToken],
     () => downloadProjectSupporters(_id, idToken)
   );
@@ -35,6 +39,20 @@ export function DownloadSupporters({ status, _id }: ProjectWithChainData) {
       });
     }
   }, [error]);
+
+  function downloadCsv() {
+    console.log(data);
+    if (data !== undefined) {
+      const encodedURI = encodeURI("data:text/csv;charset=utf-8," + data);
+
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedURI);
+      link.setAttribute("download", `${title} Supporters.csv`);
+      document.body.appendChild(link);
+
+      link.click();
+    }
+  }
 
   return (
     <Dialog>
@@ -58,8 +76,9 @@ export function DownloadSupporters({ status, _id }: ProjectWithChainData) {
         <DialogFooter>
           <Button
             type="submit"
-            onClick={() => {
-              mutateAsync?.();
+            onClick={async () => {
+              await mutateAsync?.();
+              downloadCsv();
             }}
           >
             <DownloadIcon className="w-4 h-4 mr-2" />

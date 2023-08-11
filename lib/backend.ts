@@ -229,5 +229,5 @@ export async function downloadProjectSupporters(
     console.error(response);
     throw new Error("Failed to download project supporters");
   }
-  return response.json();
+  return response.text();
 }
