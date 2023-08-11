@@ -1,12 +1,10 @@
-import React, { ReactNode } from "react";
-import { Button } from "./ui/button";
-import Link from "next/link";
+import { ReactNode } from "react";
 
 interface ProjectDivProps {
-  projects: React.ReactNode;
+  projects: ReactNode;
   projectSectionTitle?: string;
   projectSectionDescription?: string;
-  showCreateProjectButton?: boolean;
+  projectSectionButton?: ReactNode;
   curatorSection?: ReactNode;
 }
 
@@ -14,7 +12,7 @@ export function ProjectDiv({
   projects,
   projectSectionDescription,
   projectSectionTitle,
-  showCreateProjectButton,
+  projectSectionButton,
   curatorSection,
 }: ProjectDivProps) {
   return (
@@ -32,17 +30,7 @@ export function ProjectDiv({
               {projectSectionDescription}
               <br />
             </p>
-            {showCreateProjectButton && (
-              <Button
-                className="font-bold font-bolded"
-                variant={"ghost"}
-                asChild
-              >
-                <Link href="https://t.me/+e97ms5e1fvJiMjhk" target="_blank">
-                  {"GET DROP UPDATES"}
-                </Link>
-              </Button>
-            )}
+            <div>{projectSectionButton}</div>
           </div>
         )}
       </div>
