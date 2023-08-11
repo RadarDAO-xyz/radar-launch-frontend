@@ -2,8 +2,10 @@ import { FundingPoolHome } from "@/components/FundingPoolHome";
 import { HeaderHero } from "@/components/HomePage/HeaderHero";
 import { InspirationFooter } from "@/components/HomePage/InspirationFooter";
 import { ProjectDiv } from "@/components/ProjectDiv";
+import { Button } from "@/components/ui/button";
 import { useGetProjects } from "@/hooks/useGetProjects";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 
 const ProjectBlockNoSSR = dynamic(
   () => import("@/components/ProjectBlock").then((res) => res.ProjectBlock),
@@ -23,6 +25,12 @@ const VisionOfTheWeekProjectNoSSR = dynamic(
 );
 
 const FEATURED_PROJECT_ID = "64d10e4fa67c3abf0508808c";
+const CENTAUR_PROEJCT_IDS = [
+  "64d3ef19d96faeddac76d82b",
+  "64d3f328d96faeddac76d848",
+  "64d3f928d96faeddac76d86d",
+  "64d3fbece93b67e1d4e27671",
+];
 
 export default function HomePage() {
   const { data } = useGetProjects();
@@ -42,7 +50,13 @@ export default function HomePage() {
       <ProjectDiv
         projectSectionTitle="CURATED VISIONS"
         projectSectionDescription="Every month we invite a guest curator to spotlight 4 projects building a better future"
-        showCreateProjectButton
+        projectSectionButton={
+          <Button className="font-bold font-bolded" variant={"ghost"} asChild>
+            <Link href="https://t.me/+e97ms5e1fvJiMjhk" target="_blank">
+              {"GET DROP UPDATES"}
+            </Link>
+          </Button>
+        }
         projects={
           <div className="flex flex-col md:flex-row w-full overflow-auto md:space-x-12">
             {data
@@ -61,6 +75,26 @@ export default function HomePage() {
                   new Date(b.curation.start).getTime()
               )
               .slice(0, 4)
+              .map((project) => (
+                <ProjectBlockNoSSR key={project._id} {...project} />
+              ))}
+          </div>
+        }
+      />
+      <ProjectDiv
+        projectSectionTitle="OUR CENTAUR FUTURE"
+        projectSectionDescription="Support over 10 weeks of collective discovery, exploration and innovation in Cycle #3"
+        projectSectionButton={
+          <Button className="font-bold font-bolded" variant={"ghost"} asChild>
+            <Link href="https://www.radardao.xyz/patron" target="_blank">
+              {"READ MORE"}
+            </Link>
+          </Button>
+        }
+        projects={
+          <div className="flex flex-col md:flex-row w-full overflow-auto md:space-x-12">
+            {data
+              ?.filter((project) => CENTAUR_PROEJCT_IDS.includes(project._id))
               .map((project) => (
                 <ProjectBlockNoSSR key={project._id} {...project} />
               ))}
