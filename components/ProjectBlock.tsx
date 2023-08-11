@@ -8,6 +8,7 @@ import {
   useRadarEditionsGetEditions,
   useRadarEditionsTotalSupply,
 } from "@/lib/generated";
+import { useRouter } from "next/navigation";
 import isTestnet from "@/lib/isTestnet";
 import { cn } from "@/lib/utils";
 import { Project, ProjectStatus } from "@/types/mongo";
@@ -15,6 +16,7 @@ import Link from "next/link";
 import { getCountdown } from "../lib/utils";
 import { chains } from "./Web3Provider";
 import { isValidVideoLink } from "@/lib/isValidVideoLink";
+import { Button } from "./ui/button";
 
 // date formatter to convert dates to DD.MM.YYYY format
 const dateFormatter = new Intl.DateTimeFormat("en-GB", {
@@ -57,6 +59,7 @@ export function ProjectBlock({
   brief,
 }: Project) {
   const isDisabled = status !== ProjectStatus.LIVE;
+  const router = useRouter();
 
   const { data: onChainProjects } = useRadarEditionsGetEditions({
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
@@ -135,33 +138,39 @@ export function ProjectBlock({
       </div>
       <div className="bottom-half-of-content">
         <div className="collect-wrapper flex-row">
-          <div className="pt-3 flex border-t w-full border-t-[var(--line-83d2b2f6)] items-center">
-            {status === ProjectStatus.LIVE ? (
-              <div className="text-center w-full flex gap-3 text-xs text-gray-700">
-                {mint_end_date ? (
-                  <p className="border-r pr-3">
-                    {getCountdown(new Date(mint_end_date))}
-                  </p>
-                ) : null}
-                {totalSupply !== undefined && (
-                  <p>
-                    {(totalSupply + BigInt(supporter_count || 0)).toString()}{" "}
-                    supporters
-                  </p>
-                )}
-              </div>
-            ) : (
-              <div className="count-block flex items-center justify-center">
-                {getCountdown(new Date(mint_end_date))} until drop
-              </div>
-            )}
+          <div className="pt-3 flex border-t w-full border-t-[var(--line-83d2b2f6)] items-center justify-between">
+            <div>
+              {status === ProjectStatus.LIVE ? (
+                <div className="text-center w-full flex gap-3 text-xs text-gray-700">
+                  {mint_end_date ? (
+                    <p className="border-r pr-3">
+                      {getCountdown(new Date(mint_end_date))}
+                    </p>
+                  ) : null}
+                  {totalSupply !== undefined && (
+                    <p>
+                      {(totalSupply + BigInt(supporter_count || 0)).toString()}{" "}
+                      supporters
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <div className="count-block flex items-center justify-center">
+                  {getCountdown(new Date(mint_end_date))} until drop
+                </div>
+              )}
+            </div>
+            <Button
+              onClick={() => router.push(`/project/${_id}`)}
+              className="arrow-diagonal text-xl cursor-pointer hover:opacity-60 transition-opacity bg-transparent text-black hover:bg-transparent disabled:opacity-40 px-1 h-4"
+              disabled={
+                status === ProjectStatus.IN_REVIEW ||
+                status === ProjectStatus.APPROVED
+              }
+            >
+              {"↗"}
+            </Button>
           </div>
-          <Link
-            href={`/project/${_id}`}
-            className="arrow-diagonal text-2xl cursor-pointer hover:opacity-60 transition-opacity"
-          >
-            {"↗"}
-          </Link>
         </div>
       </div>
     </div>
