@@ -156,7 +156,9 @@ export default function AdminPage() {
           <div className="space-y-1">
             <h2 className="text-2xl">{userData.name}</h2>
             <p className="font-mono text-gray-600">
-              {userData.wallets?.[0] ? shortenAddress(userData.wallets[0]) : ""}
+              {typeof userData.wallets?.[0] === "string"
+                ? shortenAddress(userData.wallets[0] || "")
+                : ""}
             </p>
           </div>
         </div>
