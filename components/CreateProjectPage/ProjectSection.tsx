@@ -1,6 +1,6 @@
-import { createFormSchema } from "./CreateForm";
-import { Brief } from "@/types/mongo";
+import { getPools } from "@/lib/backend";
 import { useFormContext } from "react-hook-form";
+import { useQuery } from "wagmi";
 import * as z from "zod";
 import { TinyMCE } from "../Layout/TinyMCE";
 import {
@@ -19,10 +19,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { createFormSchema } from "./CreateForm";
+
+const HIDDEN_POOLS = ["64d6184622f75fd347e91906"];
 
 export function ProjectSection() {
-  const { control, watch } = useFormContext<z.infer<typeof createFormSchema>>();
-  const thumbnail = watch("thumbnail");
+  const { control } = useFormContext<z.infer<typeof createFormSchema>>();
+  const { data } = useQuery(["pools"], getPools);
 
   return (
     <div className="border border-slate-200 rounded p-10 mb-10">
@@ -213,11 +216,13 @@ export function ProjectSection() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {Object.values(Brief).map((brief) => (
-                      <SelectItem key={brief} value={brief}>
-                        {brief}
-                      </SelectItem>
-                    ))}
+                    {data
+                      ?.filter((pool) => !HIDDEN_POOLS.includes(pool._id))
+                      .map((pool) => (
+                        <SelectItem key={pool._id} value={pool._id}>
+                          {pool.title}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />

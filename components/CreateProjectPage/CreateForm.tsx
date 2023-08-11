@@ -32,10 +32,11 @@ import { useAccount, useEnsAddress, useMutation, useQuery } from "wagmi";
 import * as z from "zod";
 import { CrowdFundSection } from "./CrowdFundSection";
 import { MilestoneSection } from "./MilestoneSection";
+import { useGetPools } from "@/hooks/useGetPools";
 
 async function createProject(
   idToken: string,
-  values: z.infer<typeof createFormSchema>
+  values: z.infer<typeof createFormSchema> & { pool?: string }
 ) {
   const finalValues = {
     ...values,
@@ -113,7 +114,7 @@ export const createFormSchema = z.object({
     .url({ message: "Please enter a valid URL" })
     .min(1, { message: "Video URL is required" }),
   tldr: z.string().min(1, { message: "Brief description is required" }),
-  thumbnail: z.instanceof(File),
+  thumbnail: z.optional(z.instanceof(File)),
   brief: z.string().min(1, { message: "Brief is required" }),
   inspiration: z.string().min(1, { message: "Inspiration is required" }),
   team: z.array(
@@ -159,6 +160,7 @@ export const createFormSchema = z.object({
 export function CreateForm() {
   const { address } = useAccount();
   const { idToken } = useContext(AuthContext);
+  const { data: pools } = useGetPools();
 
   const form = useForm<z.infer<typeof createFormSchema>>({
     resolver: zodResolver(createFormSchema),
@@ -210,7 +212,12 @@ export function CreateForm() {
     if (admin_address.endsWith(".eth")) {
       values.admin_address = ensAddressData || admin_address;
     }
-    return createProject(idToken, values);
+    const newValues = {
+      ...values,
+      pool: values.brief,
+      brief: pools?.find((pool) => pool._id === values.brief)!.title!,
+    };
+    return createProject(idToken, newValues);
   });
   const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
     [
