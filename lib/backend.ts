@@ -199,11 +199,35 @@ export async function authenticateUser({
 
 export async function deleteProject(projectId: string, idToken: string) {
   const response = await fetch(
-    `${process.env.BACKEND_URL}/projects/${projectId}`
+    `${process.env.BACKEND_URL}/projects/${projectId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${idToken}`,
+      },
+    }
   );
   if (!response.ok) {
     console.error(response);
     throw new Error("Failed to delete project");
+  }
+  return response.json();
+}
+
+export async function downloadProjectSupporters(
+  projectId: string,
+  idToken: string
+) {
+  const response = await fetch(
+    `${process.env.BACKEND_URL}/projects/${projectId}/supporters/csv`,
+    {
+      headers: {
+        Authorization: `Bearer ${idToken}`,
+      },
+    }
+  );
+  if (!response.ok) {
+    console.error(response);
+    throw new Error("Failed to download project supporters");
   }
   return response.json();
 }

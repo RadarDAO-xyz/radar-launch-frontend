@@ -1,0 +1,72 @@
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useAuth } from "@/hooks/useAuth";
+import { downloadProjectSupporters } from "@/lib/backend";
+import { ProjectWithChainData } from "@/pages/profile/[id]";
+import { ProjectStatus } from "@/types/mongo";
+import { useEffect } from "react";
+import { useMutation } from "wagmi";
+import { Button } from "../ui/button";
+import { useToast } from "../ui/use-toast";
+import { DownloadIcon } from "lucide-react";
+
+export function DownloadSupporters({ status, _id }: ProjectWithChainData) {
+  const { toast } = useToast();
+  const { idToken } = useAuth();
+  const { mutateAsync, error, data } = useMutation(
+    ["download-project", _id, idToken],
+    () => downloadProjectSupporters(_id, idToken)
+  );
+
+  useEffect(() => {
+    if (error) {
+      console.error(error);
+      toast({
+        variant: "destructive",
+        title: "An error occurred",
+        description: "Please check your browser console for more information",
+      });
+    }
+  }, [error]);
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button
+          disabled={
+            status === ProjectStatus.IN_REVIEW ||
+            status === ProjectStatus.APPROVED
+          }
+        >
+          Download Supporters
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Download Supporters</DialogTitle>
+          <DialogDescription>
+            You will receive your supporter information in CSV format.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button
+            type="submit"
+            onClick={() => {
+              mutateAsync?.();
+            }}
+          >
+            <DownloadIcon className="w-4 h-4 mr-2" />
+            DOWNLOAD
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
