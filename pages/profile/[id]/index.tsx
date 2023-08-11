@@ -110,7 +110,7 @@ export default function AdminPage() {
   const { id } = router.query;
 
   const { data: userData } = useGetUser(id?.toString());
-  const { address, status } = useAccount();
+  const { address } = useAccount();
   const { data: onChainProjects } = useRadarEditionsGetEditions({
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
     chainId: chains[0].id,
@@ -161,9 +161,9 @@ export default function AdminPage() {
           </div>
         </div>
         <div className="flex space-x-4 mt-4 md:mt-0">
-          <Link href="/">
+          {/* <Link href="/">
             Share Update <MoveUpRight className="inline h-3 w-3" />
-          </Link>
+          </Link> */}
           <Link href={`/profile/${userData._id}/edit`}>
             Edit Profile <MoveUpRight className="inline h-3 w-3" />
           </Link>
