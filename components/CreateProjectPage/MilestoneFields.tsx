@@ -1,9 +1,8 @@
 import { useFieldArray, useFormContext } from "react-hook-form";
+import { TinyMCE } from "../Layout/TinyMCE";
 import { Button } from "../ui/button";
 import { FormControl, FormField, FormItem, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
-import { TinyMCE } from "../Layout/TinyMCE";
 
 export const MilestoneFields = () => {
   const { control } = useFormContext();

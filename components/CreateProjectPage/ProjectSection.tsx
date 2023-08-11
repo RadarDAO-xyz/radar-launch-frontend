@@ -1,5 +1,4 @@
-import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
-import { createFormSchema } from "@/pages/project/create";
+import { createFormSchema } from "./CreateForm";
 import { Brief } from "@/types/mongo";
 import { useFormContext } from "react-hook-form";
 import * as z from "zod";
@@ -23,7 +22,7 @@ import {
 
 export function ProjectSection() {
   const { control, watch } = useFormContext<z.infer<typeof createFormSchema>>();
-  const video_image = watch("video_image");
+  const thumbnail = watch("thumbnail");
 
   return (
     <div className="border border-slate-200 rounded p-10 mb-10">
@@ -142,32 +141,49 @@ export function ProjectSection() {
       <hr className="border-b-1 border-slate-200 my-8" />
       <div className="grid grid-cols-2 gap-10">
         <div className="col-span-1 pr-4">
-          <h2 className="text-xl font-base">Video Image</h2>
+          <h2 className="text-xl font-base">NFT Image</h2>
           <p>
-            This image is taken from the thumbnail of your uploaded video.
+            Please upload an image to represent your project, make it authentic.
             <br />
             <br />
             This will appear for collectors in their wallet and on their
             profile.
+            <br />
+            <br />
+            Note: you can leave this empty and this image will be taken from the
+            thumbnail of your uploaded video.
           </p>
         </div>
         <div className="col-span-1 space-y-2">
           <FormField
             control={control}
-            name="video_image"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Enter a YouTube or Vimeo URL</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            name="thumbnail"
+            render={({ field }) => {
+              const { value, onChange, ...rest } = field;
+              return (
+                <FormItem className="w-full h-full">
+                  <FormControl>
+                    <Input
+                      {...rest}
+                      type="file"
+                      onChange={(event) => {
+                        console.log(
+                          event.target.files,
+                          event.target.files?.[0]
+                        );
+                        if (event.target.files) {
+                          onChange(event.target.files[0]);
+                        }
+                      }}
+                      placeholder="Upload Image"
+                      className="w-full h-full file:hidden"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
-          {video_image !== "" && (
-            <img src={generateVideoThumbnail(video_image)} />
-          )}
         </div>
       </div>
       <hr className="border-b-1 border-slate-200 my-8" />

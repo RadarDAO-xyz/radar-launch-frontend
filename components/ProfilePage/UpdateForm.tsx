@@ -21,6 +21,7 @@ async function updateUser(
   idToken: string
 ) {
   const formData = new FormData();
+  formData.append("profile", values.profile);
   const newValues = { ...values, profile: values.profile.name };
   formData.append("payload_json", JSON.stringify(newValues));
 
