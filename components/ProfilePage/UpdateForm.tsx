@@ -14,6 +14,8 @@ import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { useToast } from "../ui/use-toast";
+import { useMutation } from "wagmi";
 
 async function updateUser(
   values: z.infer<typeof schema>,
@@ -21,11 +23,15 @@ async function updateUser(
   idToken: string
 ) {
   const formData = new FormData();
-  formData.append("profile", values.profile);
-  formData.append(
-    "payload_json",
-    JSON.stringify({ ...values, profile: values.profile.name })
-  );
+  if (values.profile) {
+    formData.append("profile", values.profile);
+    formData.append(
+      "payload_json",
+      JSON.stringify({ ...values, profile: values.profile.name })
+    );
+  } else {
+    formData.append("payload_json", JSON.stringify(values));
+  }
 
   const res = await fetch(`${process.env.BACKEND_URL}/users/${userId}`, {
     method: "PATCH",
@@ -62,14 +68,31 @@ export function UpdateForm() {
     },
   });
   const { handleSubmit, control } = form;
+  const { toast } = useToast();
+  const { mutateAsync, isLoading } = useMutation(
+    ["update-profile"],
+    () => updateUser(form.getValues(), data?._id!, idToken),
+    {
+      onError: (error) => {
+        console.error(error);
+        toast({
+          variant: "destructive",
+          title: "An error occurred",
+          description: "Please check your browser console for more information",
+        });
+      },
+      onSettled: () => {
+        toast({
+          title: "Successfully updated",
+          description: "Please refresh your page to see the changes",
+        });
+      },
+    }
+  );
 
-  const onSubmit = (formData: z.infer<typeof schema>) => {
-    try {
-      if (data && idToken !== "") {
-        updateUser(formData, data._id, idToken);
-      }
-    } catch (error) {
-      console.log(error);
+  const onSubmit = async (formData: z.infer<typeof schema>) => {
+    if (data?._id && idToken !== "") {
+      mutateAsync();
     }
   };
 
@@ -174,7 +197,7 @@ export function UpdateForm() {
           <Button
             className="bg-black text-white rounded leading-10 px-5"
             type="submit"
-            disabled={data === undefined || idToken === ""}
+            disabled={data === undefined || idToken === "" || isLoading}
           >
             {data === undefined || idToken === ""
               ? "Please Sign In"

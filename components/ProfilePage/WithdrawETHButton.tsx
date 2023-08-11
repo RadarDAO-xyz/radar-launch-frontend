@@ -25,11 +25,13 @@ import { Button } from "../ui/button";
 import { DialogFooter, DialogHeader } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { useToast } from "../ui/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 export function WithdrawETHButton({ status, editionId }: ProjectWithChainData) {
   const amountRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const { address } = useAccount();
+  const { isLoggedIn } = useAuth();
   const { config } = usePrepareRadarEditionsWithdrawEditionBalance({
     account: address,
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
@@ -90,8 +92,12 @@ export function WithdrawETHButton({ status, editionId }: ProjectWithChainData) {
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit" onClick={() => onSubmit()}>
-            WITHDRAW
+          <Button
+            type="submit"
+            onClick={() => onSubmit()}
+            disabled={!isLoggedIn}
+          >
+            {isLoggedIn ? "WITHDRAW" : "Please Sign In"}
           </Button>
         </DialogFooter>
       </DialogContent>

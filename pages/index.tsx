@@ -1,6 +1,7 @@
 import { FundingPoolHome } from "@/components/FundingPoolHome";
 import { HeaderHero } from "@/components/HomePage/HeaderHero";
 import { InspirationFooter } from "@/components/HomePage/InspirationFooter";
+import { Banner } from "@/components/Layout/Banner";
 import { ProjectDiv } from "@/components/ProjectDiv";
 import { Button } from "@/components/ui/button";
 import { useGetProjects } from "@/hooks/useGetProjects";
@@ -36,12 +37,11 @@ export default function HomePage() {
   const { data } = useGetProjects();
 
   return (
-    <section className="mt-[20px]">
-      <div className="absolute w-screen top-[64px] left-0 text-[200px] leading-none whitespace-nowrap font-bold text-gray-100 z-10 font-bolded overflow-hidden">
+    <section className="">
+      <div className="absolute w-screen top-[100px] left-0 text-[200px] leading-none whitespace-nowrap font-bold text-gray-100 z-10 font-bolded overflow-hidden">
         A MORE PLAYFUL FUTURE
       </div>
 
-      {/* <Banner /> */}
       <HeaderHero
         visionOfTheWeekSlot={
           <VisionOfTheWeekProjectNoSSR projectId={FEATURED_PROJECT_ID} />
@@ -101,6 +101,7 @@ export default function HomePage() {
           <div className="flex flex-col md:flex-row w-full overflow-auto md:space-x-12">
             {data
               ?.filter((project) => CENTAUR_PROEJCT_IDS.includes(project._id))
+              .sort((a, b) => a.edition_price - b.edition_price)
               .map((project) => (
                 <ProjectBlockNoSSR key={project._id} {...project} showPrice />
               ))}

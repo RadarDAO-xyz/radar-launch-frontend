@@ -13,7 +13,6 @@ export function AdminNav({ isUpdateProfile = false, user }: Props) {
   const { data } = useGetCurrentUser();
 
   if (data !== undefined && data._id === user?._id) {
-    console.log("here", data, user);
     return (
       <div className="flex items-center justify-between flex-col md:flex-row">
         <div className="flex items-center space-x-4">
@@ -37,7 +36,7 @@ export function AdminNav({ isUpdateProfile = false, user }: Props) {
           </Link>
         )} */}
           {!isUpdateProfile && (
-            <Link className="admin-link" href="/update-profile">
+            <Link className="admin-link" href="/profile/edit">
               Edit Profile ↗
             </Link>
           )}
