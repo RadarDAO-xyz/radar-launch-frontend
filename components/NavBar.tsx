@@ -22,6 +22,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
+import { Banner } from "./Layout/Banner";
 
 const WalletNoSSR = dynamic(() => import("./Wallet").then((res) => res.Wallet));
 
@@ -29,8 +30,8 @@ export function NavBar() {
   const router = useRouter();
 
   return (
-    <header className="px-[5%] py-4 z-50 sticky top-0 bg-white border-b">
-      <div className="">
+    <header className="pt-4 z-50 sticky top-0 bg-white border-b">
+      <div className="px-[5%] pb-3">
         <div className="navbar-logo-center-container shadow-three items-center">
           <div className="w-40 mr-8">
             <Link href="/">
@@ -182,6 +183,7 @@ export function NavBar() {
           </Sheet>
         </div>
       </div>
+      <Banner />
     </header>
   );
 }

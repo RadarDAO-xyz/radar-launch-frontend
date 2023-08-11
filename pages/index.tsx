@@ -42,7 +42,6 @@ export default function HomePage() {
         A MORE PLAYFUL FUTURE
       </div>
 
-      <Banner />
       <HeaderHero
         visionOfTheWeekSlot={
           <VisionOfTheWeekProjectNoSSR projectId={FEATURED_PROJECT_ID} />
