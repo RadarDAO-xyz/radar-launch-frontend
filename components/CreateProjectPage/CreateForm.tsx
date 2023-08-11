@@ -138,8 +138,8 @@ export const createFormSchema = z.object({
   ),
   edition_price: z.coerce
     .number()
-    .min(0, { message: "Edition price too small, minimum 0" }),
-  // .max(20, { message: "Edition price too large, maximum 20" }),
+    .min(0, { message: "Edition price too small, minimum 0" })
+    .max(20, { message: "Edition price too large, maximum 20" }),
   mint_end_date: z.date().refine((current) => current > new Date(), {
     message: "Must end later than today",
   }),
