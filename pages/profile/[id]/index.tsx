@@ -1,4 +1,5 @@
 import { CollectedVisions } from "@/components/CollectedVisions";
+import { chains } from "@/components/Web3Provider";
 import { YourVisions } from "@/components/YourVisions";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -8,20 +9,18 @@ import {
   MAINNET_CONTRACT_ADDRESS,
 } from "@/constants/address";
 import { useGetProjects } from "@/hooks/useGetProjects";
+import { useGetUser } from "@/hooks/useGetUser";
 import {
   useRadarEditionsGetBalances,
   useRadarEditionsGetEditions,
 } from "@/lib/generated";
 import isTestnet from "@/lib/isTestnet";
+import { shortenAddress } from "@/lib/utils";
 import { Project } from "@/types/mongo";
 import { MoveUpRight } from "lucide-react";
 import Link from "next/link";
-import { useAccount, useNetwork } from "wagmi";
-import { shortenAddress } from "@/lib/utils";
-import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
 import { useRouter } from "next/router";
-import { useGetUser } from "@/hooks/useGetUser";
-import { chains } from "@/components/Web3Provider";
+import { useAccount } from "wagmi";
 
 export interface OnChainProject {
   status: number;
@@ -111,8 +110,7 @@ export default function AdminPage() {
   const { id } = router.query;
 
   const { data: userData } = useGetUser(id?.toString());
-  const { address, status } = useAccount();
-  const { chain } = useNetwork();
+  const { address } = useAccount();
   const { data: onChainProjects } = useRadarEditionsGetEditions({
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
     chainId: chains[0].id,
@@ -127,50 +125,47 @@ export default function AdminPage() {
   });
   const { data: databaseProjects } = useGetProjects();
 
-  if (status === "disconnected") {
-    return (
-      <div className="mt-36 container mb-20 text-center">
-        <h1>Please login to see the page</h1>
-        <p>
-          You can login either with your wallet or other social authentication
-          providers.
-        </p>
-      </div>
-    );
-  }
-
   if (userData === undefined) {
     return (
       <div className="mt-36 container mb-20 text-center">
-        <h1>No user data found, please try logging in again.</h1>
-        <p>
-          When you login, you will need to sign a message with your wallet to
-          use our platform.
-        </p>
+        <h1>No user data found</h1>
       </div>
     );
   }
 
-  console.log({ databaseProjects, onChainProjects });
+  const yourVisionsProjects = transformYourVisionsProjects(
+    databaseProjects,
+    onChainProjects as OnChainProject[]
+  ).filter(
+    (project) => project.admin_address.toUpperCase() === address?.toUpperCase()
+  );
+  const collectedVisionsProjects = transformCollectionVisionsProject(
+    databaseProjects,
+    ownedOnChainProjects as ProjectIdWithBalance[]
+  );
 
   return (
     <div className="mt-[80px] md:pt-6 pb-12 container max-w-7xl">
       <div className="flex items-center justify-between flex-col md:flex-row">
         <div className="flex items-center space-x-4">
           <Avatar className="w-16 h-16">
-            <AvatarImage src="/default-avatar.png" />
+            <AvatarImage
+              src={`${process.env.BACKEND_URL}/users/${userData._id}/profile`}
+            />
           </Avatar>
           <div className="space-y-1">
             <h2 className="text-2xl">{userData.name}</h2>
             <p className="font-mono text-gray-600">
-              {address ? shortenAddress(address) : ""}
+              {typeof userData.wallets?.[0] === "string"
+                ? shortenAddress(userData.wallets[0] || "")
+                : ""}
             </p>
           </div>
         </div>
         <div className="flex space-x-4 mt-4 md:mt-0">
-          <Link href="/">
+          {/* <Link href="/">
             Share Update <MoveUpRight className="inline h-3 w-3" />
-          </Link>
+          </Link> */}
           <Link href={`/profile/${userData._id}/edit`}>
             Edit Profile <MoveUpRight className="inline h-3 w-3" />
           </Link>
@@ -199,33 +194,42 @@ export default function AdminPage() {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="your-visions">
-            <YourVisions
-              projects={
-                transformYourVisionsProjects(
-                  databaseProjects,
-                  onChainProjects as OnChainProject[]
-                )
-                // .filter(
-                //   (project) => project.admin_address === address?.toUpperCase()
-                // )
-              }
-            />
+            {yourVisionsProjects.length === 0 ? (
+              <div className="py-20 text-center">
+                {address !== undefined ? (
+                  <>
+                    <p className="text-2xl pb-4">Nothing to see here yet...</p>
+                    <Link href="/project" className="underline">
+                      Be inspired
+                    </Link>
+                  </>
+                ) : (
+                  <p className="text-2xl pb-4">Please login</p>
+                )}
+              </div>
+            ) : (
+              <YourVisions projects={yourVisionsProjects} />
+            )}
           </TabsContent>
           <TabsContent value="collected-visions">
-            <CollectedVisions
-              projects={transformCollectionVisionsProject(
-                databaseProjects,
-                ownedOnChainProjects as ProjectIdWithBalance[]
-              )}
-            />
+            {collectedVisionsProjects.length === 0 ? (
+              <div className="py-20 text-center">
+                {address !== undefined ? (
+                  <>
+                    <p className="text-2xl pb-4">Nothing to see here yet...</p>
+                    <Link href="/project" className="underline">
+                      Be inspired
+                    </Link>
+                  </>
+                ) : (
+                  <p className="text-2xl pb-4">Please login</p>
+                )}
+              </div>
+            ) : (
+              <CollectedVisions projects={collectedVisionsProjects} />
+            )}
           </TabsContent>
         </Tabs>
-        <div className="py-20 text-center">
-          <p className="text-2xl pb-4">Nothing to see here yet...</p>
-          <Link href="/project" className="underline">
-            Be inspired
-          </Link>
-        </div>
       </div>
     </div>
   );
