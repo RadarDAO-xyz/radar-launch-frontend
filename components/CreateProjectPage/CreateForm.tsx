@@ -114,7 +114,7 @@ export const createFormSchema = z.object({
     .url({ message: "Please enter a valid URL" })
     .min(1, { message: "Video URL is required" }),
   tldr: z.string().min(1, { message: "Brief description is required" }),
-  thumbnail: z.instanceof(File),
+  thumbnail: z.optional(z.instanceof(File)),
   brief: z.string().min(1, { message: "Brief is required" }),
   inspiration: z.string().min(1, { message: "Inspiration is required" }),
   team: z.array(
@@ -214,7 +214,8 @@ export function CreateForm() {
     }
     const newValues = {
       ...values,
-      pool: pools?.find((pool) => pool.title === values.brief)?._id,
+      pool: values.brief,
+      brief: pools?.find((pool) => pool._id === values.brief)!.title!,
     };
     return createProject(idToken, newValues);
   });
