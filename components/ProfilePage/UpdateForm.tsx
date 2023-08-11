@@ -22,8 +22,10 @@ async function updateUser(
 ) {
   const formData = new FormData();
   formData.append("profile", values.profile);
-  const newValues = { ...values, profile: values.profile.name };
-  formData.append("payload_json", JSON.stringify(newValues));
+  formData.append(
+    "payload_json",
+    JSON.stringify({ ...values, profile: values.profile.name })
+  );
 
   const res = await fetch(`${process.env.BACKEND_URL}/users/${userId}`, {
     method: "PATCH",

@@ -1,4 +1,10 @@
-import { SupportType, type Pool, type Project, type User } from "@/types/mongo";
+import {
+  SupportType,
+  type Pool,
+  type Project,
+  type User,
+  type WalletResolvable,
+} from "@/types/mongo";
 
 export async function getPools(): Promise<Pool[]> {
   const response = await fetch(`${process.env.BACKEND_URL}/pools`);
@@ -75,7 +81,9 @@ export async function getUser(userId: string): Promise<User> {
   return response.json();
 }
 
-export async function getCurrentUser(idToken: string): Promise<User> {
+export async function getCurrentUser(
+  idToken: string
+): Promise<Omit<User, "wallets"> & { wallets: WalletResolvable[] }> {
   const response = await fetch(`${process.env.BACKEND_URL}/users/@me`, {
     headers: {
       Authorization: `Bearer ${idToken}`,
