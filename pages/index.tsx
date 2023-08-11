@@ -1,6 +1,7 @@
 import { FundingPoolHome } from "@/components/FundingPoolHome";
 import { HeaderHero } from "@/components/HomePage/HeaderHero";
 import { InspirationFooter } from "@/components/HomePage/InspirationFooter";
+import { Banner } from "@/components/Layout/Banner";
 import { ProjectDiv } from "@/components/ProjectDiv";
 import { Button } from "@/components/ui/button";
 import { useGetProjects } from "@/hooks/useGetProjects";
@@ -36,12 +37,12 @@ export default function HomePage() {
   const { data } = useGetProjects();
 
   return (
-    <section className="mt-[20px]">
-      <div className="absolute w-screen top-[64px] left-0 text-[200px] leading-none whitespace-nowrap font-bold text-gray-100 z-10 font-bolded overflow-hidden">
+    <section className="">
+      <div className="absolute w-screen top-[100px] left-0 text-[200px] leading-none whitespace-nowrap font-bold text-gray-100 z-10 font-bolded overflow-hidden">
         A MORE PLAYFUL FUTURE
       </div>
 
-      {/* <Banner /> */}
+      <Banner />
       <HeaderHero
         visionOfTheWeekSlot={
           <VisionOfTheWeekProjectNoSSR projectId={FEATURED_PROJECT_ID} />

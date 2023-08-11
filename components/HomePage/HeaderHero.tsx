@@ -33,7 +33,7 @@ export function HeaderHero({ visionOfTheWeekSlot }: Props) {
   const { data: exchangeRateData } = useGetExchangeRate("ETH");
 
   return (
-    <section className="header-featured z-20 bg-transparent">
+    <section className="header-featured z-20 pt-20 bg-transparent">
       <div className="floating-down-arrow justify-between absolute right-[5%] hidden lg:flex">
         <p className="body-text larger">
           {"Curated projects dropping weekly ↓"}
