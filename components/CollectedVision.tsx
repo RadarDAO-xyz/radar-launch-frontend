@@ -19,7 +19,9 @@ export function CollectedVision({
         src={generateVideoThumbnail(video_url)}
         alt={title + " thumbnail"}
       />{" "}
-      <h3 className="py-3 font-semibold">{title}</h3>
+      <h3 className="py-3 font-semibold hover:opacity-60 transition-opacity leading-5">
+        <Link href={`/project/${_id}`}>{title}</Link>
+      </h3>
       <div className="flex">
         <HTMLParsedComponent
           className="text-xs overflow-hidden h-8  text-ellipsis whitespace-nowrap"
