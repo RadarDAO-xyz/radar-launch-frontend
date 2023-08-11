@@ -32,10 +32,11 @@ import { useAccount, useEnsAddress, useMutation, useQuery } from "wagmi";
 import * as z from "zod";
 import { CrowdFundSection } from "./CrowdFundSection";
 import { MilestoneSection } from "./MilestoneSection";
+import { useGetPools } from "@/hooks/useGetPools";
 
 async function createProject(
   idToken: string,
-  values: z.infer<typeof createFormSchema>
+  values: z.infer<typeof createFormSchema> & { pool?: string }
 ) {
   const finalValues = {
     ...values,
@@ -159,6 +160,7 @@ export const createFormSchema = z.object({
 export function CreateForm() {
   const { address } = useAccount();
   const { idToken } = useContext(AuthContext);
+  const { data: pools } = useGetPools();
 
   const form = useForm<z.infer<typeof createFormSchema>>({
     resolver: zodResolver(createFormSchema),
@@ -210,7 +212,11 @@ export function CreateForm() {
     if (admin_address.endsWith(".eth")) {
       values.admin_address = ensAddressData || admin_address;
     }
-    return createProject(idToken, values);
+    const newValues = {
+      ...values,
+      pool: pools?.find((pool) => pool.title === values.brief)?._id,
+    };
+    return createProject(idToken, newValues);
   });
   const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
     [
