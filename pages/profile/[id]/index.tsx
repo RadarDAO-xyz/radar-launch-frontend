@@ -8,6 +8,7 @@ import {
   GOERLI_CONTRACT_ADDRESS,
   MAINNET_CONTRACT_ADDRESS,
 } from "@/constants/address";
+import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
 import { useGetProjects } from "@/hooks/useGetProjects";
 import { useGetUser } from "@/hooks/useGetUser";
 import {
@@ -17,6 +18,7 @@ import {
 import isTestnet from "@/lib/isTestnet";
 import { shortenAddress } from "@/lib/utils";
 import { Project } from "@/types/mongo";
+import { AvatarFallback } from "@radix-ui/react-avatar";
 import { MoveUpRight } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -109,6 +111,7 @@ export default function AdminPage() {
   const router = useRouter();
   const { id } = router.query;
 
+  const { data: currentUserData } = useGetCurrentUser();
   const { data: userData } = useGetUser(id?.toString());
   const { address } = useAccount();
   const { data: onChainProjects } = useRadarEditionsGetEditions({
@@ -143,15 +146,13 @@ export default function AdminPage() {
     databaseProjects,
     ownedOnChainProjects as ProjectIdWithBalance[]
   );
-
   return (
     <div className="mt-[80px] md:pt-6 pb-12 container max-w-7xl">
       <div className="flex items-center justify-between flex-col md:flex-row">
         <div className="flex items-center space-x-4">
           <Avatar className="w-16 h-16">
-            <AvatarImage
-              src={`${process.env.BACKEND_URL}/users/${userData._id}/profile`}
-            />
+            <AvatarImage src={userData?.profile || "/default-avatar.png"} />
+            <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <div className="space-y-1">
             <h2 className="text-2xl">{userData.name}</h2>
@@ -166,9 +167,11 @@ export default function AdminPage() {
           {/* <Link href="/">
             Share Update <MoveUpRight className="inline h-3 w-3" />
           </Link> */}
-          <Link href={`/profile/${userData._id}/edit`}>
-            Edit Profile <MoveUpRight className="inline h-3 w-3" />
-          </Link>
+          {userData._id === currentUserData?._id && (
+            <Link href={`/profile/edit`}>
+              Edit Profile <MoveUpRight className="inline h-3 w-3" />
+            </Link>
+          )}
         </div>
       </div>
       <hr className="mt-6" />

@@ -8,7 +8,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Textarea } from "../ui/textarea";
-import { createFormSchema } from "@/pages/project/create";
+import { createFormSchema } from "./CreateForm";
 import * as z from "zod";
 import { TinyMCE } from "../Layout/TinyMCE";
 

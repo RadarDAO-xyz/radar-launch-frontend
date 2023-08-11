@@ -1,9 +1,10 @@
-import { User } from "@/types/mongo";
+import { shortenAddress } from "@/lib/utils";
+import { User, WalletResolvable } from "@/types/mongo";
 import Link from "next/link";
 
 interface Props {
   isUpdateProfile?: boolean;
-  user?: User;
+  user?: Omit<User, "wallets"> & { wallets: WalletResolvable[] };
 }
 
 export function AdminNav({ isUpdateProfile = false, user }: Props) {
@@ -16,7 +17,9 @@ export function AdminNav({ isUpdateProfile = false, user }: Props) {
       />
       <div>
         <h1>{user?.name || "Your Name"}</h1>
-        <p>{user?.wallets?.[0] || "0x..."}</p>
+        <p className="font-mono text-gray-600">
+          {shortenAddress(user?.wallets?.[0].address || "0x...")}
+        </p>
       </div>
       <div className="admin-links ml-auto">
         {/* {isUpdateProfile && (

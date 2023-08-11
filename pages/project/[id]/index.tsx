@@ -117,9 +117,7 @@ export default function IndividualProjectPage() {
               </h3>
               {data.team.map((teamMember, index) => (
                 <div key={teamMember.name} className="space-y-2 pb-4 last:pb-8">
-                  <h4 className="font-semibold">
-                    {teamMember.name}
-                  </h4>
+                  <h4 className="font-semibold">{teamMember.name}</h4>
                   <HTMLParsedComponent
                     className="text-gray-600"
                     text={teamMember.bio}
