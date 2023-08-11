@@ -33,22 +33,22 @@ export function HeaderHero({ visionOfTheWeekSlot }: Props) {
   const { data: exchangeRateData } = useGetExchangeRate("ETH");
 
   return (
-    <section className="header-featured z-20 pt-20 bg-transparent">
-      <div className="floating-down-arrow justify-between absolute right-[5%] hidden lg:flex">
-        <p className="body-text larger">
+    <section className="header-featured z-20 pt-10 bg-transparent">
+      <div className="floating-down-arrow top-[calc(100vh-200px)] items-center justify-between absolute right-[5%] hidden lg:flex">
+        <p className="body-text text-base">
           {"Curated projects dropping weekly ↓"}
           <br />
         </p>
         <Link href="https://www.culture3.xyz/" target="_blank" className="flex">
-          <p className="curator-text">
+          <span className="curator-text">
             august curated by
             <br />
-          </p>
+          </span>
           <img
-            className="logo"
+            className="logo h-5"
             loading="lazy"
             width={56}
-            height="auto"
+            height={20}
             src="https://uploads-ssl.webflow.com/64548f6f8feacfafa79c9592/64a6a82851e7ea1f12599225_62c421c68db31c451cbecc30_c3full_off_black.svg"
           />
           <div className="arrow-diagonal">{"↗"}</div>

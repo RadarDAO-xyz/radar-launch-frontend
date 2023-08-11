@@ -23,7 +23,7 @@ export function PoolCard({
         src={hero_image || "/background1.png"}
         className={cn("what-if-block-image-header object-cover mx-auto mb-0")}
       />
-      <h2 className={cn("text-xl text-center pt-4")}>{title}</h2>
+      <h2 className={cn("text-xl text-center pt-4 uppercase max-w-[140px] mx-auto")}>{title}</h2>
       <div className="flex justify-between w-full space-y-2 md:space-y-0 md:space-x-2 pt-2 px-2 flex-col md:flex-row">
         <div className="border rounded-lg p-4 w-full">
           <div className="small-text">{"Remaining Funding pool"}</div>

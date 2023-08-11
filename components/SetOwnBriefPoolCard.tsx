@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { cn } from "@/lib/utils";
 
 export function SetOwnBriefPoolCard() {
   return (
@@ -12,7 +13,7 @@ export function SetOwnBriefPoolCard() {
         src="/background2.png"
         className={"what-if-block-image-header object-cover mb-0 mx-auto"}
       />
-      <h2 className={"text-xl text-center pt-4 leading-6"}>
+      <h2 className={cn("text-xl text-center pt-4 uppercase")}>
         WANT TO SET YOUR <br />
         OWN BRIEF?
       </h2>
@@ -32,7 +33,12 @@ export function SetOwnBriefPoolCard() {
       </div>
       <div className="w-full pt-6">
         <Button className={"w-full mb-6"} asChild>
-          <Link href="https://radarxyz.notion.site/Funding-Pools-Partner-Briefs-07b0753b0f6f401f9249fe8e0537ef03?pvs=4" target="_blank">CREATE A BRIEF</Link>
+          <Link
+            href="https://radarxyz.notion.site/Funding-Pools-Partner-Briefs-07b0753b0f6f401f9249fe8e0537ef03?pvs=4"
+            target="_blank"
+          >
+            CREATE A BRIEF
+          </Link>
         </Button>
       </div>
     </div>

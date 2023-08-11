@@ -27,7 +27,7 @@ export function FundingPoolHome() {
             asChild
           >
             <Link
-              href="https://airtable.com/appGvDqIhUSP0caqo/shrkX6fnUJrcYreUy"
+              href="https://t.me/+e97ms5e1fvJiMjhk"
               target="_blank"
             >
               SIGN UP

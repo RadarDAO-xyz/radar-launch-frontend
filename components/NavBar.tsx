@@ -183,7 +183,7 @@ export function NavBar() {
           </Sheet>
         </div>
       </div>
-      <Banner />
+      {router.pathname === "/" && <Banner />}
     </header>
   );
 }

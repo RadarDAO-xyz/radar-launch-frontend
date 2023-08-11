@@ -37,7 +37,7 @@ export default function HomePage() {
   const { data } = useGetProjects();
 
   return (
-    <section className="">
+    <section>
       <div className="absolute w-screen top-[100px] left-0 text-[200px] leading-none whitespace-nowrap font-bold text-gray-100 z-10 font-bolded overflow-hidden">
         A MORE PLAYFUL FUTURE
       </div>
