@@ -37,7 +37,7 @@ export function AdminNav({ isUpdateProfile = false, user }: Props) {
           </Link>
         )} */}
           {!isUpdateProfile && (
-            <Link className="admin-link" href="/update-profile">
+            <Link className="admin-link" href="/profile/edit">
               Edit Profile ↗
             </Link>
           )}
