@@ -2,8 +2,12 @@ import Link from "next/link";
 import { PoolCard } from "./PoolCard";
 import { SetOwnBriefPoolCard } from "./SetOwnBriefPoolCard";
 import { Button } from "./ui/button";
+import { useGetPool } from "@/hooks/useGetPool";
+
+const FEATURED_POOL_ID = "64d501ee081e901b9fdfaea9";
 
 export function FundingPoolHome() {
+  const { data } = useGetPool(FEATURED_POOL_ID);
 
   return (
     <div className="py-20 px-[5%] md:px-0 mx-auto">
@@ -22,7 +26,10 @@ export function FundingPoolHome() {
             variant={"ghost"}
             asChild
           >
-            <Link href="https://airtable.com/appGvDqIhUSP0caqo/shrkX6fnUJrcYreUy" target="_blank">
+            <Link
+              href="https://airtable.com/appGvDqIhUSP0caqo/shrkX6fnUJrcYreUy"
+              target="_blank"
+            >
               SIGN UP
             </Link>
           </Button>
@@ -30,12 +37,7 @@ export function FundingPoolHome() {
       </div>
       <div className="_20px-div" />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 w-[80%] mx-auto">
-        <PoolCard
-          title={"BRIEF COMING SOON"}
-          poolAmount={10000}
-          projectSubmitted={0}
-          dropDate={new Date("2023-08-12 17:00:00 GMT+1000")}
-        />
+        {data && <PoolCard {...data} />}
         <SetOwnBriefPoolCard />
       </div>
     </div>

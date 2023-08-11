@@ -102,6 +102,7 @@ export default function HomePage() {
           <div className="flex flex-col md:flex-row w-full overflow-auto md:space-x-12">
             {data
               ?.filter((project) => CENTAUR_PROEJCT_IDS.includes(project._id))
+              .sort((a, b) => a.edition_price - b.edition_price)
               .map((project) => (
                 <ProjectBlockNoSSR key={project._id} {...project} showPrice />
               ))}
