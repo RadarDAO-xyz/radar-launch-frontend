@@ -2,23 +2,22 @@ import {
   GOERLI_CONTRACT_ADDRESS,
   MAINNET_CONTRACT_ADDRESS,
 } from "@/constants/address";
+import { useGetExchangeRate } from "@/hooks/useGetExchangeRate";
 import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
 import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
 import {
   useRadarEditionsGetEditions,
   useRadarEditionsTotalSupply,
 } from "@/lib/generated";
-import { useRouter } from "next/navigation";
 import isTestnet from "@/lib/isTestnet";
+import { isValidVideoLink } from "@/lib/isValidVideoLink";
 import { cn } from "@/lib/utils";
 import { Project, ProjectStatus } from "@/types/mongo";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { getCountdown } from "../lib/utils";
 import { chains } from "./Web3Provider";
-import { isValidVideoLink } from "@/lib/isValidVideoLink";
 import { Button } from "./ui/button";
-import { convertWeiToUsdOrEth } from "@/lib/convertWeiToUsdOrEth";
-import { useGetExchangeRate } from "@/hooks/useGetExchangeRate";
 
 // date formatter to convert dates to DD.MM.YYYY format
 const dateFormatter = new Intl.DateTimeFormat("en-GB", {
@@ -55,6 +54,7 @@ interface Props extends Project {
   showDropDate?: boolean;
   showMintEndDate?: boolean;
   showPrice?: boolean;
+  showSupporters?: boolean;
 }
 
 export function ProjectBlock({
@@ -69,6 +69,7 @@ export function ProjectBlock({
   showDropDate,
   showMintEndDate,
   showPrice,
+  showSupporters,
 }: Props) {
   const isDisabled = status !== ProjectStatus.LIVE;
   const router = useRouter();
@@ -157,15 +158,15 @@ export function ProjectBlock({
           <div className="pt-3 flex border-t w-full border-t-[var(--line-83d2b2f6)] items-center justify-between">
             <div>
               {status === ProjectStatus.LIVE ? (
-                <div className="text-center w-full flex gap-3 text-xs text-gray-700">
+                <div className="text-center w-full flex text-xs text-gray-700 divide-x">
                   {showMintEndDate && mint_end_date && (
-                    <p className="border-r pr-3">
+                    <p className="pr-2">
                       {getCountdown(new Date(mint_end_date))}
                     </p>
                   )}
                   {/* TODO: change this to onchain fee / exchange rate */}
                   {showPrice && (
-                    <p className="border-r pr-3">
+                    <p className="pr-2">
                       $
                       {edition_price.toLocaleString("en-US", {
                         maximumFractionDigits: 0,
@@ -173,8 +174,8 @@ export function ProjectBlock({
                       USD
                     </p>
                   )}
-                  {totalSupply !== undefined && (
-                    <p>
+                  {showSupporters && totalSupply !== undefined && (
+                    <p className="pl-2">
                       {(totalSupply + BigInt(supporter_count || 0)).toString()}{" "}
                       supporters
                     </p>

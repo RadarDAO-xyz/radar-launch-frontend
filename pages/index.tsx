@@ -81,6 +81,7 @@ export default function HomePage() {
                   {...project}
                   showDropDate
                   showMintEndDate
+                  showSupporters
                 />
               ))}
           </div>
