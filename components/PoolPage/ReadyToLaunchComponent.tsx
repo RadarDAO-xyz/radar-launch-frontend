@@ -22,8 +22,8 @@ export function ReadyToLaunchComponent() {
               height="auto"
               src="https://uploads-ssl.webflow.com/64548f6f8feacfafa79c9592/6480802c0e353e906c43dd3a_Brief_single.png"
             />
-            <h3 className={cn("heading-26")}>{"Be inspired"}</h3>
-            <p className={cn("body-text", "center")}>
+            <h3 className={cn("text-lg border-b-2 pb-1 pt-10")}>{"Be inspired"}</h3>
+            <p className={cn("body-text", "center mt-5 w-3/4")}>
               {
                 "Receive inspiration and insight from the RADAR community and partners"
               }
@@ -40,8 +40,8 @@ export function ReadyToLaunchComponent() {
               height={100}
               src="https://uploads-ssl.webflow.com/64548f6f8feacfafa79c9592/648087d8889d8922b98f1441_submit%20vision_2.png"
             />
-            <h3>{"Share your vision"}</h3>
-            <p className={cn("body-text", "center")}>
+            <h3 className="text-lg border-b-2 pb-1 pt-10">{"Share your vision"}</h3>
+            <p className={cn("body-text", "center mt-5 w-3/4")}>
               {
                 "Submit a video proposal (less than 3 mins) and set your milestones"
               }
@@ -58,8 +58,8 @@ export function ReadyToLaunchComponent() {
               height="auto"
               src="https://uploads-ssl.webflow.com/64548f6f8feacfafa79c9592/64808ab90c4bfc697c1a478e_submission%20icons.png"
             />
-            <h3>{"Receive validation"}</h3>
-            <p className={cn("body-text", "center")}>
+            <h3 className="text-lg border-b-2 pb-1 pt-10">{"Receive validation"}</h3>
+            <p className={cn("body-text", "center mt-5 w-3/4")}>
               {
                 "Receive an approval decision within 48 hours from RADAR's curation crew"
               }
@@ -76,8 +76,8 @@ export function ReadyToLaunchComponent() {
               height="auto"
               src="https://uploads-ssl.webflow.com/64548f6f8feacfafa79c9592/6480d007b8df65a9d406feeb_Artboard%201.png"
             />
-            <h3>{"Get support"}</h3>
-            <p className={cn("body-text", "center")}>
+            <h3 className="text-lg border-b-2 pb-1 pt-10">{"Get support"}</h3>
+            <p className={cn("body-text", "center mt-5 w-3/4")}>
               {
                 "Share your project page to attract users, contributors, and funding onchain"
               }
@@ -94,8 +94,8 @@ export function ReadyToLaunchComponent() {
               height="auto"
               src="https://uploads-ssl.webflow.com/64548f6f8feacfafa79c9592/6480dc87dff309c9a60279b0_Artboard%203.png"
             />
-            <h3>{"Make the future"}</h3>
-            <p className={cn("body-text", "center")}>
+            <h3 className="text-lg border-b-2 pb-1 pt-10">{"Make the future"}</h3>
+            <p className={cn("body-text", "center mt-5 w-3/4")}>
               {"Withdraw your crowdfunded ETH to achieve your first milestone"}
             </p>
           </div>
