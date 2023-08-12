@@ -185,16 +185,16 @@ export default function IndividualProjectPage() {
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <div className="flex items-center">
-              {userData?.socials ? (
+              {userData !== undefined ? (
                 <Link
-                  href={userData.socials}
+                  href={"/profile/" + userData._id}
                   target="_blank"
                   className="text-[16px] hover:underline"
                 >
                   {userData?.name}
                 </Link>
               ) : (
-                <p className="text-[16px]">{userData?.name}</p>
+                <p className="text-[16px]">{data?.title}</p>
               )}
             </div>
           </div>
