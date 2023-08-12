@@ -13,7 +13,7 @@ export function SetOwnBriefPoolCard() {
         src="/background2.png"
         className={"what-if-block-image-header object-cover mb-0 mx-auto"}
       />
-      <h2 className={cn("text-xl text-center pt-4 uppercase")}>
+      <h2 className={cn("text-xl text-center pt-4 uppercase leading-5")}>
         WANT TO SET YOUR <br />
         OWN BRIEF?
       </h2>
