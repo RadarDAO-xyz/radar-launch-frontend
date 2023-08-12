@@ -2,7 +2,6 @@ import { AdminNav } from "@/components/AdminNav";
 import { CollectedVisions } from "@/components/CollectedVisions";
 import { chains } from "@/components/Web3Provider";
 import { YourVisions } from "@/components/YourVisions";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   GOERLI_CONTRACT_ADDRESS,
@@ -15,10 +14,11 @@ import {
   useRadarEditionsGetEditions,
 } from "@/lib/generated";
 import isTestnet from "@/lib/isTestnet";
+import { convertAddressToChecksum } from "@/lib/utils";
 import { Project, WalletResolvable } from "@/types/mongo";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Address, useAccount } from "wagmi";
+import { Address } from "wagmi";
 
 export interface OnChainProject {
   status: number;
@@ -108,6 +108,7 @@ export default function AdminPage() {
   const { id } = router.query;
 
   const { data: userData } = useGetUser(id?.toString());
+  // address here is string from GET /user/:id, but WalletResolvable from GET /user/@me
   const address =
     typeof userData?.wallets[0] === "string"
       ? userData.wallets[0]
@@ -124,7 +125,7 @@ export default function AdminPage() {
     account: address as Address,
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
     chainId: chains[0].id,
-    args: [address as Address],
+    args: [convertAddressToChecksum(address) as Address],
     enabled: Boolean(chains[0].id) && Boolean(address),
   });
   const { data: databaseProjects } = useGetProjects();
@@ -152,20 +153,11 @@ export default function AdminPage() {
     <div className="mt-[80px] md:pt-6 pb-12 container max-w-7xl">
       <AdminNav user={userData} />
 
-
       <div className="mt-8">
         <Tabs defaultValue="your-visions">
           <TabsList className="justify-start w-full gap-4 mx-auto mb-6">
-            <TabsTrigger
-              // className="data-[state=active]:no-underline data-[state=active]:bg-gray-200 bg-gray-100 rounded font-normal"
-              value="your-visions"
-            >
-              Your Visions
-            </TabsTrigger>
-            <TabsTrigger
-              // className="data-[state=active]:no-underline data-[state=active]:bg-gray-200 bg-gray-100 rounded font-normal"
-              value="collected-visions"
-            >
+            <TabsTrigger value="your-visions">Your Visions</TabsTrigger>
+            <TabsTrigger value="collected-visions">
               Collected Visions
             </TabsTrigger>
           </TabsList>
@@ -173,7 +165,11 @@ export default function AdminPage() {
             {yourVisionsProjects.length === 0 ? (
               <div className="py-20 text-center">
                 <p className="text-2xl pb-4">Nothing to see here yet...</p>
-                <Link href="/project" className="underline">
+                <Link
+                  href="https://www.launch.radardao.xyz/brief"
+                  target="_blank"
+                  className="underline"
+                >
                   Be inspired
                 </Link>
               </div>
@@ -187,7 +183,7 @@ export default function AdminPage() {
                 {address !== undefined ? (
                   <>
                     <p className="text-2xl pb-4">Nothing to see here yet...</p>
-                    <Link href="/project" className="underline">
+                    <Link href="/" className="underline">
                       Be inspired
                     </Link>
                   </>

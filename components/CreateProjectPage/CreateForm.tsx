@@ -152,9 +152,19 @@ export const createFormSchema = z.object({
   admin_address: z
     .string()
     .min(1, { message: "Admin address is required" })
-    .refine((address) => isAddress(address) || address.endsWith(".eth"), {
-      message: "Invalid address",
-    }),
+    .refine(
+      (address) => {
+        try {
+          // isAddress throws an error
+          return isAddress(address) || address.endsWith(".eth");
+        } catch (e) {
+          return false;
+        }
+      },
+      {
+        message: "Invalid address",
+      }
+    ),
 });
 
 export function CreateForm() {
