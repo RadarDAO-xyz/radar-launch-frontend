@@ -6,7 +6,7 @@ import { useQuery } from "wagmi";
 export function useGetCurrentUser() {
   const { idToken } = useContext(AuthContext);
 
-  return useQuery(["users"], () => getCurrentUser(idToken), {
+  return useQuery(["current-user", idToken], () => getCurrentUser(idToken), {
     enabled: idToken !== "",
   });
 }
