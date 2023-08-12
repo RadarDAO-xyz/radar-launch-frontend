@@ -48,7 +48,7 @@ export function AdminNav({ isUpdateProfile = false, user }: Props) {
         </div>
         <hr className="mt-6" />
         <div className="py-4 flex justify-between items-center">
-          <p>Bio</p>
+          <HTMLParsedComponent text={user.bio || "Bio"} />
           <Button variant={"ghost"}>Find out more</Button>
         </div>
       </>
@@ -60,7 +60,10 @@ export function AdminNav({ isUpdateProfile = false, user }: Props) {
     <div className="grid grid-cols-5">
       <div className="col-span-3 flex flex-col justify-center pr-8">
         <h1 className="font-base pb-8 pt-8 text-2xl">{user?.name}</h1>
-        <HTMLParsedComponent text={user?.bio || ""} className="pb-4 max-w-[600px]" />
+        <HTMLParsedComponent
+          text={user?.bio || ""}
+          className="pb-4 max-w-[600px]"
+        />
         {user?.socials?.startsWith("https://") ? (
           <Button className="max-w-[200px]" asChild>
             <Link href={user.socials}>Socials</Link>

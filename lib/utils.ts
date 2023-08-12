@@ -3,6 +3,8 @@ import differenceInDays from "date-fns/differenceInDays";
 import { twMerge } from "tailwind-merge";
 import differenceInHours from "date-fns/differenceInHours";
 import differenceInMinutes from "date-fns/differenceInMinutes";
+import { getAddress } from "viem";
+import { chains } from "@/components/Web3Provider";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -113,4 +115,16 @@ export function formatUnits(value: bigint, decimals: number) {
   return `${negative ? "-" : ""}${integer || "0"}${
     fraction ? `.${fraction}` : ""
   }`;
+}
+
+export function convertAddressToChecksum(address?: string) {
+  if (!address) {
+    return address;
+  }
+  try {
+    return getAddress(address, chains[0].id);
+  } catch (e) {
+    console.error(e);
+  }
+  return address;
 }

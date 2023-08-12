@@ -15,7 +15,7 @@ import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useToast } from "../ui/use-toast";
-import { useMutation } from "wagmi";
+import { useMutation, useQueryClient } from "wagmi";
 
 async function updateUser(
   values: z.infer<typeof schema>,
@@ -69,8 +69,9 @@ export function UpdateForm() {
   });
   const { handleSubmit, control } = form;
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const { mutateAsync, isLoading } = useMutation(
-    ["update-profile"],
+    ["update-profile", data?._id, idToken],
     () => updateUser(form.getValues(), data?._id!, idToken),
     {
       onError: (error) => {
@@ -81,10 +82,10 @@ export function UpdateForm() {
           description: "Please check your browser console for more information",
         });
       },
-      onSettled: () => {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["current-user", idToken] });
         toast({
           title: "Successfully updated",
-          description: "Please refresh your page to see the changes",
         });
       },
     }
