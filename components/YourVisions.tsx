@@ -10,12 +10,15 @@ export function YourVisions({
   projects: ProjectWithChainData[];
 }) {
   const { data: currentUserData } = useGetCurrentUser();
-
+  console.log({
+    a: projects.map((project) => project.admin_address.toUpperCase()),
+    b: currentUserData?.wallets?.[0].address?.toUpperCase(),
+  });
   return (
     <div>
       <div className="p-8 rounded-lg border mb-6">
         <h2 className="text-xl">ACTIVE VISIONS</h2>
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-2">
           {projects
             .filter(
               (project) =>
@@ -27,7 +30,7 @@ export function YourVisions({
                 project.admin_address.toUpperCase() ===
                 currentUserData?.wallets?.[0].address?.toUpperCase()
               ) {
-                <VisionCard key={project._id} {...project} />;
+                return <VisionCard key={project._id} {...project} />;
               }
               return (
                 <ProjectBlock
@@ -55,7 +58,7 @@ export function YourVisions({
                 project.admin_address.toUpperCase() ===
                 currentUserData?.wallets?.[0].address?.toUpperCase()
               ) {
-                <VisionCard key={project._id} {...project} />;
+                return <VisionCard key={project._id} {...project} />;
               }
               return (
                 <ProjectBlock

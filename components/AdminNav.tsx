@@ -63,8 +63,8 @@ export function AdminNav({ isUpdateProfile = false, user }: Props) {
 
   // other user's view of your page
   return (
-    <div className="grid grid-cols-5">
-      <div className="col-span-3 flex flex-col justify-center pr-8">
+    <div className="grid lg:grid-cols-5 grid-cols-1">
+      <div className="lg:col-span-3 order-2 lg:order-1 flex flex-col justify-center pr-8">
         <h1 className="font-base pb-8 pt-8 text-2xl">{user?.name}</h1>
         <HTMLParsedComponent
           text={user?.bio || ""}
@@ -78,11 +78,11 @@ export function AdminNav({ isUpdateProfile = false, user }: Props) {
           <p>{user?.socials}</p>
         )}
       </div>
-      <div className="col-span-2 border rounded-xl p-10 flex justify-center text-center">
+      <div className="lg:col-span-2 order-1 lg:order-2 justify-center text-center">
         <img
           src={user?.profile || DEFAULT_AVATAR_IMAGE}
           alt={user?.name + " Profile Photo"}
-          className="rounded-xl border shadow-lg"
+          className="rounded-xl border shadow-lg rounded-xl p-10 border"
         />
       </div>
     </div>
