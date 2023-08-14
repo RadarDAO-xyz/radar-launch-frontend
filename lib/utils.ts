@@ -120,7 +120,7 @@ export function formatUnits(value: bigint, decimals: number) {
 export function convertAddressToChecksum(
   address_?: string
 ): undefined | Address {
-  if (!address_) {
+  if (address_ === undefined) {
     return address_;
   }
   const chainId = chains[0].id;

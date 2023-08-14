@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/dialog";
 import { useAuth } from "@/hooks/useAuth";
 import { deleteProject } from "@/lib/backend";
-import { useEffect } from "react";
 import { Button } from "react-day-picker";
 import { useMutation } from "wagmi";
 import { useToast } from "../ui/use-toast";
@@ -19,19 +18,18 @@ export function CancelSubmissionButton({ projectId }: { projectId: string }) {
   const { idToken } = useAuth();
   const { mutateAsync, error } = useMutation(
     ["delete-project", projectId, idToken],
-    () => deleteProject(projectId, idToken)
-  );
-
-  useEffect(() => {
-    if (error) {
-      console.error(error);
-      toast({
-        variant: "destructive",
-        title: "An error occurred",
-        description: "Please check your browser console for more information",
-      });
+    () => deleteProject(projectId, idToken),
+    {
+      onError: (e) => {
+        console.error(e);
+        toast({
+          variant: "destructive",
+          title: "An error occurred",
+          description: "Please check your browser console for more information",
+        });
+      },
     }
-  }, [error]);
+  );
 
   return (
     <Dialog>

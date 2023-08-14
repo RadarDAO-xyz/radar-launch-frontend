@@ -42,23 +42,24 @@ export function SignUpForm({ id }: Props) {
 
   const { mutateAsync, isSuccess, isLoading } = useMutation(
     ["signup-project", SupportType.SIGN_UP, id, email],
-    () => signupProject(id, email)
+    () => signupProject(id, email),
+    {
+      onError: (e) => {
+        console.error(e);
+        toast({
+          variant: "destructive",
+          title: "An error occurred",
+          description: "Please check your browser console for more information",
+        });
+      },
+    }
   );
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (errors) {
       console.error({ errors, values });
     }
-    try {
-      await mutateAsync();
-    } catch (e) {
-      console.error(e);
-      toast({
-        variant: "destructive",
-        title: "An unexpected error occured",
-        description: "Check the console for more information",
-      });
-    }
+    await mutateAsync();
   }
   return (
     <div>

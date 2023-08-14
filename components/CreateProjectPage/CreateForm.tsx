@@ -217,18 +217,41 @@ export function CreateForm() {
     mutateAsync,
     isLoading: isSubmitLoading,
     isSuccess: isSubmitSuccess,
-  } = useMutation(["submit-project"], () => {
-    const values = form.getValues();
-    if (admin_address.endsWith(".eth")) {
-      values.admin_address = ensAddressData || admin_address;
+  } = useMutation(
+    ["submit-project"],
+    () => {
+      const values = form.getValues();
+      if (admin_address.endsWith(".eth")) {
+        values.admin_address = ensAddressData || admin_address;
+      }
+      const newValues = {
+        ...values,
+        pool: values.brief,
+        brief: pools?.find((pool) => pool._id === values.brief)!.title!,
+      };
+      return createProject(idToken, newValues);
+    },
+    {
+      onError: (e) => {
+        console.error(e);
+        toast({
+          variant: "destructive",
+          title: "An unexpected error occured",
+          description: "Check the console for more information",
+        });
+      },
+      onSuccess: (data) => {
+        if (checkoutLink) {
+          toast({
+            title: "Redirecting to Paper for payment...",
+          });
+          setTimeout(() => {
+            router.push(checkoutLink);
+          }, 2000);
+        }
+      },
     }
-    const newValues = {
-      ...values,
-      pool: values.brief,
-      brief: pools?.find((pool) => pool._id === values.brief)!.title!,
-    };
-    return createProject(idToken, newValues);
-  });
+  );
   const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
     [
       "checkout-link",
@@ -265,24 +288,8 @@ export function CreateForm() {
       await mutateAsync();
     } catch (e) {
       console.error(e);
-      toast({
-        variant: "destructive",
-        title: "An unexpected error occured",
-        description: "Check the console for more information",
-      });
     }
   }
-
-  useEffect(() => {
-    if (isSubmitSuccess && createProjectData && checkoutLink) {
-      toast({
-        title: "Redirecting to Paper for payment...",
-      });
-      setTimeout(() => {
-        router.push(checkoutLink);
-      }, 2000);
-    }
-  }, [isSubmitSuccess, createProjectData, toast, router, checkoutLink]);
 
   if (address === undefined) {
     return (

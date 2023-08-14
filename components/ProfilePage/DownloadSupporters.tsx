@@ -26,19 +26,18 @@ export function DownloadSupporters({
   const { idToken, isLoggedIn } = useAuth();
   const { mutateAsync, error, data } = useMutation(
     ["download-project", _id, idToken],
-    () => downloadProjectSupporters(_id, idToken)
-  );
-
-  useEffect(() => {
-    if (error) {
-      console.error(error);
-      toast({
-        variant: "destructive",
-        title: "An error occurred",
-        description: "Please check your browser console for more information",
-      });
+    () => downloadProjectSupporters(_id, idToken),
+    {
+      onError: (e) => {
+        console.error(e);
+        toast({
+          variant: "destructive",
+          title: "An error occurred",
+          description: "Please check your browser console for more information",
+        });
+      },
     }
-  }, [error]);
+  );
 
   function downloadCsv() {
     console.log(data);
