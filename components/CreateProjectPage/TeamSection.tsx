@@ -10,8 +10,8 @@ export function TeamSection() {
         <div className="col-span-1 pr-4">
           <h2 className="text-xl font-base">Team</h2>
           <p>
-            Please add your team members names and brief bio. Note that your
-            email will not be visible on the platform.
+            Please add <strong>yourself</strong> and your team members names and brief
+            bio. Note that your email will not be visible on the platform.
           </p>
         </div>
         <div className="col-span-1">
