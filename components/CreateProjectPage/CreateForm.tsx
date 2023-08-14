@@ -240,16 +240,6 @@ export function CreateForm() {
           description: "Check the console for more information",
         });
       },
-      onSuccess: (data) => {
-        if (checkoutLink) {
-          toast({
-            title: "Redirecting to Paper for payment...",
-          });
-          setTimeout(() => {
-            router.push(checkoutLink);
-          }, 2000);
-        }
-      },
     }
   );
   const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
@@ -284,12 +274,19 @@ export function CreateForm() {
       console.error({ errors, values });
     }
 
-    try {
-      await mutateAsync();
-    } catch (e) {
-      console.error(e);
-    }
+    await mutateAsync();
   }
+
+  useEffect(() => {
+    if (isSubmitSuccess && createProjectData && checkoutLink) {
+      toast({
+        title: "Redirecting to Paper for payment...",
+      });
+      setTimeout(() => {
+        router.push(checkoutLink);
+      }, 2000);
+    }
+  }, [isSubmitSuccess, createProjectData, toast, router, checkoutLink]);
 
   if (address === undefined) {
     return (
