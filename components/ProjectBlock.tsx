@@ -1,14 +1,10 @@
-import {
-  GOERLI_CONTRACT_ADDRESS,
-  MAINNET_CONTRACT_ADDRESS,
-} from "@/constants/address";
+import { CONTRACT_ADDRESS } from "@/constants/address";
 import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
 import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
 import {
   useRadarEditionsGetEditions,
   useRadarEditionsTotalSupply,
 } from "@/lib/generated";
-import isTestnet from "@/lib/isTestnet";
 import { isValidVideoLink } from "@/lib/isValidVideoLink";
 import { cn } from "@/lib/utils";
 import { Project, ProjectStatus } from "@/types/mongo";
@@ -74,7 +70,7 @@ export function ProjectBlock({
   const router = useRouter();
 
   const { data: onChainProjects } = useRadarEditionsGetEditions({
-    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    address: CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
     enabled: Boolean(chains[0]?.id),
   });
@@ -82,7 +78,7 @@ export function ProjectBlock({
     (project) => project.id === _id
   );
   const { data: totalSupply } = useRadarEditionsTotalSupply({
-    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    address: CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
     args: [BigInt(Math.max(editionId! || 0, 0))],
     enabled: Boolean(chains[0]?.id) && editionId !== undefined,

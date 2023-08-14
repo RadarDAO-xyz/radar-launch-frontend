@@ -1,7 +1,4 @@
-import {
-  GOERLI_CONTRACT_ADDRESS,
-  MAINNET_CONTRACT_ADDRESS,
-} from "@/constants/address";
+import { CONTRACT_ADDRESS } from "@/constants/address";
 import { useGetProject } from "@/hooks/useGetProject";
 import { generateHoverVideoLink } from "@/lib/generateHoverVideoLink";
 import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
@@ -9,13 +6,12 @@ import {
   useRadarEditionsGetEditions,
   useRadarEditionsTotalSupply,
 } from "@/lib/generated";
-import isTestnet from "@/lib/isTestnet";
 import { cn, getCountdown } from "@/lib/utils";
 import { ProjectStatus } from "@/types/mongo";
 import Link from "next/link";
 import HoverVideoPlayer from "react-hover-video-player";
-import { chains } from "../Web3Provider";
 import { HTMLParsedComponent } from "../Layout/HTMLParsedComponent";
+import { chains } from "../Web3Provider";
 
 interface Props {
   projectId: string;
@@ -23,7 +19,7 @@ interface Props {
 
 export function VisionOfTheWeek({ projectId }: Props) {
   const { data: onChainProjects } = useRadarEditionsGetEditions({
-    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    address: CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
     enabled: Boolean(chains[0]?.id),
   });
@@ -31,7 +27,7 @@ export function VisionOfTheWeek({ projectId }: Props) {
     (project) => project.id === projectId
   );
   const { data: totalSupply } = useRadarEditionsTotalSupply({
-    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    address: CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
     args: [BigInt(Math.max(editionId || 0, 0))],
     enabled: Boolean(chains[0]?.id) && editionId !== undefined,

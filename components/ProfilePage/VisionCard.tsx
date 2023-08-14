@@ -1,10 +1,8 @@
 import {
-  GOERLI_CONTRACT_ADDRESS,
-  MAINNET_CONTRACT_ADDRESS,
+  CONTRACT_ADDRESS
 } from "@/constants/address";
 import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
 import { useRadarEditionsTotalSupply } from "@/lib/generated";
-import isTestnet from "@/lib/isTestnet";
 import { cn } from "@/lib/utils";
 import { ProjectWithChainData } from "@/pages/profile/[id]";
 import { ProjectStatus } from "@/types/mongo";
@@ -56,7 +54,7 @@ export function VisionCard(props: ProjectWithChainData) {
   const { _id, status, video_url, title, supporter_count, balance, editionId } =
     props;
   const { data: totalSupply } = useRadarEditionsTotalSupply({
-    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    address: CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
     args: [BigInt(Math.max(editionId! || 0, 0))],
     enabled: Boolean(chains[0]?.id) && editionId !== undefined,

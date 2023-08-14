@@ -7,14 +7,13 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import {
-  GOERLI_CONTRACT_ADDRESS,
-  MAINNET_CONTRACT_ADDRESS,
+  CONTRACT_ADDRESS
 } from "@/constants/address";
+import { useAuth } from "@/hooks/useAuth";
 import {
   usePrepareRadarEditionsWithdrawEditionBalance,
   useRadarEditionsWithdrawEditionBalance,
 } from "@/lib/generated";
-import isTestnet from "@/lib/isTestnet";
 import { parseEther } from "@/lib/utils";
 import { ProjectWithChainData } from "@/pages/profile/[id]";
 import { ProjectStatus } from "@/types/mongo";
@@ -25,7 +24,6 @@ import { Button } from "../ui/button";
 import { DialogFooter, DialogHeader } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { useToast } from "../ui/use-toast";
-import { useAuth } from "@/hooks/useAuth";
 
 export function WithdrawETHButton({ status, editionId }: ProjectWithChainData) {
   const amountRef = useRef<HTMLInputElement>(null);
@@ -34,7 +32,7 @@ export function WithdrawETHButton({ status, editionId }: ProjectWithChainData) {
   const { isLoggedIn } = useAuth();
   const { config } = usePrepareRadarEditionsWithdrawEditionBalance({
     account: address,
-    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    address: CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
     enabled: Boolean(address) && amountRef.current?.value !== undefined,
     args: [

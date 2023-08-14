@@ -1,8 +1,5 @@
 import abi from "@/abi/RadarEditions.sol/RadarEditions.json";
-import {
-  GOERLI_CONTRACT_ADDRESS,
-  MAINNET_CONTRACT_ADDRESS,
-} from "@/constants/address";
+import { CONTRACT_ADDRESS } from "@/constants/address";
 import { getProject } from "@/lib/backend";
 import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
 import isTestnet from "@/lib/isTestnet";
@@ -29,11 +26,7 @@ export default async function handler(
     const provider = ethers.getDefaultProvider(
       isTestnet() ? optimismGoerli.id : optimism.id
     );
-    const contract = new ethers.Contract(
-      isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
-      abi.abi,
-      provider
-    );
+    const contract = new ethers.Contract(CONTRACT_ADDRESS, abi.abi, provider);
     const [, , , , id] = (await contract.editions(tokenId)) ?? [];
 
     const project = await getProject(id);

@@ -1,8 +1,7 @@
-import { GOERLI_CONTRACT_ID, MAINNET_CONTRACT_ID } from "@/constants/paper";
-import isTestnet from "@/lib/isTestnet";
-import { NextApiRequest, NextApiResponse } from "next";
-import { parseEther } from "@/lib/utils";
+import { CONTRACT_ADDRESS } from "@/constants/address";
 import { getEthExchangeRate } from "@/lib/getEthExchangeRate";
+import { parseEther } from "@/lib/utils";
+import { NextApiRequest, NextApiResponse } from "next";
 
 interface Response {
   checkoutLinkIntentUrl: string;
@@ -44,7 +43,7 @@ export default async function handler(
         Authorization: "Bearer " + process.env.PAPER_API_KEY,
       },
       body: JSON.stringify({
-        contractId: isTestnet() ? GOERLI_CONTRACT_ID : MAINNET_CONTRACT_ID,
+        contractId: CONTRACT_ADDRESS,
         title: `Create Project - ${title}`,
         // description: "Describe your project *with Markdown!*",
         imageUrl,

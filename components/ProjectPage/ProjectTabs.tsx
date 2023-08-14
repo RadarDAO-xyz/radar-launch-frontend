@@ -1,8 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  GOERLI_CONTRACT_ADDRESS,
-  MAINNET_CONTRACT_ADDRESS,
-} from "@/constants/address";
+import { CONTRACT_ADDRESS } from "@/constants/address";
 import { useAuth } from "@/hooks/useAuth";
 import { useGetExchangeRate } from "@/hooks/useGetExchangeRate";
 import { useGetProject } from "@/hooks/useGetProject";
@@ -15,7 +12,6 @@ import {
   useRadarEditionsProtocolFee,
   useRadarEditionsTotalSupply,
 } from "@/lib/generated";
-import isTestnet from "@/lib/isTestnet";
 import { cn, getCountdown } from "@/lib/utils";
 import parse from "html-react-parser";
 import { DotIcon, MinusIcon, MoveDown, PlusIcon } from "lucide-react";
@@ -97,12 +93,12 @@ export function ProjectTabs({ id }: { id: string }) {
   const { address } = useAccount();
   const { login, isLoggedIn } = useAuth();
   const { data: onChainProjects } = useRadarEditionsGetEditions({
-    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    address: CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
     enabled: Boolean(chains[0]?.id),
   });
   const { data: protocolFee } = useRadarEditionsProtocolFee({
-    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    address: CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
     enabled: Boolean(chains[0]?.id),
   });
@@ -114,14 +110,14 @@ export function ProjectTabs({ id }: { id: string }) {
     editionId !== undefined ? onChainProjects?.[editionId]?.fee : undefined;
 
   const { data: totalSupply } = useRadarEditionsTotalSupply({
-    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    address: CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
     args: [BigInt(Math.max(editionId || 0, 0))],
     enabled: Boolean(chains[0]?.id) && editionId !== undefined,
   });
   const { config, error } = usePrepareRadarEditionsMintEdition({
     account: address,
-    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    address: CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
     args: [
       BigInt(editionId || 0),
@@ -387,9 +383,7 @@ export function ProjectTabs({ id }: { id: string }) {
               )}
             </p>
             <Link
-              href={`${chains[0].blockExplorers.etherscan.url}/address/${
-                isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS
-              }`}
+              href={`${chains[0].blockExplorers.etherscan.url}/address/${CONTRACT_ADDRESS}`}
               className="text-gray-500 hover:underline text-center mx-auto w-full block"
               target="_blank"
             >

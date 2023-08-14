@@ -1,4 +1,10 @@
+import isTestnet from "@/lib/isTestnet";
+
 export const GOERLI_CONTRACT_ADDRESS =
   "0x2d22716eeb1f85cf79c5531b405517c07441e84b";
 export const MAINNET_CONTRACT_ADDRESS =
   "0xdbed288027cCbE7F6746bB62c989E7C09C7c8059";
+
+export const CONTRACT_ADDRESS = isTestnet()
+  ? GOERLI_CONTRACT_ADDRESS
+  : MAINNET_CONTRACT_ADDRESS;
