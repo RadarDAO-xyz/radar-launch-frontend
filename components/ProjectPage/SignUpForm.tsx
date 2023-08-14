@@ -40,7 +40,7 @@ export function SignUpForm({ id }: Props) {
   } = form;
   const email = watch("email");
 
-  const { mutateAsync, isSuccess, isLoading } = useMutation(
+  const { mutate, isSuccess, isLoading } = useMutation(
     ["signup-project", SupportType.SIGN_UP, id, email],
     () => signupProject(id, email),
     {
@@ -59,7 +59,7 @@ export function SignUpForm({ id }: Props) {
     if (errors) {
       console.error({ errors, values });
     }
-    await mutateAsync();
+    mutate();
   }
   return (
     <div>

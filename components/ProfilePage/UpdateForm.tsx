@@ -70,7 +70,7 @@ export function UpdateForm() {
   const { handleSubmit, control } = form;
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { mutateAsync, isLoading } = useMutation(
+  const { mutate, isLoading } = useMutation(
     ["update-profile", data?._id, idToken],
     () => updateUser(form.getValues(), data?._id!, idToken),
     {
@@ -93,7 +93,7 @@ export function UpdateForm() {
 
   const onSubmit = async (formData: z.infer<typeof schema>) => {
     if (data?._id && idToken !== "") {
-      mutateAsync();
+      mutate();
     }
   };
 

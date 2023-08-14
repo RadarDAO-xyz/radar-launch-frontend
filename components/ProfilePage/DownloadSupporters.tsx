@@ -24,10 +24,13 @@ export function DownloadSupporters({
 }: ProjectWithChainData) {
   const { toast } = useToast();
   const { idToken, isLoggedIn } = useAuth();
-  const { mutateAsync, error, data } = useMutation(
+  const { mutate, error, data } = useMutation(
     ["download-project", _id, idToken],
     () => downloadProjectSupporters(_id, idToken),
     {
+      onSuccess: () => {
+        downloadCsv();
+      },
       onError: (e) => {
         console.error(e);
         toast({
@@ -76,8 +79,7 @@ export function DownloadSupporters({
           <Button
             type="submit"
             onClick={async () => {
-              await mutateAsync?.();
-              downloadCsv();
+              mutate();
             }}
             disabled={!isLoggedIn}
           >

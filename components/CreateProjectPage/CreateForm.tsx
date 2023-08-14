@@ -214,7 +214,7 @@ export function CreateForm() {
   });
   const {
     data: createProjectData,
-    mutateAsync,
+    mutate,
     isLoading: isSubmitLoading,
     isSuccess: isSubmitSuccess,
   } = useMutation(
@@ -274,7 +274,7 @@ export function CreateForm() {
       console.error({ errors, values });
     }
 
-    await mutateAsync();
+    mutate();
   }
 
   useEffect(() => {
