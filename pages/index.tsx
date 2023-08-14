@@ -25,7 +25,6 @@ const VisionOfTheWeekProjectNoSSR = dynamic(
   }
 );
 
-const FEATURED_PROJECT_ID = "64d10e4fa67c3abf0508808c";
 const CENTAUR_PROEJCT_IDS = [
   "64d3ef19d96faeddac76d82b",
   "64d3f328d96faeddac76d848",
@@ -44,7 +43,7 @@ export default function HomePage() {
 
       <HeaderHero
         visionOfTheWeekSlot={
-          <VisionOfTheWeekProjectNoSSR projectId={FEATURED_PROJECT_ID} />
+          <VisionOfTheWeekProjectNoSSR projectId={process.env.FEATURED_PROJECT_ID!} />
         }
       />
       <ProjectDiv

@@ -15,6 +15,7 @@ import { ProjectStatus } from "@/types/mongo";
 import Link from "next/link";
 import HoverVideoPlayer from "react-hover-video-player";
 import { chains } from "../Web3Provider";
+import { HTMLParsedComponent } from "../Layout/HTMLParsedComponent";
 
 interface Props {
   projectId: string;
@@ -82,7 +83,10 @@ export function VisionOfTheWeek({ projectId }: Props) {
         </Link>
         <div className="">
           {data?.description && (
-            <p className="text-xs text-gray-700">{data.description}</p>
+            <HTMLParsedComponent
+              className="text-xs text-gray-700"
+              text={data.description}
+            />
           )}
           <div className="_10px-div" />
           <div className="collect-wrapper main w-full bottom-1 md:bottom-[5%]">
@@ -109,7 +113,10 @@ export function VisionOfTheWeek({ projectId }: Props) {
               )}
             </div>
             <Link
-              className={cn("arrow-diagonal text-3xl cursor-pointer hover:opacity-60 transition-opacity", data?.status)}
+              className={cn(
+                "arrow-diagonal text-3xl cursor-pointer hover:opacity-60 transition-opacity",
+                data?.status
+              )}
               href={`/project/${projectId}`}
             >
               ↗
