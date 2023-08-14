@@ -3,17 +3,13 @@ import { CollectedVisions } from "@/components/CollectedVisions";
 import { chains } from "@/components/Web3Provider";
 import { YourVisions } from "@/components/YourVisions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  GOERLI_CONTRACT_ADDRESS,
-  MAINNET_CONTRACT_ADDRESS,
-} from "@/constants/address";
+import { CONTRACT_ADDRESS } from "@/constants/address";
 import { useGetProjects } from "@/hooks/useGetProjects";
 import { useGetUser } from "@/hooks/useGetUser";
 import {
   useRadarEditionsGetBalances,
   useRadarEditionsGetEditions,
 } from "@/lib/generated";
-import isTestnet from "@/lib/isTestnet";
 import { convertAddressToChecksum } from "@/lib/utils";
 import { Project, WalletResolvable } from "@/types/mongo";
 import Link from "next/link";
@@ -117,13 +113,13 @@ export default function AdminPage() {
       ? (userData.wallets[0] as WalletResolvable).address
       : "";
   const { data: onChainProjects } = useRadarEditionsGetEditions({
-    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
     enabled: Boolean(chains[0].id),
   });
   const { data: ownedOnChainProjects } = useRadarEditionsGetBalances({
     account: convertAddressToChecksum(address)!,
-    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
     args: [convertAddressToChecksum(address) as Address],
     enabled: Boolean(chains[0].id) && Boolean(address),

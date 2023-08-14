@@ -5,6 +5,7 @@ import {
   type User,
   type WalletResolvable,
 } from "@/types/mongo";
+import { ExchangeRate } from "./getEthExchangeRate";
 
 export async function getPools(): Promise<Pool[]> {
   const response = await fetch(`${process.env.BACKEND_URL}/pools`);
@@ -229,4 +230,15 @@ export async function downloadProjectSupporters(
     throw new Error("Failed to download project supporters");
   }
   return response.text();
+}
+
+export async function getTotalContributions(): Promise<{
+  contributionInEth: number;
+}> {
+  const response = await fetch(`/api/get-total-contribution`);
+  if (!response.ok) {
+    console.error(response);
+    throw new Error("Failed to get total contribution");
+  }
+  return response.json();
 }
