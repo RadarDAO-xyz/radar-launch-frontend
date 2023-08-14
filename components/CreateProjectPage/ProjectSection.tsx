@@ -170,10 +170,6 @@ export function ProjectSection() {
                       {...rest}
                       type="file"
                       onChange={(event) => {
-                        console.log(
-                          event.target.files,
-                          event.target.files?.[0]
-                        );
                         if (event.target.files) {
                           onChange(event.target.files[0]);
                         }

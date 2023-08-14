@@ -8,7 +8,7 @@ import Link from "next/link";
 
 export function ProjectSection({ _id, title }: Pool) {
   const { data } = useGetPoolProjects(_id);
-  console.log(data);
+
   return (
     <section className="px-[5%] py-12">
       <h2 className="text-2xl border-none py-8">{title}</h2>

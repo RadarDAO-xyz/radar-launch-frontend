@@ -10,10 +10,6 @@ export function YourVisions({
   projects: ProjectWithChainData[];
 }) {
   const { data: currentUserData } = useGetCurrentUser();
-  console.log({
-    a: projects.map((project) => project.admin_address.toUpperCase()),
-    b: currentUserData?.wallets?.[0].address?.toUpperCase(),
-  });
   return (
     <div>
       <div className="p-8 rounded-lg border mb-6">

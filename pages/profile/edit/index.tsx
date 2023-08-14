@@ -22,7 +22,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <section className="max-w-screen-lg mx-auto mt-[80px]">
+    <section className="max-w-screen-lg mx-auto mt-[80px] px-[5%]">
       <AdminNav isUpdateProfile user={data} />
       <UpdateFormNoSSR />
     </section>
