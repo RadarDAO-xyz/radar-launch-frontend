@@ -188,7 +188,6 @@ export default function IndividualProjectPage() {
               {userData !== undefined ? (
                 <Link
                   href={"/profile/" + userData._id}
-                  target="_blank"
                   className="text-[16px] hover:underline"
                 >
                   {userData?.name}

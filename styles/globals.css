@@ -93,7 +93,7 @@
   }
 
   .html-parse p {
-    @apply mb-5
+    @apply mb-5 break-all
   }
 
   .html-parse ul {

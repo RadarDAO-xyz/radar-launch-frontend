@@ -1,20 +1,18 @@
-import { cn } from "@/lib/utils";
-import { Project, ProjectStatus } from "@/types/mongo";
-import { VisionCardActions } from "./VisionCardActions";
-import { Badge } from "../ui/badge";
-import { ProjectWithChainData } from "@/pages/profile/[id]";
-import { formatEther } from "viem";
-import Link from "next/link";
-import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
 import {
   GOERLI_CONTRACT_ADDRESS,
   MAINNET_CONTRACT_ADDRESS,
 } from "@/constants/address";
+import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
 import { useRadarEditionsTotalSupply } from "@/lib/generated";
 import isTestnet from "@/lib/isTestnet";
+import { cn } from "@/lib/utils";
+import { ProjectWithChainData } from "@/pages/profile/[id]";
+import { ProjectStatus } from "@/types/mongo";
+import Link from "next/link";
+import { formatEther } from "viem";
 import { chains } from "../Web3Provider";
-import { useGetProjectSupporters } from "@/hooks/useGetProjectSupporters";
-import { useAuth } from "@/hooks/useAuth";
+import { Badge } from "../ui/badge";
+import { VisionCardActions } from "./VisionCardActions";
 
 function convertStatusName(status: ProjectStatus) {
   switch (status) {
