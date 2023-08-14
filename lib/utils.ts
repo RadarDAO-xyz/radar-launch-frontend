@@ -1,10 +1,10 @@
-import { type ClassValue, clsx } from "clsx";
+import { chains } from "@/components/Web3Provider";
+import { clsx, type ClassValue } from "clsx";
 import differenceInDays from "date-fns/differenceInDays";
-import { twMerge } from "tailwind-merge";
 import differenceInHours from "date-fns/differenceInHours";
 import differenceInMinutes from "date-fns/differenceInMinutes";
-import { getAddress } from "viem";
-import { chains } from "@/components/Web3Provider";
+import { twMerge } from "tailwind-merge";
+import { Address, keccak256, stringToBytes } from "viem";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -117,14 +117,29 @@ export function formatUnits(value: bigint, decimals: number) {
   }`;
 }
 
-export function convertAddressToChecksum(address?: string) {
-  if (!address) {
-    return address;
+export function convertAddressToChecksum(
+  address_?: string
+): undefined | Address {
+  if (!address_) {
+    return address_;
   }
-  try {
-    return getAddress(address, chains[0].id);
-  } catch (e) {
-    console.error(e);
+  const chainId = chains[0].id;
+  const hexAddress = chainId
+    ? `${chainId}${address_.toLowerCase()}`
+    : address_.substring(2).toLowerCase();
+  const hash = keccak256(stringToBytes(hexAddress), "bytes");
+
+  const address = (
+    chainId ? hexAddress.substring(`${chainId}0x`.length) : hexAddress
+  ).split("");
+  for (let i = 0; i < 40; i += 2) {
+    if (hash[i >> 1] >> 4 >= 8 && address[i]) {
+      address[i] = address[i].toUpperCase();
+    }
+    if ((hash[i >> 1] & 0x0f) >= 8 && address[i + 1]) {
+      address[i + 1] = address[i + 1].toUpperCase();
+    }
   }
-  return address;
+
+  return `0x${address.join("")}`;
 }
