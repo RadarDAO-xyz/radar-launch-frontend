@@ -47,9 +47,15 @@ export function AdminNav({ isUpdateProfile = false, user }: Props) {
           </div>
         </div>
         <hr className="mt-6" />
-        <div className="py-4 flex justify-between items-center">
-          <HTMLParsedComponent text={user.bio || "Bio"} />
-          <Button variant={"ghost"}>Find out more</Button>
+        <div className="py-4 grid grid-cols-1 lg:grid-cols-6 gap-5 items-start">
+          <HTMLParsedComponent
+            className="col-span-1 lg:col-span-4"
+            text={user.bio || "Bio"}
+          />
+          <div className="col-span-1" />
+          <Button variant={"ghost"} className="col-span-1">
+            Find out more
+          </Button>
         </div>
       </>
     );
