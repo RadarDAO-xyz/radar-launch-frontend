@@ -41,7 +41,8 @@ async function getMintCheckoutLink(
   title?: string,
   imageUrl?: string,
   projectId?: string,
-  socials?: string
+  socials?: string,
+  payingWithCard: boolean = false
 ): Promise<string> {
   if (
     editionId === undefined ||
@@ -66,6 +67,7 @@ async function getMintCheckoutLink(
         imageUrl,
         projectId,
         socials,
+        payingWithCard,
       }),
     }).then((res) => res.json());
 
@@ -143,27 +145,52 @@ export function ProjectTabs({ id }: { id: string }) {
   const { data: projectData } = useGetProject(id.toString());
   const { data: userData } = useGetUser(projectData?.founder.toString());
 
-  const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
-    ["checkout-mint-link", editionId, value, quantity],
-    () =>
-      getMintCheckoutLink(
-        quantity,
-        editionId,
-        (value! + protocolFee!).toString(),
-        projectData?.title,
-        generateVideoThumbnail(projectData?.video_url!),
-        projectData?._id,
-        userData?.socials?.replace("https://twitter.com/", "")
-      ),
-    {
-      enabled:
-        editionId !== undefined &&
-        value !== undefined &&
-        protocolFee !== undefined &&
-        currentTab === Tab.COLLECT &&
-        projectData !== undefined,
-    }
-  );
+  const { data: checkoutLinkForEth, isLoading: isCheckoutLinkForEthLoading } =
+    useQuery(
+      ["checkout-mint-link", editionId, value, quantity, false],
+      () =>
+        getMintCheckoutLink(
+          quantity,
+          editionId,
+          (value! + protocolFee!).toString(),
+          projectData?.title,
+          generateVideoThumbnail(projectData?.video_url!),
+          projectData?._id,
+          userData?.socials?.replace("https://twitter.com/", ""),
+          false
+        ),
+      {
+        enabled:
+          editionId !== undefined &&
+          value !== undefined &&
+          protocolFee !== undefined &&
+          currentTab === Tab.COLLECT &&
+          projectData !== undefined,
+      }
+    );
+  const { data: checkoutLinkForCard, isLoading: isCheckoutLinkForCardLoading } =
+    useQuery(
+      ["checkout-mint-link", editionId, value, quantity, true],
+      () =>
+        getMintCheckoutLink(
+          quantity,
+          editionId,
+          (value! + protocolFee!).toString(),
+          projectData?.title,
+          generateVideoThumbnail(projectData?.video_url!),
+          projectData?._id,
+          userData?.socials?.replace("https://twitter.com/", ""),
+          true
+        ),
+      {
+        enabled:
+          editionId !== undefined &&
+          value !== undefined &&
+          protocolFee !== undefined &&
+          currentTab === Tab.COLLECT &&
+          projectData !== undefined,
+      }
+    );
 
   const { toast } = useToast();
 
@@ -323,14 +350,35 @@ export function ProjectTabs({ id }: { id: string }) {
                     <Button
                       className={cn(
                         "w-full",
-                        !checkoutLink ? "pointer-events-none bg-gray-600" : ""
+                        !checkoutLinkForCard
+                          ? "pointer-events-none bg-gray-600"
+                          : ""
                       )}
                       variant="ghost"
                       asChild
-                      disabled={!checkoutLink || isCheckoutLinkLoading}
+                      disabled={
+                        !checkoutLinkForCard || isCheckoutLinkForCardLoading
+                      }
                     >
-                      <Link href={checkoutLink || ""}>
-                        Collect with Card / ETH
+                      <Link href={checkoutLinkForCard || ""}>
+                        Collect with Card
+                      </Link>
+                    </Button>
+                    <Button
+                      className={cn(
+                        "w-full",
+                        !checkoutLinkForEth
+                          ? "pointer-events-none bg-gray-600"
+                          : ""
+                      )}
+                      variant="ghost"
+                      asChild
+                      disabled={
+                        !checkoutLinkForEth || isCheckoutLinkForEthLoading
+                      }
+                    >
+                      <Link href={checkoutLinkForEth || ""}>
+                        Collect with ETH
                       </Link>
                     </Button>
                     <Button

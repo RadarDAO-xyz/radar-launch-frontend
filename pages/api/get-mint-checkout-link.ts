@@ -17,8 +17,16 @@ export default async function handler(
     return res.status(404).json({ message: "Not found" });
   }
   try {
-    const { editionId, value, quantity, title, imageUrl, projectId, socials } =
-      req.body;
+    const {
+      editionId,
+      value,
+      quantity,
+      title,
+      imageUrl,
+      projectId,
+      socials,
+      payingWithCard,
+    } = req.body;
     console.log({
       editionId,
       value,
@@ -27,6 +35,7 @@ export default async function handler(
       imageUrl,
       projectId,
       socials,
+      payingWithCard,
     });
     if (editionId === undefined || !value || !quantity || !title || !imageUrl) {
       return res.status(400).json({ message: "Invalid editionId or value" });
@@ -62,7 +71,10 @@ export default async function handler(
           },
           payment: { currency: "ETH", value: `${ethValue} * $QUANTITY` },
         },
-        hideNativeMint: true,
+        hideNativeMint: true, // hide Optimism payment
+        ...(payingWithCard
+          ? { hidePayWithCrypto: true }
+          : { hidePayWithCard: true }),
         // contractArgs: "string",
         feeBearer: "BUYER",
         sendEmailOnTransferSucceeded: true,
