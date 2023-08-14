@@ -53,8 +53,8 @@ export function WithdrawETHButton({ status, editionId }: ProjectWithChainData) {
       console.error(error);
       toast({
         variant: "destructive",
-        title: "An error occurred",
-        description: "Please check your browser console for more information",
+        title: "An unexpected error occured",
+        description: "Check the console for more information",
       });
     }
   }, [error]);

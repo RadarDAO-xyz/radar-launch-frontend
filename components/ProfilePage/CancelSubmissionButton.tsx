@@ -24,8 +24,8 @@ export function CancelSubmissionButton({ projectId }: { projectId: string }) {
         console.error(e);
         toast({
           variant: "destructive",
-          title: "An error occurred",
-          description: "Please check your browser console for more information",
+          title: "An unexpected error occured",
+          description: "Check the console for more information",
         });
       },
     }

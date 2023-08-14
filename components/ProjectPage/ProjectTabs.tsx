@@ -119,7 +119,7 @@ export function ProjectTabs({ id }: { id: string }) {
     args: [BigInt(Math.max(editionId || 0, 0))],
     enabled: Boolean(chains[0]?.id) && editionId !== undefined,
   });
-  const { config } = usePrepareRadarEditionsMintEdition({
+  const { config, error } = usePrepareRadarEditionsMintEdition({
     account: address,
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
@@ -238,11 +238,17 @@ export function ProjectTabs({ id }: { id: string }) {
                   $
                   {Math.round(
                     parseFloat(
-                      convertWeiToUsdOrEth(value, exchangeRateData?.ethereum.usd)
+                      convertWeiToUsdOrEth(
+                        value,
+                        exchangeRateData?.ethereum.usd
+                      )
                     )
                   ).toString()}
                 </span>
-                <span> {exchangeRateData?.ethereum.usd ? "USD" : "ETH"} X </span>{" "}
+                <span>
+                  {" "}
+                  {exchangeRateData?.ethereum.usd ? "USD" : "ETH"} X{" "}
+                </span>{" "}
                 <span className="text-black">{quantity}</span>
               </div>
               <div>mint fee</div>
@@ -260,7 +266,10 @@ export function ProjectTabs({ id }: { id: string }) {
                     )
                   ).toString()}
                 </span>
-                <span> {exchangeRateData?.ethereum.usd ? "USD" : "ETH"} X </span>
+                <span>
+                  {" "}
+                  {exchangeRateData?.ethereum.usd ? "USD" : "ETH"} X{" "}
+                </span>
                 <span className="text-black">{quantity}</span>
               </div>
               <div>protocol fee</div>
@@ -340,6 +349,14 @@ export function ProjectTabs({ id }: { id: string }) {
                           } catch (e) {
                             // prevent error from crashing the app
                             console.log(e);
+                          }
+                          if (error) {
+                            toast({
+                              variant: "destructive",
+                              title: "An unexpected error occured",
+                              description:
+                                "Check the console for more information",
+                            });
                           }
                         }
                       }}
