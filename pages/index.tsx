@@ -78,7 +78,6 @@ export default function HomePage() {
                 <ProjectBlockNoSSR
                   key={project._id}
                   {...project}
-                  showDropDate
                   showMintEndDate
                   showSupporters
                 />
