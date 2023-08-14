@@ -18,10 +18,10 @@ export function HeroSectionAmount({ data, exchangeRateData }: Props) {
       {"$" +
         (
           12400 +
-          (data && exchangeRateData?.rates?.ETH
+          (data && exchangeRateData?.ethereum?.usd
             ? +convertWeiToUsdOrEth(
                 data.reduce((acc, edition) => acc + edition.balance, 0n),
-                exchangeRateData.rates.ETH
+                exchangeRateData.ethereum.usd
               )
             : 0)
         ).toLocaleString("en-US", {

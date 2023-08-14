@@ -1,8 +1,8 @@
 import { GOERLI_CONTRACT_ID, MAINNET_CONTRACT_ID } from "@/constants/paper";
 import isTestnet from "@/lib/isTestnet";
 import { NextApiRequest, NextApiResponse } from "next";
-import { fetchExchangeRate } from "./exchange-rate";
 import { parseEther } from "@/lib/utils";
+import { getEthExchangeRate } from "@/lib/getEthExchangeRate";
 
 interface Response {
   checkoutLinkIntentUrl: string;
@@ -21,18 +21,18 @@ export default async function handler(
     const { fee, address, id, title, imageUrl } = req.body;
     console.log({ fee, address, id, title, imageUrl });
 
-    const exchangeRateData = await fetchExchangeRate("ETH");
+    const exchangeRateData = await getEthExchangeRate();
     if (
       !exchangeRateData ||
-      !exchangeRateData.rates ||
-      !exchangeRateData.rates["ETH"]
+      !exchangeRateData.ethereum ||
+      !exchangeRateData.ethereum.usd
     ) {
       console.error("Error fetching exchange rate data");
       return res.status(400).json({ message: "Error has occured" });
     }
 
     const actualFee = parseEther(
-      String(parseFloat(fee) / exchangeRateData.rates["ETH"]),
+      String(parseFloat(fee) / exchangeRateData.ethereum.usd),
       "wei"
     ).toString();
 

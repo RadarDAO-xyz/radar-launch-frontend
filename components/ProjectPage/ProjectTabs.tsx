@@ -143,7 +143,7 @@ export function ProjectTabs({ id }: { id: string }) {
     enabled: mintEditionData?.hash !== undefined,
   });
 
-  const { data: exchangeRateData } = useGetExchangeRate("ETH");
+  const { data: exchangeRateData } = useGetExchangeRate();
   const { data: projectData } = useGetProject(id.toString());
   const { data: userData } = useGetUser(projectData?.founder.toString());
 
@@ -238,11 +238,11 @@ export function ProjectTabs({ id }: { id: string }) {
                   $
                   {Math.round(
                     parseFloat(
-                      convertWeiToUsdOrEth(value, exchangeRateData?.rates?.ETH)
+                      convertWeiToUsdOrEth(value, exchangeRateData?.ethereum.usd)
                     )
                   ).toString()}
                 </span>
-                <span> {exchangeRateData?.rates?.ETH ? "USD" : "ETH"} X </span>{" "}
+                <span> {exchangeRateData?.ethereum.usd ? "USD" : "ETH"} X </span>{" "}
                 <span className="text-black">{quantity}</span>
               </div>
               <div>mint fee</div>
@@ -255,12 +255,12 @@ export function ProjectTabs({ id }: { id: string }) {
                     parseFloat(
                       convertWeiToUsdOrEth(
                         protocolFee,
-                        exchangeRateData?.rates?.ETH
+                        exchangeRateData?.ethereum.usd
                       )
                     )
                   ).toString()}
                 </span>
-                <span> {exchangeRateData?.rates?.ETH ? "USD" : "ETH"} X </span>
+                <span> {exchangeRateData?.ethereum.usd ? "USD" : "ETH"} X </span>
                 <span className="text-black">{quantity}</span>
               </div>
               <div>protocol fee</div>
@@ -274,11 +274,11 @@ export function ProjectTabs({ id }: { id: string }) {
                   parseFloat(
                     convertWeiToUsdOrEth(
                       (value + protocolFee) * BigInt(quantity),
-                      exchangeRateData?.rates?.ETH
+                      exchangeRateData?.ethereum.usd
                     )
                   )
                 ).toString()}
-                <span> {exchangeRateData?.rates?.ETH ? "USD" : "ETH"}</span>
+                <span> {exchangeRateData?.ethereum.usd ? "USD" : "ETH"}</span>
               </span>
             </div>
             <div className="flex w-full space-x-4 mb-4 px-12 md:px-4 xl:px-12">

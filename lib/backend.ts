@@ -63,15 +63,6 @@ export async function getProjectSupporters(
   return response.json();
 }
 
-export async function getExchangeRate(symbols: string) {
-  const response = await fetch(`/api/exchange-rate?symbols=${symbols}`);
-  if (!response.ok) {
-    console.error(response);
-    throw new Error("Failed to fetch exchange rate");
-  }
-  return response.json();
-}
-
 export async function getUser(userId: string): Promise<User> {
   const response = await fetch(`${process.env.BACKEND_URL}/users/${userId}`);
   if (!response.ok) {

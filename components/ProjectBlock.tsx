@@ -2,7 +2,6 @@ import {
   GOERLI_CONTRACT_ADDRESS,
   MAINNET_CONTRACT_ADDRESS,
 } from "@/constants/address";
-import { useGetExchangeRate } from "@/hooks/useGetExchangeRate";
 import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
 import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
 import {
@@ -88,7 +87,6 @@ export function ProjectBlock({
     args: [BigInt(Math.max(editionId! || 0, 0))],
     enabled: Boolean(chains[0]?.id) && editionId !== undefined,
   });
-  const { data: exchangeRateData } = useGetExchangeRate("ETH");
 
   return (
     <div

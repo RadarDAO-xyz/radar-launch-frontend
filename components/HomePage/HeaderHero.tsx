@@ -30,7 +30,7 @@ export function HeaderHero({ visionOfTheWeekSlot }: Props) {
     address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
     chainId: chains[0].id,
   });
-  const { data: exchangeRateData } = useGetExchangeRate("ETH");
+  const { data: exchangeRateData } = useGetExchangeRate();
 
   return (
     <section className="header-featured z-20 pt-10 bg-transparent">
