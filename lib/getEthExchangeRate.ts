@@ -21,7 +21,7 @@ export async function getEthExchangeRate(): Promise<ExchangeRate> {
     }
     const data = await response.json();
     console.log("cache miss", data);
-    cacheInstance.put("exchange-rate", data);
+    cacheInstance.put("exchange-rate", data, 1000 * 60 * 60 * 24);
     return data;
   } catch (e) {
     console.error(e);
