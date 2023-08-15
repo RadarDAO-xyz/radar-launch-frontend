@@ -9,7 +9,7 @@ const cacheInstance = new cache.Cache();
 export async function getEthExchangeRate(): Promise<ExchangeRate> {
   try {
     if (cacheInstance.get("exchange-rate") !== null) {
-      console.log("cache hit"), cacheInstance.get("exchange-rate");
+      console.log("cache hit", cacheInstance.get("exchange-rate"));
       return cacheInstance.get("exchange-rate") as ExchangeRate;
     }
     const response = await fetch(
