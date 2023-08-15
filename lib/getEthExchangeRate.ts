@@ -19,9 +19,10 @@ export async function getEthExchangeRate(): Promise<ExchangeRate> {
       console.error(response);
       throw new Error("Error fetching exchange rate");
     }
-    console.log("cache miss", response);
-    cacheInstance.put("exchange-rate", response);
-    return response.json();
+    const data = await response.json();
+    console.log("cache miss", data);
+    cacheInstance.put("exchange-rate", data);
+    return data;
   } catch (e) {
     console.error(e);
   }
