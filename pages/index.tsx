@@ -60,7 +60,7 @@ export default function HomePage() {
           </Button>
         }
         projects={
-          <div className="grid grid-cols-1 md:grid-cols-4 w-full md:space-x-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 w-full gap-4">
             {data
               ?.filter(
                 (project) =>
@@ -99,7 +99,7 @@ export default function HomePage() {
           </Button>
         }
         projects={
-          <div className="grid grid-cols-1 md:grid-cols-4 w-full md:space-x-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 w-full gap-4">
             {data
               ?.filter((project) => CENTAUR_PROEJCT_IDS.includes(project._id))
               .sort((a, b) => a.edition_price - b.edition_price)
