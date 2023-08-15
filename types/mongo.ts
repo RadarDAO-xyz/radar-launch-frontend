@@ -54,6 +54,7 @@ export type User = {
   socials?: string; // must be a twitter link for now
   wallets: string[];
   email?: string;
+  bypasser: boolean;
 };
 
 export type Wallet = {

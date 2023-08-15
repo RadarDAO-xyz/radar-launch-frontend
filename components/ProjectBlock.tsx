@@ -71,8 +71,8 @@ export function ProjectBlock({
 
   const { data: onChainProjects } = useRadarEditionsGetEditions({
     address: CONTRACT_ADDRESS,
-    chainId: chains[0]?.id,
-    enabled: Boolean(chains[0]?.id),
+    chainId: chains[0].id,
+    enabled: Boolean(chains[0].id),
   });
   const editionId: number | undefined = onChainProjects?.findIndex(
     (project) => project.id === _id

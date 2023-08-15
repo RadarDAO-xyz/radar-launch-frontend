@@ -59,7 +59,7 @@ function transformYourVisionsProjects(
   chainProjects.forEach((project) => {
     projectBalances[project.id] = project.balance;
   });
-  const projectIdToEditionId: Record<string, number> = chainProjects.reduce<
+  const projectIdToEditionId = chainProjects.reduce<
     Record<string, number>
   >((acc, project, index) => {
     acc[project.id] = index;
@@ -108,7 +108,7 @@ export default function AdminPage() {
   const { id } = router.query;
 
   const { data: userData } = useGetUser(id?.toString());
-  // address here is string from GET /user/:id, but WalletResolvable from GET /user/@me
+  // wallet object here is string from GET /user/:id, but WalletResolvable from GET /user/@me
   const address =
     typeof userData?.wallets[0] === "string"
       ? userData.wallets[0]
