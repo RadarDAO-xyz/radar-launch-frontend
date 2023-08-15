@@ -19,7 +19,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAccount, useQuery, useWaitForTransaction } from "wagmi";
 import { convertWeiToUsdOrEth } from "../../lib/convertWeiToUsdOrEth";
-import { chains } from "../Web3Provider";
+import { chains } from "../Providers/Web3Provider";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -263,14 +263,14 @@ export function ProjectTabs({ id }: { id: string }) {
                     parseFloat(
                       convertWeiToUsdOrEth(
                         value,
-                        exchangeRateData?.ethereum.usd
+                        exchangeRateData?.ethereum?.usd
                       )
                     )
                   ).toString()}
                 </span>
                 <span>
                   {" "}
-                  {exchangeRateData?.ethereum.usd ? "USD" : "ETH"} X{" "}
+                  {exchangeRateData?.ethereum?.usd ? "USD" : "ETH"} X{" "}
                 </span>{" "}
                 <span className="text-black">{quantity}</span>
               </div>
@@ -284,14 +284,14 @@ export function ProjectTabs({ id }: { id: string }) {
                     parseFloat(
                       convertWeiToUsdOrEth(
                         protocolFee,
-                        exchangeRateData?.ethereum.usd
+                        exchangeRateData?.ethereum?.usd
                       )
                     )
                   ).toString()}
                 </span>
                 <span>
                   {" "}
-                  {exchangeRateData?.ethereum.usd ? "USD" : "ETH"} X{" "}
+                  {exchangeRateData?.ethereum?.usd ? "USD" : "ETH"} X{" "}
                 </span>
                 <span className="text-black">{quantity}</span>
               </div>
@@ -306,11 +306,11 @@ export function ProjectTabs({ id }: { id: string }) {
                   parseFloat(
                     convertWeiToUsdOrEth(
                       (value + protocolFee) * BigInt(quantity),
-                      exchangeRateData?.ethereum.usd
+                      exchangeRateData?.ethereum?.usd
                     )
                   )
                 ).toString()}
-                <span> {exchangeRateData?.ethereum.usd ? "USD" : "ETH"}</span>
+                <span> {exchangeRateData?.ethereum?.usd ? "USD" : "ETH"}</span>
               </span>
             </div>
             <div className="flex w-full space-x-4 mb-4 px-12 md:px-4 xl:px-12">
@@ -351,7 +351,7 @@ export function ProjectTabs({ id }: { id: string }) {
                       className={cn(
                         "w-full",
                         !checkoutLinkForCard
-                          ? "pointer-events-none bg-gray-600"
+                          ? "pointer-events-none opacity-70"
                           : ""
                       )}
                       variant="ghost"
@@ -368,7 +368,7 @@ export function ProjectTabs({ id }: { id: string }) {
                       className={cn(
                         "w-full",
                         !checkoutLinkForEth
-                          ? "pointer-events-none bg-gray-600"
+                          ? "pointer-events-none opacity-70"
                           : ""
                       )}
                       variant="ghost"

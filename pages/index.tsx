@@ -1,15 +1,16 @@
-import { FundingPoolHome } from "@/components/FundingPoolHome";
+import { FundingPoolHome } from "@/components/PoolPage/FundingPoolHome";
 import { HeaderHero } from "@/components/HomePage/HeaderHero";
 import { InspirationFooter } from "@/components/HomePage/InspirationFooter";
 import { Banner } from "@/components/Layout/Banner";
-import { ProjectDiv } from "@/components/ProjectDiv";
+import { ProjectDiv } from "@/components/HomePage/ProjectDiv";
 import { Button } from "@/components/ui/button";
 import { useGetProjects } from "@/hooks/useGetProjects";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 
 const ProjectBlockNoSSR = dynamic(
-  () => import("@/components/ProjectBlock").then((res) => res.ProjectBlock),
+  () =>
+    import("@/components/Layout/ProjectBlock").then((res) => res.ProjectBlock),
   {
     ssr: false,
   }
@@ -43,7 +44,9 @@ export default function HomePage() {
 
       <HeaderHero
         visionOfTheWeekSlot={
-          <VisionOfTheWeekProjectNoSSR projectId={process.env.FEATURED_PROJECT_ID!} />
+          <VisionOfTheWeekProjectNoSSR
+            projectId={process.env.FEATURED_PROJECT_ID!}
+          />
         }
       />
       <ProjectDiv
@@ -57,7 +60,7 @@ export default function HomePage() {
           </Button>
         }
         projects={
-          <div className="flex flex-col md:flex-row w-full overflow-auto md:space-x-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 w-full md:space-x-12">
             {data
               ?.filter(
                 (project) =>
@@ -96,7 +99,7 @@ export default function HomePage() {
           </Button>
         }
         projects={
-          <div className="flex flex-col md:flex-row w-full overflow-auto md:space-x-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 w-full md:space-x-12">
             {data
               ?.filter((project) => CENTAUR_PROEJCT_IDS.includes(project._id))
               .sort((a, b) => a.edition_price - b.edition_price)

@@ -1,8 +1,8 @@
-import { AuthContext } from "@/components/AuthProvider";
+import { AuthContext } from "@/components/Providers/AuthProvider";
 import { ProjectSection } from "@/components/CreateProjectPage/ProjectSection";
 import { SupportSection } from "@/components/CreateProjectPage/SupportSection";
 import { TeamSection } from "@/components/CreateProjectPage/TeamSection";
-import { chains } from "@/components/Web3Provider";
+import { chains } from "@/components/Providers/Web3Provider";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

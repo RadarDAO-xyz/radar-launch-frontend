@@ -71,10 +71,9 @@ export default async function handler(
           },
           payment: { currency: "ETH", value: `${ethValue} * $QUANTITY` },
         },
-        hideNativeMint: true, // hide Optimism payment
         ...(payingWithCard
-          ? { hidePayWithCrypto: true }
-          : { hidePayWithCard: true }),
+          ? { hidePayWithCrypto: true } // hide ETH + Optimism
+          : { hidePayWithCard: true }), // hide Card + Optimism
         // contractArgs: "string",
         feeBearer: "BUYER",
         sendEmailOnTransferSucceeded: true,

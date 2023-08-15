@@ -10,9 +10,9 @@ import { cn } from "@/lib/utils";
 import { Project, ProjectStatus } from "@/types/mongo";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { getCountdown } from "../lib/utils";
-import { chains } from "./Web3Provider";
-import { Button } from "./ui/button";
+import { getCountdown } from "../../lib/utils";
+import { chains } from "../Providers/Web3Provider";
+import { Button } from "../ui/button";
 
 // date formatter to convert dates to DD.MM.YYYY format
 const dateFormatter = new Intl.DateTimeFormat("en-GB", {

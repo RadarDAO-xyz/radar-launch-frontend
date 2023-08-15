@@ -1,5 +1,5 @@
-import { FundingPoolHome } from "@/components/FundingPoolHome";
-import { FundingPoolTabs } from "@/components/FundingPoolTabs";
+import { FundingPoolHome } from "@/components/PoolPage/FundingPoolHome";
+import { FundingPoolTabs } from "@/components/PoolPage/FundingPoolTabs";
 
 export default function PoolPage() {
   return (

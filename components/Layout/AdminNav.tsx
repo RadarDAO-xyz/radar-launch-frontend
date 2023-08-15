@@ -2,9 +2,9 @@ import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
 import { shortenAddress } from "@/lib/utils";
 import { User, WalletResolvable } from "@/types/mongo";
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Button } from "./ui/button";
-import { HTMLParsedComponent } from "./Layout/HTMLParsedComponent";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Button } from "../ui/button";
+import { HTMLParsedComponent } from "./HTMLParsedComponent";
 import { DEFAULT_AVATAR_IMAGE } from "@/constants/links";
 
 interface Props {

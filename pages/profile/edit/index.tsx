@@ -1,4 +1,4 @@
-import { AdminNav } from "@/components/AdminNav";
+import { AdminNav } from "@/components/Layout/AdminNav";
 import { useAuth } from "@/hooks/useAuth";
 import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
 import dynamic from "next/dynamic";

@@ -6,9 +6,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import {
-  CONTRACT_ADDRESS
-} from "@/constants/address";
+import { CONTRACT_ADDRESS } from "@/constants/address";
 import { useAuth } from "@/hooks/useAuth";
 import {
   usePrepareRadarEditionsWithdrawEditionBalance,
@@ -19,7 +17,7 @@ import { ProjectWithChainData } from "@/pages/profile/[id]";
 import { ProjectStatus } from "@/types/mongo";
 import { useEffect, useRef } from "react";
 import { useAccount } from "wagmi";
-import { chains } from "../Web3Provider";
+import { chains } from "../Providers/Web3Provider";
 import { Button } from "../ui/button";
 import { DialogFooter, DialogHeader } from "../ui/dialog";
 import { Input } from "../ui/input";

@@ -1,6 +1,4 @@
-import {
-  CONTRACT_ADDRESS
-} from "@/constants/address";
+import { CONTRACT_ADDRESS } from "@/constants/address";
 import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
 import { useRadarEditionsTotalSupply } from "@/lib/generated";
 import { cn } from "@/lib/utils";
@@ -8,7 +6,7 @@ import { ProjectWithChainData } from "@/pages/profile/[id]";
 import { ProjectStatus } from "@/types/mongo";
 import Link from "next/link";
 import { formatEther } from "viem";
-import { chains } from "../Web3Provider";
+import { chains } from "../Providers/Web3Provider";
 import { Badge } from "../ui/badge";
 import { VisionCardActions } from "./VisionCardActions";
 

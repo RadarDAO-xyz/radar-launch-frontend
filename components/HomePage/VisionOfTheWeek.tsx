@@ -11,7 +11,7 @@ import { ProjectStatus } from "@/types/mongo";
 import Link from "next/link";
 import HoverVideoPlayer from "react-hover-video-player";
 import { HTMLParsedComponent } from "../Layout/HTMLParsedComponent";
-import { chains } from "../Web3Provider";
+import { chains } from "../Providers/Web3Provider";
 
 interface Props {
   projectId: string;

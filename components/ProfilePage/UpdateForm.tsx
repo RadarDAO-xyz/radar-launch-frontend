@@ -1,4 +1,4 @@
-import { AuthContext } from "@/components/AuthProvider";
+import { AuthContext } from "@/components/Providers/AuthProvider";
 import { TinyMCE } from "@/components/Layout/TinyMCE";
 import { Button } from "@/components/ui/button";
 import {

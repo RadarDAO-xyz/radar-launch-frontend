@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { NavBarListItem } from "./NavBarListItem";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -12,7 +12,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from "./ui/navigation-menu";
+} from "../ui/navigation-menu";
 import {
   Sheet,
   SheetContent,
@@ -21,8 +21,8 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "./ui/sheet";
-import { Banner } from "./Layout/Banner";
+} from "../ui/sheet";
+import { Banner } from "./Banner";
 
 const WalletNoSSR = dynamic(() => import("./Wallet").then((res) => res.Wallet));
 

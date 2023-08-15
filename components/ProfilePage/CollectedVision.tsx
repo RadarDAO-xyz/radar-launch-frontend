@@ -1,9 +1,9 @@
 import { ProjectWithOwnedAmount } from "@/pages/profile/[id]";
 import { Project } from "@/types/mongo";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import Link from "next/link";
 import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
-import { HTMLParsedComponent } from "./Layout/HTMLParsedComponent";
+import { HTMLParsedComponent } from "../Layout/HTMLParsedComponent";
 
 export function CollectedVision({
   brief,

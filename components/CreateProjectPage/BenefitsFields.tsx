@@ -1,15 +1,15 @@
 import { Input } from "@/components/ui/input";
 import { ReactNode } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { TinyMCE } from "./Layout/TinyMCE";
-import { Button } from "./ui/button";
+import { TinyMCE } from "../Layout/TinyMCE";
+import { Button } from "../ui/button";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
+} from "../ui/form";
 
 interface Props {
   children?: ReactNode;

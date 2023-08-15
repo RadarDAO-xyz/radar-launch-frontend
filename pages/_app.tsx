@@ -1,17 +1,21 @@
 import "@/devlink/global.css";
 import "@/styles/globals.css";
 
-import { AuthProvider } from "@/components/AuthProvider";
-import { PreLaunchFooter } from "@/components/Layout/PreLaunchFooter";
-import { NavBar } from "@/components/NavBar";
+import { AuthProvider } from "@/components/Providers/AuthProvider";
+import { PreLaunchFooter } from "@/components/HomePage/PreLaunchFooter";
+import { NavBar } from "@/components/Layout/NavBar";
 import { Toaster } from "@/components/ui/toaster";
 import type { AppProps } from "next/app";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import Script from "next/script";
+import { ThemeProvider } from "@/components/Providers/ThemeProvider";
 
 const Web3ProviderNoSSR = dynamic(
-  () => import("@/components/Web3Provider").then((mod) => mod.Web3Provider),
+  () =>
+    import("@/components/Providers/Web3Provider").then(
+      (mod) => mod.Web3Provider
+    ),
   { ssr: false }
 );
 
@@ -35,12 +39,14 @@ export default function App({ Component, pageProps }: AppProps) {
         <title>RADAR Launch</title>
         <link rel="icon" href="/favicon.png" sizes="any" />
       </Head>
-      <AuthProvider>
-        <NavBar />
-        <Component {...pageProps} />
-        <PreLaunchFooter />
-        <Toaster />
-      </AuthProvider>
+      <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+        <AuthProvider>
+          <NavBar />
+          <Component {...pageProps} />
+          <PreLaunchFooter />
+          <Toaster />
+        </AuthProvider>
+      </ThemeProvider>
     </Web3ProviderNoSSR>
   );
 }

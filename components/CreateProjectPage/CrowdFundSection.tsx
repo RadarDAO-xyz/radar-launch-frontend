@@ -1,4 +1,4 @@
-import { BenefitsFields } from "@/components/BenefitsFields";
+import { BenefitsFields } from "@/components/CreateProjectPage/BenefitsFields";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";

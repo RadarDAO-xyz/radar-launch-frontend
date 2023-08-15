@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { ComponentPropsWithoutRef, ElementRef, forwardRef } from "react";
-import { NavigationMenuLink } from "./ui/navigation-menu";
+import { NavigationMenuLink } from "../ui/navigation-menu";
 
 export const NavBarListItem = forwardRef<
   ElementRef<"a">,

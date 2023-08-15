@@ -1,5 +1,5 @@
-import { AdminNav } from "@/components/AdminNav";
-import { AuthContext } from "@/components/AuthProvider";
+import { AdminNav } from "@/components/Layout/AdminNav";
+import { AuthContext } from "@/components/Providers/AuthProvider";
 import {
   Accordion,
   AccordionContent,

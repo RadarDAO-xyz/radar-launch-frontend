@@ -1,4 +1,4 @@
-import { chains } from "@/components/Web3Provider";
+import { chains } from "@/components/Providers/Web3Provider";
 import {
   GOERLI_CONTRACT_ADDRESS,
   MAINNET_CONTRACT_ADDRESS,

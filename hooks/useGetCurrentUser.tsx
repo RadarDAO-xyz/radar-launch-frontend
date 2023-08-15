@@ -1,4 +1,4 @@
-import { AuthContext } from "@/components/AuthProvider";
+import { AuthContext } from "@/components/Providers/AuthProvider";
 import { getCurrentUser } from "@/lib/backend";
 import { useContext } from "react";
 import { useQuery } from "wagmi";

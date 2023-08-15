@@ -1,7 +1,7 @@
-import { AdminNav } from "@/components/AdminNav";
-import { CollectedVisions } from "@/components/CollectedVisions";
-import { chains } from "@/components/Web3Provider";
-import { YourVisions } from "@/components/YourVisions";
+import { AdminNav } from "@/components/Layout/AdminNav";
+import { CollectedVisions } from "@/components/ProfilePage/CollectedVisions";
+import { chains } from "@/components/Providers/Web3Provider";
+import { YourVisions } from "@/components/ProfilePage/YourVisions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   GOERLI_CONTRACT_ADDRESS,
@@ -59,12 +59,13 @@ function transformYourVisionsProjects(
   chainProjects.forEach((project) => {
     projectBalances[project.id] = project.balance;
   });
-  const projectIdToEditionId = chainProjects.reduce<
-    Record<string, number>
-  >((acc, project, index) => {
-    acc[project.id] = index;
-    return acc;
-  }, {});
+  const projectIdToEditionId = chainProjects.reduce<Record<string, number>>(
+    (acc, project, index) => {
+      acc[project.id] = index;
+      return acc;
+    },
+    {}
+  );
 
   return databaseProjects
     .filter((project) => projectIds.has(project._id))

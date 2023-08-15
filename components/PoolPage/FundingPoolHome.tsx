@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { PoolCard } from "./PoolCard";
 import { SetOwnBriefPoolCard } from "./SetOwnBriefPoolCard";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { useGetPool } from "@/hooks/useGetPool";
 
 const FEATURED_POOL_ID = "64d501ee081e901b9fdfaea9";
@@ -26,10 +26,7 @@ export function FundingPoolHome() {
             variant={"ghost"}
             asChild
           >
-            <Link
-              href="https://t.me/+e97ms5e1fvJiMjhk"
-              target="_blank"
-            >
+            <Link href="https://t.me/+e97ms5e1fvJiMjhk" target="_blank">
               SIGN UP
             </Link>
           </Button>

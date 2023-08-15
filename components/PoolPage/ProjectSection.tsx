@@ -3,7 +3,7 @@ import { Pool } from "@/types/mongo";
 import { SearchIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { ProjectBlock } from "../ProjectBlock";
+import { ProjectBlock } from "../Layout/ProjectBlock";
 import Link from "next/link";
 
 export function ProjectSection({ _id, title }: Pool) {

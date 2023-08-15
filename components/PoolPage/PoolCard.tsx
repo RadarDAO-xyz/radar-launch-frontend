@@ -1,7 +1,7 @@
 import { cn, getCountdown } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import dynamic from "next/dynamic";
 import { Pool } from "@/types/mongo";
 import { useGetPoolProjects } from "@/hooks/useGetPoolProjects";

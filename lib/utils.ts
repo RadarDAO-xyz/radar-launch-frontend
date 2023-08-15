@@ -1,4 +1,4 @@
-import { chains } from "@/components/Web3Provider";
+import { chains } from "@/components/Providers/Web3Provider";
 import { clsx, type ClassValue } from "clsx";
 import differenceInDays from "date-fns/differenceInDays";
 import differenceInHours from "date-fns/differenceInHours";

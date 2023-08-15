@@ -1,5 +1,5 @@
 import { useAuth } from "@/hooks/useAuth";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -11,7 +11,7 @@ import {
 import { useAccount, useEnsAddress, useEnsName } from "wagmi";
 import { shortenAddress } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
-import { chains } from "./Web3Provider";
+import { chains } from "../Providers/Web3Provider";
 import Link from "next/link";
 import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
 
