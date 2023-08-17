@@ -1,5 +1,5 @@
 import { useGetPoolProjects } from "@/hooks/useGetPoolProjects";
-import { Pool } from "@/types/mongo";
+import { Pool, ProjectStatus } from "@/types/mongo";
 import { SearchIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -8,6 +8,10 @@ import Link from "next/link";
 
 export function ProjectSection({ _id, title }: Pool) {
   const { data } = useGetPoolProjects(_id);
+
+  const liveProjects = data?.filter(
+    (project) => project.status === ProjectStatus.LIVE
+  );
 
   return (
     <section className="px-[5%] py-12">
@@ -26,8 +30,8 @@ export function ProjectSection({ _id, title }: Pool) {
       </div>
       <div className="pt-12 relative">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {data && data.length > 0 ? (
-            data.map((project) => (
+          {liveProjects && liveProjects.length > 0 ? (
+            liveProjects.map((project) => (
               <ProjectBlock
                 key={project._id}
                 {...project}
@@ -44,8 +48,8 @@ export function ProjectSection({ _id, title }: Pool) {
             </>
           )}
         </div>
-        {data === undefined ||
-          (data.length === 0 && (
+        {liveProjects === undefined ||
+          (liveProjects.length === 0 && (
             <div className="absolute left-0 right-0 px-[5%] mx-auto max-w-[800px] w-full top-[calc(50%-20px)] text-center ">
               <h2 className=" text-3xl">NOTHING TO SUPPORT YET</h2>
               <Button className="mt-3" asChild>
