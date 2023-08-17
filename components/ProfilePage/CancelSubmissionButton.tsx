@@ -16,7 +16,7 @@ import { useToast } from "../ui/use-toast";
 export function CancelSubmissionButton({ projectId }: { projectId: string }) {
   const { toast } = useToast();
   const { idToken } = useAuth();
-  const { mutate, error } = useMutation(
+  const { mutate } = useMutation(
     ["delete-project", projectId, idToken],
     () => deleteProject(projectId, idToken),
     {

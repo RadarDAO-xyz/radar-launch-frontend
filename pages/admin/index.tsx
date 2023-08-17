@@ -27,6 +27,8 @@ import { Input } from "@/components/ui/input";
 import { useMutation } from "wagmi";
 import { useAuth } from "@/hooks/useAuth";
 import { Label } from "@/components/ui/label";
+import { deleteProject } from "@/lib/backend";
+import { DeleteProjectButton } from "@/components/AdminPage/DeleteProjectButton";
 
 async function updateProjectStatus(
   projectStatus: ProjectStatus,
@@ -57,18 +59,13 @@ async function updateProjectStatus(
   return "";
 }
 
-function retrieveProjects(
+function transformProjects(
   databaseProjects?: Project[],
   chainProjects?: OnChainProject[]
 ) {
   if (!databaseProjects || !chainProjects) {
     return [];
   }
-
-  const projectIds = new Set(
-    // filter for "" ids
-    chainProjects.map((project) => project.id).filter(Boolean)
-  );
 
   const projectIdToEditionId = chainProjects.reduce<
     Record<string, { index: number; onChainStatus: number }>
@@ -77,13 +74,11 @@ function retrieveProjects(
     return acc;
   }, {});
 
-  return databaseProjects
-    .filter((project) => projectIds.has(project._id))
-    .map((project) => ({
-      ...project,
-      editionId: projectIdToEditionId[project._id].index,
-      onChainStatus: projectIdToEditionId[project._id].onChainStatus,
-    }));
+  return databaseProjects.map((project) => ({
+    ...project,
+    editionId: projectIdToEditionId[project._id]?.index,
+    onChainStatus: projectIdToEditionId[project._id]?.onChainStatus,
+  }));
 }
 
 export default function AdminPage() {
@@ -115,14 +110,23 @@ export default function AdminPage() {
   const { writeAsync: writeStopEditionAsync } =
     useRadarEditionsStopEdition(stopEditionConfig);
 
-  if (!data?.wallets?.[0].address || !data.bypasser || !idToken) {
+  if (!data?.wallets?.[0].address || !idToken) {
     return (
       <section className="mt-24 max-w-screen-lg mx-auto h-[400px]">
         <h1 className="text-center">Please login</h1>
       </section>
     );
   }
-  const projects = retrieveProjects(
+
+  if (!data.bypasser) {
+    return (
+      <section className="mt-24 max-w-screen-lg mx-auto h-[400px]">
+        <h1 className="text-center">Not authorized to view this page</h1>
+      </section>
+    );
+  }
+
+  const projects = transformProjects(
     databaseProjectData,
     onChainProjects as OnChainProject[]
   );
@@ -139,7 +143,10 @@ export default function AdminPage() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 pt-4 pb-20">
         {projects.map((project) => (
           <div className="border rounded p-4" key={project._id}>
-            <h3>{project.title}</h3>
+            <h3 className="mb-0 pb-0">{project.title}</h3>
+            {project.editionId === undefined && (
+              <strong>No onchain project found</strong>
+            )}
             <p>Edition Id (on-chain): {project.editionId}</p>
             <Link
               href={`/project/${project._id}`}
@@ -157,7 +164,7 @@ export default function AdminPage() {
             <p>On Chain Status: {project.onChainStatus}</p>
             <Dialog>
               <DialogTrigger asChild>
-                <Button>Actions</Button>
+                <Button className="mt-4">Actions</Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogTitle>Actions panel</DialogTitle>
@@ -235,6 +242,7 @@ export default function AdminPage() {
                   >
                     Update project status (database)
                   </Button>
+                  <DeleteProjectButton projectId={project._id} />
                 </DialogFooter>
               </DialogContent>
             </Dialog>
