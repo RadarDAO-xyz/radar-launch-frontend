@@ -1,4 +1,4 @@
-import { CONTRACT_ADDRESS } from "@/constants/address";
+import { PAPER_CONTRACT_ID } from "@/constants/paper";
 import { getEthExchangeRate } from "@/lib/getEthExchangeRate";
 import { parseEther } from "@/lib/utils";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -43,7 +43,7 @@ export default async function handler(
         Authorization: "Bearer " + process.env.PAPER_API_KEY,
       },
       body: JSON.stringify({
-        contractId: CONTRACT_ADDRESS,
+        contractId: PAPER_CONTRACT_ID,
         title: `Create Project - ${title}`,
         // description: "Describe your project *with Markdown!*",
         imageUrl,

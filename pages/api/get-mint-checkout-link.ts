@@ -1,6 +1,7 @@
-import { GOERLI_CONTRACT_ID, MAINNET_CONTRACT_ID } from "@/constants/paper";
+import {
+  PAPER_CONTRACT_ID
+} from "@/constants/paper";
 import { formatEther } from "@/lib/utils";
-import isTestnet from "@/lib/isTestnet";
 import { NextApiRequest, NextApiResponse } from "next";
 
 interface Response {
@@ -49,7 +50,7 @@ export default async function handler(
         Authorization: "Bearer " + process.env.PAPER_API_KEY,
       },
       body: JSON.stringify({
-        contractId: isTestnet() ? GOERLI_CONTRACT_ID : MAINNET_CONTRACT_ID,
+        contractId: PAPER_CONTRACT_ID,
         title,
         imageUrl,
         twitterHandleOverride: socials,
