@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import { CancelSubmissionButton } from "./CancelSubmissionButton";
 import { DownloadSupporters } from "./DownloadSupporters";
 import { WithdrawETHButton } from "./WithdrawETHButton";
+import { LaunchProjectButton } from "./LaunchProjectButton";
 
 export function VisionCardActions(props: ProjectWithChainData) {
   const { status, _id } = props;
@@ -13,7 +14,7 @@ export function VisionCardActions(props: ProjectWithChainData) {
       {status === ProjectStatus.IN_REVIEW && (
         <CancelSubmissionButton projectId={_id} />
       )}
-      {status === ProjectStatus.APPROVED && <Button>Launch Project</Button>}
+      {status === ProjectStatus.APPROVED && <LaunchProjectButton {...props} />}
       {status !== ProjectStatus.CANCELLED &&
         status !== ProjectStatus.REJECTED && <WithdrawETHButton {...props} />}
       {status !== ProjectStatus.CANCELLED &&

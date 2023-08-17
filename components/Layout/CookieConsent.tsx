@@ -1,32 +1,31 @@
 import Cookies from "js-cookie";
 import Link from "next/link";
-import { MouseEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 
-const USER_CONSENT_COOKIE_KEY = "cookie_consent_is_true";
+const USER_CONSENT_COOKIE_KEY = "show_cookie_consent";
 const USER_CONSENT_COOKIE_EXPIRE_DATE =
   new Date().getTime() + 365 * 24 * 60 * 60;
 
 const CookieConsent = () => {
-  const [cookieConsentIsTrue, setCookieConsentIsTrue] = useState(true);
+  const [showCookieConsent, setShowCookieConsent] = useState(true);
 
   useEffect(() => {
-    const consentIsTrue = Cookies.get(USER_CONSENT_COOKIE_KEY) === "true";
-    setCookieConsentIsTrue(consentIsTrue);
+    if (Cookies.get(USER_CONSENT_COOKIE_KEY) === "false") {
+      setShowCookieConsent(false);
+    }
   }, []);
 
-  const onClick = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
-    if (!cookieConsentIsTrue) {
-      Cookies.set(USER_CONSENT_COOKIE_KEY, "true", {
+  const onClick = () => {
+    if (showCookieConsent) {
+      Cookies.set(USER_CONSENT_COOKIE_KEY, "false", {
         expires: USER_CONSENT_COOKIE_EXPIRE_DATE,
       });
-      setCookieConsentIsTrue(true);
+      setShowCookieConsent(false);
     }
   };
 
-  if (!cookieConsentIsTrue) {
+  if (!showCookieConsent) {
     return null;
   }
 

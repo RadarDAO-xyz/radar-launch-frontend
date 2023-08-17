@@ -5,6 +5,7 @@ import {
   type User,
   type WalletResolvable,
   type ProjectUpdate,
+  ProjectStatus,
 } from "@/types/mongo";
 
 export async function getPools(): Promise<Pool[]> {
@@ -288,4 +289,33 @@ export async function getProjectUpdates(
     console.error(e);
   }
   return [];
+}
+
+export async function updateProjectStatus(
+  projectStatus: ProjectStatus,
+  projectId: string,
+  idToken: string
+) {
+  try {
+    const response = await fetch(
+      `${process.env.BACKEND_URL}/projects/${projectId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({
+          status: projectStatus,
+        }),
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Error updating project status");
+    }
+    return response.json();
+  } catch (e) {
+    console.error(e);
+  }
+  return "";
 }

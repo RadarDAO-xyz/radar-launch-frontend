@@ -1,68 +1,17 @@
-import { DeleteProjectButton } from "@/components/AdminPage/DeleteProjectButton";
-import { DownloadSupporters } from "@/components/ProfilePage/DownloadSupporters";
+import { ProjectActions } from "@/components/AdminPage/ProjectActions";
 import { chains } from "@/components/Providers/Web3Provider";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useToast } from "@/components/ui/use-toast";
 import { CONTRACT_ADDRESS } from "@/constants/address";
 import { useAuth } from "@/hooks/useAuth";
 import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
 import { useGetProjects } from "@/hooks/useGetProjects";
 import { convertProjectStatusName } from "@/lib/convertProjectStatusName";
 import { convertProjectStatusToColour } from "@/lib/convertProjectStatusToColour";
-import {
-  usePrepareRadarEditionsApproveEdition,
-  usePrepareRadarEditionsStopEdition,
-  useRadarEditionsApproveEdition,
-  useRadarEditionsGetEditions,
-  useRadarEditionsStopEdition,
-} from "@/lib/generated";
+import { useRadarEditionsGetEditions } from "@/lib/generated";
 import { cn } from "@/lib/utils";
 import { Project, ProjectStatus } from "@/types/mongo";
 import Link from "next/link";
-import { useRef } from "react";
 import { OnChainProject } from "../profile/[id]";
-import { useMutation } from "wagmi";
-import { CacheKey } from "@/constants/react-query";
-
-async function updateProjectStatus(
-  projectStatus: ProjectStatus,
-  projectId: string,
-  idToken: string
-) {
-  try {
-    const response = await fetch(
-      `${process.env.BACKEND_URL}/projects/${projectId}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${idToken}`,
-        },
-        body: JSON.stringify({
-          status: projectStatus,
-        }),
-      }
-    );
-    if (!response.ok) {
-      throw new Error("Error updating project status");
-    }
-    return await response.json();
-  } catch (e) {
-    console.error(e);
-  }
-  return "";
-}
 
 function transformProjects(
   databaseProjects?: Project[],
@@ -89,32 +38,13 @@ function transformProjects(
 export default function AdminPage() {
   const { data } = useGetCurrentUser();
   const { data: databaseProjectData } = useGetProjects();
-  const editionIdRef = useRef<HTMLInputElement>(null);
-  const projectStatusRef = useRef<HTMLInputElement>(null);
   const { idToken } = useAuth();
-  const { toast } = useToast();
 
   const { data: onChainProjects } = useRadarEditionsGetEditions({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
     enabled: Boolean(chains[0].id),
   });
-  const { config } = usePrepareRadarEditionsApproveEdition({
-    address: CONTRACT_ADDRESS,
-    chainId: chains[0].id,
-    enabled: Boolean(chains[0].id) && editionIdRef.current?.value != null,
-    args: [BigInt(+(editionIdRef.current?.value || 0)) || 0n],
-  });
-  const { writeAsync } = useRadarEditionsApproveEdition(config);
-  const { config: stopEditionConfig } = usePrepareRadarEditionsStopEdition({
-    address: CONTRACT_ADDRESS,
-    chainId: chains[0].id,
-    enabled: Boolean(chains[0].id) && editionIdRef.current?.value != null,
-    args: [BigInt(+(editionIdRef.current?.value || 0)) || 0n],
-  });
-  const { writeAsync: writeStopEditionAsync } =
-    useRadarEditionsStopEdition(stopEditionConfig);
-
   if (!data?.wallets?.[0].address || !idToken) {
     return (
       <section className="mt-24 max-w-screen-lg mx-auto h-[400px]">
@@ -162,7 +92,7 @@ export default function AdminPage() {
             >
               Admin address: {project.admin_address}
             </Link>
-            <p>
+            <div>
               Database Status: {convertProjectStatusName(project.status)}{" "}
               <Badge
                 variant="none"
@@ -171,93 +101,9 @@ export default function AdminPage() {
                   "h-3 w-3 p-0"
                 )}
               />
-            </p>
+            </div>
             <p>On Chain Status: {project.onChainStatus}</p>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button className="mt-4">Actions</Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogTitle>Actions panel</DialogTitle>
-                <DialogDescription className="space-y-4">
-                  <Label>Edition ID</Label>
-                  <Input
-                    placeholder="Edition ID"
-                    type="number"
-                    ref={editionIdRef}
-                    defaultValue={String(project.editionId)}
-                  />
-                  <Label>New Database Project Status</Label>
-                  <Input
-                    placeholder="New Project Status"
-                    type="number"
-                    ref={projectStatusRef}
-                    defaultValue={String(project.status)}
-                  />
-                </DialogDescription>
-                <DialogFooter className="flex !flex-col !space-x-0 space-y-4">
-                  <Button
-                    onClick={() => {
-                      try {
-                        writeAsync?.();
-                      } catch (e) {
-                        console.error(e);
-                        toast({
-                          variant: "destructive",
-                          title: "An unexpected error occured",
-                          description: "Check the console for more information",
-                        });
-                      }
-                    }}
-                  >
-                    Approve Edition (on-chain)
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      try {
-                        writeStopEditionAsync?.();
-                      } catch (e) {
-                        console.error(e);
-                        toast({
-                          variant: "destructive",
-                          title: "An unexpected error occured",
-                          description: "Check the console for more information",
-                        });
-                      }
-                    }}
-                  >
-                    Stop Edition (on-chain)
-                  </Button>
-                  <Button
-                    onClick={async () => {
-                      if (projectStatusRef.current?.value != null) {
-                        try {
-                          await updateProjectStatus(
-                            projectStatusRef.current
-                              .value as unknown as ProjectStatus,
-                            project._id,
-                            idToken
-                          );
-                        } catch (e) {
-                          console.error(e);
-
-                          toast({
-                            variant: "destructive",
-                            title: "An unexpected error occured",
-                            description:
-                              "Check the console for more information",
-                          });
-                        }
-                      }
-                    }}
-                  >
-                    Update project status (database)
-                  </Button>
-                  <DeleteProjectButton projectId={project._id} />
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-            <DownloadSupporters {...project} />
+            <ProjectActions {...project} />
           </div>
         ))}
       </div>
