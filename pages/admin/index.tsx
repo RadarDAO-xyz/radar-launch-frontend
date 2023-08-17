@@ -1,7 +1,25 @@
+import { DeleteProjectButton } from "@/components/AdminPage/DeleteProjectButton";
+import { DownloadSupporters } from "@/components/ProfilePage/DownloadSupporters";
 import { chains } from "@/components/Providers/Web3Provider";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/components/ui/use-toast";
 import { CONTRACT_ADDRESS } from "@/constants/address";
+import { useAuth } from "@/hooks/useAuth";
 import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
 import { useGetProjects } from "@/hooks/useGetProjects";
+import { convertStatusName } from "@/lib/convertStatusName";
+import { convertStatusToColour } from "@/lib/convertStatusToColour";
 import {
   usePrepareRadarEditionsApproveEdition,
   usePrepareRadarEditionsStopEdition,
@@ -9,27 +27,11 @@ import {
   useRadarEditionsGetEditions,
   useRadarEditionsStopEdition,
 } from "@/lib/generated";
+import { cn } from "@/lib/utils";
 import { Project, ProjectStatus } from "@/types/mongo";
-import { OnChainProject } from "../profile/[id]";
 import Link from "next/link";
 import { useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
-import { DialogFooter, DialogHeader } from "@/components/ui/dialog";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { useMutation } from "wagmi";
-import { useAuth } from "@/hooks/useAuth";
-import { Label } from "@/components/ui/label";
-import { deleteProject } from "@/lib/backend";
-import { DeleteProjectButton } from "@/components/AdminPage/DeleteProjectButton";
-import { DownloadSupporters } from "@/components/ProfilePage/DownloadSupporters";
+import { OnChainProject } from "../profile/[id]";
 
 async function updateProjectStatus(
   projectStatus: ProjectStatus,
@@ -134,10 +136,6 @@ export default function AdminPage() {
   return (
     <section className="mt-24 max-w-screen-lg mx-auto">
       <p>
-        Database project status: IN_REVIEW (0), APPROVED (1), LIVE (2), BUILDING
-        (3), REJECTED (4), CANCELLED (5)
-      </p>
-      <p>
         On chain project status: NotCreated (0), Created (1), Launched (2),
         Stopped (3)
       </p>
@@ -149,10 +147,7 @@ export default function AdminPage() {
             )}
             <h3 className="mb-0 pb-0">{project.title}</h3>
             <p>Edition Id (on-chain): {project.editionId}</p>
-            <Link
-              href={`/project/${project._id}`}
-              className="underline block"
-            >
+            <Link href={`/project/${project._id}`} className="underline block">
               Project Id (database): {project._id}
             </Link>
             <Link
@@ -161,7 +156,16 @@ export default function AdminPage() {
             >
               Admin address: {project.admin_address}
             </Link>
-            <p>Database Status: {project.status}</p>
+            <p>
+              Database Status: {convertStatusName(project.status)}{" "}
+              <Badge
+                variant="none"
+                className={cn(
+                  convertStatusToColour(project.status),
+                  "h-3 w-3 p-0"
+                )}
+              />
+            </p>
             <p>On Chain Status: {project.onChainStatus}</p>
             <Dialog>
               <DialogTrigger asChild>

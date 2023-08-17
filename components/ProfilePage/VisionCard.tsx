@@ -3,50 +3,13 @@ import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
 import { useRadarEditionsTotalSupply } from "@/lib/generated";
 import { cn } from "@/lib/utils";
 import { ProjectWithChainData } from "@/pages/profile/[id]";
-import { ProjectStatus } from "@/types/mongo";
 import Link from "next/link";
 import { formatEther } from "viem";
 import { chains } from "../Providers/Web3Provider";
 import { Badge } from "../ui/badge";
 import { VisionCardActions } from "./VisionCardActions";
-
-function convertStatusName(status: ProjectStatus) {
-  switch (status) {
-    case ProjectStatus.IN_REVIEW:
-      return "In review";
-    case ProjectStatus.APPROVED:
-      return "Approved";
-    case ProjectStatus.LIVE:
-      return "Live";
-    case ProjectStatus.BUILDING:
-      return "Closed & Building";
-    case ProjectStatus.REJECTED:
-      return "Rejected";
-    case ProjectStatus.CANCELLED:
-      return "Cancelled";
-    default:
-      return "Unknown status";
-  }
-}
-
-function convertStatusToColour(status: ProjectStatus) {
-  switch (status) {
-    case ProjectStatus.IN_REVIEW:
-      return "bg-yellow-300";
-    case ProjectStatus.APPROVED:
-      return "bg-orange-500";
-    case ProjectStatus.LIVE:
-      return "bg-green-400";
-    case ProjectStatus.BUILDING:
-      return "bg-purple-800";
-    case ProjectStatus.REJECTED:
-      return "bg-red-700";
-    case ProjectStatus.CANCELLED:
-      return "bg-gray-900";
-    default:
-      return "Unknown status";
-  }
-}
+import { convertStatusName } from "@/lib/convertStatusName";
+import { convertStatusToColour } from "@/lib/convertStatusToColour";
 
 export function VisionCard(props: ProjectWithChainData) {
   const { _id, status, video_url, title, supporter_count, balance, editionId } =

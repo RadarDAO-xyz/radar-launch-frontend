@@ -1,5 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CONTRACT_ADDRESS } from "@/constants/address";
+import { CacheKey } from "@/constants/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { useGetExchangeRate } from "@/hooks/useGetExchangeRate";
 import { useGetProject } from "@/hooks/useGetProject";
@@ -33,7 +34,6 @@ import { Input } from "../ui/input";
 import { useToast } from "../ui/use-toast";
 import { ContributeForm } from "./ContributeForm";
 import { SignUpForm } from "./SignUpForm";
-import { CacheKey } from "@/constants/react-query";
 
 async function getMintCheckoutLink(
   quantity: number,
@@ -355,7 +355,6 @@ export function ProjectTabs({ id }: { id: string }) {
                           ? "pointer-events-none opacity-70"
                           : ""
                       )}
-                      variant="ghost"
                       asChild
                       disabled={
                         !checkoutLinkForCard || isCheckoutLinkForCardLoading
@@ -372,7 +371,6 @@ export function ProjectTabs({ id }: { id: string }) {
                           ? "pointer-events-none opacity-70"
                           : ""
                       )}
-                      variant="ghost"
                       asChild
                       disabled={
                         !checkoutLinkForEth || isCheckoutLinkForEthLoading
