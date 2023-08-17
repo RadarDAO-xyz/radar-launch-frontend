@@ -29,6 +29,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Label } from "@/components/ui/label";
 import { deleteProject } from "@/lib/backend";
 import { DeleteProjectButton } from "@/components/AdminPage/DeleteProjectButton";
+import { DownloadSupporters } from "@/components/ProfilePage/DownloadSupporters";
 
 async function updateProjectStatus(
   projectStatus: ProjectStatus,
@@ -143,20 +144,20 @@ export default function AdminPage() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 pt-4 pb-20">
         {projects.map((project) => (
           <div className="border rounded p-4" key={project._id}>
-            <h3 className="mb-0 pb-0">{project.title}</h3>
             {project.editionId === undefined && (
               <strong>No onchain project found</strong>
             )}
+            <h3 className="mb-0 pb-0">{project.title}</h3>
             <p>Edition Id (on-chain): {project.editionId}</p>
             <Link
               href={`/project/${project._id}`}
-              className="hover:underline block"
+              className="underline block"
             >
               Project Id (database): {project._id}
             </Link>
             <Link
               href={`/profile/${project.admin_address}`}
-              className="break-all hover:underline block"
+              className="break-all underline block"
             >
               Admin address: {project.admin_address}
             </Link>
@@ -246,6 +247,7 @@ export default function AdminPage() {
                 </DialogFooter>
               </DialogContent>
             </Dialog>
+            <DownloadSupporters {...project} />
           </div>
         ))}
       </div>

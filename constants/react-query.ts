@@ -1,4 +1,5 @@
 export enum CacheKey {
+  // query
   CURRENT_USER = "current-user",
   LOGIN = "login",
   USERS = "users",
@@ -14,4 +15,6 @@ export enum CacheKey {
   PROJECT_UPDATES = "project-updates",
   CHECKOUT_LINK = "checkout-link",
   CHECKOUT_MINT_LINK = "checkout-mint-link",
+  // mutation
+  DOWNLOAD_PROJECT_SUPPORTERS = "download-project-supporters",
 }

@@ -10,26 +10,35 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { downloadProjectSupporters } from "@/lib/backend";
 import { ProjectWithChainData } from "@/pages/profile/[id]";
-import { ProjectStatus } from "@/types/mongo";
-import { useEffect } from "react";
+import { Project, ProjectStatus } from "@/types/mongo";
+import { DownloadIcon } from "lucide-react";
 import { useMutation } from "wagmi";
 import { Button } from "../ui/button";
 import { useToast } from "../ui/use-toast";
-import { DownloadIcon } from "lucide-react";
+import { CacheKey } from "@/constants/react-query";
 
-export function DownloadSupporters({
-  status,
-  _id,
-  title,
-}: ProjectWithChainData) {
+function downloadTextAsCsv(text: string, fileName: string) {
+  if (text !== undefined) {
+    const encodedURI = encodeURI("data:text/csv;charset=utf-8," + text);
+
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedURI);
+    link.setAttribute("download", fileName);
+    document.body.appendChild(link);
+
+    link.click();
+  }
+}
+
+export function DownloadSupporters({ status, _id, title }: Project) {
   const { toast } = useToast();
   const { idToken, isLoggedIn } = useAuth();
-  const { mutate, error, data } = useMutation(
-    ["download-project", _id, idToken],
+  const { mutate } = useMutation(
+    [CacheKey.DOWNLOAD_PROJECT_SUPPORTERS, _id, idToken],
     () => downloadProjectSupporters(_id, idToken),
     {
-      onSuccess: () => {
-        downloadCsv();
+      onSuccess: (text) => {
+        downloadTextAsCsv(text, `${title} Supporters.csv`);
       },
       onError: (e) => {
         console.error(e);
@@ -41,20 +50,6 @@ export function DownloadSupporters({
       },
     }
   );
-
-  function downloadCsv() {
-    console.log(data);
-    if (data !== undefined) {
-      const encodedURI = encodeURI("data:text/csv;charset=utf-8," + data);
-
-      const link = document.createElement("a");
-      link.setAttribute("href", encodedURI);
-      link.setAttribute("download", `${title} Supporters.csv`);
-      document.body.appendChild(link);
-
-      link.click();
-    }
-  }
 
   return (
     <Dialog>
