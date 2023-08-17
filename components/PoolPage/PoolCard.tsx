@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import dynamic from "next/dynamic";
-import { Pool } from "@/types/mongo";
+import { Pool, ProjectStatus } from "@/types/mongo";
 import { useGetPoolProjects } from "@/hooks/useGetPoolProjects";
 
 export function PoolCard({
@@ -42,7 +42,8 @@ export function PoolCard({
         <div className="border rounded-lg p-4 w-full">
           <div className={"small-text"}>{"Projects Submitted "}</div>
           <div className={cn("funding-pool-numbers pt-1")}>
-            {data?.length || 0}
+            {data?.filter((project) => project.status === ProjectStatus.LIVE)
+              .length || 0}
           </div>
         </div>
       </div>{" "}
