@@ -61,7 +61,7 @@ export function Wallet() {
       }}
       variant={"ghost"}
     >
-      Login ⚙
+      LOGIN ⚙
     </Button>
   );
 }

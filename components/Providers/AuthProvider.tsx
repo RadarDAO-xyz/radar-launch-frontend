@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
 
   useEffect(() => {
     (async () => {
-      if (isLoggedIn && web3Auth) {
+      if (isLoggedIn && web3Auth && !idToken) {
         const socialLoginUserInfo = await web3Auth?.getUserInfo();
         // social login here
         if (socialLoginUserInfo?.idToken) {
@@ -84,7 +84,7 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
         setIdToken((await web3Auth.authenticateUser()).idToken);
       }
     })();
-  }, [isLoggedIn, setIdToken, web3Auth]);
+  }, [idToken, isLoggedIn, setIdToken, web3Auth]);
 
   async function login() {
     if (web3Auth && !isLoggedIn) {

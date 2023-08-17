@@ -68,7 +68,7 @@ export function NavBar() {
               <NavigationMenuItem>
                 <NavigationMenuTrigger>INSPIRATION</NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] list-none ml-0">
                     <NavBarListItem
                       href="https://www.radardao.xyz/"
                       target="_blank"

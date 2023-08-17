@@ -10,6 +10,7 @@ import dynamic from "next/dynamic";
 import Head from "next/head";
 import Script from "next/script";
 import { ThemeProvider } from "@/components/Providers/ThemeProvider";
+import CookieConsent from "@/components/Layout/CookieConsent";
 
 const Web3ProviderNoSSR = dynamic(
   () =>
@@ -45,6 +46,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
           <PreLaunchFooter />
           <Toaster />
+          <CookieConsent />
         </AuthProvider>
       </ThemeProvider>
     </Web3ProviderNoSSR>
