@@ -135,39 +135,43 @@ export default function IndividualProjectPage() {
                 )}
               </div>
               <hr />
-              <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16 pt-10">
-                Funding Goals
-              </h3>
-              <Table>
-                <TableBody>
-                  {data?.milestones.map((milestone, index) => (
-                    <TableRow key={milestone.text}>
-                      <TableCell
-                        className={cn(
-                          "font-medium text-xl align-top",
-                          typeof milestone.amount === "number"
-                            ? "w-[200px]"
-                            : "w-[60px]"
-                        )}
-                      >
-                        {typeof milestone.amount === "number" ? (
-                          <span className="text-normal">
-                            ${" "}
-                            <span className="text-gray-400 text-lg">
-                              {milestone.amount.toFixed(2)}
-                            </span>
-                          </span>
-                        ) : (
-                          `${index + 1}.`
-                        )}
-                      </TableCell>
-                      <TableCell className="border-l">
-                        <HTMLParsedComponent text={milestone.text} />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+              {data?.milestones?.length > 0 && (
+                <>
+                  <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16 pt-10">
+                    Funding Goals
+                  </h3>
+                  <Table>
+                    <TableBody>
+                      {data.milestones.map((milestone, index) => (
+                        <TableRow key={milestone.text}>
+                          <TableCell
+                            className={cn(
+                              "font-medium text-xl align-top",
+                              typeof milestone.amount === "number"
+                                ? "w-[200px]"
+                                : "w-[60px]"
+                            )}
+                          >
+                            {typeof milestone.amount === "number" ? (
+                              <span className="text-normal">
+                                ${" "}
+                                <span className="text-gray-400 text-lg">
+                                  {milestone.amount.toFixed(2)}
+                                </span>
+                              </span>
+                            ) : (
+                              `${index + 1}.`
+                            )}
+                          </TableCell>
+                          <TableCell className="border-l">
+                            <HTMLParsedComponent text={milestone.text} />
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </>
+              )}
             </TabsContent>
             <TabsContent value={Tab.UPDATES} className="p-8">
               Coming soon...

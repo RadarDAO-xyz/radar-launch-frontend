@@ -18,8 +18,8 @@ import { CONTRACT_ADDRESS } from "@/constants/address";
 import { useAuth } from "@/hooks/useAuth";
 import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
 import { useGetProjects } from "@/hooks/useGetProjects";
-import { convertStatusName } from "@/lib/convertStatusName";
-import { convertStatusToColour } from "@/lib/convertStatusToColour";
+import { convertProjectStatusName } from "@/lib/convertProjectStatusName";
+import { convertProjectStatusToColour } from "@/lib/convertProjectStatusToColour";
 import {
   usePrepareRadarEditionsApproveEdition,
   usePrepareRadarEditionsStopEdition,
@@ -32,6 +32,8 @@ import { Project, ProjectStatus } from "@/types/mongo";
 import Link from "next/link";
 import { useRef } from "react";
 import { OnChainProject } from "../profile/[id]";
+import { useMutation } from "wagmi";
+import { CacheKey } from "@/constants/react-query";
 
 async function updateProjectStatus(
   projectStatus: ProjectStatus,
@@ -136,6 +138,10 @@ export default function AdminPage() {
   return (
     <section className="mt-24 max-w-screen-lg mx-auto">
       <p>
+        Database project status: IN_REVIEW (0), APPROVED (1), LIVE (2), BUILDING
+        (3), REJECTED (4), CANCELLED (5)
+      </p>
+      <p>
         On chain project status: NotCreated (0), Created (1), Launched (2),
         Stopped (3)
       </p>
@@ -157,11 +163,11 @@ export default function AdminPage() {
               Admin address: {project.admin_address}
             </Link>
             <p>
-              Database Status: {convertStatusName(project.status)}{" "}
+              Database Status: {convertProjectStatusName(project.status)}{" "}
               <Badge
                 variant="none"
                 className={cn(
-                  convertStatusToColour(project.status),
+                  convertProjectStatusToColour(project.status),
                   "h-3 w-3 p-0"
                 )}
               />

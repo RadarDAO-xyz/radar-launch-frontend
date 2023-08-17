@@ -8,8 +8,8 @@ import { formatEther } from "viem";
 import { chains } from "../Providers/Web3Provider";
 import { Badge } from "../ui/badge";
 import { VisionCardActions } from "./VisionCardActions";
-import { convertStatusName } from "@/lib/convertStatusName";
-import { convertStatusToColour } from "@/lib/convertStatusToColour";
+import { convertProjectStatusName } from "@/lib/convertProjectStatusName";
+import { convertProjectStatusToColour } from "@/lib/convertProjectStatusToColour";
 
 export function VisionCard(props: ProjectWithChainData) {
   const { _id, status, video_url, title, supporter_count, balance, editionId } =
@@ -37,10 +37,10 @@ export function VisionCard(props: ProjectWithChainData) {
   return (
     <div className="p-2 col-span-1">
       <div className="flex justify-between items-center pb-2">
-        <p>{convertStatusName(status)}</p>
+        <p>{convertProjectStatusName(status)}</p>
         <Badge
           variant="none"
-          className={cn(convertStatusToColour(status), "h-3 w-3 p-0")}
+          className={cn(convertProjectStatusToColour(status), "h-3 w-3 p-0")}
         />
       </div>
       <img src={generateVideoThumbnail(video_url)} alt={title + " thumbnail"} />

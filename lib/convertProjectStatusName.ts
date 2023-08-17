@@ -1,6 +1,6 @@
 import { ProjectStatus } from "@/types/mongo";
 
-export function convertStatusName(status: ProjectStatus) {
+export function convertProjectStatusName(status: ProjectStatus) {
   switch (status) {
     case ProjectStatus.IN_REVIEW:
       return "In review";

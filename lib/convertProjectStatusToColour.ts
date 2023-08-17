@@ -1,6 +1,6 @@
 import { ProjectStatus } from "@/types/mongo";
 
-export function convertStatusToColour(status: ProjectStatus) {
+export function convertProjectStatusToColour(status: ProjectStatus) {
   switch (status) {
     case ProjectStatus.IN_REVIEW:
       return "bg-yellow-300";
