@@ -12,6 +12,7 @@ import { Web3Context } from "./Web3Provider";
 import { authenticateUser } from "@/lib/backend";
 import { getPublicCompressed } from "@toruslabs/eccrypto";
 import { Web3AuthConnector } from "@web3auth/web3auth-wagmi-connector";
+import { CacheKey } from "@/constants/react-query";
 
 interface AuthContextType {
   idToken: string;
@@ -45,7 +46,7 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
 
   // backend auth
   useQuery(
-    ["login", isWalletLogin, idToken],
+    [CacheKey.LOGIN, isWalletLogin, idToken],
     () => authenticateUser({ idToken, isWalletLogin, address, appPubKey }),
     {
       enabled:

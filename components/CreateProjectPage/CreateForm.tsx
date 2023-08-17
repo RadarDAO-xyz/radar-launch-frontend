@@ -33,6 +33,7 @@ import * as z from "zod";
 import { CrowdFundSection } from "./CrowdFundSection";
 import { MilestoneSection } from "./MilestoneSection";
 import { useGetPools } from "@/hooks/useGetPools";
+import { CacheKey } from "@/constants/react-query";
 
 async function createProject(
   idToken: string,
@@ -244,7 +245,7 @@ export function CreateForm() {
   );
   const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
     [
-      "checkout-link",
+      CacheKey.CHECKOUT_LINK,
       fee,
       createProjectData?._id,
       ensAddressData || admin_address,

@@ -33,6 +33,7 @@ import { Input } from "../ui/input";
 import { useToast } from "../ui/use-toast";
 import { ContributeForm } from "./ContributeForm";
 import { SignUpForm } from "./SignUpForm";
+import { CacheKey } from "@/constants/react-query";
 
 async function getMintCheckoutLink(
   quantity: number,
@@ -147,7 +148,7 @@ export function ProjectTabs({ id }: { id: string }) {
 
   const { data: checkoutLinkForEth, isLoading: isCheckoutLinkForEthLoading } =
     useQuery(
-      ["checkout-mint-link", editionId, value, quantity, false],
+      [CacheKey.CHECKOUT_MINT_LINK, editionId, value, quantity, false],
       () =>
         getMintCheckoutLink(
           quantity,
@@ -170,7 +171,7 @@ export function ProjectTabs({ id }: { id: string }) {
     );
   const { data: checkoutLinkForCard, isLoading: isCheckoutLinkForCardLoading } =
     useQuery(
-      ["checkout-mint-link", editionId, value, quantity, true],
+      [CacheKey.CHECKOUT_MINT_LINK, editionId, value, quantity, true],
       () =>
         getMintCheckoutLink(
           quantity,

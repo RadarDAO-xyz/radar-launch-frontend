@@ -1,6 +1,5 @@
-import { getPools } from "@/lib/backend";
+import { useGetPools } from "@/hooks/useGetPools";
 import { useFormContext } from "react-hook-form";
-import { useQuery } from "wagmi";
 import * as z from "zod";
 import { TinyMCE } from "../Layout/TinyMCE";
 import {
@@ -25,7 +24,7 @@ const HIDDEN_POOLS = ["64d6184622f75fd347e91906"];
 
 export function ProjectSection() {
   const { control } = useFormContext<z.infer<typeof createFormSchema>>();
-  const { data } = useQuery(["pools"], getPools);
+  const { data } = useGetPools();
 
   return (
     <div className="border border-slate-200 rounded p-10 mb-10">

@@ -23,37 +23,13 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
-import { Project, ProjectUpdate } from "@/types/mongo";
+import { useGetProjectUpdates } from "@/hooks/useGetProjectUpdates";
+import { useGetUserProjects } from "@/hooks/useGetUserProjects";
+import { ProjectUpdate } from "@/types/mongo";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { useQuery } from "wagmi";
 import * as z from "zod";
-
-async function getUpdates(
-  idToken: string,
-  projectId?: string
-): Promise<ProjectUpdate[]> {
-  if (!projectId) {
-    return [];
-  }
-  try {
-    const res = await fetch(
-      `${process.env.BACKEND_URL}/projects/${projectId}/updates`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${idToken}`,
-        },
-      }
-    ).then((res) => res.json());
-    return res;
-  } catch (e) {
-    console.error(e);
-  }
-  return [];
-}
 
 async function sendUpdate(
   idToken: string,
@@ -78,25 +54,6 @@ async function sendUpdate(
   return;
 }
 
-async function getProjects(idToken: string, id?: string): Promise<Project[]> {
-  if (!id) {
-    return [];
-  }
-  try {
-    const res = await fetch(`${process.env.BACKEND_URL}/users/${id}/projects`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${idToken}`,
-      },
-    }).then((res) => res.json());
-    return res;
-  } catch (e) {
-    console.error(e);
-  }
-  return [];
-}
-
 const formSchema = z.object({
   project: z.string().min(1, { message: "Project is required" }),
   text: z.string(),
@@ -106,13 +63,7 @@ export default function Updates() {
   const { data } = useGetCurrentUser();
   const { idToken } = useContext(AuthContext);
 
-  const { data: projects } = useQuery(
-    ["projects", data?._id],
-    () => getProjects(idToken, data?._id),
-    {
-      enabled: Boolean(data?._id) && Boolean(idToken),
-    }
-  );
+  const { data: projects } = useGetUserProjects(data?._id);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: "onBlur",
@@ -126,13 +77,7 @@ export default function Updates() {
   const projectId = watch("project");
   const project = projects?.find((project) => project._id === projectId);
 
-  const { data: updates, refetch } = useQuery(
-    ["updates", data?._id],
-    () => getUpdates(idToken, project?._id),
-    {
-      enabled: Boolean(project?._id) && Boolean(idToken),
-    }
-  );
+  const { data: updates, refetch } = useGetProjectUpdates(project?._id);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {

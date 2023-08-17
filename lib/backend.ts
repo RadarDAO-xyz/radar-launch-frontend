@@ -4,6 +4,7 @@ import {
   type Project,
   type User,
   type WalletResolvable,
+  type ProjectUpdate,
 } from "@/types/mongo";
 
 export async function getPools(): Promise<Pool[]> {
@@ -229,4 +230,62 @@ export async function downloadProjectSupporters(
     throw new Error("Failed to download project supporters");
   }
   return response.text();
+}
+
+export async function getUserProjects(
+  idToken: string,
+  id: string
+): Promise<Project[]> {
+  if (!id || !idToken) {
+    return [];
+  }
+  try {
+    const response = await fetch(
+      `${process.env.BACKEND_URL}/users/${id}/projects`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+      }
+    );
+    if (!response.ok) {
+      console.error(response);
+      throw new Error("Failed to retrieve user projects");
+    }
+    return response.json();
+  } catch (e) {
+    console.error(e);
+  }
+  return [];
+}
+
+export async function getProjectUpdates(
+  idToken: string,
+  projectId: string
+): Promise<ProjectUpdate[]> {
+  if (!projectId || !idToken) {
+    return [];
+  }
+  try {
+    const response = await fetch(
+      `${process.env.BACKEND_URL}/projects/${projectId}/updates`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+      }
+    );
+    if (!response.ok) {
+      console.error(response);
+      throw new Error("Failed to retrieve project updates");
+    }
+    return response.json();
+  } catch (e) {
+    console.error(e);
+  }
+  return [];
 }
