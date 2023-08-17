@@ -26,24 +26,23 @@ const CookieConsent = () => {
     }
   };
 
-  if (cookieConsentIsTrue) {
+  if (!cookieConsentIsTrue) {
     return null;
   }
 
   return (
-    <section className="fixed bottom-0 left-0 w-full bg-white z-50">
-      <div className="flex flex-col items-start px-5 py-3 space-y-2 border-t md:flex-row md:space-y-0 md:items-stretch md:space-x-2">
+    <section className="fixed bottom-0 left-0 w-full bg-white z-50 px-[5%]">
+      <div className="flex flex-col items-start py-3 space-y-2 border-t md:flex-row md:space-y-0 md:items-stretch md:space-x-2">
         <div className="flex items-center flex-grow text-gray-900">
           <p className="text-sm">
             This site uses services that uses cookies to deliver better
-            experience and analyze traffic. You can learn more about the
-            services we use at our{" "}
+            experiences.{" "}
             <Link
               href="https://www.launch.radardao.xyz/terms-and-conditions"
               className="text-sm underline hover:text-lightAccent"
               target="_blank"
             >
-              terms and conditions
+              Learn more
             </Link>
             .
           </p>
