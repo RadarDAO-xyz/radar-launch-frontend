@@ -178,9 +178,7 @@ export function CrowdFundSection() {
                 <FormControl>
                   <Input {...field} placeholder="Your ETH / ENS address" />
                 </FormControl>
-                <FormDescription>
-                  This should start with 0x... or end with .eth
-                </FormDescription>
+                <FormDescription>This should start with 0x...</FormDescription>
                 <FormMessage />
               </FormItem>
             )}

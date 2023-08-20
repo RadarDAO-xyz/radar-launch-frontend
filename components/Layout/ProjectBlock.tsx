@@ -65,6 +65,7 @@ export function ProjectBlock({
   showMintEndDate,
   showPrice,
   showSupporters,
+  thumbnail,
 }: Props) {
   const isDisabled = status !== ProjectStatus.LIVE;
   const router = useRouter();
@@ -117,7 +118,10 @@ export function ProjectBlock({
               allow="autoplay; fullscreen; picture-in-picture"
             />
           ) : (
-            <img src={generateVideoThumbnail(video_url)} className="w-full" />
+            <img
+              src={thumbnail || generateVideoThumbnail(video_url)}
+              className="w-full"
+            />
             // <HoverVideoPlayer
             //   focused
             //   loop

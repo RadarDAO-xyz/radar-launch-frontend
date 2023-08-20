@@ -361,7 +361,7 @@ export function ProjectTabs({ id }: { id: string }) {
                       }
                     >
                       <Link href={checkoutLinkForCard || ""}>
-                        Collect with Card
+                        Collect with Credit Card
                       </Link>
                     </Button>
                     <Button

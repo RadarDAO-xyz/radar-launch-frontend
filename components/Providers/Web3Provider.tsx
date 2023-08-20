@@ -24,7 +24,7 @@ const openloginAdapter = new OpenloginAdapter({
       logoLight: "https://radarlaunch.app/project-image.png",
       logoDark: "https://radarlaunch.app/project-image.png",
       defaultLanguage: "en", // en, de, ja, ko, zh, es, fr, pt, nl
-      dark: true, // whether to enable dark mode. defaultValue: false
+      dark: false, // whether to enable dark mode. defaultValue: false
       theme: {
         primary: "#00B4FF",
       },
@@ -36,9 +36,6 @@ const openloginAdapter = new OpenloginAdapter({
 const chainConfig = {
   chainNamespace: CHAIN_NAMESPACES.EIP155,
   rpcTarget: chains[0].rpcUrls.default.http[0],
-  // rpcTarget: isTestnet()
-  //   ? `https://optimism-goerli.infura.io/v3/${process.env.VITE_INFURA_KEY}`
-  //   : `https://optimism-mainnet.infura.io/v3/${process.env.VITE_INFURA_KEY}`,
   chainId: "0x" + chains[0].id.toString(16),
   displayName: chains[0].name,
   tickerName: chains[0].nativeCurrency?.name,
@@ -85,7 +82,6 @@ export const Web3Provider = ({ children }: { children?: ReactNode }) => {
         web3AuthNetwork: "cyan",
         chainConfig,
         uiConfig: {
-          // theme: "dark",
           loginMethodsOrder: ["google", "email_passwordless"],
           appName: "blockchain",
           appLogo: "https://radarlaunch.app/project-image.png",

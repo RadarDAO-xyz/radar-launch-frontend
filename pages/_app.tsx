@@ -40,7 +40,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <title>RADAR Launch</title>
         <link rel="icon" href="/favicon.png" sizes="any" />
       </Head>
-      <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+      <ThemeProvider attribute="class" defaultTheme="light" themes={["light"]}>
         <AuthProvider>
           <NavBar />
           <Component {...pageProps} />

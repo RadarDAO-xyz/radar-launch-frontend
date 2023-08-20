@@ -75,7 +75,6 @@ export default async function handler(
         ...(payingWithCard
           ? { hidePayWithCrypto: true } // hide ETH + Optimism
           : { hidePayWithCard: true }), // hide Card + Optimism
-        // contractArgs: "string",
         feeBearer: "BUYER",
         sendEmailOnTransferSucceeded: true,
       }),

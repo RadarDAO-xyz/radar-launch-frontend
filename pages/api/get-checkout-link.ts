@@ -17,8 +17,8 @@ export default async function handler(
     return res.status(404).json({ message: "Not found" });
   }
   try {
-    const { fee, address, id, title, imageUrl } = req.body;
-    console.log({ fee, address, id, title, imageUrl });
+    const { fee, address, id, title, imageUrl, payingWithCard } = req.body;
+    console.log({ fee, address, id, title, imageUrl, payingWithCard });
 
     const exchangeRateData = await getEthExchangeRate();
     if (
@@ -59,7 +59,9 @@ export default async function handler(
           args: { payer: "$WALLET", fee: actualFee, owner: address, id },
           payment: { currency: "ETH", value: "0" },
         },
-        // contractArgs: "string",
+        ...(payingWithCard
+          ? { hidePayWithCrypto: true } // hide ETH + Optimism
+          : { hidePayWithCard: true }), // hide Card + Optimism
         feeBearer: "BUYER",
         sendEmailOnTransferSucceeded: true,
       }),

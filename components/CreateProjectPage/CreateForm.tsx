@@ -1,4 +1,3 @@
-import { AuthContext } from "@/components/Providers/AuthProvider";
 import { ProjectSection } from "@/components/CreateProjectPage/ProjectSection";
 import { SupportSection } from "@/components/CreateProjectPage/SupportSection";
 import { TeamSection } from "@/components/CreateProjectPage/TeamSection";
@@ -21,19 +20,33 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
+import { CONTRACT_ADDRESS } from "@/constants/address";
+import { CacheKey } from "@/constants/react-query";
+import { useAuth } from "@/hooks/useAuth";
+import { useGetPools } from "@/hooks/useGetPools";
 import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
+import {
+  usePrepareRadarEditionsCreateEdition,
+  useRadarEditionsCreateEdition,
+} from "@/lib/generated";
+import { convertAddressToChecksum } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useContext, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { isAddress } from "viem";
-import { useAccount, useEnsAddress, useMutation, useQuery } from "wagmi";
+import {
+  useAccount,
+  useEnsAddress,
+  useMutation,
+  useQuery,
+  useWaitForTransaction,
+} from "wagmi";
 import * as z from "zod";
 import { CrowdFundSection } from "./CrowdFundSection";
 import { MilestoneSection } from "./MilestoneSection";
-import { useGetPools } from "@/hooks/useGetPools";
-import { CacheKey } from "@/constants/react-query";
+import { data } from "autoprefixer";
 
 async function createProject(
   idToken: string,
@@ -80,7 +93,8 @@ async function getCheckoutLink(
   address: string,
   id: string,
   title: string,
-  imageUrl: string
+  imageUrl: string,
+  payingWithCard: boolean = false
 ): Promise<string> {
   try {
     const result = await fetch(`/api/get-checkout-link`, {
@@ -94,6 +108,7 @@ async function getCheckoutLink(
         id,
         title,
         imageUrl,
+        payingWithCard,
       }),
     }).then((res) => res.json());
     console.log(result);
@@ -168,10 +183,18 @@ export const createFormSchema = z.object({
     ),
 });
 
+enum ButtonPressed {
+  CARD,
+  ETH,
+  OPTIMISM,
+}
+
 export function CreateForm() {
   const { address } = useAccount();
-  const { idToken } = useContext(AuthContext);
+  const { idToken, isLoggedIn } = useAuth();
   const { data: pools } = useGetPools();
+  const [buttonPressed, setButtonPressed] = useState<ButtonPressed>();
+  const [hasToasted, setHasToasted] = useState(false);
 
   const form = useForm<z.infer<typeof createFormSchema>>({
     resolver: zodResolver(createFormSchema),
@@ -195,6 +218,8 @@ export function CreateForm() {
       edition_price: 0,
       mint_end_date: new Date(Date.now() + 24 * 60 * 60 * 1000),
       benefits: [],
+      tags: "",
+      description: "",
       admin_address: address || "",
     },
   });
@@ -243,31 +268,139 @@ export function CreateForm() {
       },
     }
   );
-  const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
-    [
-      CacheKey.CHECKOUT_LINK,
-      fee,
+  const { config } = usePrepareRadarEditionsCreateEdition({
+    account: address,
+    address: CONTRACT_ADDRESS,
+    chainId: chains[0]?.id,
+    args: [
+      BigInt(fee),
+      convertAddressToChecksum(admin_address)!,
+      address!,
       createProjectData?._id,
-      ensAddressData || admin_address,
     ],
-    () =>
-      getCheckoutLink(
+    enabled:
+      createProjectData?._id !== undefined &&
+      admin_address !== "" &&
+      address !== undefined &&
+      isLoggedIn,
+  });
+  const {
+    writeAsync,
+    data: createEditionData,
+    error,
+  } = useRadarEditionsCreateEdition(config);
+  const { isLoading, isSuccess } = useWaitForTransaction({
+    hash: createEditionData?.hash,
+    enabled: createEditionData?.hash !== undefined,
+  });
+  const { data: checkoutLinkForCard, isLoading: isCheckoutLinkForCardLoading } =
+    useQuery(
+      [
+        CacheKey.CHECKOUT_LINK,
         fee,
-        admin_address,
-        createProjectData._id,
-        title,
-        generateVideoThumbnail(video_url)
-      ),
-    {
-      enabled:
-        Boolean(createProjectData?._id) &&
-        Boolean(admin_address) &&
-        Boolean(title) &&
-        Boolean(video_url),
-    }
-  );
+        createProjectData?._id,
+        ensAddressData || admin_address,
+        true,
+      ],
+      () =>
+        getCheckoutLink(
+          fee,
+          admin_address,
+          createProjectData._id,
+          title,
+          generateVideoThumbnail(video_url),
+          true
+        ),
+      {
+        enabled:
+          Boolean(createProjectData?._id) &&
+          Boolean(admin_address) &&
+          Boolean(title) &&
+          Boolean(video_url),
+      }
+    );
+  const { data: checkoutLinkForEth, isLoading: isCheckoutLinkForEthLoading } =
+    useQuery(
+      [
+        CacheKey.CHECKOUT_LINK,
+        fee,
+        createProjectData?._id,
+        ensAddressData || admin_address,
+        false,
+      ],
+      () =>
+        getCheckoutLink(
+          fee,
+          admin_address,
+          createProjectData._id,
+          title,
+          generateVideoThumbnail(video_url),
+          false
+        ),
+      {
+        enabled:
+          Boolean(createProjectData?._id) &&
+          Boolean(admin_address) &&
+          Boolean(title) &&
+          Boolean(video_url),
+      }
+    );
   const router = useRouter();
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (
+      isSubmitSuccess &&
+      createProjectData?._id &&
+      buttonPressed === ButtonPressed.OPTIMISM
+    ) {
+      try {
+        writeAsync?.();
+        setHasToasted(false);
+      } catch (e) {
+        // prevent error from crashing the app
+        console.log(e);
+      }
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: "An unexpected error occured",
+          description: "Check the console for more information",
+        });
+      }
+    }
+  }, [
+    buttonPressed,
+    createProjectData?._id,
+    error,
+    isSubmitSuccess,
+    toast,
+    writeAsync,
+  ]);
+
+  useEffect(() => {
+    if (isLoading && createEditionData?.hash) {
+      toast({
+        title: "Transaction sent!",
+        description: "Awaiting for confirmation...",
+      });
+    }
+  }, [isLoading, createEditionData?.hash]);
+
+  useEffect(() => {
+    if (isSuccess && createEditionData?.hash && !hasToasted) {
+      toast({
+        title: "Success!",
+        description: "Your project has been created!",
+        action: (
+          <Button asChild>
+            <Link href={`/projects/${createProjectData?._id}`}>View</Link>
+          </Button>
+        ),
+      });
+      setHasToasted(true);
+    }
+  }, [isSuccess, createEditionData?.hash]);
 
   async function onSubmit(values: z.infer<typeof createFormSchema>) {
     // print form errors
@@ -279,15 +412,32 @@ export function CreateForm() {
   }
 
   useEffect(() => {
-    if (isSubmitSuccess && createProjectData && checkoutLink) {
+    if (
+      isSubmitSuccess &&
+      createProjectData &&
+      ((buttonPressed === ButtonPressed.CARD && checkoutLinkForCard) ||
+        (buttonPressed === ButtonPressed.ETH && checkoutLinkForEth))
+    ) {
       toast({
         title: "Redirecting to Paper for payment...",
       });
       setTimeout(() => {
-        router.push(checkoutLink);
+        if (buttonPressed === ButtonPressed.CARD) {
+          router.push(checkoutLinkForCard!);
+        } else {
+          router.push(checkoutLinkForEth!);
+        }
       }, 2000);
     }
-  }, [isSubmitSuccess, createProjectData, toast, router, checkoutLink]);
+  }, [
+    isSubmitSuccess,
+    createProjectData,
+    toast,
+    router,
+    checkoutLinkForCard,
+    checkoutLinkForEth,
+    buttonPressed,
+  ]);
 
   if (address === undefined) {
     return (
@@ -395,11 +545,30 @@ export function CreateForm() {
                 </Button>
                 <Button
                   className="w-full"
-                  disabled={isSubmitLoading || isCheckoutLinkLoading}
+                  disabled={isSubmitLoading || isCheckoutLinkForCardLoading}
+                  type="submit"
+                  onClick={() => setButtonPressed(ButtonPressed.CARD)}
+                  form="create-project"
+                >
+                  Pay with Credit Card
+                </Button>
+                <Button
+                  className="w-full"
+                  disabled={isSubmitLoading || isCheckoutLinkForEthLoading}
+                  type="submit"
+                  onClick={() => setButtonPressed(ButtonPressed.ETH)}
+                  form="create-project"
+                >
+                  Pay with ETH
+                </Button>
+                <Button
+                  className="w-full"
+                  disabled={isSubmitLoading}
+                  onClick={() => setButtonPressed(ButtonPressed.OPTIMISM)}
                   type="submit"
                   form="create-project"
                 >
-                  Pay with Paper
+                  Pay with Optimism
                 </Button>
               </DialogFooter>
             </DialogContent>

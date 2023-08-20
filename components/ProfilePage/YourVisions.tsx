@@ -44,11 +44,7 @@ export function YourVisions({
         <h2 className="text-xl">INACTIVE VISIONS</h2>
         <div className="grid grid-cols-4 gap-2">
           {projects
-            .filter(
-              (project) =>
-                project.status === ProjectStatus.CANCELLED ||
-                project.status === ProjectStatus.REJECTED
-            )
+            .filter((project) => project.status === ProjectStatus.REJECTED)
             .map((project) => {
               if (
                 project.admin_address.toUpperCase() ===
