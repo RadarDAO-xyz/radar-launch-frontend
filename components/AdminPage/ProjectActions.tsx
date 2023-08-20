@@ -25,7 +25,16 @@ import { DeleteProjectButton } from "./DeleteProjectButton";
 import { useAuth } from "@/hooks/useAuth";
 import { useMutation, useQueryClient } from "wagmi";
 import { CacheKey } from "@/constants/react-query";
-import { updateProjectStatus } from "@/lib/backend";
+import { updateProject } from "@/lib/backend";
+import { cn } from "@/lib/utils";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
 
 interface ProjectWithChainData extends Project {
   editionId: number;
@@ -33,12 +42,19 @@ interface ProjectWithChainData extends Project {
 }
 
 export function ProjectActions(props: ProjectWithChainData) {
-  const { _id, status, editionId } = props;
+  const { _id, status, editionId, curation } = props;
 
   const [isOpen, setIsOpen] = useState(false);
 
   const { idToken } = useAuth();
   const projectStatusRef = useRef<HTMLInputElement>(null);
+  const [curationStart, setCurationStart] = useState<Date | undefined>(
+    curation?.start ? new Date(curation.start) : undefined
+  );
+  const [curationEnd, setCurationEnd] = useState<Date | undefined>(
+    curation?.end ? new Date(curation.end) : undefined
+  );
+
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const { config } = usePrepareRadarEditionsApproveEdition({
@@ -60,7 +76,18 @@ export function ProjectActions(props: ProjectWithChainData) {
 
   const { mutate, isLoading: isUpdateLoading } = useMutation(
     [CacheKey.UDPATE_PROJECT_STATUS, _id, projectStatusRef.current?.value],
-    () => updateProjectStatus(+projectStatusRef.current!.value, _id, idToken),
+    () =>
+      updateProject(
+        {
+          status: +projectStatusRef.current!.value,
+          curation: {
+            start: curationStart?.toISOString(),
+            end: curationEnd?.toISOString(),
+          },
+        },
+        _id,
+        idToken
+      ),
     {
       onSuccess: () => {
         queryClient.invalidateQueries([CacheKey.PROJECTS]);
@@ -99,6 +126,65 @@ export function ProjectActions(props: ProjectWithChainData) {
               ref={projectStatusRef}
               defaultValue={status}
             />
+            <Label>Curation Start</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-full pl-3 text-left font-normal",
+                    !curationStart && "text-muted-foreground"
+                  )}
+                >
+                  {curationStart ? (
+                    format(curationStart, "PPP")
+                  ) : (
+                    <span>Pick a date</span>
+                  )}
+                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={curationStart || new Date()}
+                  onSelect={(e) => {
+                    if (e !== undefined) {
+                      setCurationStart(e);
+                    }
+                  }}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+            <Label>Curation End</Label>
+
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-full pl-3 text-left font-normal",
+                    !curationEnd && "text-muted-foreground"
+                  )}
+                >
+                  {curationEnd ? (
+                    format(curationEnd, "PPP")
+                  ) : (
+                    <span>Pick a date</span>
+                  )}
+                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={curationEnd || new Date()}
+                  onSelect={setCurationEnd}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
           </DialogDescription>
           <DialogFooter className="flex !flex-col !space-x-0 space-y-4">
             <Button
@@ -141,7 +227,7 @@ export function ProjectActions(props: ProjectWithChainData) {
               }}
               disabled={isUpdateLoading}
             >
-              Update project status (database)
+              Update project (database)
             </Button>
             <DeleteProjectButton projectId={_id} />
           </DialogFooter>

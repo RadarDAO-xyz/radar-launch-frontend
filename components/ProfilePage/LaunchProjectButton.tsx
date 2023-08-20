@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { CacheKey } from "@/constants/react-query";
 import { useAuth } from "@/hooks/useAuth";
-import { updateProjectStatus } from "@/lib/backend";
+import { updateProject } from "@/lib/backend";
 import { Project, ProjectStatus } from "@/types/mongo";
 import { RocketIcon } from "lucide-react";
 import { useMutation, useQueryClient } from "wagmi";
@@ -24,7 +24,7 @@ export function LaunchProjectButton({ status, _id }: Project) {
   const queryClient = useQueryClient();
   const { mutate } = useMutation(
     [CacheKey.UDPATE_PROJECT_STATUS, _id, idToken],
-    () => updateProjectStatus(ProjectStatus.LIVE, _id, idToken),
+    () => updateProject({ status: ProjectStatus.LIVE }, _id, idToken),
     {
       onSuccess: async () => {
         await queryClient.invalidateQueries([CacheKey.PROJECTS]);

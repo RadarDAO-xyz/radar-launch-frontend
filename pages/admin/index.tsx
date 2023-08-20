@@ -103,6 +103,14 @@ export default function AdminPage() {
               />
             </div>
             <p>On Chain Status: {project.onChainStatus}</p>
+            <p>
+              Curation Start:{" "}
+              {new Date(project.curation?.start).toLocaleDateString()}
+            </p>
+            <p>
+              Curation End:{" "}
+              {new Date(project.curation?.end).toLocaleDateString()}
+            </p>
             <ProjectActions {...project} />
           </div>
         ))}

@@ -46,7 +46,6 @@ import {
 import * as z from "zod";
 import { CrowdFundSection } from "./CrowdFundSection";
 import { MilestoneSection } from "./MilestoneSection";
-import { data } from "autoprefixer";
 
 async function createProject(
   idToken: string,

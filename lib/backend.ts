@@ -2,11 +2,11 @@ import {
   SupportType,
   type Pool,
   type Project,
-  type User,
-  type WalletResolvable,
   type ProjectUpdate,
-  ProjectStatus,
+  type User,
+  type WalletResolvable
 } from "@/types/mongo";
+import { RecursivePartial } from "@/types/utils";
 
 export async function getPools(): Promise<Pool[]> {
   const response = await fetch(`${process.env.BACKEND_URL}/pools`);
@@ -291,8 +291,8 @@ export async function getProjectUpdates(
   return [];
 }
 
-export async function updateProjectStatus(
-  projectStatus: ProjectStatus,
+export async function updateProject(
+  fields: RecursivePartial<Project>,
   projectId: string,
   idToken: string
 ) {
@@ -305,9 +305,7 @@ export async function updateProjectStatus(
           "Content-Type": "application/json",
           Authorization: `Bearer ${idToken}`,
         },
-        body: JSON.stringify({
-          status: projectStatus,
-        }),
+        body: JSON.stringify(fields),
       }
     );
     if (!response.ok) {
