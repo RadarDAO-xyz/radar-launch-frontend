@@ -38,7 +38,7 @@ export default function HomePage() {
 
   return (
     <section>
-      <div className="absolute w-screen top-[100px] left-0 text-[200px] leading-none whitespace-nowrap font-bold text-gray-100 z-10 font-bolded overflow-hidden">
+      <div className="absolute w-full top-[100px] left-0 text-[200px] leading-none whitespace-nowrap font-bold text-gray-100 z-10 font-bolded overflow-hidden">
         A MORE PLAYFUL FUTURE
       </div>
 
