@@ -3,13 +3,14 @@ import { useMutation, useQueryClient } from "wagmi";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "../ui/use-toast";
 import { Button } from "../ui/button";
+import { CacheKey } from "@/constants/react-query";
 
 export function DeleteProjectButton({ projectId }: { projectId: string }) {
   const { idToken } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const { mutate, isLoading } = useMutation(
-    ["delete-project", projectId, idToken],
+    [CacheKey.DELETE_PROJECT, projectId, idToken],
     () => deleteProject(projectId, idToken),
     {
       onError: (e) => {
@@ -21,9 +22,9 @@ export function DeleteProjectButton({ projectId }: { projectId: string }) {
         });
       },
       onSuccess: async () => {
-        await queryClient.invalidateQueries(["projects"]);
+        await queryClient.invalidateQueries([CacheKey.PROJECTS]);
         toast({
-          title: "Successfully deleted projects",
+          title: "Successfully deleted project",
         });
       },
     }

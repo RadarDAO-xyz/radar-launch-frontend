@@ -1,19 +1,15 @@
 import { AdminNav } from "@/components/Layout/AdminNav";
 import { CollectedVisions } from "@/components/ProfilePage/CollectedVisions";
-import { chains } from "@/components/Providers/Web3Provider";
 import { YourVisions } from "@/components/ProfilePage/YourVisions";
+import { chains } from "@/components/Providers/Web3Provider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  GOERLI_CONTRACT_ADDRESS,
-  MAINNET_CONTRACT_ADDRESS,
-} from "@/constants/address";
+import { CONTRACT_ADDRESS } from "@/constants/address";
 import { useGetProjects } from "@/hooks/useGetProjects";
 import { useGetUser } from "@/hooks/useGetUser";
 import {
   useRadarEditionsGetBalances,
   useRadarEditionsGetEditions,
 } from "@/lib/generated";
-import isTestnet from "@/lib/isTestnet";
 import { convertAddressToChecksum } from "@/lib/utils";
 import { Project, WalletResolvable } from "@/types/mongo";
 import Link from "next/link";
@@ -44,6 +40,7 @@ export interface ProjectWithOwnedAmount extends Project {
 }
 
 function transformYourVisionsProjects(
+  userId?: string,
   databaseProjects?: Project[],
   chainProjects?: OnChainProject[]
 ): ProjectWithChainData[] {
@@ -68,7 +65,9 @@ function transformYourVisionsProjects(
   );
 
   return databaseProjects
-    .filter((project) => projectIds.has(project._id))
+    .filter(
+      (project) => projectIds.has(project._id) && project.founder === userId
+    )
     .map((project) => ({
       ...project,
       balance: projectBalances[project._id],
@@ -118,13 +117,13 @@ export default function AdminPage() {
       ? (userData.wallets[0] as WalletResolvable).address
       : "";
   const { data: onChainProjects } = useRadarEditionsGetEditions({
-    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
     enabled: Boolean(chains[0].id),
   });
   const { data: ownedOnChainProjects } = useRadarEditionsGetBalances({
     account: convertAddressToChecksum(address)!,
-    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
+    address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
     args: [convertAddressToChecksum(address) as Address],
     enabled: Boolean(chains[0].id) && Boolean(address),
@@ -140,6 +139,7 @@ export default function AdminPage() {
   }
 
   const yourVisionsProjects = transformYourVisionsProjects(
+    id?.toString(),
     databaseProjects,
     onChainProjects as OnChainProject[]
   ).filter(

@@ -4,7 +4,7 @@ import {
   type Project,
   type ProjectUpdate,
   type User,
-  type WalletResolvable
+  type WalletResolvable,
 } from "@/types/mongo";
 import { RecursivePartial } from "@/types/utils";
 
@@ -202,6 +202,7 @@ export async function deleteProject(projectId: string, idToken: string) {
   const response = await fetch(
     `${process.env.BACKEND_URL}/projects/${projectId}`,
     {
+      method: "DELETE",
       headers: {
         Authorization: `Bearer ${idToken}`,
       },
@@ -211,7 +212,6 @@ export async function deleteProject(projectId: string, idToken: string) {
     console.error(response);
     throw new Error("Failed to delete project");
   }
-  return response.json();
 }
 
 export async function downloadProjectSupporters(

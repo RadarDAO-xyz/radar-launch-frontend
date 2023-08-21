@@ -37,8 +37,8 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 
 interface ProjectWithChainData extends Project {
-  editionId: number;
-  onChainStatus: number;
+  editionId?: number;
+  onChainStatus?: number;
 }
 
 export function ProjectActions(props: ProjectWithChainData) {
@@ -60,7 +60,7 @@ export function ProjectActions(props: ProjectWithChainData) {
   const { config } = usePrepareRadarEditionsApproveEdition({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
-    enabled: Boolean(chains[0].id) && isOpen,
+    enabled: Boolean(chains[0].id) && isOpen && editionId !== undefined,
     args: [BigInt(+(editionId || 0)) || 0n],
   });
   const { writeAsync, isLoading: isApproveLoading } =
@@ -68,7 +68,7 @@ export function ProjectActions(props: ProjectWithChainData) {
   const { config: stopEditionConfig } = usePrepareRadarEditionsStopEdition({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
-    enabled: Boolean(chains[0].id) && isOpen,
+    enabled: Boolean(chains[0].id) && isOpen && editionId !== undefined,
     args: [BigInt(+(editionId || 0)) || 0n],
   });
   const { writeAsync: writeStopEditionAsync, isLoading: isStopLoading } =

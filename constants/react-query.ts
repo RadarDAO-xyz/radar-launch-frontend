@@ -18,4 +18,5 @@ export enum CacheKey {
   // mutation
   DOWNLOAD_PROJECT_SUPPORTERS = "download-project-supporters",
   UDPATE_PROJECT_STATUS = "update-project-status",
+  DELETE_PROJECT = "delete-project",
 }
