@@ -22,7 +22,7 @@ const Web3ProviderNoSSR = dynamic(
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <Web3ProviderNoSSR>
+    <>
       <Script
         async
         src="https://www.googletagmanager.com/gtag/js?id=G-RXHTNDF4RP%22%3E"
@@ -79,15 +79,21 @@ export default function App({ Component, pageProps }: AppProps) {
 
         <link rel="icon" href="/favicon.png" sizes="any" />
       </Head>
-      <ThemeProvider attribute="class" defaultTheme="light" themes={["light"]}>
-        <AuthProvider>
-          <NavBar />
-          <Component {...pageProps} />
-          <PreLaunchFooter />
-          <Toaster />
-          <CookieConsent />
-        </AuthProvider>
-      </ThemeProvider>
-    </Web3ProviderNoSSR>
+      <Web3ProviderNoSSR>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          themes={["light"]}
+        >
+          <AuthProvider>
+            <NavBar />
+            <Component {...pageProps} />
+            <PreLaunchFooter />
+            <Toaster />
+            <CookieConsent />
+          </AuthProvider>
+        </ThemeProvider>
+      </Web3ProviderNoSSR>
+    </>
   );
 }
