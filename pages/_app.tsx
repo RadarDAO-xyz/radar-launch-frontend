@@ -71,7 +71,7 @@ export default function App({ Component, pageProps }: AppProps) {
         />
         <meta
           name="twitter:image"
-          content=" https://radarlaunch.app/project-image.png"
+          content="https://radarlaunch.app/project-image.png"
         />
         <meta property="twitter:image:alt" content="RADAR Launch image" />
 
