@@ -147,7 +147,7 @@ export function ProjectActions(props: ProjectWithChainData) {
               <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                   mode="single"
-                  selected={curationStart || new Date()}
+                  selected={curationStart}
                   onSelect={(e) => {
                     if (e !== undefined) {
                       setCurationStart(e);
@@ -179,7 +179,7 @@ export function ProjectActions(props: ProjectWithChainData) {
               <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                   mode="single"
-                  selected={curationEnd || new Date()}
+                  selected={curationEnd}
                   onSelect={setCurationEnd}
                   initialFocus
                 />
