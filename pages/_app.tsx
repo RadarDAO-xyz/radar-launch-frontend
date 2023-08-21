@@ -38,6 +38,32 @@ export default function App({ Component, pageProps }: AppProps) {
       </Script>
       <Head>
         <title>RADAR Launch</title>
+        <meta name="keywords" content="radar, nft, launch" />
+        <meta name="author" content="RADAR Launch" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta property="og:title" content="RADAR Launch" />
+        <meta
+          property="og:description"
+          content="Launch your projects with RADAR"
+        />
+        <meta property="og:site_name" content="RADAR Launch" />
+        <meta
+          property="og:image"
+          content="https://radarlaunch.app/project-image.png"
+        />
+
+        <meta name="twitter:title" content="RADAR Launch" />
+        <meta
+          name="twitter:description"
+          content="Launch your projects with RADAR"
+        />
+        <meta
+          name="twitter:image"
+          content=" https://radarlaunch.app/project-image.png"
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@Radarxyz" />
+
         <link rel="icon" href="/favicon.png" sizes="any" />
       </Head>
       <ThemeProvider attribute="class" defaultTheme="light" themes={["light"]}>
