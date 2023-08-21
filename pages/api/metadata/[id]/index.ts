@@ -36,7 +36,8 @@ export default async function handler(
     return res.status(200).json({
       name: project.title,
       image: project.thumbnail || generateVideoThumbnail(project.video_url),
-      description: turndownService.turndown(project.description),
+      description: turndownService.turndown(
+        `<p>${project.title}</p>${project.description}<p>Building A More Play-Full Future on Launch</p>`),
       external_url: `https://radarlaunch.app/project/${id}`,
       attributes: project.tags.map((tag) => ({
         trait_type: "Future of:",
