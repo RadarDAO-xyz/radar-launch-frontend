@@ -39,6 +39,14 @@ export function Wallet() {
             {ensName || shortenAddress(address)}
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
+          {currentUserData?.bypasser && (
+            <>
+              <DropdownMenuItem asChild>
+                <Link href="/admin">Admin</Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+            </>
+          )}
           <DropdownMenuItem className="cursor-pointer" asChild>
             <Link href={`/profile/${currentUserData._id}`}>Profile</Link>
           </DropdownMenuItem>
