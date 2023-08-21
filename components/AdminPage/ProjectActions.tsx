@@ -104,10 +104,10 @@ export function ProjectActions(props: ProjectWithChainData) {
   );
 
   return (
-    <>
+    <div className="mt-4 flex gap-4">
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
-          <Button className="mt-4">Actions</Button>
+          <Button>Actions</Button>
         </DialogTrigger>
         <DialogContent>
           <DialogTitle>Actions panel</DialogTitle>
@@ -234,6 +234,6 @@ export function ProjectActions(props: ProjectWithChainData) {
         </DialogContent>
       </Dialog>
       <DownloadSupporters {...props} />
-    </>
+    </div>
   );
 }

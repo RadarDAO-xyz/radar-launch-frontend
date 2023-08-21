@@ -67,15 +67,33 @@ export default function AdminPage() {
   );
   return (
     <section className="mt-24 max-w-screen-lg mx-auto">
+      <div>
+        <strong>
+          Database project status: IN_REVIEW (0), APPROVED (1), LIVE (2),
+          BUILDING (3), REJECTED (4), CANCELLED (5)
+        </strong>
+      </div>
+      <div>
+        <strong>
+          On chain project status: NotCreated (0), Created (1), Launched (2),
+          Stopped (3)
+        </strong>
+      </div>
       <p>
-        Database project status: IN_REVIEW (0), APPROVED (1), LIVE (2), BUILDING
-        (3), REJECTED (4), CANCELLED (5)
+        To modify the 4 featured projects in the homepage, do the following
+        <ul>
+          <li>
+            Copy the curation start date of the project you want to replace,
+            e.g. DROP #3
+          </li>
+          <li>
+            Update the curation start date of the new project with the date in
+            previous step (go to actions)
+          </li>
+          <li>Delete the old project</li>
+        </ul>
       </p>
-      <p>
-        On chain project status: NotCreated (0), Created (1), Launched (2),
-        Stopped (3)
-      </p>
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 pt-4 pb-20">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 pt-4 pb-20">
         {projects.map((project) => (
           <div className="border rounded p-4" key={project._id}>
             {project.editionId === undefined && (
