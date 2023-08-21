@@ -122,7 +122,6 @@ export default function AdminPage() {
     enabled: Boolean(chains[0].id),
   });
   const { data: ownedOnChainProjects } = useRadarEditionsGetBalances({
-    account: convertAddressToChecksum(address)!,
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
     args: [convertAddressToChecksum(address) as Address],
