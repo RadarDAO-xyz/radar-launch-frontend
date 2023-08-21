@@ -183,7 +183,6 @@ export default function IndividualProjectPage() {
             <Avatar className="w-12 h-12">
               <AvatarImage
                 src={userData?.profile || DEFAULT_AVATAR_IMAGE}
-                className="object-contain"
                 alt="avatar"
               />
               <AvatarFallback>CN</AvatarFallback>
@@ -218,7 +217,6 @@ export default function IndividualProjectPage() {
               <Avatar className="w-12 h-12">
                 <AvatarImage
                   src={userData?.profile || DEFAULT_AVATAR_IMAGE}
-                  className="object-contain"
                   alt="avatar"
                 />
                 <AvatarFallback>CN</AvatarFallback>
