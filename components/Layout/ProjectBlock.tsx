@@ -1,4 +1,5 @@
 import { CONTRACT_ADDRESS } from "@/constants/address";
+import { useGetCountdown } from "@/hooks/useGetCountdown";
 import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
 import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
 import {
@@ -10,7 +11,6 @@ import { cn } from "@/lib/utils";
 import { Project, ProjectStatus } from "@/types/mongo";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { getCountdown } from "../../lib/utils";
 import { chains } from "../Providers/Web3Provider";
 import { Button } from "../ui/button";
 
@@ -84,6 +84,7 @@ export function ProjectBlock({
     args: [BigInt(Math.max(editionId! || 0, 0))],
     enabled: Boolean(chains[0]?.id) && editionId !== undefined,
   });
+  const countdown = useGetCountdown(new Date(mint_end_date));
 
   return (
     <div
@@ -158,9 +159,7 @@ export function ProjectBlock({
               {status === ProjectStatus.LIVE ? (
                 <div className="text-center w-full flex text-xs text-gray-700 divide-x">
                   {showMintEndDate && mint_end_date && (
-                    <p className="pr-2">
-                      {getCountdown(new Date(mint_end_date))}
-                    </p>
+                    <p className="pr-2">{countdown}</p>
                   )}
                   {/* TODO: change this to onchain fee / exchange rate */}
                   {showPrice && (
@@ -181,7 +180,7 @@ export function ProjectBlock({
                 </div>
               ) : (
                 <div className="count-block flex items-center justify-center">
-                  {getCountdown(new Date(mint_end_date))} until drop
+                  {countdown} until drop
                 </div>
               )}
             </div>

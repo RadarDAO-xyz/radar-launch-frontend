@@ -1,4 +1,5 @@
 import { CONTRACT_ADDRESS } from "@/constants/address";
+import { useGetCountdown } from "@/hooks/useGetCountdown";
 import { useGetProject } from "@/hooks/useGetProject";
 import { generateHoverVideoLink } from "@/lib/generateHoverVideoLink";
 import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
@@ -6,7 +7,7 @@ import {
   useRadarEditionsGetEditions,
   useRadarEditionsTotalSupply,
 } from "@/lib/generated";
-import { cn, getCountdown } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { ProjectStatus } from "@/types/mongo";
 import Link from "next/link";
 import HoverVideoPlayer from "react-hover-video-player";
@@ -33,6 +34,9 @@ export function VisionOfTheWeek({ projectId }: Props) {
     enabled: Boolean(chains[0]?.id) && editionId !== undefined,
   });
   const { data } = useGetProject(projectId);
+  const countdown = useGetCountdown(
+    data?.mint_end_date ? new Date(data.mint_end_date) : undefined
+  );
 
   return (
     <div className="featured-project-wrapper">
@@ -90,9 +94,7 @@ export function VisionOfTheWeek({ projectId }: Props) {
               {data?.status === ProjectStatus.LIVE ? (
                 <div className="flex gap-3 text-gray-700 w-full">
                   {data?.mint_end_date ? (
-                    <span className="border-r pr-3">
-                      {getCountdown(new Date(data.mint_end_date))}
-                    </span>
+                    <span className="border-r pr-3">{countdown}</span>
                   ) : null}
                   <span>
                     {(
@@ -102,10 +104,7 @@ export function VisionOfTheWeek({ projectId }: Props) {
                   </span>
                 </div>
               ) : (
-                <div>
-                  {getCountdown(new Date("2023-08-03T23:00:00+02:00"))} until
-                  drop
-                </div>
+                <div>{countdown} until drop</div>
               )}
             </div>
             <Link

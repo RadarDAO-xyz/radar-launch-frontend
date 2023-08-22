@@ -2,6 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CONTRACT_ADDRESS } from "@/constants/address";
 import { CacheKey } from "@/constants/react-query";
 import { useAuth } from "@/hooks/useAuth";
+import { useGetCountdown } from "@/hooks/useGetCountdown";
 import { useGetExchangeRate } from "@/hooks/useGetExchangeRate";
 import { useGetProject } from "@/hooks/useGetProject";
 import { useGetUser } from "@/hooks/useGetUser";
@@ -13,7 +14,7 @@ import {
   useRadarEditionsProtocolFee,
   useRadarEditionsTotalSupply,
 } from "@/lib/generated";
-import { cn, getCountdown } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import parse from "html-react-parser";
 import { DotIcon, MinusIcon, MoveDown, PlusIcon } from "lucide-react";
 import Link from "next/link";
@@ -145,6 +146,9 @@ export function ProjectTabs({ id }: { id: string }) {
   const { data: exchangeRateData } = useGetExchangeRate();
   const { data: projectData } = useGetProject(id.toString());
   const { data: userData } = useGetUser(projectData?.founder.toString());
+  const countdown = useGetCountdown(
+    projectData?.mint_end_date ? new Date(projectData.mint_end_date) : undefined
+  );
 
   const { data: checkoutLinkForEth, isLoading: isCheckoutLinkForEthLoading } =
     useQuery(
@@ -338,7 +342,16 @@ export function ProjectTabs({ id }: { id: string }) {
             </div>
             <Dialog modal={false}>
               <DialogTrigger asChild>
-                <Button className="w-full">COLLECT</Button>
+                <Button
+                  className="w-full"
+                  disabled={
+                    projectData?.mint_end_date
+                      ? new Date(projectData.mint_end_date) < new Date()
+                      : false
+                  }
+                >
+                  COLLECT
+                </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
@@ -412,11 +425,10 @@ export function ProjectTabs({ id }: { id: string }) {
             </Dialog>
 
             <p className="text-center pb-4 pt-8 text-gray-700">
-              {projectData?.mint_end_date ? (
+              {projectData?.mint_end_date &&
+              new Date(projectData.mint_end_date) > new Date() ? (
                 <>
-                  <span>
-                    {getCountdown(new Date(projectData.mint_end_date))}
-                  </span>
+                  <span>{countdown}</span>
                   <DotIcon className="inline" />
                 </>
               ) : null}

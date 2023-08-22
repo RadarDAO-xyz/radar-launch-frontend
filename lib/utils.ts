@@ -1,5 +1,6 @@
 import { chains } from "@/components/Providers/Web3Provider";
 import { clsx, type ClassValue } from "clsx";
+import { differenceInSeconds } from "date-fns";
 import differenceInDays from "date-fns/differenceInDays";
 import differenceInHours from "date-fns/differenceInHours";
 import differenceInMinutes from "date-fns/differenceInMinutes";
@@ -27,17 +28,28 @@ export function getCountdown(date: Date) {
   const hoursLeft = differenceInHours(date, today) - daysLeft * 24;
   const minutesLeft =
     differenceInMinutes(date, today) - daysLeft * 24 * 60 - hoursLeft * 60;
+  const secondsLeft =
+    differenceInSeconds(date, today) -
+    daysLeft * 24 * 60 * 60 -
+    hoursLeft * 60 * 60 -
+    minutesLeft * 60;
 
-  const daysLeftString = daysLeft < 10 ? `0${Math.max(daysLeft, 0)}` : daysLeft;
   const hoursLeftString =
     hoursLeft < 10 ? `0${Math.max(hoursLeft, 0)}` : hoursLeft;
   const minutesLeftString =
     minutesLeft < 10 ? `0${Math.max(minutesLeft, 0)}` : minutesLeft;
 
-  return `${daysLeftString}d ${hoursLeftString}h ${minutesLeftString}m`;
+  if (daysLeft > 0) {
+    const daysLeftString =
+      daysLeft < 10 ? `0${Math.max(daysLeft, 0)}` : daysLeft;
+    return `${daysLeftString}d ${hoursLeftString}h ${minutesLeftString}m`;
+  }
+  const secondsLeftString =
+    secondsLeft < 10 ? `0${Math.max(secondsLeft, 0)}` : secondsLeft;
+  return `${hoursLeftString}h ${minutesLeftString}m ${secondsLeftString}s`;
 }
 
-// Objects and functions copied from "viem" below as there are some errors happening on Netlify functions
+// Objects and functions copied from "viem" below as there are some errors happening on Vercel functions
 
 export const etherUnits = {
   gwei: 9,
