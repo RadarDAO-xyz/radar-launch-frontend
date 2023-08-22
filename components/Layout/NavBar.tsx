@@ -23,6 +23,7 @@ import {
   SheetTrigger,
 } from "../ui/sheet";
 import { Banner } from "./Banner";
+import Image from "next/image";
 
 const WalletNoSSR = dynamic(() => import("./Wallet").then((res) => res.Wallet));
 
@@ -33,14 +34,14 @@ export function NavBar() {
     <header className="pt-4 z-50 sticky top-0 bg-white border-b">
       <div className="px-[5%] pb-3">
         <div className="navbar-logo-center-container shadow-three items-center">
-          <div className="w-40 mr-8">
+          <div className="w-full max-w-[100px]">
             <Link href="/">
-              <img
+              <Image
                 className="image-4"
-                loading="lazy"
-                width="auto"
-                height="auto"
+                width={100}
+                height={25}
                 src="/logo.png"
+                alt="RADAR Logo"
               />
             </Link>
           </div>
@@ -49,7 +50,7 @@ export function NavBar() {
               <NavigationMenuItem>
                 <Link href="/pool" legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    FUNDING POOLS
+                    GRANT POOLS
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
@@ -136,7 +137,7 @@ export function NavBar() {
               <div className="py-4 flex flex-col">
                 <Button asChild variant="link" className="justify-start">
                   <Link className="" href="/pool">
-                    FUNDING POOLS
+                    GRANT POOLS
                   </Link>
                 </Button>
                 <Button asChild variant="link" className="justify-start">

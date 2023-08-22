@@ -3,57 +3,63 @@ import Link from "next/link";
 import React from "react";
 import Image from "next/image";
 
-export function FundingPoolTabs() {
+enum Tab {
+  WHY_GRANT_POOLS = "why-grant-pools",
+  GETTING_FUNDED = "getting-funded",
+  CREATING_POOL = "creating-pool",
+}
+
+export function GrantPoolTabs() {
   return (
     <div className={"funding-pool-header"}>
       <div className={"funding-pool-title"}>
         <h1 className={"feature-heading center"}>
-          FUNDING THE FUTURE THROUGH FUNDING POOLS
+          FUNDING THE FUTURE THROUGH GRANT POOLS
         </h1>
       </div>
       <div className={"_20px-div"} />
       <div className="">
-        <Tabs defaultValue="why-funding-pools">
+        <Tabs defaultValue={Tab.WHY_GRANT_POOLS}>
           <TabsList className="grid w-full grid-cols-3 gap-4 max-w-2xl mx-auto mb-6">
             <TabsTrigger
               className="data-[state=active]:no-underline data-[state=active]:bg-gray-200 bg-gray-100 rounded font-normal border-b-0 leading-8"
-              value="why-funding-pools"
+              value={Tab.WHY_GRANT_POOLS}
             >
-              Why funding pools
+              Why grant pools
             </TabsTrigger>
             <TabsTrigger
               className="data-[state=active]:no-underline data-[state=active]:bg-gray-200 bg-gray-100 rounded font-normal border-b-0 leading-8"
-              value="getting-funded"
+              value={Tab.GETTING_FUNDED}
             >
               Getting funded
             </TabsTrigger>
             <TabsTrigger
               className="data-[state=active]:no-underline data-[state=active]:bg-gray-200 bg-gray-100 rounded font-normal border-b-0 leading-8"
-              value="creating-pool"
+              value={Tab.CREATING_POOL}
             >
               Creating a pool
             </TabsTrigger>
           </TabsList>
           <TabsContent
-            value="why-funding-pools"
+            value={Tab.WHY_GRANT_POOLS}
             className="max-w-2xl w-full mx-auto text-center border p-16 rounded-lg"
           >
             {
-              "To accelerate the better futures we believe in, we’re collaborating with visionary partners: investors, individuals, blockchains, and brands who have deep conviction in an opportunity space that’s inherently linked to one of our futures."
+              "To accelerate the better futures we believe in, we're collaborating with visionary partners: investors, individuals, blockchains, and brands who have deep conviction in an opportunity space that's inherently linked to one of our futures."
             }
             <br />
             <br />
             {
-              "Together, we’ll set bespoke briefs with dedicated funding pools to inspire and attract builders to build in answer to the briefs and distribute the funds via RADARLaunch."
+              "Together, we'll set bespoke briefs with dedicated grant pools to inspire and attract builders to build in answer to the briefs and distribute the funds via RADARLaunch."
             }
             <br />
             <br />
             {
-              "Unlike traditional hackathons where only a few projects receive prizes, on Launch 100% of the funding pool will be dispersed among participating builders — with funders able to support as many projects as they’d like until the funding pool is closed."
+              "Unlike traditional hackathons where only a few projects receive prizes, on Launch 100% of the grant pool will be dispersed among participating builders — with funders able to support as many projects as they'd like until the grant pool is closed."
             }
           </TabsContent>
           <TabsContent
-            value="getting-funded"
+            value={Tab.GETTING_FUNDED}
             className="max-w-5xl w-full mx-auto text-center border p-16 rounded-lg"
           >
             <div className={"pricing-grid"}>
@@ -127,7 +133,7 @@ export function FundingPoolTabs() {
             </Link>
           </TabsContent>
           <TabsContent
-            value="creating-pool"
+            value={Tab.CREATING_POOL}
             className="max-w-5xl w-full mx-auto text-center border p-16 rounded-lg"
           >
             <p className={"body-text center"}>

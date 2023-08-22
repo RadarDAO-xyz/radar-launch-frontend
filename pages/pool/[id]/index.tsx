@@ -1,4 +1,4 @@
-import { FundingPoolProjectHeader } from "@/components/PoolPage/FundingPoolProjectHeader";
+import { GrantPoolProjectHeader } from "@/components/PoolPage/GrantPoolProjectHeader";
 import { ProjectSection } from "@/components/PoolPage/ProjectSection";
 import { ReadyToLaunchComponent } from "@/components/PoolPage/ReadyToLaunchComponent";
 import { useGetPool } from "@/hooks/useGetPool";
@@ -27,7 +27,7 @@ export default function PoolPage() {
 
   return (
     <>
-      <FundingPoolProjectHeader {...data} />
+      <GrantPoolProjectHeader {...data} />
       <ProjectSection {...data} />
       <ReadyToLaunchComponent />
     </>

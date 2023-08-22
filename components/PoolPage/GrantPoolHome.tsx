@@ -6,19 +6,19 @@ import { useGetPool } from "@/hooks/useGetPool";
 
 const FEATURED_POOL_ID = "64d501ee081e901b9fdfaea9";
 
-export function FundingPoolHome() {
+export function GrantPoolHome() {
   const { data } = useGetPool(FEATURED_POOL_ID);
 
   return (
     <div className="py-20 px-[5%] md:px-0 mx-auto">
       <div className="funding-pool-title pb-20">
-        <h1 className="feature-heading pb-4">{"Funding Pools"}</h1>
+        <h1 className="feature-heading pb-4">{"Grant Pools"}</h1>
         <p className="body-text larger ">
-          Funding pools are set by visionary partners asking big questions
-          around futures they believe in.
+          Grant pools are set by visionary partners asking big questions around
+          futures they believe in.
           <br />
           <br />
-          Want to be first to know about new briefs and funding pools?
+          Want to be first to know about new briefs and grant pools?
         </p>
         <div className="pt-8">
           <Button

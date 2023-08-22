@@ -42,7 +42,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="author" content="RADAR Launch" />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <base href="https://radarlaunch.app" />
+        {process.env.NODE_ENV === "production" && (
+          <base href="https://radarlaunch.app" />
+        )}
 
         <meta property="og:url" content="https://radarlaunch.app" />
         <meta property="og:type" content="website" />

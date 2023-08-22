@@ -1,4 +1,4 @@
-import { FundingPoolHome } from "@/components/PoolPage/FundingPoolHome";
+import { GrantPoolHome } from "@/components/PoolPage/GrantPoolHome";
 import { HeaderHero } from "@/components/HomePage/HeaderHero";
 import { InspirationFooter } from "@/components/HomePage/InspirationFooter";
 import { Banner } from "@/components/Layout/Banner";
@@ -109,7 +109,7 @@ export default function HomePage() {
           </div>
         }
       />
-      <FundingPoolHome />
+      <GrantPoolHome />
       <InspirationFooter />
     </section>
   );

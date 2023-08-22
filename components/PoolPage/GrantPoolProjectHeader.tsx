@@ -3,7 +3,7 @@ import Link from "next/link";
 import { HTMLParsedComponent } from "../Layout/HTMLParsedComponent";
 import { Button } from "../ui/button";
 
-export function FundingPoolProjectHeader({
+export function GrantPoolProjectHeader({
   title,
   description,
   pool_amount,
