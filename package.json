@@ -36,7 +36,6 @@
     "@web3auth/openlogin-adapter": "^6.1.7",
     "@web3auth/web3auth-wagmi-connector": "^4.0.1",
     "@webflow/webflow-cli": "^1.5.1",
-    "alchemy-sdk": "^2.9.2",
     "autoprefixer": "10.4.14",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",

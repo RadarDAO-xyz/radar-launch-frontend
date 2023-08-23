@@ -1,7 +1,7 @@
 import { AdminNav } from '@/components/Layout/AdminNav';
 import { CollectedVisions } from '@/components/ProfilePage/CollectedVisions';
-import { YourVisions } from '@/components/ProfilePage/YourVisions';
 import { chains } from '@/components/Providers/Web3Provider';
+import { YourVisions } from '@/components/ProfilePage/YourVisions';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CONTRACT_ADDRESS } from '@/constants/address';
 import { useGetProjects } from '@/hooks/useGetProjects';

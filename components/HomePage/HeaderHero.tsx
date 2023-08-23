@@ -1,16 +1,7 @@
-import { chains } from '@/components/Providers/Web3Provider';
-import {
-  GOERLI_CONTRACT_ADDRESS,
-  MAINNET_CONTRACT_ADDRESS,
-} from '@/constants/address';
-import { useGetExchangeRate } from '@/hooks/useGetExchangeRate';
-import { useRadarEditionsGetEditions } from '@/lib/generated';
-import isTestnet from '@/lib/isTestnet';
-import dynamic from 'next/dynamic';
-import Link from 'next/link';
-import { ReactNode } from 'react';
-import { useAccount } from 'wagmi';
-import { HeroSectionAmount } from './HeroSectionAmount';
+import dynamic from "next/dynamic";
+import Link from "next/link";
+import { ReactNode } from "react";
+import { HeroSectionAmount } from "./HeroSectionAmount";
 
 const HeroSectionAmountNoSSR = dynamic(
   () => Promise.resolve(HeroSectionAmount),
@@ -24,14 +15,6 @@ interface Props {
 }
 
 export function HeaderHero({ visionOfTheWeekSlot }: Props) {
-  const { address } = useAccount();
-  const { data } = useRadarEditionsGetEditions({
-    account: address,
-    address: isTestnet() ? GOERLI_CONTRACT_ADDRESS : MAINNET_CONTRACT_ADDRESS,
-    chainId: chains[0].id,
-  });
-  const { data: exchangeRateData } = useGetExchangeRate();
-
   return (
     <section className="header-featured z-20 bg-transparent pt-10">
       <div className="floating-down-arrow absolute right-[5%] top-[calc(100vh-200px)] hidden items-center justify-between lg:flex">
@@ -75,10 +58,7 @@ export function HeaderHero({ visionOfTheWeekSlot }: Props) {
             <br />
           </p>
           <div className="div-block-99">
-            <HeroSectionAmountNoSSR
-              data={data}
-              exchangeRateData={exchangeRateData}
-            />
+            <HeroSectionAmountNoSSR />
             <p className="body-text larger">
               {'already committed to build better futures'}
             </p>

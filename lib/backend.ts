@@ -4,9 +4,9 @@ import {
   type Project,
   type ProjectUpdate,
   type User,
-  type WalletResolvable
+  type WalletResolvable,
 } from '@/types/mongo';
-import { RecursivePartial } from '@/types/utils';
+import type { RecursivePartial } from '@/types/utils';
 
 export async function getPools(): Promise<Pool[]> {
   const response = await fetch(`${process.env.BACKEND_URL}/pools`);
@@ -28,7 +28,7 @@ export async function getPool(poolId: string): Promise<Pool> {
 
 export async function getPoolProjects(poolId: string): Promise<Project[]> {
   const response = await fetch(
-    `${process.env.BACKEND_URL}/pools/${poolId}/projects`
+    `${process.env.BACKEND_URL}/pools/${poolId}/projects`,
   );
   if (!response.ok) {
     console.error(response);
@@ -41,11 +41,11 @@ export async function getProjectSupporters(
   projectId: string,
   idToken: string,
   signups: boolean,
-  contributors: boolean
+  contributors: boolean,
 ) {
   const data = {
     signups: signups ? 'true' : 'false',
-    contributors: contributors ? 'true' : 'false'
+    contributors: contributors ? 'true' : 'false',
   };
   const params = new URLSearchParams(data);
   const response = await fetch(
@@ -54,9 +54,9 @@ export async function getProjectSupporters(
     }/projects/${projectId}/supporters/?${params.toString()}`,
     {
       headers: {
-        Authorization: `Bearer ${idToken}`
-      }
-    }
+        Authorization: `Bearer ${idToken}`,
+      },
+    },
   );
   if (!response.ok) {
     console.error(response);
@@ -75,12 +75,12 @@ export async function getUser(userId: string): Promise<User> {
 }
 
 export async function getCurrentUser(
-  idToken: string
+  idToken: string,
 ): Promise<Omit<User, 'wallets'> & { wallets: WalletResolvable[] }> {
   const response = await fetch(`${process.env.BACKEND_URL}/users/@me`, {
     headers: {
-      Authorization: `Bearer ${idToken}`
-    }
+      Authorization: `Bearer ${idToken}`,
+    },
   });
   if (!response.ok) {
     console.error(response);
@@ -117,13 +117,13 @@ export async function signupProject(projectId: string, email?: string) {
     {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         email,
-        type: SupportType.SIGN_UP
-      })
-    }
+        type: SupportType.SIGN_UP,
+      }),
+    },
   );
   if (!response.ok) {
     console.error(response);
@@ -137,7 +137,7 @@ export async function contributeProject(
   social?: string,
   email?: string,
   skillset?: string,
-  contribution?: string
+  contribution?: string,
 ) {
   if (!email || !social || !skillset || !contribution) {
     return '';
@@ -147,16 +147,16 @@ export async function contributeProject(
     {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         email,
         social,
         skillset,
         contribution,
-        type: SupportType.CONTRIBUTE
-      })
-    }
+        type: SupportType.CONTRIBUTE,
+      }),
+    },
   );
   if (!response.ok) {
     console.error(response);
@@ -169,7 +169,7 @@ export async function authenticateUser({
   idToken,
   isWalletLogin,
   address,
-  appPubKey
+  appPubKey,
 }: {
   idToken: string;
   isWalletLogin: boolean;
@@ -181,15 +181,15 @@ export async function authenticateUser({
     headers: {
       'X-Auth-Method': isWalletLogin ? 'Wallet' : 'Social',
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${idToken}`
+      Authorization: `Bearer ${idToken}`,
     },
     body: isWalletLogin
       ? JSON.stringify({
-          public_address: address
+          public_address: address,
         })
       : JSON.stringify({
-          appPubKey
-        })
+          appPubKey,
+        }),
   });
   if (!response.ok) {
     console.error(response);
@@ -204,9 +204,9 @@ export async function deleteProject(projectId: string, idToken: string) {
     {
       method: 'DELETE',
       headers: {
-        Authorization: `Bearer ${idToken}`
-      }
-    }
+        Authorization: `Bearer ${idToken}`,
+      },
+    },
   );
   if (!response.ok) {
     console.error(response);
@@ -216,15 +216,15 @@ export async function deleteProject(projectId: string, idToken: string) {
 
 export async function downloadProjectSupporters(
   projectId: string,
-  idToken: string
+  idToken: string,
 ) {
   const response = await fetch(
     `${process.env.BACKEND_URL}/projects/${projectId}/supporters/csv`,
     {
       headers: {
-        Authorization: `Bearer ${idToken}`
-      }
-    }
+        Authorization: `Bearer ${idToken}`,
+      },
+    },
   );
   if (!response.ok) {
     console.error(response);
@@ -233,9 +233,20 @@ export async function downloadProjectSupporters(
   return response.text();
 }
 
+export async function getTotalContributions(): Promise<{
+  contributionInEth: number;
+}> {
+  const response = await fetch(`/api/get-total-contribution`);
+  if (!response.ok) {
+    console.error(response);
+    throw new Error('Failed to get total contribution');
+  }
+  return response.json();
+}
+
 export async function getUserProjects(
   idToken: string,
-  id: string
+  id: string,
 ): Promise<Project[]> {
   if (!id || !idToken) {
     return [];
@@ -247,9 +258,9 @@ export async function getUserProjects(
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${idToken}`
-        }
-      }
+          Authorization: `Bearer ${idToken}`,
+        },
+      },
     );
     if (!response.ok) {
       console.error(response);
@@ -264,7 +275,7 @@ export async function getUserProjects(
 
 export async function getProjectUpdates(
   idToken: string,
-  projectId: string
+  projectId: string,
 ): Promise<ProjectUpdate[]> {
   if (!projectId || !idToken) {
     return [];
@@ -276,9 +287,9 @@ export async function getProjectUpdates(
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${idToken}`
-        }
-      }
+          Authorization: `Bearer ${idToken}`,
+        },
+      },
     );
     if (!response.ok) {
       console.error(response);
@@ -294,7 +305,7 @@ export async function getProjectUpdates(
 export async function updateProject(
   fields: RecursivePartial<Project>,
   projectId: string,
-  idToken: string
+  idToken: string,
 ) {
   try {
     const response = await fetch(
@@ -303,10 +314,10 @@ export async function updateProject(
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${idToken}`
+          Authorization: `Bearer ${idToken}`,
         },
-        body: JSON.stringify(fields)
-      }
+        body: JSON.stringify(fields),
+      },
     );
     if (!response.ok) {
       throw new Error('Error updating project status');
