@@ -94,7 +94,7 @@
   }
 
   .html-parse p {
-    @apply mb-5 break-words;
+    @apply [&:not(:last-child)]:mb-5 break-words;
   }
 
   .html-parse ul {

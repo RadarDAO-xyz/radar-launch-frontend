@@ -17,7 +17,6 @@ import { useGetProject } from '@/hooks/useGetProject';
 import { useGetUser } from '@/hooks/useGetUser';
 import { generateVideoEmbed } from '@/lib/generateVideoEmbed';
 import { isValidVideoLink } from '@/lib/isValidVideoLink';
-import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -145,23 +144,9 @@ export default function IndividualProjectPage() {
                       {data.milestones.map((milestone, index) => (
                         <TableRow key={milestone.text}>
                           <TableCell
-                            className={cn(
-                              'align-top text-xl font-medium',
-                              typeof milestone.amount === 'number'
-                                ? 'w-[200px]'
-                                : 'w-[60px]',
-                            )}
+                            className={'align-top text-xl font-medium'}
                           >
-                            {typeof milestone.amount === 'number' ? (
-                              <span className="text-normal">
-                                ${' '}
-                                <span className="text-lg text-gray-400">
-                                  {milestone.amount.toFixed(2)}
-                                </span>
-                              </span>
-                            ) : (
-                              `${index + 1}.`
-                            )}
+                            {renderMilestoneAmount(milestone.amount, index)}
                           </TableCell>
                           <TableCell className="border-l">
                             <HTMLParsedComponent text={milestone.text} />
@@ -239,4 +224,26 @@ export default function IndividualProjectPage() {
       </div>
     </>
   );
+}
+
+function renderMilestoneAmount(
+  milestoneAmount: string | number,
+  index: number,
+) {
+  if (!isNaN(milestoneAmount as number)) {
+    return (
+      <span className="text-normal">
+        ${' '}
+        <span className="text-lg text-gray-400">
+          {(+milestoneAmount).toFixed(2)}
+        </span>
+      </span>
+    );
+  }
+
+  if (milestoneAmount !== '' && milestoneAmount !== '-') {
+    return <span>{milestoneAmount}</span>;
+  }
+
+  return `${index + 1}.`;
 }
