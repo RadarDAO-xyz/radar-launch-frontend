@@ -1,4 +1,4 @@
-import { formatEther } from "viem";
+import { formatEther } from 'viem';
 
 export function convertWeiToUsdOrEth(wei: bigint, exchangeRate?: number) {
   if (exchangeRate !== undefined) {

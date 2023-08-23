@@ -1,8 +1,8 @@
-import { AuthContext } from "@/components/Providers/AuthProvider";
-import { CacheKey } from "@/constants/react-query";
-import { getCurrentUser } from "@/lib/backend";
-import { useContext } from "react";
-import { useQuery } from "wagmi";
+import { AuthContext } from '@/components/Providers/AuthProvider';
+import { CacheKey } from '@/constants/react-query';
+import { getCurrentUser } from '@/lib/backend';
+import { useContext } from 'react';
+import { useQuery } from 'wagmi';
 
 export function useGetCurrentUser() {
   const { idToken } = useContext(AuthContext);
@@ -11,7 +11,7 @@ export function useGetCurrentUser() {
     [CacheKey.CURRENT_USER, idToken],
     () => getCurrentUser(idToken),
     {
-      enabled: idToken !== "",
+      enabled: idToken !== ''
     }
   );
 }

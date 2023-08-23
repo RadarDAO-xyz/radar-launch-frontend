@@ -1,8 +1,8 @@
-import { getCountdown } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { getCountdown } from '@/lib/utils';
+import { useEffect, useState } from 'react';
 
 export function useGetCountdown(date?: Date) {
-  const [countdownString, setCountdownString] = useState("");
+  const [countdownString, setCountdownString] = useState('');
 
   useEffect(() => {
     const interval = setInterval(() => {

@@ -1,20 +1,20 @@
-import { AdminNav } from "@/components/Layout/AdminNav";
-import { CollectedVisions } from "@/components/ProfilePage/CollectedVisions";
-import { YourVisions } from "@/components/ProfilePage/YourVisions";
-import { chains } from "@/components/Providers/Web3Provider";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CONTRACT_ADDRESS } from "@/constants/address";
-import { useGetProjects } from "@/hooks/useGetProjects";
-import { useGetUser } from "@/hooks/useGetUser";
+import { AdminNav } from '@/components/Layout/AdminNav';
+import { CollectedVisions } from '@/components/ProfilePage/CollectedVisions';
+import { YourVisions } from '@/components/ProfilePage/YourVisions';
+import { chains } from '@/components/Providers/Web3Provider';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { CONTRACT_ADDRESS } from '@/constants/address';
+import { useGetProjects } from '@/hooks/useGetProjects';
+import { useGetUser } from '@/hooks/useGetUser';
 import {
   useRadarEditionsGetBalances,
   useRadarEditionsGetEditions,
-} from "@/lib/generated";
-import { convertAddressToChecksum } from "@/lib/utils";
-import { Project, WalletResolvable } from "@/types/mongo";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { Address } from "wagmi";
+} from '@/lib/generated';
+import { convertAddressToChecksum } from '@/lib/utils';
+import { Project, WalletResolvable } from '@/types/mongo';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { Address } from 'wagmi';
 
 export interface OnChainProject {
   status: number;
@@ -30,8 +30,8 @@ export interface ProjectIdWithBalance {
 }
 
 export interface ProjectWithChainData extends Project {
-  balance: bigint;
-  editionId: number;
+  balance?: bigint;
+  editionId?: number;
 }
 
 export interface ProjectWithOwnedAmount extends Project {
@@ -42,16 +42,12 @@ export interface ProjectWithOwnedAmount extends Project {
 function transformYourVisionsProjects(
   userId?: string,
   databaseProjects?: Project[],
-  chainProjects?: OnChainProject[]
+  chainProjects?: OnChainProject[],
 ): ProjectWithChainData[] {
   if (!databaseProjects || !chainProjects) {
     return [];
   }
 
-  const projectIds = new Set(
-    // filter for "" ids
-    chainProjects.map((project) => project.id).filter(Boolean)
-  );
   const projectBalances: Record<string, bigint> = {};
   chainProjects.forEach((project) => {
     projectBalances[project.id] = project.balance;
@@ -61,13 +57,11 @@ function transformYourVisionsProjects(
       acc[project.id] = index;
       return acc;
     },
-    {}
+    {},
   );
 
   return databaseProjects
-    .filter(
-      (project) => projectIds.has(project._id) && project.founder === userId
-    )
+    .filter((project) => project.founder === userId)
     .map((project) => ({
       ...project,
       balance: projectBalances[project._id],
@@ -77,7 +71,7 @@ function transformYourVisionsProjects(
 
 function transformCollectionVisionsProject(
   databaseProjects?: Project[],
-  chainBalances?: ProjectIdWithBalance[]
+  chainBalances?: ProjectIdWithBalance[],
 ): ProjectWithOwnedAmount[] {
   if (!databaseProjects || !chainBalances) {
     return [];
@@ -110,12 +104,12 @@ export default function AdminPage() {
   const { data: userData } = useGetUser(id?.toString());
   // wallet object here is string from GET /user/:id, but WalletResolvable from GET /user/@me
   const address =
-    typeof userData?.wallets[0] === "string"
+    typeof userData?.wallets[0] === 'string'
       ? userData.wallets[0]
-      : typeof userData?.wallets[0] === "object" &&
-        "address" in userData?.wallets[0]
+      : typeof userData?.wallets[0] === 'object' &&
+        'address' in userData?.wallets[0]
       ? (userData.wallets[0] as WalletResolvable).address
-      : "";
+      : '';
   const { data: onChainProjects } = useRadarEditionsGetEditions({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
@@ -131,7 +125,7 @@ export default function AdminPage() {
 
   if (userData === undefined) {
     return (
-      <div className="mt-36 container mb-20 text-center">
+      <div className="container mb-20 mt-36 text-center">
         <h1>No user data found</h1>
       </div>
     );
@@ -140,22 +134,22 @@ export default function AdminPage() {
   const yourVisionsProjects = transformYourVisionsProjects(
     id?.toString(),
     databaseProjects,
-    onChainProjects as OnChainProject[]
+    onChainProjects as OnChainProject[],
   ).filter(
-    (project) => project.admin_address.toUpperCase() === address?.toUpperCase()
+    (project) => project.admin_address.toUpperCase() === address?.toUpperCase(),
   );
   const collectedVisionsProjects = transformCollectionVisionsProject(
     databaseProjects,
-    ownedOnChainProjects as ProjectIdWithBalance[]
+    ownedOnChainProjects as ProjectIdWithBalance[],
   );
 
   return (
-    <div className="mt-[80px] md:pt-6 pb-12 container max-w-7xl">
+    <div className="container mt-[80px] max-w-7xl pb-12 md:pt-6">
       <AdminNav user={userData} />
 
       <div className="mt-8">
         <Tabs defaultValue="your-visions">
-          <TabsList className="justify-start w-full gap-4 mx-auto mb-6">
+          <TabsList className="mx-auto mb-6 w-full justify-start gap-4">
             <TabsTrigger value="your-visions">Your Visions</TabsTrigger>
             <TabsTrigger value="collected-visions">
               Collected Visions
@@ -164,7 +158,7 @@ export default function AdminPage() {
           <TabsContent value="your-visions">
             {yourVisionsProjects.length === 0 ? (
               <div className="py-20 text-center">
-                <p className="text-2xl pb-4">Nothing to see here yet...</p>
+                <p className="pb-4 text-2xl">Nothing to see here yet...</p>
                 <Link
                   href="https://www.launch.radardao.xyz/brief"
                   target="_blank"
@@ -182,13 +176,13 @@ export default function AdminPage() {
               <div className="py-20 text-center">
                 {address !== undefined ? (
                   <>
-                    <p className="text-2xl pb-4">Nothing to see here yet...</p>
+                    <p className="pb-4 text-2xl">Nothing to see here yet...</p>
                     <Link href="/" className="underline">
                       Be inspired
                     </Link>
                   </>
                 ) : (
-                  <p className="text-2xl pb-4">Please login</p>
+                  <p className="pb-4 text-2xl">Please login</p>
                 )}
               </div>
             ) : (

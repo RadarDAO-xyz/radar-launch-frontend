@@ -1,5 +1,5 @@
-import { GrantPoolHome } from "@/components/PoolPage/GrantPoolHome";
-import { GrantPoolTabs } from "@/components/PoolPage/GrantPoolTabs";
+import { GrantPoolHome } from '@/components/PoolPage/GrantPoolHome';
+import { GrantPoolTabs } from '@/components/PoolPage/GrantPoolTabs';
 
 export default function PoolPage() {
   return (

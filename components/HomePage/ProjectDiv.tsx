@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 
 interface ProjectDivProps {
   projects: ReactNode;
@@ -16,7 +16,7 @@ export function ProjectDiv({
   curatorSection,
 }: ProjectDivProps) {
   return (
-    <section className="bg-white px-[5%] pt-12 pb-20 border-b border-b-black">
+    <section className="border-b border-b-black bg-white px-[5%] pb-20 pt-12">
       <div className="title-block">
         {projectSectionTitle && (
           <h2 className="heading-trending-launch-page">
@@ -25,7 +25,7 @@ export function ProjectDiv({
         )}
         <div className="_10px-div" />
         {projectSectionDescription && (
-          <div className="div-block-103 pb-8 flex md:flex-row items-center flex-col self-end md:space-y-0 space-y-4 space-x-0">
+          <div className="div-block-103 flex flex-col items-center space-x-0 space-y-4 self-end pb-8 md:flex-row md:space-y-0">
             <p className="body-text left">
               {projectSectionDescription}
               <br />

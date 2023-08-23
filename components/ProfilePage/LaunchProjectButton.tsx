@@ -6,16 +6,16 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { CacheKey } from "@/constants/react-query";
-import { useAuth } from "@/hooks/useAuth";
-import { updateProject } from "@/lib/backend";
-import { Project, ProjectStatus } from "@/types/mongo";
-import { RocketIcon } from "lucide-react";
-import { useMutation, useQueryClient } from "wagmi";
-import { Button } from "../ui/button";
-import { useToast } from "../ui/use-toast";
-import { useState } from "react";
+} from '@/components/ui/dialog';
+import { CacheKey } from '@/constants/react-query';
+import { useAuth } from '@/hooks/useAuth';
+import { updateProject } from '@/lib/backend';
+import { Project, ProjectStatus } from '@/types/mongo';
+import { RocketIcon } from 'lucide-react';
+import { useMutation, useQueryClient } from 'wagmi';
+import { Button } from '../ui/button';
+import { useToast } from '../ui/use-toast';
+import { useState } from 'react';
 
 export function LaunchProjectButton({ status, _id }: Project) {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,19 +29,19 @@ export function LaunchProjectButton({ status, _id }: Project) {
       onSuccess: async () => {
         await queryClient.invalidateQueries([CacheKey.PROJECTS]);
         toast({
-          title: "Successfully launched project!",
+          title: 'Successfully launched project!',
         });
         setIsOpen(false);
       },
       onError: (e) => {
         console.error(e);
         toast({
-          variant: "destructive",
-          title: "An unexpected error occured",
-          description: "Check the console for more information",
+          variant: 'destructive',
+          title: 'An unexpected error occured',
+          description: 'Check the console for more information',
         });
       },
-    }
+    },
   );
 
   return (
@@ -68,10 +68,10 @@ export function LaunchProjectButton({ status, _id }: Project) {
             disabled={!isLoggedIn}
           >
             {!isLoggedIn ? (
-              "Please Sign In"
+              'Please Sign In'
             ) : (
               <>
-                <RocketIcon className="w-4 h-4 mr-2" />
+                <RocketIcon className="mr-2 h-4 w-4" />
                 LAUNCH
               </>
             )}

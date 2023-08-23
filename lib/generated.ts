@@ -7,13 +7,13 @@ import {
   usePrepareContractWrite,
   UsePrepareContractWriteConfig,
   useContractEvent,
-  UseContractEventConfig,
-} from 'wagmi'
+  UseContractEventConfig
+} from 'wagmi';
 import {
   ReadContractResult,
   WriteContractMode,
-  PrepareWriteContractResult,
-} from 'wagmi/actions'
+  PrepareWriteContractResult
+} from 'wagmi/actions';
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // RadarEditions
@@ -37,16 +37,16 @@ export const radarEditionsABI = [
         name: 'previousAdmin',
         internalType: 'address',
         type: 'address',
-        indexed: false,
+        indexed: false
       },
       {
         name: 'newAdmin',
         internalType: 'address',
         type: 'address',
-        indexed: false,
-      },
+        indexed: false
+      }
     ],
-    name: 'AdminChanged',
+    name: 'AdminChanged'
   },
   {
     type: 'event',
@@ -56,17 +56,17 @@ export const radarEditionsABI = [
         name: 'account',
         internalType: 'address',
         type: 'address',
-        indexed: true,
+        indexed: true
       },
       {
         name: 'operator',
         internalType: 'address',
         type: 'address',
-        indexed: true,
+        indexed: true
       },
-      { name: 'approved', internalType: 'bool', type: 'bool', indexed: false },
+      { name: 'approved', internalType: 'bool', type: 'bool', indexed: false }
     ],
-    name: 'ApprovalForAll',
+    name: 'ApprovalForAll'
   },
   {
     type: 'event',
@@ -76,10 +76,10 @@ export const radarEditionsABI = [
         name: 'beacon',
         internalType: 'address',
         type: 'address',
-        indexed: true,
-      },
+        indexed: true
+      }
     ],
-    name: 'BeaconUpgraded',
+    name: 'BeaconUpgraded'
   },
   {
     type: 'event',
@@ -89,10 +89,10 @@ export const radarEditionsABI = [
         name: 'editionId',
         internalType: 'uint256',
         type: 'uint256',
-        indexed: false,
-      },
+        indexed: false
+      }
     ],
-    name: 'EditionApproved',
+    name: 'EditionApproved'
   },
   {
     type: 'event',
@@ -102,22 +102,22 @@ export const radarEditionsABI = [
         name: 'editionId',
         internalType: 'uint256',
         type: 'uint256',
-        indexed: false,
+        indexed: false
       },
       {
         name: 'amount',
         internalType: 'uint256',
         type: 'uint256',
-        indexed: false,
+        indexed: false
       },
       {
         name: 'owner',
         internalType: 'address',
         type: 'address',
-        indexed: false,
-      },
+        indexed: false
+      }
     ],
-    name: 'EditionBalanceWithdrawn',
+    name: 'EditionBalanceWithdrawn'
   },
   {
     type: 'event',
@@ -127,17 +127,17 @@ export const radarEditionsABI = [
         name: 'editionId',
         internalType: 'uint256',
         type: 'uint256',
-        indexed: false,
+        indexed: false
       },
       { name: 'fee', internalType: 'uint256', type: 'uint256', indexed: false },
       {
         name: 'owner',
         internalType: 'address',
         type: 'address',
-        indexed: false,
-      },
+        indexed: false
+      }
     ],
-    name: 'EditionCreated',
+    name: 'EditionCreated'
   },
   {
     type: 'event',
@@ -147,10 +147,10 @@ export const radarEditionsABI = [
         name: 'editionId',
         internalType: 'uint256',
         type: 'uint256',
-        indexed: false,
-      },
+        indexed: false
+      }
     ],
-    name: 'EditionResumed',
+    name: 'EditionResumed'
   },
   {
     type: 'event',
@@ -160,18 +160,18 @@ export const radarEditionsABI = [
         name: 'editionId',
         internalType: 'uint256',
         type: 'uint256',
-        indexed: false,
-      },
+        indexed: false
+      }
     ],
-    name: 'EditionStopped',
+    name: 'EditionStopped'
   },
   {
     type: 'event',
     anonymous: false,
     inputs: [
-      { name: 'version', internalType: 'uint8', type: 'uint8', indexed: false },
+      { name: 'version', internalType: 'uint8', type: 'uint8', indexed: false }
     ],
-    name: 'Initialized',
+    name: 'Initialized'
   },
   {
     type: 'event',
@@ -181,10 +181,10 @@ export const radarEditionsABI = [
         name: 'account',
         internalType: 'address',
         type: 'address',
-        indexed: false,
-      },
+        indexed: false
+      }
     ],
-    name: 'Paused',
+    name: 'Paused'
   },
   {
     type: 'event',
@@ -195,16 +195,16 @@ export const radarEditionsABI = [
         name: 'previousAdminRole',
         internalType: 'bytes32',
         type: 'bytes32',
-        indexed: true,
+        indexed: true
       },
       {
         name: 'newAdminRole',
         internalType: 'bytes32',
         type: 'bytes32',
-        indexed: true,
-      },
+        indexed: true
+      }
     ],
-    name: 'RoleAdminChanged',
+    name: 'RoleAdminChanged'
   },
   {
     type: 'event',
@@ -215,16 +215,16 @@ export const radarEditionsABI = [
         name: 'account',
         internalType: 'address',
         type: 'address',
-        indexed: true,
+        indexed: true
       },
       {
         name: 'sender',
         internalType: 'address',
         type: 'address',
-        indexed: true,
-      },
+        indexed: true
+      }
     ],
-    name: 'RoleGranted',
+    name: 'RoleGranted'
   },
   {
     type: 'event',
@@ -235,16 +235,16 @@ export const radarEditionsABI = [
         name: 'account',
         internalType: 'address',
         type: 'address',
-        indexed: true,
+        indexed: true
       },
       {
         name: 'sender',
         internalType: 'address',
         type: 'address',
-        indexed: true,
-      },
+        indexed: true
+      }
     ],
-    name: 'RoleRevoked',
+    name: 'RoleRevoked'
   },
   {
     type: 'event',
@@ -254,7 +254,7 @@ export const radarEditionsABI = [
         name: 'operator',
         internalType: 'address',
         type: 'address',
-        indexed: true,
+        indexed: true
       },
       { name: 'from', internalType: 'address', type: 'address', indexed: true },
       { name: 'to', internalType: 'address', type: 'address', indexed: true },
@@ -262,16 +262,16 @@ export const radarEditionsABI = [
         name: 'ids',
         internalType: 'uint256[]',
         type: 'uint256[]',
-        indexed: false,
+        indexed: false
       },
       {
         name: 'values',
         internalType: 'uint256[]',
         type: 'uint256[]',
-        indexed: false,
-      },
+        indexed: false
+      }
     ],
-    name: 'TransferBatch',
+    name: 'TransferBatch'
   },
   {
     type: 'event',
@@ -281,7 +281,7 @@ export const radarEditionsABI = [
         name: 'operator',
         internalType: 'address',
         type: 'address',
-        indexed: true,
+        indexed: true
       },
       { name: 'from', internalType: 'address', type: 'address', indexed: true },
       { name: 'to', internalType: 'address', type: 'address', indexed: true },
@@ -290,19 +290,19 @@ export const radarEditionsABI = [
         name: 'value',
         internalType: 'uint256',
         type: 'uint256',
-        indexed: false,
-      },
+        indexed: false
+      }
     ],
-    name: 'TransferSingle',
+    name: 'TransferSingle'
   },
   {
     type: 'event',
     anonymous: false,
     inputs: [
       { name: 'value', internalType: 'string', type: 'string', indexed: false },
-      { name: 'id', internalType: 'uint256', type: 'uint256', indexed: true },
+      { name: 'id', internalType: 'uint256', type: 'uint256', indexed: true }
     ],
-    name: 'URI',
+    name: 'URI'
   },
   {
     type: 'event',
@@ -312,10 +312,10 @@ export const radarEditionsABI = [
         name: 'account',
         internalType: 'address',
         type: 'address',
-        indexed: false,
-      },
+        indexed: false
+      }
     ],
-    name: 'Unpaused',
+    name: 'Unpaused'
   },
   {
     type: 'event',
@@ -325,10 +325,10 @@ export const radarEditionsABI = [
         name: 'implementation',
         internalType: 'address',
         type: 'address',
-        indexed: true,
-      },
+        indexed: true
+      }
     ],
-    name: 'Upgraded',
+    name: 'Upgraded'
   },
   { stateMutability: 'payable', type: 'fallback' },
   {
@@ -336,34 +336,34 @@ export const radarEditionsABI = [
     type: 'function',
     inputs: [],
     name: 'DEFAULT_ADMIN_ROLE',
-    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }]
   },
   {
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [{ name: 'editionId', internalType: 'uint256', type: 'uint256' }],
     name: 'approveEdition',
-    outputs: [],
+    outputs: []
   },
   {
     stateMutability: 'view',
     type: 'function',
     inputs: [
       { name: 'account', internalType: 'address', type: 'address' },
-      { name: 'id', internalType: 'uint256', type: 'uint256' },
+      { name: 'id', internalType: 'uint256', type: 'uint256' }
     ],
     name: 'balanceOf',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }]
   },
   {
     stateMutability: 'view',
     type: 'function',
     inputs: [
       { name: 'accounts', internalType: 'address[]', type: 'address[]' },
-      { name: 'ids', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: 'ids', internalType: 'uint256[]', type: 'uint256[]' }
     ],
     name: 'balanceOfBatch',
-    outputs: [{ name: '', internalType: 'uint256[]', type: 'uint256[]' }],
+    outputs: [{ name: '', internalType: 'uint256[]', type: 'uint256[]' }]
   },
   {
     stateMutability: 'nonpayable',
@@ -371,10 +371,10 @@ export const radarEditionsABI = [
     inputs: [
       { name: 'account', internalType: 'address', type: 'address' },
       { name: 'id', internalType: 'uint256', type: 'uint256' },
-      { name: 'value', internalType: 'uint256', type: 'uint256' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' }
     ],
     name: 'burn',
-    outputs: [],
+    outputs: []
   },
   {
     stateMutability: 'nonpayable',
@@ -382,10 +382,10 @@ export const radarEditionsABI = [
     inputs: [
       { name: 'account', internalType: 'address', type: 'address' },
       { name: 'ids', internalType: 'uint256[]', type: 'uint256[]' },
-      { name: 'values', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: 'values', internalType: 'uint256[]', type: 'uint256[]' }
     ],
     name: 'burnBatch',
-    outputs: [],
+    outputs: []
   },
   {
     stateMutability: 'nonpayable',
@@ -394,17 +394,17 @@ export const radarEditionsABI = [
       { name: 'fee', internalType: 'uint256', type: 'uint256' },
       { name: 'owner', internalType: 'address', type: 'address' },
       { name: 'payer', internalType: 'address', type: 'address' },
-      { name: 'id', internalType: 'string', type: 'string' },
+      { name: 'id', internalType: 'string', type: 'string' }
     ],
     name: 'createEdition',
-    outputs: [{ name: 'editionId', internalType: 'uint256', type: 'uint256' }],
+    outputs: [{ name: 'editionId', internalType: 'uint256', type: 'uint256' }]
   },
   {
     stateMutability: 'view',
     type: 'function',
     inputs: [],
     name: 'editionCounter',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }]
   },
   {
     stateMutability: 'view',
@@ -415,20 +415,20 @@ export const radarEditionsABI = [
       {
         name: 'status',
         internalType: 'enum EditionsStructs.EditionStatus',
-        type: 'uint8',
+        type: 'uint8'
       },
       { name: 'fee', internalType: 'uint256', type: 'uint256' },
       { name: 'balance', internalType: 'uint256', type: 'uint256' },
       { name: 'owner', internalType: 'address', type: 'address' },
-      { name: 'id', internalType: 'string', type: 'string' },
-    ],
+      { name: 'id', internalType: 'string', type: 'string' }
+    ]
   },
   {
     stateMutability: 'view',
     type: 'function',
     inputs: [{ name: 'id', internalType: 'uint256', type: 'uint256' }],
     name: 'exists',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }]
   },
   {
     stateMutability: 'view',
@@ -442,10 +442,10 @@ export const radarEditionsABI = [
         type: 'tuple[]',
         components: [
           { name: 'id', internalType: 'string', type: 'string' },
-          { name: 'amount', internalType: 'uint256', type: 'uint256' },
-        ],
-      },
-    ],
+          { name: 'amount', internalType: 'uint256', type: 'uint256' }
+        ]
+      }
+    ]
   },
   {
     stateMutability: 'view',
@@ -461,66 +461,66 @@ export const radarEditionsABI = [
           {
             name: 'status',
             internalType: 'enum EditionsStructs.EditionStatus',
-            type: 'uint8',
+            type: 'uint8'
           },
           { name: 'fee', internalType: 'uint256', type: 'uint256' },
           { name: 'balance', internalType: 'uint256', type: 'uint256' },
           { name: 'owner', internalType: 'address', type: 'address' },
-          { name: 'id', internalType: 'string', type: 'string' },
-        ],
-      },
-    ],
+          { name: 'id', internalType: 'string', type: 'string' }
+        ]
+      }
+    ]
   },
   {
     stateMutability: 'view',
     type: 'function',
     inputs: [{ name: 'role', internalType: 'bytes32', type: 'bytes32' }],
     name: 'getRoleAdmin',
-    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }]
   },
   {
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
       { name: 'role', internalType: 'bytes32', type: 'bytes32' },
-      { name: 'account', internalType: 'address', type: 'address' },
+      { name: 'account', internalType: 'address', type: 'address' }
     ],
     name: 'grantRole',
-    outputs: [],
+    outputs: []
   },
   {
     stateMutability: 'view',
     type: 'function',
     inputs: [
       { name: 'role', internalType: 'bytes32', type: 'bytes32' },
-      { name: 'account', internalType: 'address', type: 'address' },
+      { name: 'account', internalType: 'address', type: 'address' }
     ],
     name: 'hasRole',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }]
   },
   {
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [],
     name: 'initialize',
-    outputs: [],
+    outputs: []
   },
   {
     stateMutability: 'view',
     type: 'function',
     inputs: [
       { name: 'account', internalType: 'address', type: 'address' },
-      { name: 'operator', internalType: 'address', type: 'address' },
+      { name: 'operator', internalType: 'address', type: 'address' }
     ],
     name: 'isApprovedForAll',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }]
   },
   {
     stateMutability: 'view',
     type: 'function',
     inputs: [],
     name: 'maximumEditionFee',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }]
   },
   {
     stateMutability: 'payable',
@@ -529,65 +529,65 @@ export const radarEditionsABI = [
       { name: 'editionId', internalType: 'uint256', type: 'uint256' },
       { name: 'amount', internalType: 'uint256', type: 'uint256' },
       { name: 'buyer', internalType: 'address', type: 'address' },
-      { name: 'data', internalType: 'bytes', type: 'bytes' },
+      { name: 'data', internalType: 'bytes', type: 'bytes' }
     ],
     name: 'mintEdition',
-    outputs: [],
+    outputs: []
   },
   {
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [],
     name: 'pause',
-    outputs: [],
+    outputs: []
   },
   {
     stateMutability: 'view',
     type: 'function',
     inputs: [],
     name: 'paused',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }]
   },
   {
     stateMutability: 'view',
     type: 'function',
     inputs: [],
     name: 'protocolFee',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }]
   },
   {
     stateMutability: 'view',
     type: 'function',
     inputs: [],
     name: 'proxiableUUID',
-    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }]
   },
   {
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
       { name: 'role', internalType: 'bytes32', type: 'bytes32' },
-      { name: 'account', internalType: 'address', type: 'address' },
+      { name: 'account', internalType: 'address', type: 'address' }
     ],
     name: 'renounceRole',
-    outputs: [],
+    outputs: []
   },
   {
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [{ name: 'editionId', internalType: 'uint256', type: 'uint256' }],
     name: 'resumeEdition',
-    outputs: [],
+    outputs: []
   },
   {
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
       { name: 'role', internalType: 'bytes32', type: 'bytes32' },
-      { name: 'account', internalType: 'address', type: 'address' },
+      { name: 'account', internalType: 'address', type: 'address' }
     ],
     name: 'revokeRole',
-    outputs: [],
+    outputs: []
   },
   {
     stateMutability: 'nonpayable',
@@ -597,10 +597,10 @@ export const radarEditionsABI = [
       { name: 'to', internalType: 'address', type: 'address' },
       { name: 'ids', internalType: 'uint256[]', type: 'uint256[]' },
       { name: 'amounts', internalType: 'uint256[]', type: 'uint256[]' },
-      { name: 'data', internalType: 'bytes', type: 'bytes' },
+      { name: 'data', internalType: 'bytes', type: 'bytes' }
     ],
     name: 'safeBatchTransferFrom',
-    outputs: [],
+    outputs: []
   },
   {
     stateMutability: 'nonpayable',
@@ -610,119 +610,119 @@ export const radarEditionsABI = [
       { name: 'to', internalType: 'address', type: 'address' },
       { name: 'id', internalType: 'uint256', type: 'uint256' },
       { name: 'amount', internalType: 'uint256', type: 'uint256' },
-      { name: 'data', internalType: 'bytes', type: 'bytes' },
+      { name: 'data', internalType: 'bytes', type: 'bytes' }
     ],
     name: 'safeTransferFrom',
-    outputs: [],
+    outputs: []
   },
   {
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
       { name: 'operator', internalType: 'address', type: 'address' },
-      { name: 'approved', internalType: 'bool', type: 'bool' },
+      { name: 'approved', internalType: 'bool', type: 'bool' }
     ],
     name: 'setApprovalForAll',
-    outputs: [],
+    outputs: []
   },
   {
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
-      { name: '_maximumEditionFee', internalType: 'uint256', type: 'uint256' },
+      { name: '_maximumEditionFee', internalType: 'uint256', type: 'uint256' }
     ],
     name: 'setMaximumEditionFee',
-    outputs: [],
+    outputs: []
   },
   {
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
-      { name: '_protocolFee', internalType: 'uint256', type: 'uint256' },
+      { name: '_protocolFee', internalType: 'uint256', type: 'uint256' }
     ],
     name: 'setProtocolFee',
-    outputs: [],
+    outputs: []
   },
   {
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [{ name: 'newuri', internalType: 'string', type: 'string' }],
     name: 'setURI',
-    outputs: [],
+    outputs: []
   },
   {
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [{ name: 'editionId', internalType: 'uint256', type: 'uint256' }],
     name: 'stopEdition',
-    outputs: [],
+    outputs: []
   },
   {
     stateMutability: 'view',
     type: 'function',
     inputs: [{ name: 'interfaceId', internalType: 'bytes4', type: 'bytes4' }],
     name: 'supportsInterface',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }]
   },
   {
     stateMutability: 'view',
     type: 'function',
     inputs: [{ name: 'id', internalType: 'uint256', type: 'uint256' }],
     name: 'totalSupply',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }]
   },
   {
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [],
     name: 'unpause',
-    outputs: [],
+    outputs: []
   },
   {
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
-      { name: 'newImplementation', internalType: 'address', type: 'address' },
+      { name: 'newImplementation', internalType: 'address', type: 'address' }
     ],
     name: 'upgradeTo',
-    outputs: [],
+    outputs: []
   },
   {
     stateMutability: 'payable',
     type: 'function',
     inputs: [
       { name: 'newImplementation', internalType: 'address', type: 'address' },
-      { name: 'data', internalType: 'bytes', type: 'bytes' },
+      { name: 'data', internalType: 'bytes', type: 'bytes' }
     ],
     name: 'upgradeToAndCall',
-    outputs: [],
+    outputs: []
   },
   {
     stateMutability: 'view',
     type: 'function',
     inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     name: 'uri',
-    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    outputs: [{ name: '', internalType: 'string', type: 'string' }]
   },
   {
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
       { name: 'editionId', internalType: 'uint256', type: 'uint256' },
-      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' }
     ],
     name: 'withdrawEditionBalance',
-    outputs: [],
+    outputs: []
   },
   {
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [{ name: 'amount', internalType: 'uint256', type: 'uint256' }],
     name: 'withdrawFunds',
-    outputs: [],
+    outputs: []
   },
-  { stateMutability: 'payable', type: 'receive' },
-] as const
+  { stateMutability: 'payable', type: 'receive' }
+] as const;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // React
@@ -733,21 +733,21 @@ export const radarEditionsABI = [
  */
 export function useRadarEditionsRead<
   TFunctionName extends string,
-  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>,
+  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>
 >(
   config: Omit<
     UseContractReadConfig<typeof radarEditionsABI, TFunctionName, TSelectData>,
     'abi'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractRead({
     abi: radarEditionsABI,
-    ...config,
+    ...config
   } as UseContractReadConfig<
     typeof radarEditionsABI,
     TFunctionName,
     TSelectData
-  >)
+  >);
 }
 
 /**
@@ -755,22 +755,22 @@ export function useRadarEditionsRead<
  */
 export function useRadarEditionsDefaultAdminRole<
   TFunctionName extends 'DEFAULT_ADMIN_ROLE',
-  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>,
+  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>
 >(
   config: Omit<
     UseContractReadConfig<typeof radarEditionsABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractRead({
     abi: radarEditionsABI,
     functionName: 'DEFAULT_ADMIN_ROLE',
-    ...config,
+    ...config
   } as UseContractReadConfig<
     typeof radarEditionsABI,
     TFunctionName,
     TSelectData
-  >)
+  >);
 }
 
 /**
@@ -778,22 +778,22 @@ export function useRadarEditionsDefaultAdminRole<
  */
 export function useRadarEditionsBalanceOf<
   TFunctionName extends 'balanceOf',
-  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>,
+  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>
 >(
   config: Omit<
     UseContractReadConfig<typeof radarEditionsABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractRead({
     abi: radarEditionsABI,
     functionName: 'balanceOf',
-    ...config,
+    ...config
   } as UseContractReadConfig<
     typeof radarEditionsABI,
     TFunctionName,
     TSelectData
-  >)
+  >);
 }
 
 /**
@@ -801,22 +801,22 @@ export function useRadarEditionsBalanceOf<
  */
 export function useRadarEditionsBalanceOfBatch<
   TFunctionName extends 'balanceOfBatch',
-  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>,
+  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>
 >(
   config: Omit<
     UseContractReadConfig<typeof radarEditionsABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractRead({
     abi: radarEditionsABI,
     functionName: 'balanceOfBatch',
-    ...config,
+    ...config
   } as UseContractReadConfig<
     typeof radarEditionsABI,
     TFunctionName,
     TSelectData
-  >)
+  >);
 }
 
 /**
@@ -824,22 +824,22 @@ export function useRadarEditionsBalanceOfBatch<
  */
 export function useRadarEditionsEditionCounter<
   TFunctionName extends 'editionCounter',
-  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>,
+  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>
 >(
   config: Omit<
     UseContractReadConfig<typeof radarEditionsABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractRead({
     abi: radarEditionsABI,
     functionName: 'editionCounter',
-    ...config,
+    ...config
   } as UseContractReadConfig<
     typeof radarEditionsABI,
     TFunctionName,
     TSelectData
-  >)
+  >);
 }
 
 /**
@@ -847,22 +847,22 @@ export function useRadarEditionsEditionCounter<
  */
 export function useRadarEditionsEditions<
   TFunctionName extends 'editions',
-  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>,
+  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>
 >(
   config: Omit<
     UseContractReadConfig<typeof radarEditionsABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractRead({
     abi: radarEditionsABI,
     functionName: 'editions',
-    ...config,
+    ...config
   } as UseContractReadConfig<
     typeof radarEditionsABI,
     TFunctionName,
     TSelectData
-  >)
+  >);
 }
 
 /**
@@ -870,22 +870,22 @@ export function useRadarEditionsEditions<
  */
 export function useRadarEditionsExists<
   TFunctionName extends 'exists',
-  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>,
+  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>
 >(
   config: Omit<
     UseContractReadConfig<typeof radarEditionsABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractRead({
     abi: radarEditionsABI,
     functionName: 'exists',
-    ...config,
+    ...config
   } as UseContractReadConfig<
     typeof radarEditionsABI,
     TFunctionName,
     TSelectData
-  >)
+  >);
 }
 
 /**
@@ -893,22 +893,22 @@ export function useRadarEditionsExists<
  */
 export function useRadarEditionsGetBalances<
   TFunctionName extends 'getBalances',
-  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>,
+  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>
 >(
   config: Omit<
     UseContractReadConfig<typeof radarEditionsABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractRead({
     abi: radarEditionsABI,
     functionName: 'getBalances',
-    ...config,
+    ...config
   } as UseContractReadConfig<
     typeof radarEditionsABI,
     TFunctionName,
     TSelectData
-  >)
+  >);
 }
 
 /**
@@ -916,22 +916,22 @@ export function useRadarEditionsGetBalances<
  */
 export function useRadarEditionsGetEditions<
   TFunctionName extends 'getEditions',
-  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>,
+  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>
 >(
   config: Omit<
     UseContractReadConfig<typeof radarEditionsABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractRead({
     abi: radarEditionsABI,
     functionName: 'getEditions',
-    ...config,
+    ...config
   } as UseContractReadConfig<
     typeof radarEditionsABI,
     TFunctionName,
     TSelectData
-  >)
+  >);
 }
 
 /**
@@ -939,22 +939,22 @@ export function useRadarEditionsGetEditions<
  */
 export function useRadarEditionsGetRoleAdmin<
   TFunctionName extends 'getRoleAdmin',
-  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>,
+  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>
 >(
   config: Omit<
     UseContractReadConfig<typeof radarEditionsABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractRead({
     abi: radarEditionsABI,
     functionName: 'getRoleAdmin',
-    ...config,
+    ...config
   } as UseContractReadConfig<
     typeof radarEditionsABI,
     TFunctionName,
     TSelectData
-  >)
+  >);
 }
 
 /**
@@ -962,22 +962,22 @@ export function useRadarEditionsGetRoleAdmin<
  */
 export function useRadarEditionsHasRole<
   TFunctionName extends 'hasRole',
-  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>,
+  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>
 >(
   config: Omit<
     UseContractReadConfig<typeof radarEditionsABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractRead({
     abi: radarEditionsABI,
     functionName: 'hasRole',
-    ...config,
+    ...config
   } as UseContractReadConfig<
     typeof radarEditionsABI,
     TFunctionName,
     TSelectData
-  >)
+  >);
 }
 
 /**
@@ -985,22 +985,22 @@ export function useRadarEditionsHasRole<
  */
 export function useRadarEditionsIsApprovedForAll<
   TFunctionName extends 'isApprovedForAll',
-  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>,
+  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>
 >(
   config: Omit<
     UseContractReadConfig<typeof radarEditionsABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractRead({
     abi: radarEditionsABI,
     functionName: 'isApprovedForAll',
-    ...config,
+    ...config
   } as UseContractReadConfig<
     typeof radarEditionsABI,
     TFunctionName,
     TSelectData
-  >)
+  >);
 }
 
 /**
@@ -1008,22 +1008,22 @@ export function useRadarEditionsIsApprovedForAll<
  */
 export function useRadarEditionsMaximumEditionFee<
   TFunctionName extends 'maximumEditionFee',
-  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>,
+  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>
 >(
   config: Omit<
     UseContractReadConfig<typeof radarEditionsABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractRead({
     abi: radarEditionsABI,
     functionName: 'maximumEditionFee',
-    ...config,
+    ...config
   } as UseContractReadConfig<
     typeof radarEditionsABI,
     TFunctionName,
     TSelectData
-  >)
+  >);
 }
 
 /**
@@ -1031,22 +1031,22 @@ export function useRadarEditionsMaximumEditionFee<
  */
 export function useRadarEditionsPaused<
   TFunctionName extends 'paused',
-  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>,
+  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>
 >(
   config: Omit<
     UseContractReadConfig<typeof radarEditionsABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractRead({
     abi: radarEditionsABI,
     functionName: 'paused',
-    ...config,
+    ...config
   } as UseContractReadConfig<
     typeof radarEditionsABI,
     TFunctionName,
     TSelectData
-  >)
+  >);
 }
 
 /**
@@ -1054,22 +1054,22 @@ export function useRadarEditionsPaused<
  */
 export function useRadarEditionsProtocolFee<
   TFunctionName extends 'protocolFee',
-  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>,
+  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>
 >(
   config: Omit<
     UseContractReadConfig<typeof radarEditionsABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractRead({
     abi: radarEditionsABI,
     functionName: 'protocolFee',
-    ...config,
+    ...config
   } as UseContractReadConfig<
     typeof radarEditionsABI,
     TFunctionName,
     TSelectData
-  >)
+  >);
 }
 
 /**
@@ -1077,22 +1077,22 @@ export function useRadarEditionsProtocolFee<
  */
 export function useRadarEditionsProxiableUuid<
   TFunctionName extends 'proxiableUUID',
-  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>,
+  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>
 >(
   config: Omit<
     UseContractReadConfig<typeof radarEditionsABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractRead({
     abi: radarEditionsABI,
     functionName: 'proxiableUUID',
-    ...config,
+    ...config
   } as UseContractReadConfig<
     typeof radarEditionsABI,
     TFunctionName,
     TSelectData
-  >)
+  >);
 }
 
 /**
@@ -1100,22 +1100,22 @@ export function useRadarEditionsProxiableUuid<
  */
 export function useRadarEditionsSupportsInterface<
   TFunctionName extends 'supportsInterface',
-  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>,
+  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>
 >(
   config: Omit<
     UseContractReadConfig<typeof radarEditionsABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractRead({
     abi: radarEditionsABI,
     functionName: 'supportsInterface',
-    ...config,
+    ...config
   } as UseContractReadConfig<
     typeof radarEditionsABI,
     TFunctionName,
     TSelectData
-  >)
+  >);
 }
 
 /**
@@ -1123,22 +1123,22 @@ export function useRadarEditionsSupportsInterface<
  */
 export function useRadarEditionsTotalSupply<
   TFunctionName extends 'totalSupply',
-  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>,
+  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>
 >(
   config: Omit<
     UseContractReadConfig<typeof radarEditionsABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractRead({
     abi: radarEditionsABI,
     functionName: 'totalSupply',
-    ...config,
+    ...config
   } as UseContractReadConfig<
     typeof radarEditionsABI,
     TFunctionName,
     TSelectData
-  >)
+  >);
 }
 
 /**
@@ -1146,22 +1146,22 @@ export function useRadarEditionsTotalSupply<
  */
 export function useRadarEditionsUri<
   TFunctionName extends 'uri',
-  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>,
+  TSelectData = ReadContractResult<typeof radarEditionsABI, TFunctionName>
 >(
   config: Omit<
     UseContractReadConfig<typeof radarEditionsABI, TFunctionName, TSelectData>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractRead({
     abi: radarEditionsABI,
     functionName: 'uri',
-    ...config,
+    ...config
   } as UseContractReadConfig<
     typeof radarEditionsABI,
     TFunctionName,
     TSelectData
-  >)
+  >);
 }
 
 /**
@@ -1169,7 +1169,7 @@ export function useRadarEditionsUri<
  */
 export function useRadarEditionsWrite<
   TFunctionName extends string,
-  TMode extends WriteContractMode = undefined,
+  TMode extends WriteContractMode = undefined
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
@@ -1181,20 +1181,20 @@ export function useRadarEditionsWrite<
         TMode
       >
     : UseContractWriteConfig<typeof radarEditionsABI, TFunctionName, TMode> & {
-        abi?: never
-      } = {} as any,
+        abi?: never;
+      } = {} as any
 ) {
   return useContractWrite<typeof radarEditionsABI, TFunctionName, TMode>({
     abi: radarEditionsABI,
-    ...config,
-  } as any)
+    ...config
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link radarEditionsABI}__ and `functionName` set to `"approveEdition"`.
  */
 export function useRadarEditionsApproveEdition<
-  TMode extends WriteContractMode = undefined,
+  TMode extends WriteContractMode = undefined
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
@@ -1210,22 +1210,22 @@ export function useRadarEditionsApproveEdition<
         'approveEdition',
         TMode
       > & {
-        abi?: never
-        functionName?: 'approveEdition'
-      } = {} as any,
+        abi?: never;
+        functionName?: 'approveEdition';
+      } = {} as any
 ) {
   return useContractWrite<typeof radarEditionsABI, 'approveEdition', TMode>({
     abi: radarEditionsABI,
     functionName: 'approveEdition',
-    ...config,
-  } as any)
+    ...config
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link radarEditionsABI}__ and `functionName` set to `"burn"`.
  */
 export function useRadarEditionsBurn<
-  TMode extends WriteContractMode = undefined,
+  TMode extends WriteContractMode = undefined
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
@@ -1237,22 +1237,22 @@ export function useRadarEditionsBurn<
         TMode
       > & { functionName?: 'burn' }
     : UseContractWriteConfig<typeof radarEditionsABI, 'burn', TMode> & {
-        abi?: never
-        functionName?: 'burn'
-      } = {} as any,
+        abi?: never;
+        functionName?: 'burn';
+      } = {} as any
 ) {
   return useContractWrite<typeof radarEditionsABI, 'burn', TMode>({
     abi: radarEditionsABI,
     functionName: 'burn',
-    ...config,
-  } as any)
+    ...config
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link radarEditionsABI}__ and `functionName` set to `"burnBatch"`.
  */
 export function useRadarEditionsBurnBatch<
-  TMode extends WriteContractMode = undefined,
+  TMode extends WriteContractMode = undefined
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
@@ -1264,22 +1264,22 @@ export function useRadarEditionsBurnBatch<
         TMode
       > & { functionName?: 'burnBatch' }
     : UseContractWriteConfig<typeof radarEditionsABI, 'burnBatch', TMode> & {
-        abi?: never
-        functionName?: 'burnBatch'
-      } = {} as any,
+        abi?: never;
+        functionName?: 'burnBatch';
+      } = {} as any
 ) {
   return useContractWrite<typeof radarEditionsABI, 'burnBatch', TMode>({
     abi: radarEditionsABI,
     functionName: 'burnBatch',
-    ...config,
-  } as any)
+    ...config
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link radarEditionsABI}__ and `functionName` set to `"createEdition"`.
  */
 export function useRadarEditionsCreateEdition<
-  TMode extends WriteContractMode = undefined,
+  TMode extends WriteContractMode = undefined
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
@@ -1295,22 +1295,22 @@ export function useRadarEditionsCreateEdition<
         'createEdition',
         TMode
       > & {
-        abi?: never
-        functionName?: 'createEdition'
-      } = {} as any,
+        abi?: never;
+        functionName?: 'createEdition';
+      } = {} as any
 ) {
   return useContractWrite<typeof radarEditionsABI, 'createEdition', TMode>({
     abi: radarEditionsABI,
     functionName: 'createEdition',
-    ...config,
-  } as any)
+    ...config
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link radarEditionsABI}__ and `functionName` set to `"grantRole"`.
  */
 export function useRadarEditionsGrantRole<
-  TMode extends WriteContractMode = undefined,
+  TMode extends WriteContractMode = undefined
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
@@ -1322,22 +1322,22 @@ export function useRadarEditionsGrantRole<
         TMode
       > & { functionName?: 'grantRole' }
     : UseContractWriteConfig<typeof radarEditionsABI, 'grantRole', TMode> & {
-        abi?: never
-        functionName?: 'grantRole'
-      } = {} as any,
+        abi?: never;
+        functionName?: 'grantRole';
+      } = {} as any
 ) {
   return useContractWrite<typeof radarEditionsABI, 'grantRole', TMode>({
     abi: radarEditionsABI,
     functionName: 'grantRole',
-    ...config,
-  } as any)
+    ...config
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link radarEditionsABI}__ and `functionName` set to `"initialize"`.
  */
 export function useRadarEditionsInitialize<
-  TMode extends WriteContractMode = undefined,
+  TMode extends WriteContractMode = undefined
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
@@ -1349,22 +1349,22 @@ export function useRadarEditionsInitialize<
         TMode
       > & { functionName?: 'initialize' }
     : UseContractWriteConfig<typeof radarEditionsABI, 'initialize', TMode> & {
-        abi?: never
-        functionName?: 'initialize'
-      } = {} as any,
+        abi?: never;
+        functionName?: 'initialize';
+      } = {} as any
 ) {
   return useContractWrite<typeof radarEditionsABI, 'initialize', TMode>({
     abi: radarEditionsABI,
     functionName: 'initialize',
-    ...config,
-  } as any)
+    ...config
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link radarEditionsABI}__ and `functionName` set to `"mintEdition"`.
  */
 export function useRadarEditionsMintEdition<
-  TMode extends WriteContractMode = undefined,
+  TMode extends WriteContractMode = undefined
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
@@ -1376,22 +1376,22 @@ export function useRadarEditionsMintEdition<
         TMode
       > & { functionName?: 'mintEdition' }
     : UseContractWriteConfig<typeof radarEditionsABI, 'mintEdition', TMode> & {
-        abi?: never
-        functionName?: 'mintEdition'
-      } = {} as any,
+        abi?: never;
+        functionName?: 'mintEdition';
+      } = {} as any
 ) {
   return useContractWrite<typeof radarEditionsABI, 'mintEdition', TMode>({
     abi: radarEditionsABI,
     functionName: 'mintEdition',
-    ...config,
-  } as any)
+    ...config
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link radarEditionsABI}__ and `functionName` set to `"pause"`.
  */
 export function useRadarEditionsPause<
-  TMode extends WriteContractMode = undefined,
+  TMode extends WriteContractMode = undefined
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
@@ -1403,22 +1403,22 @@ export function useRadarEditionsPause<
         TMode
       > & { functionName?: 'pause' }
     : UseContractWriteConfig<typeof radarEditionsABI, 'pause', TMode> & {
-        abi?: never
-        functionName?: 'pause'
-      } = {} as any,
+        abi?: never;
+        functionName?: 'pause';
+      } = {} as any
 ) {
   return useContractWrite<typeof radarEditionsABI, 'pause', TMode>({
     abi: radarEditionsABI,
     functionName: 'pause',
-    ...config,
-  } as any)
+    ...config
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link radarEditionsABI}__ and `functionName` set to `"renounceRole"`.
  */
 export function useRadarEditionsRenounceRole<
-  TMode extends WriteContractMode = undefined,
+  TMode extends WriteContractMode = undefined
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
@@ -1430,22 +1430,22 @@ export function useRadarEditionsRenounceRole<
         TMode
       > & { functionName?: 'renounceRole' }
     : UseContractWriteConfig<typeof radarEditionsABI, 'renounceRole', TMode> & {
-        abi?: never
-        functionName?: 'renounceRole'
-      } = {} as any,
+        abi?: never;
+        functionName?: 'renounceRole';
+      } = {} as any
 ) {
   return useContractWrite<typeof radarEditionsABI, 'renounceRole', TMode>({
     abi: radarEditionsABI,
     functionName: 'renounceRole',
-    ...config,
-  } as any)
+    ...config
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link radarEditionsABI}__ and `functionName` set to `"resumeEdition"`.
  */
 export function useRadarEditionsResumeEdition<
-  TMode extends WriteContractMode = undefined,
+  TMode extends WriteContractMode = undefined
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
@@ -1461,22 +1461,22 @@ export function useRadarEditionsResumeEdition<
         'resumeEdition',
         TMode
       > & {
-        abi?: never
-        functionName?: 'resumeEdition'
-      } = {} as any,
+        abi?: never;
+        functionName?: 'resumeEdition';
+      } = {} as any
 ) {
   return useContractWrite<typeof radarEditionsABI, 'resumeEdition', TMode>({
     abi: radarEditionsABI,
     functionName: 'resumeEdition',
-    ...config,
-  } as any)
+    ...config
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link radarEditionsABI}__ and `functionName` set to `"revokeRole"`.
  */
 export function useRadarEditionsRevokeRole<
-  TMode extends WriteContractMode = undefined,
+  TMode extends WriteContractMode = undefined
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
@@ -1488,22 +1488,22 @@ export function useRadarEditionsRevokeRole<
         TMode
       > & { functionName?: 'revokeRole' }
     : UseContractWriteConfig<typeof radarEditionsABI, 'revokeRole', TMode> & {
-        abi?: never
-        functionName?: 'revokeRole'
-      } = {} as any,
+        abi?: never;
+        functionName?: 'revokeRole';
+      } = {} as any
 ) {
   return useContractWrite<typeof radarEditionsABI, 'revokeRole', TMode>({
     abi: radarEditionsABI,
     functionName: 'revokeRole',
-    ...config,
-  } as any)
+    ...config
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link radarEditionsABI}__ and `functionName` set to `"safeBatchTransferFrom"`.
  */
 export function useRadarEditionsSafeBatchTransferFrom<
-  TMode extends WriteContractMode = undefined,
+  TMode extends WriteContractMode = undefined
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
@@ -1519,9 +1519,9 @@ export function useRadarEditionsSafeBatchTransferFrom<
         'safeBatchTransferFrom',
         TMode
       > & {
-        abi?: never
-        functionName?: 'safeBatchTransferFrom'
-      } = {} as any,
+        abi?: never;
+        functionName?: 'safeBatchTransferFrom';
+      } = {} as any
 ) {
   return useContractWrite<
     typeof radarEditionsABI,
@@ -1530,15 +1530,15 @@ export function useRadarEditionsSafeBatchTransferFrom<
   >({
     abi: radarEditionsABI,
     functionName: 'safeBatchTransferFrom',
-    ...config,
-  } as any)
+    ...config
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link radarEditionsABI}__ and `functionName` set to `"safeTransferFrom"`.
  */
 export function useRadarEditionsSafeTransferFrom<
-  TMode extends WriteContractMode = undefined,
+  TMode extends WriteContractMode = undefined
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
@@ -1554,22 +1554,22 @@ export function useRadarEditionsSafeTransferFrom<
         'safeTransferFrom',
         TMode
       > & {
-        abi?: never
-        functionName?: 'safeTransferFrom'
-      } = {} as any,
+        abi?: never;
+        functionName?: 'safeTransferFrom';
+      } = {} as any
 ) {
   return useContractWrite<typeof radarEditionsABI, 'safeTransferFrom', TMode>({
     abi: radarEditionsABI,
     functionName: 'safeTransferFrom',
-    ...config,
-  } as any)
+    ...config
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link radarEditionsABI}__ and `functionName` set to `"setApprovalForAll"`.
  */
 export function useRadarEditionsSetApprovalForAll<
-  TMode extends WriteContractMode = undefined,
+  TMode extends WriteContractMode = undefined
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
@@ -1585,22 +1585,22 @@ export function useRadarEditionsSetApprovalForAll<
         'setApprovalForAll',
         TMode
       > & {
-        abi?: never
-        functionName?: 'setApprovalForAll'
-      } = {} as any,
+        abi?: never;
+        functionName?: 'setApprovalForAll';
+      } = {} as any
 ) {
   return useContractWrite<typeof radarEditionsABI, 'setApprovalForAll', TMode>({
     abi: radarEditionsABI,
     functionName: 'setApprovalForAll',
-    ...config,
-  } as any)
+    ...config
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link radarEditionsABI}__ and `functionName` set to `"setMaximumEditionFee"`.
  */
 export function useRadarEditionsSetMaximumEditionFee<
-  TMode extends WriteContractMode = undefined,
+  TMode extends WriteContractMode = undefined
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
@@ -1616,9 +1616,9 @@ export function useRadarEditionsSetMaximumEditionFee<
         'setMaximumEditionFee',
         TMode
       > & {
-        abi?: never
-        functionName?: 'setMaximumEditionFee'
-      } = {} as any,
+        abi?: never;
+        functionName?: 'setMaximumEditionFee';
+      } = {} as any
 ) {
   return useContractWrite<
     typeof radarEditionsABI,
@@ -1627,15 +1627,15 @@ export function useRadarEditionsSetMaximumEditionFee<
   >({
     abi: radarEditionsABI,
     functionName: 'setMaximumEditionFee',
-    ...config,
-  } as any)
+    ...config
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link radarEditionsABI}__ and `functionName` set to `"setProtocolFee"`.
  */
 export function useRadarEditionsSetProtocolFee<
-  TMode extends WriteContractMode = undefined,
+  TMode extends WriteContractMode = undefined
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
@@ -1651,22 +1651,22 @@ export function useRadarEditionsSetProtocolFee<
         'setProtocolFee',
         TMode
       > & {
-        abi?: never
-        functionName?: 'setProtocolFee'
-      } = {} as any,
+        abi?: never;
+        functionName?: 'setProtocolFee';
+      } = {} as any
 ) {
   return useContractWrite<typeof radarEditionsABI, 'setProtocolFee', TMode>({
     abi: radarEditionsABI,
     functionName: 'setProtocolFee',
-    ...config,
-  } as any)
+    ...config
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link radarEditionsABI}__ and `functionName` set to `"setURI"`.
  */
 export function useRadarEditionsSetUri<
-  TMode extends WriteContractMode = undefined,
+  TMode extends WriteContractMode = undefined
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
@@ -1678,22 +1678,22 @@ export function useRadarEditionsSetUri<
         TMode
       > & { functionName?: 'setURI' }
     : UseContractWriteConfig<typeof radarEditionsABI, 'setURI', TMode> & {
-        abi?: never
-        functionName?: 'setURI'
-      } = {} as any,
+        abi?: never;
+        functionName?: 'setURI';
+      } = {} as any
 ) {
   return useContractWrite<typeof radarEditionsABI, 'setURI', TMode>({
     abi: radarEditionsABI,
     functionName: 'setURI',
-    ...config,
-  } as any)
+    ...config
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link radarEditionsABI}__ and `functionName` set to `"stopEdition"`.
  */
 export function useRadarEditionsStopEdition<
-  TMode extends WriteContractMode = undefined,
+  TMode extends WriteContractMode = undefined
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
@@ -1705,22 +1705,22 @@ export function useRadarEditionsStopEdition<
         TMode
       > & { functionName?: 'stopEdition' }
     : UseContractWriteConfig<typeof radarEditionsABI, 'stopEdition', TMode> & {
-        abi?: never
-        functionName?: 'stopEdition'
-      } = {} as any,
+        abi?: never;
+        functionName?: 'stopEdition';
+      } = {} as any
 ) {
   return useContractWrite<typeof radarEditionsABI, 'stopEdition', TMode>({
     abi: radarEditionsABI,
     functionName: 'stopEdition',
-    ...config,
-  } as any)
+    ...config
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link radarEditionsABI}__ and `functionName` set to `"unpause"`.
  */
 export function useRadarEditionsUnpause<
-  TMode extends WriteContractMode = undefined,
+  TMode extends WriteContractMode = undefined
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
@@ -1732,22 +1732,22 @@ export function useRadarEditionsUnpause<
         TMode
       > & { functionName?: 'unpause' }
     : UseContractWriteConfig<typeof radarEditionsABI, 'unpause', TMode> & {
-        abi?: never
-        functionName?: 'unpause'
-      } = {} as any,
+        abi?: never;
+        functionName?: 'unpause';
+      } = {} as any
 ) {
   return useContractWrite<typeof radarEditionsABI, 'unpause', TMode>({
     abi: radarEditionsABI,
     functionName: 'unpause',
-    ...config,
-  } as any)
+    ...config
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link radarEditionsABI}__ and `functionName` set to `"upgradeTo"`.
  */
 export function useRadarEditionsUpgradeTo<
-  TMode extends WriteContractMode = undefined,
+  TMode extends WriteContractMode = undefined
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
@@ -1759,22 +1759,22 @@ export function useRadarEditionsUpgradeTo<
         TMode
       > & { functionName?: 'upgradeTo' }
     : UseContractWriteConfig<typeof radarEditionsABI, 'upgradeTo', TMode> & {
-        abi?: never
-        functionName?: 'upgradeTo'
-      } = {} as any,
+        abi?: never;
+        functionName?: 'upgradeTo';
+      } = {} as any
 ) {
   return useContractWrite<typeof radarEditionsABI, 'upgradeTo', TMode>({
     abi: radarEditionsABI,
     functionName: 'upgradeTo',
-    ...config,
-  } as any)
+    ...config
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link radarEditionsABI}__ and `functionName` set to `"upgradeToAndCall"`.
  */
 export function useRadarEditionsUpgradeToAndCall<
-  TMode extends WriteContractMode = undefined,
+  TMode extends WriteContractMode = undefined
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
@@ -1790,22 +1790,22 @@ export function useRadarEditionsUpgradeToAndCall<
         'upgradeToAndCall',
         TMode
       > & {
-        abi?: never
-        functionName?: 'upgradeToAndCall'
-      } = {} as any,
+        abi?: never;
+        functionName?: 'upgradeToAndCall';
+      } = {} as any
 ) {
   return useContractWrite<typeof radarEditionsABI, 'upgradeToAndCall', TMode>({
     abi: radarEditionsABI,
     functionName: 'upgradeToAndCall',
-    ...config,
-  } as any)
+    ...config
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link radarEditionsABI}__ and `functionName` set to `"withdrawEditionBalance"`.
  */
 export function useRadarEditionsWithdrawEditionBalance<
-  TMode extends WriteContractMode = undefined,
+  TMode extends WriteContractMode = undefined
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
@@ -1821,9 +1821,9 @@ export function useRadarEditionsWithdrawEditionBalance<
         'withdrawEditionBalance',
         TMode
       > & {
-        abi?: never
-        functionName?: 'withdrawEditionBalance'
-      } = {} as any,
+        abi?: never;
+        functionName?: 'withdrawEditionBalance';
+      } = {} as any
 ) {
   return useContractWrite<
     typeof radarEditionsABI,
@@ -1832,15 +1832,15 @@ export function useRadarEditionsWithdrawEditionBalance<
   >({
     abi: radarEditionsABI,
     functionName: 'withdrawEditionBalance',
-    ...config,
-  } as any)
+    ...config
+  } as any);
 }
 
 /**
  * Wraps __{@link useContractWrite}__ with `abi` set to __{@link radarEditionsABI}__ and `functionName` set to `"withdrawFunds"`.
  */
 export function useRadarEditionsWithdrawFunds<
-  TMode extends WriteContractMode = undefined,
+  TMode extends WriteContractMode = undefined
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
@@ -1856,15 +1856,15 @@ export function useRadarEditionsWithdrawFunds<
         'withdrawFunds',
         TMode
       > & {
-        abi?: never
-        functionName?: 'withdrawFunds'
-      } = {} as any,
+        abi?: never;
+        functionName?: 'withdrawFunds';
+      } = {} as any
 ) {
   return useContractWrite<typeof radarEditionsABI, 'withdrawFunds', TMode>({
     abi: radarEditionsABI,
     functionName: 'withdrawFunds',
-    ...config,
-  } as any)
+    ...config
+  } as any);
 }
 
 /**
@@ -1874,12 +1874,12 @@ export function usePrepareRadarEditionsWrite<TFunctionName extends string>(
   config: Omit<
     UsePrepareContractWriteConfig<typeof radarEditionsABI, TFunctionName>,
     'abi'
-  > = {} as any,
+  > = {} as any
 ) {
   return usePrepareContractWrite({
     abi: radarEditionsABI,
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, TFunctionName>)
+    ...config
+  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, TFunctionName>);
 }
 
 /**
@@ -1889,13 +1889,16 @@ export function usePrepareRadarEditionsApproveEdition(
   config: Omit<
     UsePrepareContractWriteConfig<typeof radarEditionsABI, 'approveEdition'>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return usePrepareContractWrite({
     abi: radarEditionsABI,
     functionName: 'approveEdition',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'approveEdition'>)
+    ...config
+  } as UsePrepareContractWriteConfig<
+    typeof radarEditionsABI,
+    'approveEdition'
+  >);
 }
 
 /**
@@ -1905,13 +1908,13 @@ export function usePrepareRadarEditionsBurn(
   config: Omit<
     UsePrepareContractWriteConfig<typeof radarEditionsABI, 'burn'>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return usePrepareContractWrite({
     abi: radarEditionsABI,
     functionName: 'burn',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'burn'>)
+    ...config
+  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'burn'>);
 }
 
 /**
@@ -1921,13 +1924,13 @@ export function usePrepareRadarEditionsBurnBatch(
   config: Omit<
     UsePrepareContractWriteConfig<typeof radarEditionsABI, 'burnBatch'>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return usePrepareContractWrite({
     abi: radarEditionsABI,
     functionName: 'burnBatch',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'burnBatch'>)
+    ...config
+  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'burnBatch'>);
 }
 
 /**
@@ -1937,13 +1940,13 @@ export function usePrepareRadarEditionsCreateEdition(
   config: Omit<
     UsePrepareContractWriteConfig<typeof radarEditionsABI, 'createEdition'>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return usePrepareContractWrite({
     abi: radarEditionsABI,
     functionName: 'createEdition',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'createEdition'>)
+    ...config
+  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'createEdition'>);
 }
 
 /**
@@ -1953,13 +1956,13 @@ export function usePrepareRadarEditionsGrantRole(
   config: Omit<
     UsePrepareContractWriteConfig<typeof radarEditionsABI, 'grantRole'>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return usePrepareContractWrite({
     abi: radarEditionsABI,
     functionName: 'grantRole',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'grantRole'>)
+    ...config
+  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'grantRole'>);
 }
 
 /**
@@ -1969,13 +1972,13 @@ export function usePrepareRadarEditionsInitialize(
   config: Omit<
     UsePrepareContractWriteConfig<typeof radarEditionsABI, 'initialize'>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return usePrepareContractWrite({
     abi: radarEditionsABI,
     functionName: 'initialize',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'initialize'>)
+    ...config
+  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'initialize'>);
 }
 
 /**
@@ -1985,13 +1988,13 @@ export function usePrepareRadarEditionsMintEdition(
   config: Omit<
     UsePrepareContractWriteConfig<typeof radarEditionsABI, 'mintEdition'>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return usePrepareContractWrite({
     abi: radarEditionsABI,
     functionName: 'mintEdition',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'mintEdition'>)
+    ...config
+  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'mintEdition'>);
 }
 
 /**
@@ -2001,13 +2004,13 @@ export function usePrepareRadarEditionsPause(
   config: Omit<
     UsePrepareContractWriteConfig<typeof radarEditionsABI, 'pause'>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return usePrepareContractWrite({
     abi: radarEditionsABI,
     functionName: 'pause',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'pause'>)
+    ...config
+  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'pause'>);
 }
 
 /**
@@ -2017,13 +2020,13 @@ export function usePrepareRadarEditionsRenounceRole(
   config: Omit<
     UsePrepareContractWriteConfig<typeof radarEditionsABI, 'renounceRole'>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return usePrepareContractWrite({
     abi: radarEditionsABI,
     functionName: 'renounceRole',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'renounceRole'>)
+    ...config
+  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'renounceRole'>);
 }
 
 /**
@@ -2033,13 +2036,13 @@ export function usePrepareRadarEditionsResumeEdition(
   config: Omit<
     UsePrepareContractWriteConfig<typeof radarEditionsABI, 'resumeEdition'>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return usePrepareContractWrite({
     abi: radarEditionsABI,
     functionName: 'resumeEdition',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'resumeEdition'>)
+    ...config
+  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'resumeEdition'>);
 }
 
 /**
@@ -2049,13 +2052,13 @@ export function usePrepareRadarEditionsRevokeRole(
   config: Omit<
     UsePrepareContractWriteConfig<typeof radarEditionsABI, 'revokeRole'>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return usePrepareContractWrite({
     abi: radarEditionsABI,
     functionName: 'revokeRole',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'revokeRole'>)
+    ...config
+  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'revokeRole'>);
 }
 
 /**
@@ -2068,16 +2071,16 @@ export function usePrepareRadarEditionsSafeBatchTransferFrom(
       'safeBatchTransferFrom'
     >,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return usePrepareContractWrite({
     abi: radarEditionsABI,
     functionName: 'safeBatchTransferFrom',
-    ...config,
+    ...config
   } as UsePrepareContractWriteConfig<
     typeof radarEditionsABI,
     'safeBatchTransferFrom'
-  >)
+  >);
 }
 
 /**
@@ -2087,16 +2090,16 @@ export function usePrepareRadarEditionsSafeTransferFrom(
   config: Omit<
     UsePrepareContractWriteConfig<typeof radarEditionsABI, 'safeTransferFrom'>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return usePrepareContractWrite({
     abi: radarEditionsABI,
     functionName: 'safeTransferFrom',
-    ...config,
+    ...config
   } as UsePrepareContractWriteConfig<
     typeof radarEditionsABI,
     'safeTransferFrom'
-  >)
+  >);
 }
 
 /**
@@ -2106,16 +2109,16 @@ export function usePrepareRadarEditionsSetApprovalForAll(
   config: Omit<
     UsePrepareContractWriteConfig<typeof radarEditionsABI, 'setApprovalForAll'>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return usePrepareContractWrite({
     abi: radarEditionsABI,
     functionName: 'setApprovalForAll',
-    ...config,
+    ...config
   } as UsePrepareContractWriteConfig<
     typeof radarEditionsABI,
     'setApprovalForAll'
-  >)
+  >);
 }
 
 /**
@@ -2128,16 +2131,16 @@ export function usePrepareRadarEditionsSetMaximumEditionFee(
       'setMaximumEditionFee'
     >,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return usePrepareContractWrite({
     abi: radarEditionsABI,
     functionName: 'setMaximumEditionFee',
-    ...config,
+    ...config
   } as UsePrepareContractWriteConfig<
     typeof radarEditionsABI,
     'setMaximumEditionFee'
-  >)
+  >);
 }
 
 /**
@@ -2147,13 +2150,16 @@ export function usePrepareRadarEditionsSetProtocolFee(
   config: Omit<
     UsePrepareContractWriteConfig<typeof radarEditionsABI, 'setProtocolFee'>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return usePrepareContractWrite({
     abi: radarEditionsABI,
     functionName: 'setProtocolFee',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'setProtocolFee'>)
+    ...config
+  } as UsePrepareContractWriteConfig<
+    typeof radarEditionsABI,
+    'setProtocolFee'
+  >);
 }
 
 /**
@@ -2163,13 +2169,13 @@ export function usePrepareRadarEditionsSetUri(
   config: Omit<
     UsePrepareContractWriteConfig<typeof radarEditionsABI, 'setURI'>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return usePrepareContractWrite({
     abi: radarEditionsABI,
     functionName: 'setURI',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'setURI'>)
+    ...config
+  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'setURI'>);
 }
 
 /**
@@ -2179,13 +2185,13 @@ export function usePrepareRadarEditionsStopEdition(
   config: Omit<
     UsePrepareContractWriteConfig<typeof radarEditionsABI, 'stopEdition'>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return usePrepareContractWrite({
     abi: radarEditionsABI,
     functionName: 'stopEdition',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'stopEdition'>)
+    ...config
+  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'stopEdition'>);
 }
 
 /**
@@ -2195,13 +2201,13 @@ export function usePrepareRadarEditionsUnpause(
   config: Omit<
     UsePrepareContractWriteConfig<typeof radarEditionsABI, 'unpause'>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return usePrepareContractWrite({
     abi: radarEditionsABI,
     functionName: 'unpause',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'unpause'>)
+    ...config
+  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'unpause'>);
 }
 
 /**
@@ -2211,13 +2217,13 @@ export function usePrepareRadarEditionsUpgradeTo(
   config: Omit<
     UsePrepareContractWriteConfig<typeof radarEditionsABI, 'upgradeTo'>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return usePrepareContractWrite({
     abi: radarEditionsABI,
     functionName: 'upgradeTo',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'upgradeTo'>)
+    ...config
+  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'upgradeTo'>);
 }
 
 /**
@@ -2227,16 +2233,16 @@ export function usePrepareRadarEditionsUpgradeToAndCall(
   config: Omit<
     UsePrepareContractWriteConfig<typeof radarEditionsABI, 'upgradeToAndCall'>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return usePrepareContractWrite({
     abi: radarEditionsABI,
     functionName: 'upgradeToAndCall',
-    ...config,
+    ...config
   } as UsePrepareContractWriteConfig<
     typeof radarEditionsABI,
     'upgradeToAndCall'
-  >)
+  >);
 }
 
 /**
@@ -2249,16 +2255,16 @@ export function usePrepareRadarEditionsWithdrawEditionBalance(
       'withdrawEditionBalance'
     >,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return usePrepareContractWrite({
     abi: radarEditionsABI,
     functionName: 'withdrawEditionBalance',
-    ...config,
+    ...config
   } as UsePrepareContractWriteConfig<
     typeof radarEditionsABI,
     'withdrawEditionBalance'
-  >)
+  >);
 }
 
 /**
@@ -2268,13 +2274,13 @@ export function usePrepareRadarEditionsWithdrawFunds(
   config: Omit<
     UsePrepareContractWriteConfig<typeof radarEditionsABI, 'withdrawFunds'>,
     'abi' | 'functionName'
-  > = {} as any,
+  > = {} as any
 ) {
   return usePrepareContractWrite({
     abi: radarEditionsABI,
     functionName: 'withdrawFunds',
-    ...config,
-  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'withdrawFunds'>)
+    ...config
+  } as UsePrepareContractWriteConfig<typeof radarEditionsABI, 'withdrawFunds'>);
 }
 
 /**
@@ -2284,12 +2290,12 @@ export function useRadarEditionsEvent<TEventName extends string>(
   config: Omit<
     UseContractEventConfig<typeof radarEditionsABI, TEventName>,
     'abi'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractEvent({
     abi: radarEditionsABI,
-    ...config,
-  } as UseContractEventConfig<typeof radarEditionsABI, TEventName>)
+    ...config
+  } as UseContractEventConfig<typeof radarEditionsABI, TEventName>);
 }
 
 /**
@@ -2299,13 +2305,13 @@ export function useRadarEditionsAdminChangedEvent(
   config: Omit<
     UseContractEventConfig<typeof radarEditionsABI, 'AdminChanged'>,
     'abi' | 'eventName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractEvent({
     abi: radarEditionsABI,
     eventName: 'AdminChanged',
-    ...config,
-  } as UseContractEventConfig<typeof radarEditionsABI, 'AdminChanged'>)
+    ...config
+  } as UseContractEventConfig<typeof radarEditionsABI, 'AdminChanged'>);
 }
 
 /**
@@ -2315,13 +2321,13 @@ export function useRadarEditionsApprovalForAllEvent(
   config: Omit<
     UseContractEventConfig<typeof radarEditionsABI, 'ApprovalForAll'>,
     'abi' | 'eventName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractEvent({
     abi: radarEditionsABI,
     eventName: 'ApprovalForAll',
-    ...config,
-  } as UseContractEventConfig<typeof radarEditionsABI, 'ApprovalForAll'>)
+    ...config
+  } as UseContractEventConfig<typeof radarEditionsABI, 'ApprovalForAll'>);
 }
 
 /**
@@ -2331,13 +2337,13 @@ export function useRadarEditionsBeaconUpgradedEvent(
   config: Omit<
     UseContractEventConfig<typeof radarEditionsABI, 'BeaconUpgraded'>,
     'abi' | 'eventName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractEvent({
     abi: radarEditionsABI,
     eventName: 'BeaconUpgraded',
-    ...config,
-  } as UseContractEventConfig<typeof radarEditionsABI, 'BeaconUpgraded'>)
+    ...config
+  } as UseContractEventConfig<typeof radarEditionsABI, 'BeaconUpgraded'>);
 }
 
 /**
@@ -2347,13 +2353,13 @@ export function useRadarEditionsEditionApprovedEvent(
   config: Omit<
     UseContractEventConfig<typeof radarEditionsABI, 'EditionApproved'>,
     'abi' | 'eventName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractEvent({
     abi: radarEditionsABI,
     eventName: 'EditionApproved',
-    ...config,
-  } as UseContractEventConfig<typeof radarEditionsABI, 'EditionApproved'>)
+    ...config
+  } as UseContractEventConfig<typeof radarEditionsABI, 'EditionApproved'>);
 }
 
 /**
@@ -2363,16 +2369,16 @@ export function useRadarEditionsEditionBalanceWithdrawnEvent(
   config: Omit<
     UseContractEventConfig<typeof radarEditionsABI, 'EditionBalanceWithdrawn'>,
     'abi' | 'eventName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractEvent({
     abi: radarEditionsABI,
     eventName: 'EditionBalanceWithdrawn',
-    ...config,
+    ...config
   } as UseContractEventConfig<
     typeof radarEditionsABI,
     'EditionBalanceWithdrawn'
-  >)
+  >);
 }
 
 /**
@@ -2382,13 +2388,13 @@ export function useRadarEditionsEditionCreatedEvent(
   config: Omit<
     UseContractEventConfig<typeof radarEditionsABI, 'EditionCreated'>,
     'abi' | 'eventName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractEvent({
     abi: radarEditionsABI,
     eventName: 'EditionCreated',
-    ...config,
-  } as UseContractEventConfig<typeof radarEditionsABI, 'EditionCreated'>)
+    ...config
+  } as UseContractEventConfig<typeof radarEditionsABI, 'EditionCreated'>);
 }
 
 /**
@@ -2398,13 +2404,13 @@ export function useRadarEditionsEditionResumedEvent(
   config: Omit<
     UseContractEventConfig<typeof radarEditionsABI, 'EditionResumed'>,
     'abi' | 'eventName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractEvent({
     abi: radarEditionsABI,
     eventName: 'EditionResumed',
-    ...config,
-  } as UseContractEventConfig<typeof radarEditionsABI, 'EditionResumed'>)
+    ...config
+  } as UseContractEventConfig<typeof radarEditionsABI, 'EditionResumed'>);
 }
 
 /**
@@ -2414,13 +2420,13 @@ export function useRadarEditionsEditionStoppedEvent(
   config: Omit<
     UseContractEventConfig<typeof radarEditionsABI, 'EditionStopped'>,
     'abi' | 'eventName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractEvent({
     abi: radarEditionsABI,
     eventName: 'EditionStopped',
-    ...config,
-  } as UseContractEventConfig<typeof radarEditionsABI, 'EditionStopped'>)
+    ...config
+  } as UseContractEventConfig<typeof radarEditionsABI, 'EditionStopped'>);
 }
 
 /**
@@ -2430,13 +2436,13 @@ export function useRadarEditionsInitializedEvent(
   config: Omit<
     UseContractEventConfig<typeof radarEditionsABI, 'Initialized'>,
     'abi' | 'eventName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractEvent({
     abi: radarEditionsABI,
     eventName: 'Initialized',
-    ...config,
-  } as UseContractEventConfig<typeof radarEditionsABI, 'Initialized'>)
+    ...config
+  } as UseContractEventConfig<typeof radarEditionsABI, 'Initialized'>);
 }
 
 /**
@@ -2446,13 +2452,13 @@ export function useRadarEditionsPausedEvent(
   config: Omit<
     UseContractEventConfig<typeof radarEditionsABI, 'Paused'>,
     'abi' | 'eventName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractEvent({
     abi: radarEditionsABI,
     eventName: 'Paused',
-    ...config,
-  } as UseContractEventConfig<typeof radarEditionsABI, 'Paused'>)
+    ...config
+  } as UseContractEventConfig<typeof radarEditionsABI, 'Paused'>);
 }
 
 /**
@@ -2462,13 +2468,13 @@ export function useRadarEditionsRoleAdminChangedEvent(
   config: Omit<
     UseContractEventConfig<typeof radarEditionsABI, 'RoleAdminChanged'>,
     'abi' | 'eventName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractEvent({
     abi: radarEditionsABI,
     eventName: 'RoleAdminChanged',
-    ...config,
-  } as UseContractEventConfig<typeof radarEditionsABI, 'RoleAdminChanged'>)
+    ...config
+  } as UseContractEventConfig<typeof radarEditionsABI, 'RoleAdminChanged'>);
 }
 
 /**
@@ -2478,13 +2484,13 @@ export function useRadarEditionsRoleGrantedEvent(
   config: Omit<
     UseContractEventConfig<typeof radarEditionsABI, 'RoleGranted'>,
     'abi' | 'eventName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractEvent({
     abi: radarEditionsABI,
     eventName: 'RoleGranted',
-    ...config,
-  } as UseContractEventConfig<typeof radarEditionsABI, 'RoleGranted'>)
+    ...config
+  } as UseContractEventConfig<typeof radarEditionsABI, 'RoleGranted'>);
 }
 
 /**
@@ -2494,13 +2500,13 @@ export function useRadarEditionsRoleRevokedEvent(
   config: Omit<
     UseContractEventConfig<typeof radarEditionsABI, 'RoleRevoked'>,
     'abi' | 'eventName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractEvent({
     abi: radarEditionsABI,
     eventName: 'RoleRevoked',
-    ...config,
-  } as UseContractEventConfig<typeof radarEditionsABI, 'RoleRevoked'>)
+    ...config
+  } as UseContractEventConfig<typeof radarEditionsABI, 'RoleRevoked'>);
 }
 
 /**
@@ -2510,13 +2516,13 @@ export function useRadarEditionsTransferBatchEvent(
   config: Omit<
     UseContractEventConfig<typeof radarEditionsABI, 'TransferBatch'>,
     'abi' | 'eventName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractEvent({
     abi: radarEditionsABI,
     eventName: 'TransferBatch',
-    ...config,
-  } as UseContractEventConfig<typeof radarEditionsABI, 'TransferBatch'>)
+    ...config
+  } as UseContractEventConfig<typeof radarEditionsABI, 'TransferBatch'>);
 }
 
 /**
@@ -2526,13 +2532,13 @@ export function useRadarEditionsTransferSingleEvent(
   config: Omit<
     UseContractEventConfig<typeof radarEditionsABI, 'TransferSingle'>,
     'abi' | 'eventName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractEvent({
     abi: radarEditionsABI,
     eventName: 'TransferSingle',
-    ...config,
-  } as UseContractEventConfig<typeof radarEditionsABI, 'TransferSingle'>)
+    ...config
+  } as UseContractEventConfig<typeof radarEditionsABI, 'TransferSingle'>);
 }
 
 /**
@@ -2542,13 +2548,13 @@ export function useRadarEditionsUriEvent(
   config: Omit<
     UseContractEventConfig<typeof radarEditionsABI, 'URI'>,
     'abi' | 'eventName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractEvent({
     abi: radarEditionsABI,
     eventName: 'URI',
-    ...config,
-  } as UseContractEventConfig<typeof radarEditionsABI, 'URI'>)
+    ...config
+  } as UseContractEventConfig<typeof radarEditionsABI, 'URI'>);
 }
 
 /**
@@ -2558,13 +2564,13 @@ export function useRadarEditionsUnpausedEvent(
   config: Omit<
     UseContractEventConfig<typeof radarEditionsABI, 'Unpaused'>,
     'abi' | 'eventName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractEvent({
     abi: radarEditionsABI,
     eventName: 'Unpaused',
-    ...config,
-  } as UseContractEventConfig<typeof radarEditionsABI, 'Unpaused'>)
+    ...config
+  } as UseContractEventConfig<typeof radarEditionsABI, 'Unpaused'>);
 }
 
 /**
@@ -2574,11 +2580,11 @@ export function useRadarEditionsUpgradedEvent(
   config: Omit<
     UseContractEventConfig<typeof radarEditionsABI, 'Upgraded'>,
     'abi' | 'eventName'
-  > = {} as any,
+  > = {} as any
 ) {
   return useContractEvent({
     abi: radarEditionsABI,
     eventName: 'Upgraded',
-    ...config,
-  } as UseContractEventConfig<typeof radarEditionsABI, 'Upgraded'>)
+    ...config
+  } as UseContractEventConfig<typeof radarEditionsABI, 'Upgraded'>);
 }

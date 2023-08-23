@@ -1,7 +1,7 @@
-import { CacheKey } from "@/constants/react-query";
-import { getProjectUpdates } from "@/lib/backend";
-import { useQuery } from "wagmi";
-import { useAuth } from "./useAuth";
+import { CacheKey } from '@/constants/react-query';
+import { getProjectUpdates } from '@/lib/backend';
+import { useQuery } from 'wagmi';
+import { useAuth } from './useAuth';
 
 export function useGetProjectUpdates(projectId?: string) {
   const { idToken } = useAuth();
@@ -10,7 +10,7 @@ export function useGetProjectUpdates(projectId?: string) {
     [CacheKey.PROJECT_UPDATES, projectId],
     () => getProjectUpdates(idToken, projectId!),
     {
-      enabled: Boolean(projectId) && Boolean(idToken),
+      enabled: Boolean(projectId) && Boolean(idToken)
     }
   );
 }

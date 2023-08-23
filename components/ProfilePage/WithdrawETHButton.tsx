@@ -4,24 +4,24 @@ import {
   DialogDescription,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { CONTRACT_ADDRESS } from "@/constants/address";
-import { useAuth } from "@/hooks/useAuth";
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { CONTRACT_ADDRESS } from '@/constants/address';
+import { useAuth } from '@/hooks/useAuth';
 import {
   usePrepareRadarEditionsWithdrawEditionBalance,
   useRadarEditionsWithdrawEditionBalance,
-} from "@/lib/generated";
-import { parseEther } from "@/lib/utils";
-import { ProjectWithChainData } from "@/pages/profile/[id]";
-import { ProjectStatus } from "@/types/mongo";
-import { useEffect, useRef } from "react";
-import { useAccount } from "wagmi";
-import { chains } from "../Providers/Web3Provider";
-import { Button } from "../ui/button";
-import { DialogFooter, DialogHeader } from "../ui/dialog";
-import { Input } from "../ui/input";
-import { useToast } from "../ui/use-toast";
+} from '@/lib/generated';
+import { parseEther } from '@/lib/utils';
+import { ProjectWithChainData } from '@/pages/profile/[id]';
+import { ProjectStatus } from '@/types/mongo';
+import { useEffect, useRef } from 'react';
+import { useAccount } from 'wagmi';
+import { chains } from '../Providers/Web3Provider';
+import { Button } from '../ui/button';
+import { DialogFooter, DialogHeader } from '../ui/dialog';
+import { Input } from '../ui/input';
+import { useToast } from '../ui/use-toast';
 
 export function WithdrawETHButton({ status, editionId }: ProjectWithChainData) {
   const amountRef = useRef<HTMLInputElement>(null);
@@ -32,10 +32,13 @@ export function WithdrawETHButton({ status, editionId }: ProjectWithChainData) {
     account: address,
     address: CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
-    enabled: Boolean(address) && amountRef.current?.value !== undefined,
+    enabled:
+      Boolean(address) &&
+      amountRef.current?.value !== undefined &&
+      editionId !== undefined,
     args: [
-      BigInt(editionId),
-      parseEther(amountRef.current?.value.toString() || "0"),
+      BigInt(editionId || 0),
+      parseEther(amountRef.current?.value.toString() || '0'),
     ],
   });
   const { writeAsync, error } = useRadarEditionsWithdrawEditionBalance(config);
@@ -48,9 +51,9 @@ export function WithdrawETHButton({ status, editionId }: ProjectWithChainData) {
     if (error) {
       console.error(error);
       toast({
-        variant: "destructive",
-        title: "An unexpected error occured",
-        description: "Check the console for more information",
+        variant: 'destructive',
+        title: 'An unexpected error occured',
+        description: 'Check the console for more information',
       });
     }
   }, [error]);
@@ -76,7 +79,7 @@ export function WithdrawETHButton({ status, editionId }: ProjectWithChainData) {
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-5 items-center gap-4">
-            <Label htmlFor="amount" className="text-right mb-0 col-span-2">
+            <Label htmlFor="amount" className="col-span-2 mb-0 text-right">
               Amount (in ETH)
             </Label>
             <Input
@@ -93,7 +96,7 @@ export function WithdrawETHButton({ status, editionId }: ProjectWithChainData) {
             onClick={() => onSubmit()}
             disabled={!isLoggedIn}
           >
-            {isLoggedIn ? "WITHDRAW" : "Please Sign In"}
+            {isLoggedIn ? 'WITHDRAW' : 'Please Sign In'}
           </Button>
         </DialogFooter>
       </DialogContent>

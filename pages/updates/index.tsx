@@ -1,51 +1,51 @@
-import { AdminNav } from "@/components/Layout/AdminNav";
-import { AuthContext } from "@/components/Providers/AuthProvider";
+import { AdminNav } from '@/components/Layout/AdminNav';
+import { AuthContext } from '@/components/Providers/AuthProvider';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/accordion';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
-import { useGetProjectUpdates } from "@/hooks/useGetProjectUpdates";
-import { useGetUserProjects } from "@/hooks/useGetUserProjects";
-import { ProjectUpdate } from "@/types/mongo";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useContext } from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
+import { useGetProjectUpdates } from '@/hooks/useGetProjectUpdates';
+import { useGetUserProjects } from '@/hooks/useGetUserProjects';
+import { ProjectUpdate } from '@/types/mongo';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useContext } from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
 async function sendUpdate(
   idToken: string,
-  values: ProjectUpdate
+  values: ProjectUpdate,
 ): Promise<ProjectUpdate | undefined> {
   try {
     const res = await fetch(
       `${process.env.BACKEND_URL}/projects/${values.project}/updates`,
       {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${idToken}`,
         },
         body: JSON.stringify(values),
-      }
+      },
     );
     return await res.json();
   } catch (e) {
@@ -55,7 +55,7 @@ async function sendUpdate(
 }
 
 const formSchema = z.object({
-  project: z.string().min(1, { message: "Project is required" }),
+  project: z.string().min(1, { message: 'Project is required' }),
   text: z.string(),
 });
 
@@ -66,15 +66,15 @@ export default function Updates() {
   const { data: projects } = useGetUserProjects(data?._id);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    mode: "onBlur",
+    mode: 'onBlur',
     defaultValues: {
-      project: "",
-      text: "",
+      project: '',
+      text: '',
     },
   });
   const { control, handleSubmit, watch } = form;
 
-  const projectId = watch("project");
+  const projectId = watch('project');
   const project = projects?.find((project) => project._id === projectId);
 
   const { data: updates, refetch } = useGetProjectUpdates(project?._id);
@@ -89,9 +89,9 @@ export default function Updates() {
   };
 
   return (
-    <div className="mt-24 max-w-screen-lg mx-auto">
+    <div className="mx-auto mt-24 max-w-screen-lg">
       <AdminNav />
-      <div className="flex mb-20">
+      <div className="mb-20 flex">
         <div className="w-1/2 pr-10">
           <h1 className="text-lg">Share an update with your supporters</h1>
           <p>
@@ -111,7 +111,7 @@ export default function Updates() {
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
-                        <SelectTrigger className="w-full mt-6">
+                        <SelectTrigger className="mt-6 w-full">
                           <FormControl>
                             <SelectValue placeholder="Select a vision to update" />
                           </FormControl>

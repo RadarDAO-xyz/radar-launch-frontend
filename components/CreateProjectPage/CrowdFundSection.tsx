@@ -1,7 +1,7 @@
-import { BenefitsFields } from "@/components/CreateProjectPage/BenefitsFields";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Checkbox } from "@/components/ui/checkbox";
+import { BenefitsFields } from '@/components/CreateProjectPage/BenefitsFields';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   FormControl,
   FormDescription,
@@ -9,31 +9,31 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { useFormContext } from "react-hook-form";
+} from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
+import { CalendarIcon } from 'lucide-react';
+import { useFormContext } from 'react-hook-form';
 
 export function CrowdFundSection() {
   const { control } = useFormContext();
   return (
-    <div className="border border-slate-200 rounded p-10 mb-10">
+    <div className="mb-10 rounded border border-slate-200 p-10">
       <h1 className="font-base">Crowdfund (Optional)</h1>
       <p className="form-subheading">
         Do you want to crowdfund to reach your milestones, raise capital and
         offer optional benefits to inspire people to support you?
       </p>
-      <hr className="border-b-1 border-slate-200 my-8" />
+      <hr className="border-b-1 my-8 border-slate-200" />
       <div className="grid grid-cols-2 gap-10">
         <div className="col-span-1 pr-4">
-          <h2 className="text-xl font-base">Crowdfunding</h2>
+          <h2 className="font-base text-xl">Crowdfunding</h2>
           <p>
             We encourage you to focus on smaller fundraising goals to reach
             impactful milestones, building trust and growing supporters as you
@@ -62,10 +62,10 @@ export function CrowdFundSection() {
           />
         </div>
       </div>
-      <hr className="border-b-1 border-slate-200 my-8" />
+      <hr className="border-b-1 my-8 border-slate-200" />
       <div className="grid grid-cols-2 gap-10">
         <div className="col-span-1 pr-4">
-          <h2 className="text-xl font-base">Editions</h2>
+          <h2 className="font-base text-xl">Editions</h2>
           <p>
             On Launch, projects start with a default edition price of $0.
             <br />
@@ -106,14 +106,14 @@ export function CrowdFundSection() {
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
-                          variant={"outline"}
+                          variant={'outline'}
                           className={cn(
-                            "w-full pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground"
+                            'w-full pl-3 text-left font-normal',
+                            !field.value && 'text-muted-foreground',
                           )}
                         >
                           {field.value ? (
-                            format(field.value, "PPP")
+                            format(field.value, 'PPP')
                           ) : (
                             <span>Pick a date</span>
                           )}
@@ -137,10 +137,10 @@ export function CrowdFundSection() {
           />
         </div>
       </div>
-      <hr className="border-b-1 border-slate-200 my-8" />
+      <hr className="border-b-1 my-8 border-slate-200" />
       <div className="grid grid-cols-2 gap-10">
         <div className="col-span-1 pr-4">
-          <h2 className="text-xl font-base">
+          <h2 className="font-base text-xl">
             Optional Benefits for supporters
           </h2>
           <p>
@@ -160,10 +160,10 @@ export function CrowdFundSection() {
           <BenefitsFields />
         </div>
       </div>
-      <hr className="border-b-1 border-slate-200 my-8" />
+      <hr className="border-b-1 my-8 border-slate-200" />
       <div className="grid grid-cols-2 gap-10">
         <div className="col-span-1 pr-4">
-          <h2 className="text-xl font-base">Set your admin address</h2>
+          <h2 className="font-base text-xl">Set your admin address</h2>
           <p>
             Please share an Ethereum address which can withdraw your crowdfund,
             please ensure you have access to this address.
