@@ -53,15 +53,15 @@ export function getCountdown(date: Date) {
 
 export const etherUnits = {
   gwei: 9,
-  wei: 18
+  wei: 18,
 };
 export const gweiUnits = {
   ether: -9,
-  wei: 9
+  wei: 9,
 };
 export const weiUnits = {
   ether: -18,
-  gwei: -9
+  gwei: -9,
 };
 
 export function parseEther(ether: string, unit: 'wei' | 'gwei' = 'wei') {
@@ -86,7 +86,7 @@ export function parseUnits(value: string, decimals: number) {
     const [left, unit, right] = [
       fraction.slice(0, decimals - 1),
       fraction.slice(decimals - 1, decimals),
-      fraction.slice(decimals)
+      fraction.slice(decimals),
     ];
 
     const rounded = Math.round(Number(`${unit}.${right}`));
@@ -121,7 +121,7 @@ export function formatUnits(value: bigint, decimals: number) {
 
   let [integer, fraction] = [
     display.slice(0, display.length - decimals),
-    display.slice(display.length - decimals)
+    display.slice(display.length - decimals),
   ];
   fraction = fraction.replace(/(0+)$/, '');
   return `${negative ? '-' : ''}${integer || '0'}${
@@ -129,9 +129,7 @@ export function formatUnits(value: bigint, decimals: number) {
   }`;
 }
 
-export function convertAddressToChecksum(
-  address_?: string
-): undefined | Address {
+export function convertAddressToChecksum(address_?: string) {
   if (address_ === undefined) {
     return address_;
   }
@@ -153,5 +151,5 @@ export function convertAddressToChecksum(
     }
   }
 
-  return `0x${address.join('')}`;
+  return `0x${address.join('')}` as Address;
 }

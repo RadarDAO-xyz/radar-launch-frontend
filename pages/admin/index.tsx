@@ -79,7 +79,7 @@ export default function AdminPage() {
           Stopped (3)
         </strong>
       </div>
-      <p>
+      <div>
         To modify the 4 featured projects in the homepage, do the following
         <ul>
           <li>
@@ -92,7 +92,7 @@ export default function AdminPage() {
           </li>
           <li>Delete the old project</li>
         </ul>
-      </p>
+      </div>
       <div className="grid grid-cols-1 gap-4 pb-20 pt-4 lg:grid-cols-3">
         {projects.map((project) => (
           <div className="rounded border p-4" key={project._id}>

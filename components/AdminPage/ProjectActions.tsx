@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Dialog,
   DialogContent,
@@ -8,33 +9,27 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { CONTRACT_ADDRESS } from '@/constants/address';
-import {
-  usePrepareRadarEditionsApproveEdition,
-  usePrepareRadarEditionsStopEdition,
-  useRadarEditionsApproveEdition,
-  useRadarEditionsStopEdition,
-} from '@/lib/generated';
-import { Project, ProjectStatus } from '@/types/mongo';
-import { useRef, useState } from 'react';
-import { DownloadSupporters } from '../ProfilePage/DownloadSupporters';
-import { chains } from '../Providers/Web3Provider';
-import { DialogFooter } from '../ui/dialog';
-import { useToast } from '../ui/use-toast';
-import { DeleteProjectButton } from './DeleteProjectButton';
-import { useAuth } from '@/hooks/useAuth';
-import { useMutation, useQueryClient } from 'wagmi';
-import { CacheKey } from '@/constants/react-query';
-import { updateProject } from '@/lib/backend';
-import { cn } from '@/lib/utils';
 import {
   Popover,
-  PopoverTrigger,
   PopoverContent,
+  PopoverTrigger,
 } from '@/components/ui/popover';
+import { CacheKey } from '@/constants/react-query';
+import { useAuth } from '@/hooks/useAuth';
+import { updateProject } from '@/lib/backend';
+import { cn } from '@/lib/utils';
+import { Project } from '@/types/mongo';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
-import { Calendar } from '@/components/ui/calendar';
+import { useRef, useState } from 'react';
+import { useMutation, useQueryClient } from 'wagmi';
+import { DownloadSupporters } from '../ProfilePage/DownloadSupporters';
+import { DialogFooter } from '../ui/dialog';
+import { useToast } from '../ui/use-toast';
+import { ApproveEditionButton } from './ApproveEditionButton';
+import { DeleteProjectButton } from './DeleteProjectButton';
+import { DisapproveEditionButton } from './DisapproveEditionButton';
+import { CreateEditionButton } from './CreateEditionButton';
 
 interface ProjectWithChainData extends Project {
   editionId?: number;
@@ -42,7 +37,8 @@ interface ProjectWithChainData extends Project {
 }
 
 export function ProjectActions(props: ProjectWithChainData) {
-  const { _id, status, editionId, curation } = props;
+  const { _id, status, editionId, curation, edition_price, admin_address } =
+    props;
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -57,22 +53,6 @@ export function ProjectActions(props: ProjectWithChainData) {
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { config } = usePrepareRadarEditionsApproveEdition({
-    address: CONTRACT_ADDRESS,
-    chainId: chains[0].id,
-    enabled: Boolean(chains[0].id) && isOpen && editionId !== undefined,
-    args: [BigInt(+(editionId || 0)) || 0n],
-  });
-  const { writeAsync, isLoading: isApproveLoading } =
-    useRadarEditionsApproveEdition(config);
-  const { config: stopEditionConfig } = usePrepareRadarEditionsStopEdition({
-    address: CONTRACT_ADDRESS,
-    chainId: chains[0].id,
-    enabled: Boolean(chains[0].id) && isOpen && editionId !== undefined,
-    args: [BigInt(+(editionId || 0)) || 0n],
-  });
-  const { writeAsync: writeStopEditionAsync, isLoading: isStopLoading } =
-    useRadarEditionsStopEdition(stopEditionConfig);
 
   const { mutate, isLoading: isUpdateLoading } = useMutation(
     [CacheKey.UDPATE_PROJECT_STATUS, _id, projectStatusRef.current?.value],
@@ -187,40 +167,14 @@ export function ProjectActions(props: ProjectWithChainData) {
             </Popover>
           </DialogDescription>
           <DialogFooter className="flex !flex-col !space-x-0 space-y-4">
-            <Button
-              disabled={isApproveLoading}
-              onClick={() => {
-                try {
-                  writeAsync?.();
-                } catch (e) {
-                  console.error(e);
-                  toast({
-                    variant: 'destructive',
-                    title: 'An unexpected error occured',
-                    description: 'Check the console for more information',
-                  });
-                }
-              }}
-            >
-              Approve Edition (on-chain)
-            </Button>
-            <Button
-              disabled={isStopLoading}
-              onClick={() => {
-                try {
-                  writeStopEditionAsync?.();
-                } catch (e) {
-                  console.error(e);
-                  toast({
-                    variant: 'destructive',
-                    title: 'An unexpected error occured',
-                    description: 'Check the console for more information',
-                  });
-                }
-              }}
-            >
-              Stop Edition (on-chain)
-            </Button>
+            <CreateEditionButton
+              isOpen={isOpen}
+              projectId={_id}
+              fee={edition_price}
+              address={admin_address}
+            />
+            <ApproveEditionButton isOpen={isOpen} editionId={editionId} />
+            <DisapproveEditionButton isOpen={isOpen} editionId={editionId} />
             <Button
               onClick={() => {
                 mutate();
