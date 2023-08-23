@@ -7,7 +7,6 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { CONTRACT_ADDRESS } from '@/constants/address';
-import { useAuth } from '@/hooks/useAuth';
 import {
   usePrepareRadarEditionsWithdrawEditionBalance,
   useRadarEditionsWithdrawEditionBalance,
@@ -15,7 +14,7 @@ import {
 import { parseEther } from '@/lib/utils';
 import { ProjectWithChainData } from '@/pages/profile/[id]';
 import { ProjectStatus } from '@/types/mongo';
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { chains } from '../Providers/Web3Provider';
 import { Button } from '../ui/button';
@@ -24,25 +23,17 @@ import { Input } from '../ui/input';
 import { useToast } from '../ui/use-toast';
 
 export function WithdrawETHButton({ status, editionId }: ProjectWithChainData) {
-  const amountRef = useRef<HTMLInputElement>(null);
+  const [amount, setAmount] = useState(0);
   const { toast } = useToast();
   const { address } = useAccount();
-  const { isLoggedIn } = useAuth();
   const { config } = usePrepareRadarEditionsWithdrawEditionBalance({
     account: address,
     address: CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
-    enabled:
-      Boolean(address) &&
-      amountRef.current?.value !== undefined &&
-      editionId !== undefined,
-    args: [
-      BigInt(editionId || 0),
-      parseEther(amountRef.current?.value.toString() || '0'),
-    ],
+    enabled: Boolean(address) && editionId !== undefined,
+    args: [BigInt(editionId || 0), parseEther(amount.toString())],
   });
   const { writeAsync, error } = useRadarEditionsWithdrawEditionBalance(config);
-
   function onSubmit() {
     writeAsync?.();
   }
@@ -83,7 +74,8 @@ export function WithdrawETHButton({ status, editionId }: ProjectWithChainData) {
               Amount (in ETH)
             </Label>
             <Input
-              ref={amountRef}
+              value={amount}
+              onChange={(e) => setAmount(+e.target.value)}
               id="amount"
               type="number"
               className="col-span-3"
@@ -91,12 +83,8 @@ export function WithdrawETHButton({ status, editionId }: ProjectWithChainData) {
           </div>
         </div>
         <DialogFooter>
-          <Button
-            type="submit"
-            onClick={() => onSubmit()}
-            disabled={!isLoggedIn}
-          >
-            {isLoggedIn ? 'WITHDRAW' : 'Please Sign In'}
+          <Button type="submit" onClick={() => onSubmit()}>
+            WITHDRAW
           </Button>
         </DialogFooter>
       </DialogContent>
