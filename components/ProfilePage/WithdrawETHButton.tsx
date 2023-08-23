@@ -15,7 +15,7 @@ import { parseEther } from '@/lib/utils';
 import { ProjectWithChainData } from '@/pages/profile/[id]';
 import { ProjectStatus } from '@/types/mongo';
 import { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useWaitForTransaction } from 'wagmi';
 import { chains } from '../Providers/Web3Provider';
 import { Button } from '../ui/button';
 import { DialogFooter, DialogHeader } from '../ui/dialog';
@@ -24,6 +24,9 @@ import { useToast } from '../ui/use-toast';
 
 export function WithdrawETHButton({ status, editionId }: ProjectWithChainData) {
   const [amount, setAmount] = useState(0);
+  const [hasToasted, setHasToasted] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
   const { toast } = useToast();
   const { address } = useAccount();
   const { config } = usePrepareRadarEditionsWithdrawEditionBalance({
@@ -33,7 +36,33 @@ export function WithdrawETHButton({ status, editionId }: ProjectWithChainData) {
     enabled: Boolean(address) && editionId !== undefined,
     args: [BigInt(editionId || 0), parseEther(amount.toString())],
   });
-  const { writeAsync, error } = useRadarEditionsWithdrawEditionBalance(config);
+  const { writeAsync, data, error } =
+    useRadarEditionsWithdrawEditionBalance(config);
+  const { isLoading, isSuccess } = useWaitForTransaction({
+    hash: data?.hash,
+    enabled: data?.hash !== undefined,
+  });
+
+  useEffect(() => {
+    if (isLoading && data?.hash) {
+      toast({
+        title: 'Transaction sent!',
+        description: 'Awaiting for confirmation...',
+      });
+    }
+  }, [isLoading, data?.hash]);
+
+  useEffect(() => {
+    if (isSuccess && data?.hash && !hasToasted) {
+      toast({
+        title: 'Success!',
+        description: 'Your NFT has been minted!',
+      });
+      setHasToasted(true);
+      setIsOpen(false);
+    }
+  }, [isSuccess, data?.hash]);
+
   function onSubmit() {
     writeAsync?.();
   }
@@ -50,7 +79,7 @@ export function WithdrawETHButton({ status, editionId }: ProjectWithChainData) {
   }, [error]);
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
           disabled={
