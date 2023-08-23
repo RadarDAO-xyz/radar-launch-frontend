@@ -1,11 +1,11 @@
-import dynamic from "next/dynamic";
+import dynamic from 'next/dynamic';
 
 const CreateFormNoSSR = dynamic(
   () =>
-    import("@/components/CreateProjectPage/CreateForm").then(
-      (mod) => mod.CreateForm
+    import('@/components/CreateProjectPage/CreateForm').then(
+      (mod) => mod.CreateForm,
     ),
-  { ssr: false }
+  { ssr: false },
 );
 
 export default function CreateProjectPage() {

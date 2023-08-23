@@ -6,13 +6,13 @@ import {
   useContext,
   useEffect,
   useState,
-} from "react";
-import { useConnect, useDisconnect, useAccount, useQuery } from "wagmi";
-import { Web3Context } from "./Web3Provider";
-import { authenticateUser } from "@/lib/backend";
-import { getPublicCompressed } from "@toruslabs/eccrypto";
-import { Web3AuthConnector } from "@web3auth/web3auth-wagmi-connector";
-import { CacheKey } from "@/constants/react-query";
+} from 'react';
+import { useConnect, useDisconnect, useAccount, useQuery } from 'wagmi';
+import { Web3Context } from './Web3Provider';
+import { authenticateUser } from '@/lib/backend';
+import { getPublicCompressed } from '@toruslabs/eccrypto';
+import { Web3AuthConnector } from '@web3auth/web3auth-wagmi-connector';
+import { CacheKey } from '@/constants/react-query';
 
 interface AuthContextType {
   idToken: string;
@@ -23,7 +23,7 @@ interface AuthContextType {
 }
 
 export const AuthContext = createContext<AuthContextType>({
-  idToken: "",
+  idToken: '',
   setIdToken: () => {},
   login: () => {},
   logout: () => {},
@@ -36,13 +36,13 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
   const { web3Auth } = useContext(Web3Context) ?? {};
   const { address, isConnected } = useAccount();
 
-  const [idToken, setIdToken] = useState("");
+  const [idToken, setIdToken] = useState('');
   // logged in status is dependent on backend as well, hence we use idToken and not isConnected
   const [isLoggedIn, setIsLoggedIn] = useState(
-    idToken !== undefined && isConnected
+    idToken !== undefined && isConnected,
   );
   const [isWalletLogin, setIsWalletLoggedIn] = useState(false);
-  const [appPubKey, setAppPubKey] = useState("");
+  const [appPubKey, setAppPubKey] = useState('');
 
   // backend auth
   useQuery(
@@ -51,9 +51,9 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
     {
       enabled:
         isLoggedIn &&
-        idToken !== "" &&
-        (address !== undefined || appPubKey !== ""),
-    }
+        idToken !== '' &&
+        (address !== undefined || appPubKey !== ''),
+    },
   );
 
   useEffect(() => {
@@ -72,11 +72,14 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
         if (socialLoginUserInfo?.idToken) {
           setIsWalletLoggedIn(false);
           const app_scoped_privkey = await web3Auth.provider?.request({
-            method: "eth_private_key",
+            method: 'eth_private_key',
           });
           const app_pub_key = getPublicCompressed(
-            Buffer.from((app_scoped_privkey as string).padStart(64, "0"), "hex")
-          ).toString("hex");
+            Buffer.from(
+              (app_scoped_privkey as string).padStart(64, '0'),
+              'hex',
+            ),
+          ).toString('hex');
           setAppPubKey(app_pub_key);
         } else {
           setIsWalletLoggedIn(true);

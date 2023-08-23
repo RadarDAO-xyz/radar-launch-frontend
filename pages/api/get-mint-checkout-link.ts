@@ -1,8 +1,6 @@
-import {
-  PAPER_CONTRACT_ID
-} from "@/constants/paper";
-import { formatEther } from "@/lib/utils";
-import { NextApiRequest, NextApiResponse } from "next";
+import { PAPER_CONTRACT_ID } from '@/constants/paper';
+import { formatEther } from '@/lib/utils';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 interface Response {
   checkoutLinkIntentUrl: string;
@@ -14,8 +12,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Response | { message: string }>
 ) {
-  if (req.method !== "POST") {
-    return res.status(404).json({ message: "Not found" });
+  if (req.method !== 'POST') {
+    return res.status(404).json({ message: 'Not found' });
   }
   try {
     const {
@@ -26,7 +24,7 @@ export default async function handler(
       imageUrl,
       projectId,
       socials,
-      payingWithCard,
+      payingWithCard
     } = req.body;
     console.log({
       editionId,
@@ -36,18 +34,18 @@ export default async function handler(
       imageUrl,
       projectId,
       socials,
-      payingWithCard,
+      payingWithCard
     });
     if (editionId === undefined || !value || !quantity || !title || !imageUrl) {
-      return res.status(400).json({ message: "Invalid editionId or value" });
+      return res.status(400).json({ message: 'Invalid editionId or value' });
     }
     const ethValue = formatEther(value).toString();
     const options = {
-      method: "POST",
+      method: 'POST',
       headers: {
-        accept: "application/json",
-        "content-type": "application/json",
-        Authorization: "Bearer " + process.env.PAPER_API_KEY,
+        accept: 'application/json',
+        'content-type': 'application/json',
+        Authorization: 'Bearer ' + process.env.PAPER_API_KEY
       },
       body: JSON.stringify({
         contractId: PAPER_CONTRACT_ID,
@@ -57,40 +55,40 @@ export default async function handler(
         // description: "Describe your project *with Markdown!*",
         successCallbackUrl: projectId
           ? `https://radarlaunch.app/project/${projectId}`
-          : "https://radarlaunch.app",
-        cancelCallbackUrl: "https://radarlaunch.app/project/create",
+          : 'https://radarlaunch.app',
+        cancelCallbackUrl: 'https://radarlaunch.app/project/create',
         sendEmailOnCreation: true,
         quantity,
         metadata: {},
         mintMethod: {
-          name: "mintEdition",
+          name: 'mintEdition',
           args: {
             editionId,
-            buyer: "$WALLET",
-            amount: "$QUANTITY",
-            data: "0x0000000000000000000000000000000000000000000000000000000000000000",
+            buyer: '$WALLET',
+            amount: '$QUANTITY',
+            data: '0x0000000000000000000000000000000000000000000000000000000000000000'
           },
-          payment: { currency: "ETH", value: `${ethValue} * $QUANTITY` },
+          payment: { currency: 'ETH', value: `${ethValue} * $QUANTITY` }
         },
         ...(payingWithCard
           ? { hidePayWithCrypto: true } // hide ETH + Optimism
           : { hidePayWithCard: true }), // hide Card + Optimism
-        feeBearer: "BUYER",
-        sendEmailOnTransferSucceeded: true,
-      }),
+        feeBearer: 'BUYER',
+        sendEmailOnTransferSucceeded: true
+      })
     };
 
     const response = await fetch(
-      "https://withpaper.com/api/2022-08-12/checkout-link-intent",
+      'https://withpaper.com/api/2022-08-12/checkout-link-intent',
       options
     ).then((response) => response.json());
     if (response.error) {
       throw response.error;
     }
-    res.setHeader("Cache-Control", "no-store, max-age=0");
+    res.setHeader('Cache-Control', 'no-store, max-age=0');
     return res.status(200).json(response);
   } catch (e) {
     console.log(e);
-    return res.status(400).json({ message: "Error has occured" });
+    return res.status(400).json({ message: 'Error has occured' });
   }
 }

@@ -1,5 +1,5 @@
-import React from "react";
-import Link from "next/link";
+import React from 'react';
+import Link from 'next/link';
 
 export function InspirationFooter() {
   return (
@@ -7,17 +7,17 @@ export function InspirationFooter() {
       <div className="hero-wrapper full biffer">
         <div className="hero-split right-buffer">
           <h1 className="feature-heading">
-            {"Still looking for inspiration?"}
+            {'Still looking for inspiration?'}
           </h1>
           <div className="_20px-div" />
           <p className="body-text text-left">
             {
-              "The RADAR community of 300+ future seekers are behind RADAR Launch."
+              'The RADAR community of 300+ future seekers are behind RADAR Launch.'
             }
             <br />
             <br />
             {
-              "To inspire your ideas for a more playful world, we invite you to..."
+              'To inspire your ideas for a more playful world, we invite you to...'
             }
           </p>
           <div className="_20px-div" />
@@ -27,8 +27,8 @@ export function InspirationFooter() {
               href="https://www.launch.radardao.xyz/brief"
               target="_blank"
             >
-              {"Find inspiration in our creative briefs "}
-              <span className="right-arrow">{"→"}</span>
+              {'Find inspiration in our creative briefs '}
+              <span className="right-arrow">{'→'}</span>
             </Link>
           </div>
           <div className="_10px-div" />
@@ -38,8 +38,8 @@ export function InspirationFooter() {
               href="https://lu.ma/radarcommunityevents"
               target="_blank"
             >
-              {"Register for one of our what-if workshops "}
-              <span className="right-arrow">{"→"}</span>
+              {'Register for one of our what-if workshops '}
+              <span className="right-arrow">{'→'}</span>
             </Link>
           </div>
           <div className="_10px-div" />
@@ -49,8 +49,8 @@ export function InspirationFooter() {
               href="https://discord.gg/fpfAsR4nRt"
               target="_blank"
             >
-              {"Join our public Discord server to jam on ideas "}
-              <span className="right-arrow">{"→"}</span>
+              {'Join our public Discord server to jam on ideas '}
+              <span className="right-arrow">{'→'}</span>
             </Link>
           </div>
         </div>

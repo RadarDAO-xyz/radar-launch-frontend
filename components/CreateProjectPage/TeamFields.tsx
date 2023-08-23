@@ -1,9 +1,9 @@
-import { ReactNode } from "react";
-import { useFieldArray, useFormContext } from "react-hook-form";
-import { TinyMCE } from "../Layout/TinyMCE";
-import { Button } from "../ui/button";
-import { FormControl, FormField, FormItem, FormMessage } from "../ui/form";
-import { Input } from "../ui/input";
+import { ReactNode } from 'react';
+import { useFieldArray, useFormContext } from 'react-hook-form';
+import { TinyMCE } from '../Layout/TinyMCE';
+import { Button } from '../ui/button';
+import { FormControl, FormField, FormItem, FormMessage } from '../ui/form';
+import { Input } from '../ui/input';
 
 interface Props {
   children?: ReactNode;
@@ -12,7 +12,7 @@ interface Props {
 export const TeamFields = ({ children }: Props) => {
   const { control } = useFormContext();
   const { fields, append, remove } = useFieldArray({
-    name: "team",
+    name: 'team',
     control,
   });
 
@@ -21,7 +21,7 @@ export const TeamFields = ({ children }: Props) => {
       {fields.map((row, index) => (
         <div key={row.id} className="mb-6 space-y-4">
           <FormField
-            key={row.id + "name"}
+            key={row.id + 'name'}
             name={`team.${index}.name`}
             render={({ field }) => (
               <FormItem>
@@ -33,7 +33,7 @@ export const TeamFields = ({ children }: Props) => {
             )}
           />
           <FormField
-            key={row.id + "bio"}
+            key={row.id + 'bio'}
             name={`team.${index}.bio`}
             render={({ field }) => {
               const { onChange, ...rest } = field;
@@ -43,7 +43,7 @@ export const TeamFields = ({ children }: Props) => {
                     <TinyMCE
                       {...rest}
                       init={{
-                        placeholder: "Bio",
+                        placeholder: 'Bio',
                       }}
                       onEditorChange={(value, editor) => {
                         onChange(value);
@@ -56,7 +56,7 @@ export const TeamFields = ({ children }: Props) => {
             }}
           />
           <FormField
-            key={row.id + "email"}
+            key={row.id + 'email'}
             name={`team.${index}.email`}
             render={({ field }) => (
               <FormItem>
@@ -72,8 +72,8 @@ export const TeamFields = ({ children }: Props) => {
       <Button
         type="button"
         className="w-full"
-        variant={"ghost"}
-        onClick={() => append({ name: "", bio: "", email: "" })}
+        variant={'ghost'}
+        onClick={() => append({ name: '', bio: '', email: '' })}
       >
         + add another
       </Button>

@@ -1,4 +1,4 @@
-import { VIMEO_REGEX, YOUTUBE_REGEX } from "@/constants/regex";
+import { VIMEO_REGEX, YOUTUBE_REGEX } from '@/constants/regex';
 
 export function isValidVideoLink(videoUrl: string) {
   return (

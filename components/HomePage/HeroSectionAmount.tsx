@@ -1,5 +1,5 @@
-import { useGetExchangeRate } from "@/hooks/useGetExchangeRate";
-import { convertWeiToUsdOrEth } from "@/lib/convertWeiToUsdOrEth";
+import { useGetExchangeRate } from '@/hooks/useGetExchangeRate';
+import { convertWeiToUsdOrEth } from '@/lib/convertWeiToUsdOrEth';
 
 interface Props {
   data?: readonly {
@@ -9,22 +9,22 @@ interface Props {
     owner: `0x${string}`;
     id: string;
   }[];
-  exchangeRateData?: ReturnType<typeof useGetExchangeRate>["data"];
+  exchangeRateData?: ReturnType<typeof useGetExchangeRate>['data'];
 }
 
 export function HeroSectionAmount({ data, exchangeRateData }: Props) {
   return (
     <h1 className="heading-5">
-      {"$" +
+      {'$' +
         (
           12400 +
           (data && exchangeRateData?.ethereum?.usd
             ? +convertWeiToUsdOrEth(
                 data.reduce((acc, edition) => acc + edition.balance, 0n),
-                exchangeRateData.ethereum.usd
+                exchangeRateData.ethereum.usd,
               )
             : 0)
-        ).toLocaleString("en-US", {
+        ).toLocaleString('en-US', {
           maximumFractionDigits: 0,
         })}
     </h1>

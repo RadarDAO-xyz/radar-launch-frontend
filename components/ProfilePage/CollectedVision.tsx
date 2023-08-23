@@ -1,9 +1,8 @@
-import { ProjectWithOwnedAmount } from "@/pages/profile/[id]";
-import { Project } from "@/types/mongo";
-import { Button } from "../ui/button";
-import Link from "next/link";
-import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
-import { HTMLParsedComponent } from "../Layout/HTMLParsedComponent";
+import { generateVideoThumbnail } from '@/lib/generateVideoThumbnail';
+import { ProjectWithOwnedAmount } from '@/pages/profile/[id]';
+import Link from 'next/link';
+import { HTMLParsedComponent } from '../Layout/HTMLParsedComponent';
+import { Button } from '../ui/button';
 
 export function CollectedVision({
   brief,
@@ -13,22 +12,22 @@ export function CollectedVision({
   _id,
 }: ProjectWithOwnedAmount) {
   return (
-    <div className="p-2 col-span-1">
-      <HTMLParsedComponent text={brief} className="text-xs pb-2" />
+    <div className="col-span-1 p-2">
+      <HTMLParsedComponent text={brief} className="pb-2 text-xs" />
       <img
         src={generateVideoThumbnail(video_url)}
-        alt={title + " thumbnail"}
-      />{" "}
-      <h3 className="py-3 font-semibold hover:opacity-60 transition-opacity leading-5">
+        alt={title + ' thumbnail'}
+      />{' '}
+      <h3 className="py-3 font-semibold leading-5 transition-opacity hover:opacity-60">
         <Link href={`/project/${_id}`}>{title}</Link>
       </h3>
       <div className="flex">
         <HTMLParsedComponent
-          className="text-xs overflow-hidden h-8  text-ellipsis whitespace-nowrap"
+          className="h-8 overflow-hidden text-ellipsis  whitespace-nowrap text-xs"
           text={tldr}
         />
         {tldr.length > 60 && (
-          <span className="text-sm relative -top-1">...</span>
+          <span className="relative -top-1 text-sm">...</span>
         )}
       </div>
       <Button className="w-full" asChild>

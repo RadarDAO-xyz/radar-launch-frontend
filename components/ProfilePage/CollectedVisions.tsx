@@ -1,5 +1,5 @@
-import { ProjectWithOwnedAmount } from "@/pages/profile/[id]";
-import { CollectedVision } from "./CollectedVision";
+import { ProjectWithOwnedAmount } from '@/pages/profile/[id]';
+import { CollectedVision } from './CollectedVision';
 
 export function CollectedVisions({
   projects,
@@ -7,9 +7,9 @@ export function CollectedVisions({
   projects: ProjectWithOwnedAmount[];
 }) {
   return (
-    <div className="p-8 rounded-lg border mb-6">
+    <div className="mb-6 rounded-lg border p-8">
       <h2 className="text-xl">COLLECTED VISIONS</h2>
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-2">
+      <div className="grid grid-cols-1 gap-2 lg:grid-cols-4">
         {projects.map((edition) => (
           <CollectedVision {...edition} key={edition._id} />
         ))}

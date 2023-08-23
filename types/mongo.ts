@@ -4,7 +4,7 @@ export enum ProjectStatus {
   LIVE,
   BUILDING,
   REJECTED,
-  CANCELLED,
+  CANCELLED
 }
 
 export type Project = {
@@ -102,15 +102,15 @@ export type ProjectUpdate = {
 };
 
 export enum Brief {
-  THE_ENCHANTRESS = "The Enchantress",
-  THE_HEALER = "The Healer",
-  THE_MEDIATOR = "The Mediator",
-  THE_TEACHER = "The Teacher",
-  THE_ARTIST = "The Artist",
-  THE_NEW_PLAYERS = "The New Players",
+  THE_ENCHANTRESS = 'The Enchantress',
+  THE_HEALER = 'The Healer',
+  THE_MEDIATOR = 'The Mediator',
+  THE_TEACHER = 'The Teacher',
+  THE_ARTIST = 'The Artist',
+  THE_NEW_PLAYERS = 'The New Players'
 }
 
 export enum SupportType {
   SIGN_UP,
-  CONTRIBUTE,
+  CONTRIBUTE
 }

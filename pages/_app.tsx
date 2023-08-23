@@ -1,23 +1,23 @@
-import "@/devlink/global.css";
-import "@/styles/globals.css";
+import '@/devlink/global.css';
+import '@/styles/globals.css';
 
-import { AuthProvider } from "@/components/Providers/AuthProvider";
-import { PreLaunchFooter } from "@/components/HomePage/PreLaunchFooter";
-import { NavBar } from "@/components/Layout/NavBar";
-import { Toaster } from "@/components/ui/toaster";
-import type { AppProps } from "next/app";
-import dynamic from "next/dynamic";
-import Head from "next/head";
-import Script from "next/script";
-import { ThemeProvider } from "@/components/Providers/ThemeProvider";
-import CookieConsent from "@/components/Layout/CookieConsent";
+import { AuthProvider } from '@/components/Providers/AuthProvider';
+import { PreLaunchFooter } from '@/components/HomePage/PreLaunchFooter';
+import { NavBar } from '@/components/Layout/NavBar';
+import { Toaster } from '@/components/ui/toaster';
+import type { AppProps } from 'next/app';
+import dynamic from 'next/dynamic';
+import Head from 'next/head';
+import Script from 'next/script';
+import { ThemeProvider } from '@/components/Providers/ThemeProvider';
+import CookieConsent from '@/components/Layout/CookieConsent';
 
 const Web3ProviderNoSSR = dynamic(
   () =>
-    import("@/components/Providers/Web3Provider").then(
-      (mod) => mod.Web3Provider
+    import('@/components/Providers/Web3Provider').then(
+      (mod) => mod.Web3Provider,
     ),
-  { ssr: false }
+  { ssr: false },
 );
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -42,7 +42,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="author" content="RADAR Launch" />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        {process.env.NODE_ENV === "production" && (
+        {process.env.NODE_ENV === 'production' && (
           <base href="https://radarlaunch.app" />
         )}
 
@@ -85,7 +85,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
-          themes={["light"]}
+          themes={['light']}
         >
           <AuthProvider>
             <NavBar />

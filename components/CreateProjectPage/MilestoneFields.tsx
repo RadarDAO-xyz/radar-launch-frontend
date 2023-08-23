@@ -1,13 +1,13 @@
-import { useFieldArray, useFormContext } from "react-hook-form";
-import { TinyMCE } from "../Layout/TinyMCE";
-import { Button } from "../ui/button";
-import { FormControl, FormField, FormItem, FormMessage } from "../ui/form";
-import { Input } from "../ui/input";
+import { useFieldArray, useFormContext } from 'react-hook-form';
+import { TinyMCE } from '../Layout/TinyMCE';
+import { Button } from '../ui/button';
+import { FormControl, FormField, FormItem, FormMessage } from '../ui/form';
+import { Input } from '../ui/input';
 
 export const MilestoneFields = () => {
   const { control } = useFormContext();
   const { fields, append, remove } = useFieldArray({
-    name: "milestones",
+    name: 'milestones',
     control,
   });
 
@@ -16,7 +16,7 @@ export const MilestoneFields = () => {
       {fields.map((field, index) => (
         <div key={field.id} className="mb-6">
           <FormField
-            key={field.id + "amount"}
+            key={field.id + 'amount'}
             name={`milestones.${index}.amount`}
             render={({ field }) => (
               <FormItem className="pb-4">
@@ -28,7 +28,7 @@ export const MilestoneFields = () => {
             )}
           />
           <FormField
-            key={field.id + "text"}
+            key={field.id + 'text'}
             name={`milestones.${index}.text`}
             render={({ field }) => {
               const { onChange, ...rest } = field;
@@ -50,10 +50,10 @@ export const MilestoneFields = () => {
         </div>
       ))}
       <Button
-        variant={"ghost"}
+        variant={'ghost'}
         type="button"
         className="w-full"
-        onClick={() => append({ amount: "", text: "" })}
+        onClick={() => append({ amount: '', text: '' })}
       >
         + add another
       </Button>

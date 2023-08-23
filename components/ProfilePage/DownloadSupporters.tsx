@@ -6,24 +6,24 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { useAuth } from "@/hooks/useAuth";
-import { downloadProjectSupporters } from "@/lib/backend";
-import { ProjectWithChainData } from "@/pages/profile/[id]";
-import { Project, ProjectStatus } from "@/types/mongo";
-import { DownloadIcon } from "lucide-react";
-import { useMutation } from "wagmi";
-import { Button } from "../ui/button";
-import { useToast } from "../ui/use-toast";
-import { CacheKey } from "@/constants/react-query";
+} from '@/components/ui/dialog';
+import { useAuth } from '@/hooks/useAuth';
+import { downloadProjectSupporters } from '@/lib/backend';
+import { ProjectWithChainData } from '@/pages/profile/[id]';
+import { Project, ProjectStatus } from '@/types/mongo';
+import { DownloadIcon } from 'lucide-react';
+import { useMutation } from 'wagmi';
+import { Button } from '../ui/button';
+import { useToast } from '../ui/use-toast';
+import { CacheKey } from '@/constants/react-query';
 
 function downloadTextAsCsv(text: string, fileName: string) {
   if (text !== undefined) {
-    const encodedURI = encodeURI("data:text/csv;charset=utf-8," + text);
+    const encodedURI = encodeURI('data:text/csv;charset=utf-8,' + text);
 
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedURI);
-    link.setAttribute("download", fileName);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedURI);
+    link.setAttribute('download', fileName);
     document.body.appendChild(link);
 
     link.click();
@@ -43,12 +43,12 @@ export function DownloadSupporters({ status, _id, title }: Project) {
       onError: (e) => {
         console.error(e);
         toast({
-          variant: "destructive",
-          title: "An unexpected error occured",
-          description: "Check the console for more information",
+          variant: 'destructive',
+          title: 'An unexpected error occured',
+          description: 'Check the console for more information',
         });
       },
-    }
+    },
   );
 
   return (
@@ -79,10 +79,10 @@ export function DownloadSupporters({ status, _id, title }: Project) {
             disabled={!isLoggedIn}
           >
             {!isLoggedIn ? (
-              "Please Sign In"
+              'Please Sign In'
             ) : (
               <>
-                <DownloadIcon className="w-4 h-4 mr-2" />
+                <DownloadIcon className="mr-2 h-4 w-4" />
                 DOWNLOAD
               </>
             )}

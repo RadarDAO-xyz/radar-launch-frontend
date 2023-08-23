@@ -1,42 +1,42 @@
-import { useForm } from "react-hook-form";
-import { Button } from "../ui/button";
+import { useForm } from 'react-hook-form';
+import { Button } from '../ui/button';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "wagmi";
-import { SupportType } from "@/types/mongo";
-import { contributeProject, signupProject } from "@/lib/backend";
-import { useToast } from "../ui/use-toast";
-import { Textarea } from "../ui/textarea";
+} from '../ui/form';
+import { Input } from '../ui/input';
+import * as z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from 'wagmi';
+import { SupportType } from '@/types/mongo';
+import { contributeProject, signupProject } from '@/lib/backend';
+import { useToast } from '../ui/use-toast';
+import { Textarea } from '../ui/textarea';
 
 interface Props {
   id: string;
 }
 
 const formSchema = z.object({
-  email: z.string().email().min(1, { message: "Email is required" }),
+  email: z.string().email().min(1, { message: 'Email is required' }),
   social: z.string(),
-  skillset: z.string().min(1, { message: "Please describe your skillset" }),
+  skillset: z.string().min(1, { message: 'Please describe your skillset' }),
   contribution: z
     .string()
-    .min(1, { message: "Please describe how you would contribute" }),
+    .min(1, { message: 'Please describe how you would contribute' }),
 });
 
 export function ContributeForm({ id }: Props) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      social: "",
-      skillset: "",
-      contribution: "",
+      email: '',
+      social: '',
+      skillset: '',
+      contribution: '',
     },
   });
   const { toast } = useToast();
@@ -50,8 +50,8 @@ export function ContributeForm({ id }: Props) {
   const { email, social, skillset, contribution } = watch();
 
   const { mutateAsync, isSuccess, isLoading } = useMutation(
-    ["signup-project", SupportType.CONTRIBUTE, id, email],
-    () => contributeProject(id, social, email, skillset, contribution)
+    ['signup-project', SupportType.CONTRIBUTE, id, email],
+    () => contributeProject(id, social, email, skillset, contribution),
   );
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -63,21 +63,23 @@ export function ContributeForm({ id }: Props) {
     } catch (e) {
       console.error(e);
       toast({
-        variant: "destructive",
-        title: "An unexpected error occured",
-        description: "Check the console for more information",
+        variant: 'destructive',
+        title: 'An unexpected error occured',
+        description: 'Check the console for more information',
       });
     }
   }
 
   return (
     <div className="p-4">
-      <h2 className="text-xl text-center pb-6 font-base">Help Build this Project</h2>
+      <h2 className="pb-6 text-center font-base text-xl">
+        Help Build this Project
+      </h2>
       {!isSuccess ? (
         <Form {...form}>
           {/* @ts-expect-error Netlify form submission */}
-          <form netlify={"true"} onSubmit={handleSubmit(onSubmit)}>
-            <div className="flex sm:space-x-4 space-y-4 sm:space-y-0 mb-4 sm:flex-row flex-col">
+          <form netlify={'true'} onSubmit={handleSubmit(onSubmit)}>
+            <div className="mb-4 flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
               <FormField
                 control={control}
                 name="social"

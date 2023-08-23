@@ -1,9 +1,9 @@
-import { deleteProject } from "@/lib/backend";
-import { useMutation, useQueryClient } from "wagmi";
-import { useAuth } from "@/hooks/useAuth";
-import { useToast } from "../ui/use-toast";
-import { Button } from "../ui/button";
-import { CacheKey } from "@/constants/react-query";
+import { deleteProject } from '@/lib/backend';
+import { useMutation, useQueryClient } from 'wagmi';
+import { useAuth } from '@/hooks/useAuth';
+import { useToast } from '../ui/use-toast';
+import { Button } from '../ui/button';
+import { CacheKey } from '@/constants/react-query';
 
 export function DeleteProjectButton({ projectId }: { projectId: string }) {
   const { idToken } = useAuth();
@@ -16,18 +16,18 @@ export function DeleteProjectButton({ projectId }: { projectId: string }) {
       onError: (e) => {
         console.error(e);
         toast({
-          variant: "destructive",
-          title: "An unexpected error occured",
-          description: "Check the console for more information",
+          variant: 'destructive',
+          title: 'An unexpected error occured',
+          description: 'Check the console for more information',
         });
       },
       onSuccess: async () => {
         await queryClient.invalidateQueries([CacheKey.PROJECTS]);
         toast({
-          title: "Successfully deleted project",
+          title: 'Successfully deleted project',
         });
       },
-    }
+    },
   );
 
   return (

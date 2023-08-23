@@ -1,40 +1,40 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { CONTRACT_ADDRESS } from "@/constants/address";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { CONTRACT_ADDRESS } from '@/constants/address';
 import {
   usePrepareRadarEditionsApproveEdition,
   usePrepareRadarEditionsStopEdition,
   useRadarEditionsApproveEdition,
   useRadarEditionsStopEdition,
-} from "@/lib/generated";
-import { Project, ProjectStatus } from "@/types/mongo";
-import { useRef, useState } from "react";
-import { DownloadSupporters } from "../ProfilePage/DownloadSupporters";
-import { chains } from "../Providers/Web3Provider";
-import { DialogFooter } from "../ui/dialog";
-import { useToast } from "../ui/use-toast";
-import { DeleteProjectButton } from "./DeleteProjectButton";
-import { useAuth } from "@/hooks/useAuth";
-import { useMutation, useQueryClient } from "wagmi";
-import { CacheKey } from "@/constants/react-query";
-import { updateProject } from "@/lib/backend";
-import { cn } from "@/lib/utils";
+} from '@/lib/generated';
+import { Project, ProjectStatus } from '@/types/mongo';
+import { useRef, useState } from 'react';
+import { DownloadSupporters } from '../ProfilePage/DownloadSupporters';
+import { chains } from '../Providers/Web3Provider';
+import { DialogFooter } from '../ui/dialog';
+import { useToast } from '../ui/use-toast';
+import { DeleteProjectButton } from './DeleteProjectButton';
+import { useAuth } from '@/hooks/useAuth';
+import { useMutation, useQueryClient } from 'wagmi';
+import { CacheKey } from '@/constants/react-query';
+import { updateProject } from '@/lib/backend';
+import { cn } from '@/lib/utils';
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-} from "@/components/ui/popover";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
+} from '@/components/ui/popover';
+import { format } from 'date-fns';
+import { CalendarIcon } from 'lucide-react';
+import { Calendar } from '@/components/ui/calendar';
 
 interface ProjectWithChainData extends Project {
   editionId?: number;
@@ -49,10 +49,10 @@ export function ProjectActions(props: ProjectWithChainData) {
   const { idToken } = useAuth();
   const projectStatusRef = useRef<HTMLInputElement>(null);
   const [curationStart, setCurationStart] = useState<Date | undefined>(
-    curation?.start ? new Date(curation.start) : undefined
+    curation?.start ? new Date(curation.start) : undefined,
   );
   const [curationEnd, setCurationEnd] = useState<Date | undefined>(
-    curation?.end ? new Date(curation.end) : undefined
+    curation?.end ? new Date(curation.end) : undefined,
   );
 
   const { toast } = useToast();
@@ -86,7 +86,7 @@ export function ProjectActions(props: ProjectWithChainData) {
           },
         },
         _id,
-        idToken
+        idToken,
       ),
     {
       onSuccess: () => {
@@ -95,12 +95,12 @@ export function ProjectActions(props: ProjectWithChainData) {
       onError: (e) => {
         console.error(e);
         toast({
-          variant: "destructive",
-          title: "An unexpected error occured",
-          description: "Check the console for more information",
+          variant: 'destructive',
+          title: 'An unexpected error occured',
+          description: 'Check the console for more information',
         });
       },
-    }
+    },
   );
 
   return (
@@ -130,14 +130,14 @@ export function ProjectActions(props: ProjectWithChainData) {
             <Popover>
               <PopoverTrigger asChild>
                 <Button
-                  variant={"outline"}
+                  variant={'outline'}
                   className={cn(
-                    "w-full pl-3 text-left font-normal",
-                    !curationStart && "text-muted-foreground"
+                    'w-full pl-3 text-left font-normal',
+                    !curationStart && 'text-muted-foreground',
                   )}
                 >
                   {curationStart ? (
-                    format(curationStart, "PPP")
+                    format(curationStart, 'PPP')
                   ) : (
                     <span>Pick a date</span>
                   )}
@@ -162,14 +162,14 @@ export function ProjectActions(props: ProjectWithChainData) {
             <Popover>
               <PopoverTrigger asChild>
                 <Button
-                  variant={"outline"}
+                  variant={'outline'}
                   className={cn(
-                    "w-full pl-3 text-left font-normal",
-                    !curationEnd && "text-muted-foreground"
+                    'w-full pl-3 text-left font-normal',
+                    !curationEnd && 'text-muted-foreground',
                   )}
                 >
                   {curationEnd ? (
-                    format(curationEnd, "PPP")
+                    format(curationEnd, 'PPP')
                   ) : (
                     <span>Pick a date</span>
                   )}
@@ -195,9 +195,9 @@ export function ProjectActions(props: ProjectWithChainData) {
                 } catch (e) {
                   console.error(e);
                   toast({
-                    variant: "destructive",
-                    title: "An unexpected error occured",
-                    description: "Check the console for more information",
+                    variant: 'destructive',
+                    title: 'An unexpected error occured',
+                    description: 'Check the console for more information',
                   });
                 }
               }}
@@ -212,9 +212,9 @@ export function ProjectActions(props: ProjectWithChainData) {
                 } catch (e) {
                   console.error(e);
                   toast({
-                    variant: "destructive",
-                    title: "An unexpected error occured",
-                    description: "Check the console for more information",
+                    variant: 'destructive',
+                    title: 'An unexpected error occured',
+                    description: 'Check the console for more information',
                   });
                 }
               }}
