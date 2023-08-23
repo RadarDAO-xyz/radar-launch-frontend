@@ -1,19 +1,19 @@
-import { useAuth } from "@/hooks/useAuth";
-import { Button } from "./ui/button";
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-import { useAccount, useEnsAddress, useEnsName } from "wagmi";
-import { shortenAddress } from "@/lib/utils";
-import { ChevronDown } from "lucide-react";
-import { chains } from "./Web3Provider";
-import Link from "next/link";
-import { useGetCurrentUser } from "@/hooks/useGetCurrentUser";
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { useAuth } from '@/hooks/useAuth';
+import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
+import { shortenAddress } from '@/lib/utils';
+import { ChevronDown } from 'lucide-react';
+import Link from 'next/link';
+import { useAccount, useEnsName } from 'wagmi';
+import { chains } from '../Providers/Web3Provider';
+import { Button } from '../ui/button';
 
 export function Wallet() {
   const { login, logout, isLoggedIn } = useAuth();
@@ -29,7 +29,7 @@ export function Wallet() {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant={"ghost"}>
+          <Button variant={'ghost'}>
             {ensName || shortenAddress(address)}
             <ChevronDown />
           </Button>
@@ -39,6 +39,14 @@ export function Wallet() {
             {ensName || shortenAddress(address)}
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
+          {currentUserData?.bypasser && (
+            <>
+              <DropdownMenuItem className="cursor-pointer" asChild>
+                <Link href="/admin">Admin</Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+            </>
+          )}
           <DropdownMenuItem className="cursor-pointer" asChild>
             <Link href={`/profile/${currentUserData._id}`}>Profile</Link>
           </DropdownMenuItem>
@@ -59,9 +67,9 @@ export function Wallet() {
       onClick={() => {
         login();
       }}
-      variant={"ghost"}
+      variant={'ghost'}
     >
-      Login ⚙
+      LOGIN ⚙
     </Button>
   );
 }

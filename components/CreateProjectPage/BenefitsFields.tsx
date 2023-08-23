@@ -1,15 +1,15 @@
-import { Input } from "@/components/ui/input";
-import { ReactNode } from "react";
-import { useFieldArray, useFormContext } from "react-hook-form";
-import { TinyMCE } from "./Layout/TinyMCE";
-import { Button } from "./ui/button";
+import { Input } from '@/components/ui/input';
+import { ReactNode } from 'react';
+import { useFieldArray, useFormContext } from 'react-hook-form';
+import { TinyMCE } from '../Layout/TinyMCE';
+import { Button } from '../ui/button';
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
+} from '../ui/form';
 
 interface Props {
   children?: ReactNode;
@@ -18,7 +18,7 @@ interface Props {
 export const BenefitsFields = ({ children }: Props) => {
   const { control } = useFormContext();
   const { fields, append, remove } = useFieldArray({
-    name: "benefits",
+    name: 'benefits',
     control,
   });
 
@@ -27,7 +27,7 @@ export const BenefitsFields = ({ children }: Props) => {
       {fields.map((field, index) => (
         <div key={field.id} className="mb-6">
           <FormField
-            key={field.id + "amount"}
+            key={field.id + 'amount'}
             control={control}
             name={`benefits.${index}.amount`}
             render={({ field }) => (
@@ -36,7 +36,7 @@ export const BenefitsFields = ({ children }: Props) => {
                   <FormControl>
                     <Input {...field} type="number" placeholder="#" />
                   </FormControl>
-                  <FormLabel className="w-full mb-0">
+                  <FormLabel className="mb-0 w-full">
                     editions collected
                   </FormLabel>
                 </div>
@@ -45,7 +45,7 @@ export const BenefitsFields = ({ children }: Props) => {
             )}
           />
           <FormField
-            key={field.id + "text"}
+            key={field.id + 'text'}
             control={control}
             name={`benefits.${index}.text`}
             render={({ field }) => {
@@ -68,10 +68,10 @@ export const BenefitsFields = ({ children }: Props) => {
         </div>
       ))}
       <Button
-        variant={"ghost"}
+        variant={'ghost'}
         type="button"
         className="w-full"
-        onClick={() => append({ amount: "", text: "" })}
+        onClick={() => append({ amount: '', text: '' })}
       >
         + add another
       </Button>

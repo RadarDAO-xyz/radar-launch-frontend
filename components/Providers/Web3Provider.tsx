@@ -1,45 +1,42 @@
-import isTestnet from "@/lib/isTestnet";
-import { CHAIN_NAMESPACES } from "@web3auth/base";
-import { MetamaskAdapter } from "@web3auth/metamask-adapter";
-import { Web3Auth } from "@web3auth/modal";
-import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
-import { ReactNode, createContext, useEffect, useState } from "react";
-import { WagmiConfig, configureChains, createConfig } from "wagmi";
-import { optimism, optimismGoerli } from "wagmi/chains";
-import { InjectedConnector } from "wagmi/connectors/injected";
-import { infuraProvider } from "wagmi/providers/infura";
-import { publicProvider } from "wagmi/providers/public";
+import isTestnet from '@/lib/isTestnet';
+import { CHAIN_NAMESPACES } from '@web3auth/base';
+import { MetamaskAdapter } from '@web3auth/metamask-adapter';
+import { Web3Auth } from '@web3auth/modal';
+import { OpenloginAdapter } from '@web3auth/openlogin-adapter';
+import { ReactNode, createContext, useEffect, useState } from 'react';
+import { WagmiConfig, configureChains, createConfig } from 'wagmi';
+import { optimism, optimismGoerli } from 'wagmi/chains';
+import { InjectedConnector } from 'wagmi/connectors/injected';
+import { infuraProvider } from 'wagmi/providers/infura';
+import { publicProvider } from 'wagmi/providers/public';
 
 export const { chains, publicClient, webSocketPublicClient } = configureChains(
   [isTestnet() ? optimismGoerli : optimism],
-  [publicProvider(), infuraProvider({ apiKey: process.env.VITE_INFURA_KEY! })]
+  [publicProvider(), infuraProvider({ apiKey: process.env.VITE_INFURA_KEY! })],
 );
 
 const openloginAdapter = new OpenloginAdapter({
   adapterSettings: {
-    uxMode: "popup",
+    uxMode: 'popup',
     whiteLabel: {
-      name: "RADAR Launch",
-      url: "https://radarlaunch.app",
-      logoLight: "https://radarlaunch.app/project-image.png",
-      logoDark: "https://radarlaunch.app/project-image.png",
-      defaultLanguage: "en", // en, de, ja, ko, zh, es, fr, pt, nl
-      dark: true, // whether to enable dark mode. defaultValue: false
+      name: 'RADAR Launch',
+      url: 'https://radarlaunch.app',
+      logoLight: 'https://radarlaunch.app/project-image.png',
+      logoDark: 'https://radarlaunch.app/project-image.png',
+      defaultLanguage: 'en', // en, de, ja, ko, zh, es, fr, pt, nl
+      dark: false, // whether to enable dark mode. defaultValue: false
       theme: {
-        primary: "#00B4FF",
+        primary: '#00B4FF',
       },
     },
-    network: isTestnet() ? "testnet" : "cyan",
+    network: isTestnet() ? 'testnet' : 'cyan',
   },
 });
 
 const chainConfig = {
   chainNamespace: CHAIN_NAMESPACES.EIP155,
   rpcTarget: chains[0].rpcUrls.default.http[0],
-  // rpcTarget: isTestnet()
-  //   ? `https://optimism-goerli.infura.io/v3/${process.env.VITE_INFURA_KEY}`
-  //   : `https://optimism-mainnet.infura.io/v3/${process.env.VITE_INFURA_KEY}`,
-  chainId: "0x" + chains[0].id.toString(16),
+  chainId: '0x' + chains[0].id.toString(16),
   displayName: chains[0].name,
   tickerName: chains[0].nativeCurrency?.name,
   ticker: chains[0].nativeCurrency?.symbol,
@@ -49,7 +46,7 @@ const chainConfig = {
 const metamaskAdapter = new MetamaskAdapter({
   clientId: process.env.VITE_WEB3AUTH_CLIENT_ID,
   sessionTime: 86400,
-  web3AuthNetwork: isTestnet() ? "testnet" : "cyan",
+  web3AuthNetwork: isTestnet() ? 'testnet' : 'cyan',
   chainConfig,
 });
 
@@ -65,7 +62,7 @@ const wagmiConfig = createConfig({
     new InjectedConnector({
       chains,
       options: {
-        name: "Injected",
+        name: 'Injected',
         shimDisconnect: true,
       },
     }),
@@ -81,14 +78,13 @@ export const Web3Provider = ({ children }: { children?: ReactNode }) => {
     const init = async () => {
       // @ts-ignore
       const newWeb3Auth = new Web3Auth({
-        clientId: process.env.VITE_WEB3AUTH_CLIENT_ID || "",
-        web3AuthNetwork: "cyan",
+        clientId: process.env.VITE_WEB3AUTH_CLIENT_ID || '',
+        web3AuthNetwork: 'cyan',
         chainConfig,
         uiConfig: {
-          // theme: "dark",
-          loginMethodsOrder: ["google", "email_passwordless"],
-          appName: "blockchain",
-          appLogo: "https://radarlaunch.app/project-image.png",
+          loginMethodsOrder: ['google', 'email_passwordless'],
+          appName: 'blockchain',
+          appLogo: 'https://radarlaunch.app/project-image.png',
         },
       });
 

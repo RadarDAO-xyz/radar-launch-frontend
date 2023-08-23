@@ -1,35 +1,36 @@
-import { FundingPoolHome } from "@/components/FundingPoolHome";
-import { HeaderHero } from "@/components/HomePage/HeaderHero";
-import { InspirationFooter } from "@/components/HomePage/InspirationFooter";
-import { Banner } from "@/components/Layout/Banner";
-import { ProjectDiv } from "@/components/ProjectDiv";
-import { Button } from "@/components/ui/button";
-import { useGetProjects } from "@/hooks/useGetProjects";
-import dynamic from "next/dynamic";
-import Link from "next/link";
+import { GrantPoolHome } from '@/components/PoolPage/GrantPoolHome';
+import { HeaderHero } from '@/components/HomePage/HeaderHero';
+import { InspirationFooter } from '@/components/HomePage/InspirationFooter';
+import { Banner } from '@/components/Layout/Banner';
+import { ProjectDiv } from '@/components/HomePage/ProjectDiv';
+import { Button } from '@/components/ui/button';
+import { useGetProjects } from '@/hooks/useGetProjects';
+import dynamic from 'next/dynamic';
+import Link from 'next/link';
 
 const ProjectBlockNoSSR = dynamic(
-  () => import("@/components/ProjectBlock").then((res) => res.ProjectBlock),
+  () =>
+    import('@/components/Layout/ProjectBlock').then((res) => res.ProjectBlock),
   {
     ssr: false,
-  }
+  },
 );
 
 const VisionOfTheWeekProjectNoSSR = dynamic(
   () =>
-    import("@/components/HomePage/VisionOfTheWeek").then(
-      (res) => res.VisionOfTheWeek
+    import('@/components/HomePage/VisionOfTheWeek').then(
+      (res) => res.VisionOfTheWeek,
     ),
   {
     ssr: false,
-  }
+  },
 );
 
 const CENTAUR_PROEJCT_IDS = [
-  "64d3ef19d96faeddac76d82b",
-  "64d3f328d96faeddac76d848",
-  "64d3f928d96faeddac76d86d",
-  "64d3fbece93b67e1d4e27671",
+  '64d3ef19d96faeddac76d82b',
+  '64d3f328d96faeddac76d848',
+  '64d3f928d96faeddac76d86d',
+  '64d3fbece93b67e1d4e27671',
 ];
 
 export default function HomePage() {
@@ -37,27 +38,29 @@ export default function HomePage() {
 
   return (
     <section>
-      <div className="absolute w-screen top-[100px] left-0 text-[200px] leading-none whitespace-nowrap font-bold text-gray-100 z-10 font-bolded overflow-hidden">
+      <div className="absolute left-0 top-[100px] z-10 w-full overflow-hidden whitespace-nowrap font-bolded text-[200px] font-bold leading-none text-gray-100">
         A MORE PLAYFUL FUTURE
       </div>
 
       <HeaderHero
         visionOfTheWeekSlot={
-          <VisionOfTheWeekProjectNoSSR projectId={process.env.FEATURED_PROJECT_ID!} />
+          <VisionOfTheWeekProjectNoSSR
+            projectId={process.env.FEATURED_PROJECT_ID!}
+          />
         }
       />
       <ProjectDiv
         projectSectionTitle="CURATED VISIONS"
         projectSectionDescription="Every month we invite a guest curator to spotlight 4 projects building a better future"
         projectSectionButton={
-          <Button className="font-bold font-bolded" variant={"ghost"} asChild>
+          <Button className="font-bolded font-bold" variant={'ghost'} asChild>
             <Link href="https://t.me/+e97ms5e1fvJiMjhk" target="_blank">
-              {"GET DROP UPDATES"}
+              {'GET DROP UPDATES'}
             </Link>
           </Button>
         }
         projects={
-          <div className="flex flex-col md:flex-row w-full overflow-auto md:space-x-12">
+          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-4">
             {data
               ?.filter(
                 (project) =>
@@ -65,13 +68,13 @@ export default function HomePage() {
                   new Date(project.curation.start) <= new Date() &&
                   // if no curation end date, show it indefinitely
                   (project.curation?.end ||
-                    new Date(project.curation.end) >= new Date())
+                    new Date(project.curation.end) >= new Date()),
               )
               // sort by ascending start dates
               .sort(
                 (a, b) =>
                   new Date(a.curation.start).getTime() -
-                  new Date(b.curation.start).getTime()
+                  new Date(b.curation.start).getTime(),
               )
               .slice(0, 4)
               .map((project) => (
@@ -89,14 +92,14 @@ export default function HomePage() {
         projectSectionTitle="OUR CENTAUR FUTURE"
         projectSectionDescription="Support over 10 weeks of collective discovery, exploration and innovation in Cycle #3"
         projectSectionButton={
-          <Button className="font-bold font-bolded" variant={"ghost"} asChild>
+          <Button className="font-bolded font-bold" variant={'ghost'} asChild>
             <Link href="https://www.radardao.xyz/patron" target="_blank">
-              {"READ MORE"}
+              {'READ MORE'}
             </Link>
           </Button>
         }
         projects={
-          <div className="flex flex-col md:flex-row w-full overflow-auto md:space-x-12">
+          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-4">
             {data
               ?.filter((project) => CENTAUR_PROEJCT_IDS.includes(project._id))
               .sort((a, b) => a.edition_price - b.edition_price)
@@ -106,7 +109,7 @@ export default function HomePage() {
           </div>
         }
       />
-      <FundingPoolHome />
+      <GrantPoolHome />
       <InspirationFooter />
     </section>
   );

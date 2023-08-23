@@ -1,9 +1,9 @@
-import { MenuIcon } from "lucide-react";
-import dynamic from "next/dynamic";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { NavBarListItem } from "./NavBarListItem";
-import { Button } from "./ui/button";
+import { MenuIcon } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { NavBarListItem } from './NavBarListItem';
+import { Button } from '../ui/button';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -12,7 +12,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from "./ui/navigation-menu";
+} from '../ui/navigation-menu';
 import {
   Sheet,
   SheetContent,
@@ -21,35 +21,36 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "./ui/sheet";
-import { Banner } from "./Layout/Banner";
+} from '../ui/sheet';
+import { Banner } from './Banner';
+import Image from 'next/image';
 
-const WalletNoSSR = dynamic(() => import("./Wallet").then((res) => res.Wallet));
+const WalletNoSSR = dynamic(() => import('./Wallet').then((res) => res.Wallet));
 
 export function NavBar() {
   const router = useRouter();
 
   return (
-    <header className="pt-4 z-50 sticky top-0 bg-white border-b">
+    <header className="sticky top-0 z-50 border-b bg-white pt-4">
       <div className="px-[5%] pb-3">
         <div className="navbar-logo-center-container shadow-three items-center">
-          <div className="w-40 mr-8">
+          <div className="w-full max-w-[100px]">
             <Link href="/">
-              <img
+              <Image
                 className="image-4"
-                loading="lazy"
-                width="auto"
-                height="auto"
+                width={100}
+                height={25}
                 src="/logo.png"
+                alt="RADAR Logo"
               />
             </Link>
           </div>
-          <NavigationMenu className="z-50 lg:flex hidden">
+          <NavigationMenu className="z-50 hidden lg:flex">
             <NavigationMenuList className="space-x-0">
               <NavigationMenuItem>
                 <Link href="/pool" legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    FUNDING POOLS
+                    GRANT POOLS
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
@@ -68,7 +69,7 @@ export function NavBar() {
               <NavigationMenuItem>
                 <NavigationMenuTrigger>INSPIRATION</NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                  <ul className="ml-0 grid w-[400px] list-none gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                     <NavBarListItem
                       href="https://www.radardao.xyz/"
                       target="_blank"
@@ -112,9 +113,9 @@ export function NavBar() {
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
-          <nav className="w-full flex justify-end" role="navigation">
+          <nav className="flex w-full justify-end" role="navigation">
             <div className="flex">
-              <div className="space-x-3 lg:pr-0 hidden sm:flex">
+              <div className="hidden space-x-3 sm:flex lg:pr-0">
                 <WalletNoSSR />
                 <Button asChild>
                   <Link href="/project/create">SUBMIT</Link>
@@ -123,7 +124,7 @@ export function NavBar() {
             </div>
           </nav>
           <Sheet>
-            <SheetTrigger asChild className="block lg:hidden ml-2">
+            <SheetTrigger asChild className="ml-2 block lg:hidden">
               <Button variant="outline">
                 <MenuIcon />
               </Button>
@@ -133,10 +134,10 @@ export function NavBar() {
                 <SheetTitle>RADAR</SheetTitle>
                 <SheetDescription></SheetDescription>
               </SheetHeader>
-              <div className="py-4 flex flex-col">
+              <div className="flex flex-col py-4">
                 <Button asChild variant="link" className="justify-start">
                   <Link className="" href="/pool">
-                    FUNDING POOLS
+                    GRANT POOLS
                   </Link>
                 </Button>
                 <Button asChild variant="link" className="justify-start">
@@ -172,7 +173,7 @@ export function NavBar() {
                 </Button>
               </div>
               <SheetFooter>
-                <div className="flex justify-between flex-col space-y-2 w-full">
+                <div className="flex w-full flex-col justify-between space-y-2">
                   <WalletNoSSR />
                   <Button asChild>
                     <Link href="/project/create">SUBMIT</Link>
@@ -183,7 +184,7 @@ export function NavBar() {
           </Sheet>
         </div>
       </div>
-      {router.pathname === "/" && <Banner />}
+      {router.pathname === '/' && <Banner />}
     </header>
   );
 }

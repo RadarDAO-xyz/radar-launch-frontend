@@ -1,29 +1,28 @@
-import { HTMLParsedComponent } from "@/components/Layout/HTMLParsedComponent";
-import { ProjectTabs } from "@/components/ProjectPage/ProjectTabs";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { HTMLParsedComponent } from '@/components/Layout/HTMLParsedComponent';
+import { ProjectTabs } from '@/components/ProjectPage/ProjectTabs';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Sheet,
   SheetClose,
   SheetContent,
   SheetFooter,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DEFAULT_AVATAR_IMAGE } from "@/constants/links";
-import { useGetProject } from "@/hooks/useGetProject";
-import { useGetUser } from "@/hooks/useGetUser";
-import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
-import { isValidVideoLink } from "@/lib/isValidVideoLink";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { useRouter } from "next/router";
+} from '@/components/ui/sheet';
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DEFAULT_AVATAR_IMAGE } from '@/constants/links';
+import { useGetProject } from '@/hooks/useGetProject';
+import { useGetUser } from '@/hooks/useGetUser';
+import { generateVideoEmbed } from '@/lib/generateVideoEmbed';
+import { isValidVideoLink } from '@/lib/isValidVideoLink';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 enum Tab {
-  DETAILS = "ONE",
-  UPDATES = "TWO",
+  DETAILS = 'ONE',
+  UPDATES = 'TWO',
 }
 
 export default function IndividualProjectPage() {
@@ -32,13 +31,13 @@ export default function IndividualProjectPage() {
 
   const { data, isLoading: isProjectLoading } = useGetProject(id?.toString());
   const { data: userData, isLoading: isUserLoading } = useGetUser(
-    data?.founder
+    data?.founder,
   );
 
   if (isProjectLoading || isUserLoading) {
     return (
       <div className="px-[5%] py-20">
-        <h1 className="text-3xl text-center">Loading...</h1>
+        <h1 className="text-center text-3xl">Loading...</h1>
       </div>
     );
   }
@@ -46,26 +45,26 @@ export default function IndividualProjectPage() {
   if (!id || !data) {
     return (
       <div className="px-[5%] py-20">
-        <h1 className="text-3xl text-center">No project found</h1>
+        <h1 className="text-center text-3xl">No project found</h1>
       </div>
     );
   }
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-6 px-[5%] bg-white">
-        <div className="md:col-span-4 col-span-1 md:pr-10 md:overflow-y-scroll md:max-h-screen">
+      <div className="grid grid-cols-1 bg-white px-[5%] md:grid-cols-6">
+        <div className="col-span-1 md:col-span-4 md:max-h-screen md:overflow-y-scroll md:pr-10">
           <div>
-            {isValidVideoLink(data?.video_url || "") ? (
+            {isValidVideoLink(data?.video_url || '') ? (
               <iframe
-                width={"100%"}
+                width={'100%'}
                 className="aspect-video"
                 frameBorder={0}
                 src={generateVideoEmbed(
                   data?.video_url,
-                  data?.video_url.includes("youtube")
-                    ? "?controls=0&fs=0&loop=1&modestbranding=1&playsinline=1&iv_load_policy=3"
-                    : ""
+                  data?.video_url.includes('youtube')
+                    ? '?controls=0&fs=0&loop=1&modestbranding=1&playsinline=1&iv_load_policy=3'
+                    : '',
                 )}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
@@ -75,45 +74,45 @@ export default function IndividualProjectPage() {
               <div>Invalid project video submitted, {data.video_url}</div>
             )}
           </div>
-          <div className="text-normal pt-10 pb-4 text-gray-400">
+          <div className="pb-4 pt-10 text-normal text-gray-400">
             The Brief: <span className="font-semibold">{data.brief}</span>
           </div>
-          <h2 className="text-3xl pb-4 font-base">{data.title}</h2>
+          <h2 className="pb-4 font-base text-3xl">{data.title}</h2>
           <hr />
           <HTMLParsedComponent
-            className="text-normal pt-4 pb-4 text-gray-500"
+            className="pb-4 pt-4 text-normal text-gray-500"
             text={data.description}
           />
           {data.tags?.length > 0 && (
             <div className="flex flex-wrap gap-2 pb-8">
-              <Badge className="bg-gray-600 hover:bg-gray-600 text-gray-200 text-sm px-4 py-1">
+              <Badge className="bg-gray-600 px-4 py-1 text-sm text-gray-200 hover:bg-gray-600">
                 A More Play-Full Future
               </Badge>
               {data.tags.map((tag) => (
                 <Badge
                   variant="secondary"
                   key={tag}
-                  className="text-gray-700 text-sm px-4 py-1"
+                  className="px-4 py-1 text-sm text-gray-700"
                 >
                   {tag}
                 </Badge>
               ))}
             </div>
           )}
-          <Tabs defaultValue={Tab.DETAILS} className="border rounded-lg py-8">
-            <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 lg:grid-cols-6 px-14">
+          <Tabs defaultValue={Tab.DETAILS} className="rounded-lg border py-8">
+            <TabsList className="grid w-full grid-cols-3 px-14 md:grid-cols-4 lg:grid-cols-6">
               <TabsTrigger value={Tab.DETAILS}>DETAILS</TabsTrigger>
               <TabsTrigger value={Tab.UPDATES}>UPDATES</TabsTrigger>
             </TabsList>
             <TabsContent value={Tab.DETAILS} className="px-14 py-6">
               <div className="pb-16">
-                <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-8">
+                <h3 className="pb-8 text-lg font-medium underline decoration-slate-100 underline-offset-[16px]">
                   Project TLDR
                 </h3>
                 <HTMLParsedComponent text={data.tldr} />
               </div>
               <hr />
-              <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-8 pt-10">
+              <h3 className="pb-8 pt-10 text-lg font-medium underline decoration-slate-100 underline-offset-[16px]">
                 Who is the team executing on this project
               </h3>
               {data.team.map((teamMember, index) => (
@@ -127,7 +126,7 @@ export default function IndividualProjectPage() {
               ))}
               <hr />
               <div className="pb-16 pt-10">
-                <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-4">
+                <h3 className="pb-4 text-lg font-medium underline decoration-slate-100 underline-offset-[16px]">
                   This project is looking for:
                 </h3>
                 {data.collaborators && (
@@ -135,51 +134,40 @@ export default function IndividualProjectPage() {
                 )}
               </div>
               <hr />
-              <h3 className="font-medium text-lg underline underline-offset-[16px] decoration-slate-100 pb-16 pt-10">
-                Funding Goals
-              </h3>
-              <Table>
-                <TableBody>
-                  {data?.milestones.map((milestone, index) => (
-                    <TableRow key={milestone.text}>
-                      <TableCell
-                        className={cn(
-                          "font-medium text-xl align-top",
-                          typeof milestone.amount === "number"
-                            ? "w-[200px]"
-                            : "w-[60px]"
-                        )}
-                      >
-                        {typeof milestone.amount === "number" ? (
-                          <span className="text-normal">
-                            ${" "}
-                            <span className="text-gray-400 text-lg">
-                              {milestone.amount.toFixed(2)}
-                            </span>
-                          </span>
-                        ) : (
-                          `${index + 1}.`
-                        )}
-                      </TableCell>
-                      <TableCell className="border-l">
-                        <HTMLParsedComponent text={milestone.text} />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+              {data?.milestones?.length > 0 && (
+                <>
+                  <h3 className="pb-16 pt-10 text-lg font-medium underline decoration-slate-100 underline-offset-[16px]">
+                    Funding Goals
+                  </h3>
+                  <Table>
+                    <TableBody>
+                      {data.milestones.map((milestone, index) => (
+                        <TableRow key={milestone.text}>
+                          <TableCell
+                            className={'align-top text-xl font-medium'}
+                          >
+                            {renderMilestoneAmount(milestone.amount, index)}
+                          </TableCell>
+                          <TableCell className="border-l">
+                            <HTMLParsedComponent text={milestone.text} />
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </>
+              )}
             </TabsContent>
             <TabsContent value={Tab.UPDATES} className="p-8">
               Coming soon...
             </TabsContent>
           </Tabs>
         </div>
-        <div className="md:col-span-2 col-span-1 md:px-4 pt-6 md:overflow-y-scroll md:max-h-screen hidden md:block">
+        <div className="col-span-1 hidden pt-6 md:col-span-2 md:block md:max-h-screen md:overflow-y-scroll md:px-4">
           <div className="flex space-x-2 pb-4">
-            <Avatar className="w-12 h-12">
+            <Avatar className="h-12 w-12">
               <AvatarImage
                 src={userData?.profile || DEFAULT_AVATAR_IMAGE}
-                className="object-contain"
                 alt="avatar"
               />
               <AvatarFallback>CN</AvatarFallback>
@@ -187,7 +175,7 @@ export default function IndividualProjectPage() {
             <div className="flex items-center">
               {userData !== undefined ? (
                 <Link
-                  href={"/profile/" + userData._id}
+                  href={'/profile/' + userData._id}
                   className="text-[16px] hover:underline"
                 >
                   {userData?.name}
@@ -199,22 +187,21 @@ export default function IndividualProjectPage() {
           </div>
           <hr />
 
-          <div className="pt-4 pb-4">
+          <div className="pb-4 pt-4">
             <ProjectTabs id={id.toString()} />
           </div>
         </div>
       </div>
-      <div className="md:hidden bottom-0 px-[5%] border py-4 bg-white sticky">
+      <div className="sticky bottom-0 border bg-white px-[5%] py-4 md:hidden">
         <Sheet modal={false}>
           <SheetTrigger asChild>
             <Button className="w-full">SUPPORT</Button>
           </SheetTrigger>
-          <SheetContent side={"bottom"} className="h-full overflow-scroll">
+          <SheetContent side={'bottom'} className="h-full overflow-scroll">
             <div className="flex space-x-2 pb-4">
-              <Avatar className="w-12 h-12">
+              <Avatar className="h-12 w-12">
                 <AvatarImage
                   src={userData?.profile || DEFAULT_AVATAR_IMAGE}
-                  className="object-contain"
                   alt="avatar"
                 />
                 <AvatarFallback>CN</AvatarFallback>
@@ -237,4 +224,26 @@ export default function IndividualProjectPage() {
       </div>
     </>
   );
+}
+
+function renderMilestoneAmount(
+  milestoneAmount: string | number,
+  index: number,
+) {
+  if (!isNaN(milestoneAmount as number)) {
+    return (
+      <span className="text-normal">
+        ${' '}
+        <span className="text-lg text-gray-400">
+          {(+milestoneAmount).toFixed(2)}
+        </span>
+      </span>
+    );
+  }
+
+  if (milestoneAmount !== '' && milestoneAmount !== '-') {
+    return <span>{milestoneAmount}</span>;
+  }
+
+  return `${index + 1}.`;
 }

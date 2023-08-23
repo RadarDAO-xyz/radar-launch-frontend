@@ -1,26 +1,28 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CONTRACT_ADDRESS } from "@/constants/address";
-import { useAuth } from "@/hooks/useAuth";
-import { useGetExchangeRate } from "@/hooks/useGetExchangeRate";
-import { useGetProject } from "@/hooks/useGetProject";
-import { useGetUser } from "@/hooks/useGetUser";
-import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { CONTRACT_ADDRESS } from '@/constants/address';
+import { CacheKey } from '@/constants/react-query';
+import { useAuth } from '@/hooks/useAuth';
+import { useGetCountdown } from '@/hooks/useGetCountdown';
+import { useGetExchangeRate } from '@/hooks/useGetExchangeRate';
+import { useGetProject } from '@/hooks/useGetProject';
+import { useGetUser } from '@/hooks/useGetUser';
+import { generateVideoThumbnail } from '@/lib/generateVideoThumbnail';
 import {
   usePrepareRadarEditionsMintEdition,
   useRadarEditionsGetEditions,
   useRadarEditionsMintEdition,
   useRadarEditionsProtocolFee,
   useRadarEditionsTotalSupply,
-} from "@/lib/generated";
-import { cn, getCountdown } from "@/lib/utils";
-import parse from "html-react-parser";
-import { DotIcon, MinusIcon, MoveDown, PlusIcon } from "lucide-react";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { useAccount, useQuery, useWaitForTransaction } from "wagmi";
-import { convertWeiToUsdOrEth } from "../../lib/convertWeiToUsdOrEth";
-import { chains } from "../Web3Provider";
-import { Button } from "../ui/button";
+} from '@/lib/generated';
+import { cn } from '@/lib/utils';
+import parse from 'html-react-parser';
+import { DotIcon, MinusIcon, MoveDown, PlusIcon } from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { useAccount, useQuery, useWaitForTransaction } from 'wagmi';
+import { convertWeiToUsdOrEth } from '../../lib/convertWeiToUsdOrEth';
+import { chains } from '../Providers/Web3Provider';
+import { Button } from '../ui/button';
 import {
   Dialog,
   DialogContent,
@@ -28,11 +30,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
-import { Input } from "../ui/input";
-import { useToast } from "../ui/use-toast";
-import { ContributeForm } from "./ContributeForm";
-import { SignUpForm } from "./SignUpForm";
+} from '../ui/dialog';
+import { Input } from '../ui/input';
+import { useToast } from '../ui/use-toast';
+import { ContributeForm } from './ContributeForm';
+import { SignUpForm } from './SignUpForm';
 
 async function getMintCheckoutLink(
   quantity: number,
@@ -41,7 +43,8 @@ async function getMintCheckoutLink(
   title?: string,
   imageUrl?: string,
   projectId?: string,
-  socials?: string
+  socials?: string,
+  payingWithCard: boolean = false,
 ): Promise<string> {
   if (
     editionId === undefined ||
@@ -49,14 +52,14 @@ async function getMintCheckoutLink(
     title === undefined ||
     imageUrl === undefined
   ) {
-    return "";
+    return '';
   }
 
   try {
     const result = await fetch(`/api/get-mint-checkout-link`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         editionId,
@@ -66,23 +69,24 @@ async function getMintCheckoutLink(
         imageUrl,
         projectId,
         socials,
+        payingWithCard,
       }),
     }).then((res) => res.json());
 
-    if ("checkoutLinkIntentUrl" in result) {
+    if ('checkoutLinkIntentUrl' in result) {
       return result.checkoutLinkIntentUrl;
     }
   } catch (e) {
     console.error(e);
   }
-  return "";
+  return '';
 }
 
 enum Tab {
-  COLLECT = "collect",
-  SIGN_UP = "sign-up",
-  CONTRIBUTE = "contribute",
-  BENEFITS = "benefits",
+  COLLECT = 'collect',
+  SIGN_UP = 'sign-up',
+  CONTRIBUTE = 'contribute',
+  BENEFITS = 'benefits',
 }
 
 export function ProjectTabs({ id }: { id: string }) {
@@ -104,7 +108,7 @@ export function ProjectTabs({ id }: { id: string }) {
   });
 
   const editionId: number | undefined = onChainProjects?.findIndex(
-    (project) => project.id === id
+    (project) => project.id === id,
   );
   const value =
     editionId !== undefined ? onChainProjects?.[editionId]?.fee : undefined;
@@ -123,7 +127,7 @@ export function ProjectTabs({ id }: { id: string }) {
       BigInt(editionId || 0),
       BigInt(quantity),
       address!,
-      "0x0000000000000000000000000000000000000000000000000000000000000000",
+      '0x0000000000000000000000000000000000000000000000000000000000000000',
     ],
     value: BigInt((value || 0n) + (protocolFee || 0n)) * BigInt(quantity),
     enabled:
@@ -142,36 +146,66 @@ export function ProjectTabs({ id }: { id: string }) {
   const { data: exchangeRateData } = useGetExchangeRate();
   const { data: projectData } = useGetProject(id.toString());
   const { data: userData } = useGetUser(projectData?.founder.toString());
-
-  const { data: checkoutLink, isLoading: isCheckoutLinkLoading } = useQuery(
-    ["checkout-mint-link", editionId, value, quantity],
-    () =>
-      getMintCheckoutLink(
-        quantity,
-        editionId,
-        (value! + protocolFee!).toString(),
-        projectData?.title,
-        generateVideoThumbnail(projectData?.video_url!),
-        projectData?._id,
-        userData?.socials?.replace("https://twitter.com/", "")
-      ),
-    {
-      enabled:
-        editionId !== undefined &&
-        value !== undefined &&
-        protocolFee !== undefined &&
-        currentTab === Tab.COLLECT &&
-        projectData !== undefined,
-    }
+  const countdown = useGetCountdown(
+    projectData?.mint_end_date
+      ? new Date(projectData.mint_end_date)
+      : undefined,
   );
+
+  const { data: checkoutLinkForEth, isLoading: isCheckoutLinkForEthLoading } =
+    useQuery(
+      [CacheKey.CHECKOUT_MINT_LINK, editionId, value, quantity, false],
+      () =>
+        getMintCheckoutLink(
+          quantity,
+          editionId,
+          (value! + protocolFee!).toString(),
+          projectData?.title,
+          generateVideoThumbnail(projectData?.video_url!),
+          projectData?._id,
+          userData?.socials?.replace('https://twitter.com/', ''),
+          false,
+        ),
+      {
+        enabled:
+          editionId !== undefined &&
+          value !== undefined &&
+          protocolFee !== undefined &&
+          currentTab === Tab.COLLECT &&
+          projectData !== undefined,
+      },
+    );
+  const { data: checkoutLinkForCard, isLoading: isCheckoutLinkForCardLoading } =
+    useQuery(
+      [CacheKey.CHECKOUT_MINT_LINK, editionId, value, quantity, true],
+      () =>
+        getMintCheckoutLink(
+          quantity,
+          editionId,
+          (value! + protocolFee!).toString(),
+          projectData?.title,
+          generateVideoThumbnail(projectData?.video_url!),
+          projectData?._id,
+          userData?.socials?.replace('https://twitter.com/', ''),
+          true,
+        ),
+      {
+        enabled:
+          editionId !== undefined &&
+          value !== undefined &&
+          protocolFee !== undefined &&
+          currentTab === Tab.COLLECT &&
+          projectData !== undefined,
+      },
+    );
 
   const { toast } = useToast();
 
   useEffect(() => {
     if (isLoading && mintEditionData?.hash) {
       toast({
-        title: "Transaction sent!",
-        description: "Awaiting for confirmation...",
+        title: 'Transaction sent!',
+        description: 'Awaiting for confirmation...',
       });
     }
   }, [isLoading, mintEditionData?.hash]);
@@ -179,8 +213,8 @@ export function ProjectTabs({ id }: { id: string }) {
   useEffect(() => {
     if (isSuccess && mintEditionData?.hash && !hasToasted) {
       toast({
-        title: "Success!",
-        description: "Your NFT has been minted!",
+        title: 'Success!',
+        description: 'Your NFT has been minted!',
       });
       setHasToasted(true);
     }
@@ -191,44 +225,44 @@ export function ProjectTabs({ id }: { id: string }) {
       defaultValue={Tab.COLLECT}
       onValueChange={(e) => setCurrentTab(e as Tab)}
     >
-      <TabsList className="w-full gap-2 h-auto px-0 grid grid-cols-2 lg:grid-cols-3">
+      <TabsList className="grid h-auto w-full grid-cols-2 gap-2 px-0 lg:grid-cols-3">
         <TabsTrigger value={Tab.COLLECT} asChild>
           <Button
-            className="border-b-0 no-underline p-2 px-4 !bg-gray-100 hover:!bg-gray-200 w-full data-[state=active]:!bg-gray-300 col-span-1"
-            variant={"ghost"}
+            className="col-span-1 w-full border-b-0 !bg-gray-100 p-2 px-4 no-underline hover:!bg-gray-200 data-[state=active]:!bg-gray-300"
+            variant={'ghost'}
           >
-            Collect <MoveDown className="ml-1 w-3 h-3" />
+            Collect <MoveDown className="ml-1 h-3 w-3" />
           </Button>
         </TabsTrigger>
         <TabsTrigger value={Tab.SIGN_UP} asChild>
           <Button
-            className="border-b-0 no-underline p-2 px-4 !bg-gray-100 hover:!bg-gray-200 w-full data-[state=active]:!bg-gray-300 col-span-1"
-            variant={"ghost"}
+            className="col-span-1 w-full border-b-0 !bg-gray-100 p-2 px-4 no-underline hover:!bg-gray-200 data-[state=active]:!bg-gray-300"
+            variant={'ghost'}
           >
-            Sign Up <MoveDown className="ml-1 w-3 h-3" />
+            Sign Up <MoveDown className="ml-1 h-3 w-3" />
           </Button>
         </TabsTrigger>
         <TabsTrigger value={Tab.CONTRIBUTE} asChild>
           <Button
-            className="border-b-0 no-underline p-2 px-4 !bg-gray-100 hover:!bg-gray-200 w-full data-[state=active]:!bg-gray-300 col-span-1"
-            variant={"ghost"}
+            className="col-span-1 w-full border-b-0 !bg-gray-100 p-2 px-4 no-underline hover:!bg-gray-200 data-[state=active]:!bg-gray-300"
+            variant={'ghost'}
           >
-            Contribute <MoveDown className="ml-1 w-3 h-3" />
+            Contribute <MoveDown className="ml-1 h-3 w-3" />
           </Button>
         </TabsTrigger>
         <TabsTrigger value={Tab.BENEFITS} asChild>
           <Button
-            className="border-b-0 no-underline p-2 px-4 !bg-gray-100 hover:!bg-gray-200 w-full data-[state=active]:!bg-gray-300 md:col-span-1 lg:col-span-3"
-            variant={"ghost"}
+            className="w-full border-b-0 !bg-gray-100 p-2 px-4 no-underline hover:!bg-gray-200 data-[state=active]:!bg-gray-300 md:col-span-1 lg:col-span-3"
+            variant={'ghost'}
           >
-            Benefits <MoveDown className="ml-1 w-3 h-3" />
+            Benefits <MoveDown className="ml-1 h-3 w-3" />
           </Button>
         </TabsTrigger>
       </TabsList>
-      <TabsContent value={Tab.COLLECT} className="px-4 py-2 rounded-md border">
-        {typeof value === "bigint" && typeof protocolFee === "bigint" ? (
+      <TabsContent value={Tab.COLLECT} className="rounded-md border px-4 py-2">
+        {typeof value === 'bigint' && typeof protocolFee === 'bigint' ? (
           <div className="p-4 lg:p-6">
-            <div className="flex justify-between mb-4 text-gray-400">
+            <div className="mb-4 flex justify-between text-gray-400">
               <div>
                 <span>
                   $
@@ -236,20 +270,20 @@ export function ProjectTabs({ id }: { id: string }) {
                     parseFloat(
                       convertWeiToUsdOrEth(
                         value,
-                        exchangeRateData?.ethereum.usd
-                      )
-                    )
+                        exchangeRateData?.ethereum?.usd,
+                      ),
+                    ),
                   ).toString()}
                 </span>
                 <span>
-                  {" "}
-                  {exchangeRateData?.ethereum.usd ? "USD" : "ETH"} X{" "}
-                </span>{" "}
+                  {' '}
+                  {exchangeRateData?.ethereum?.usd ? 'USD' : 'ETH'} X{' '}
+                </span>{' '}
                 <span className="text-black">{quantity}</span>
               </div>
               <div>mint fee</div>
             </div>
-            <div className="flex justify-between mb-4 text-gray-400">
+            <div className="mb-4 flex justify-between text-gray-400">
               <div>
                 <span>
                   $
@@ -257,21 +291,21 @@ export function ProjectTabs({ id }: { id: string }) {
                     parseFloat(
                       convertWeiToUsdOrEth(
                         protocolFee,
-                        exchangeRateData?.ethereum.usd
-                      )
-                    )
+                        exchangeRateData?.ethereum?.usd,
+                      ),
+                    ),
                   ).toString()}
                 </span>
                 <span>
-                  {" "}
-                  {exchangeRateData?.ethereum.usd ? "USD" : "ETH"} X{" "}
+                  {' '}
+                  {exchangeRateData?.ethereum?.usd ? 'USD' : 'ETH'} X{' '}
                 </span>
                 <span className="text-black">{quantity}</span>
               </div>
               <div>protocol fee</div>
             </div>
             <hr className="my-4" />
-            <div className="flex justify-between mb-4">
+            <div className="mb-4 flex justify-between">
               <p className="text-gray-400">Total cost</p>
               <span>
                 $
@@ -279,29 +313,29 @@ export function ProjectTabs({ id }: { id: string }) {
                   parseFloat(
                     convertWeiToUsdOrEth(
                       (value + protocolFee) * BigInt(quantity),
-                      exchangeRateData?.ethereum.usd
-                    )
-                  )
+                      exchangeRateData?.ethereum?.usd,
+                    ),
+                  ),
                 ).toString()}
-                <span> {exchangeRateData?.ethereum.usd ? "USD" : "ETH"}</span>
+                <span> {exchangeRateData?.ethereum?.usd ? 'USD' : 'ETH'}</span>
               </span>
             </div>
-            <div className="flex w-full space-x-4 mb-4 px-12 md:px-4 xl:px-12">
+            <div className="mb-4 flex w-full space-x-4 px-12 md:px-4 xl:px-12">
               <Button
-                variant={"outline"}
+                variant={'outline'}
                 className="px-2"
                 onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))}
               >
                 <MinusIcon />
               </Button>
               <Input
-                type={"number"}
-                className="text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                type={'number'}
+                className="text-center [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 value={quantity}
                 onChange={(e) => setQuantity(+e.target.value)}
               />
               <Button
-                variant={"outline"}
+                variant={'outline'}
                 className="px-2"
                 onClick={() => setQuantity((prev) => prev + 1)}
               >
@@ -310,7 +344,16 @@ export function ProjectTabs({ id }: { id: string }) {
             </div>
             <Dialog modal={false}>
               <DialogTrigger asChild>
-                <Button className="w-full">COLLECT</Button>
+                <Button
+                  className="w-full"
+                  disabled={
+                    projectData?.mint_end_date
+                      ? new Date(projectData.mint_end_date) < new Date()
+                      : false
+                  }
+                >
+                  COLLECT
+                </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
@@ -319,18 +362,37 @@ export function ProjectTabs({ id }: { id: string }) {
                   </DialogTitle>
                 </DialogHeader>
                 <DialogFooter>
-                  <div className="flex flex-col gap-2 w-full">
+                  <div className="flex w-full flex-col gap-2">
                     <Button
                       className={cn(
-                        "w-full",
-                        !checkoutLink ? "pointer-events-none bg-gray-600" : ""
+                        'w-full',
+                        !checkoutLinkForCard
+                          ? 'pointer-events-none opacity-70'
+                          : '',
                       )}
-                      variant="ghost"
                       asChild
-                      disabled={!checkoutLink || isCheckoutLinkLoading}
+                      disabled={
+                        !checkoutLinkForCard || isCheckoutLinkForCardLoading
+                      }
                     >
-                      <Link href={checkoutLink || ""}>
-                        Collect with Card / ETH
+                      <Link href={checkoutLinkForCard || ''}>
+                        Collect with Credit Card
+                      </Link>
+                    </Button>
+                    <Button
+                      className={cn(
+                        'w-full',
+                        !checkoutLinkForEth
+                          ? 'pointer-events-none opacity-70'
+                          : '',
+                      )}
+                      asChild
+                      disabled={
+                        !checkoutLinkForEth || isCheckoutLinkForEthLoading
+                      }
+                    >
+                      <Link href={checkoutLinkForEth || ''}>
+                        Collect with ETH
                       </Link>
                     </Button>
                     <Button
@@ -348,28 +410,27 @@ export function ProjectTabs({ id }: { id: string }) {
                           }
                           if (error) {
                             toast({
-                              variant: "destructive",
-                              title: "An unexpected error occured",
+                              variant: 'destructive',
+                              title: 'An unexpected error occured',
                               description:
-                                "Check the console for more information",
+                                'Check the console for more information',
                             });
                           }
                         }
                       }}
                     >
-                      Collect with Optimism {!isLoggedIn ? "(sign in)" : ""}
+                      Collect with Optimism {!isLoggedIn ? '(sign in)' : ''}
                     </Button>
                   </div>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
 
-            <p className="text-center pb-4 pt-8 text-gray-700">
-              {projectData?.mint_end_date ? (
+            <p className="pb-4 pt-8 text-center text-gray-700">
+              {projectData?.mint_end_date &&
+              new Date(projectData.mint_end_date) > new Date() ? (
                 <>
-                  <span>
-                    {getCountdown(new Date(projectData.mint_end_date))}
-                  </span>
+                  <span>{countdown}</span>
                   <DotIcon className="inline" />
                 </>
               ) : null}
@@ -377,14 +438,14 @@ export function ProjectTabs({ id }: { id: string }) {
                 <span>
                   {(
                     totalSupply + BigInt(projectData?.supporter_count || 0)
-                  ).toString()}{" "}
+                  ).toString()}{' '}
                   supporters
                 </span>
               )}
             </p>
             <Link
               href={`${chains[0].blockExplorers.etherscan.url}/address/${CONTRACT_ADDRESS}`}
-              className="text-gray-500 hover:underline text-center mx-auto w-full block"
+              className="mx-auto block w-full text-center text-gray-500 hover:underline"
               target="_blank"
             >
               contract
@@ -396,13 +457,13 @@ export function ProjectTabs({ id }: { id: string }) {
       </TabsContent>
       <TabsContent
         value={Tab.SIGN_UP}
-        className="px-8 py-6 pb-10 rounded-md border"
+        className="rounded-md border px-8 py-6 pb-10"
       >
         <SignUpForm id={id} />
       </TabsContent>
       <TabsContent
         value={Tab.CONTRIBUTE}
-        className="px-4 pt-8 pb-10 rounded-md border"
+        className="rounded-md border px-4 pb-10 pt-8"
       >
         <ContributeForm id={id} />
       </TabsContent>
@@ -411,7 +472,7 @@ export function ProjectTabs({ id }: { id: string }) {
           projectData.benefits.filter(Boolean).map((benefit) => (
             <div
               key={benefit.text}
-              className="mt-4 border rounded-md last:pb-12"
+              className="mt-4 rounded-md border last:pb-12"
             >
               <h3 className="p-6 text-gray-500">
                 Collect <span className="text-black">{benefit.amount}</span> or
@@ -422,7 +483,7 @@ export function ProjectTabs({ id }: { id: string }) {
             </div>
           ))
         ) : (
-          <div className="p-6 border rounded-md">No benefits found</div>
+          <div className="rounded-md border p-6">No benefits found</div>
         )}
       </TabsContent>
     </Tabs>

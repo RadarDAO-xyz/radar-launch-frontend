@@ -1,6 +1,5 @@
-import { useGetExchangeRate } from "@/hooks/useGetExchangeRate";
-import { useGetTotalContributions } from "@/hooks/useGetTotalContributions";
-import { convertWeiToUsdOrEth } from "@/lib/convertWeiToUsdOrEth";
+import { useGetExchangeRate } from '@/hooks/useGetExchangeRate';
+import { useGetTotalContributions } from '@/hooks/useGetTotalContributions';
 
 export function HeroSectionAmount() {
   const { data: exchangeRateData } = useGetExchangeRate();
@@ -10,12 +9,12 @@ export function HeroSectionAmount() {
 
   return (
     <h1 className="heading-5">
-      {"$" +
+      {'$' +
         (
           12400 +
           (totalContributionData?.contributionInEth || 0) *
             (exchangeRateData?.ethereum.usd || 0)
-        ).toLocaleString("en-US", {
+        ).toLocaleString('en-US', {
           maximumFractionDigits: 0,
         })}
     </h1>

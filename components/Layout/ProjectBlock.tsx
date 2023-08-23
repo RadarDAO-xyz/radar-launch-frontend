@@ -1,24 +1,24 @@
-import { CONTRACT_ADDRESS } from "@/constants/address";
-import { generateVideoEmbed } from "@/lib/generateVideoEmbed";
-import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
+import { CONTRACT_ADDRESS } from '@/constants/address';
+import { useGetCountdown } from '@/hooks/useGetCountdown';
+import { generateVideoEmbed } from '@/lib/generateVideoEmbed';
+import { generateVideoThumbnail } from '@/lib/generateVideoThumbnail';
 import {
   useRadarEditionsGetEditions,
   useRadarEditionsTotalSupply,
-} from "@/lib/generated";
-import { isValidVideoLink } from "@/lib/isValidVideoLink";
-import { cn } from "@/lib/utils";
-import { Project, ProjectStatus } from "@/types/mongo";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { getCountdown } from "../lib/utils";
-import { chains } from "./Web3Provider";
-import { Button } from "./ui/button";
+} from '@/lib/generated';
+import { isValidVideoLink } from '@/lib/isValidVideoLink';
+import { cn } from '@/lib/utils';
+import { Project, ProjectStatus } from '@/types/mongo';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { chains } from '../Providers/Web3Provider';
+import { Button } from '../ui/button';
 
 // date formatter to convert dates to DD.MM.YYYY format
-const dateFormatter = new Intl.DateTimeFormat("en-GB", {
-  day: "numeric",
-  month: "numeric",
-  year: "numeric",
+const dateFormatter = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric',
+  month: 'numeric',
+  year: 'numeric',
 });
 
 function formatDate(date: Date) {
@@ -26,14 +26,14 @@ function formatDate(date: Date) {
     .formatToParts(date)
     .map(({ type, value }) => {
       switch (type) {
-        case "literal":
-          if (value === "/") {
-            return ".";
+        case 'literal':
+          if (value === '/') {
+            return '.';
           }
           return value;
-        case "day":
-        case "month":
-        case "year":
+        case 'day':
+        case 'month':
+        case 'year':
           if (value.length < 2) {
             return `0${value}`;
           }
@@ -42,7 +42,7 @@ function formatDate(date: Date) {
           return value;
       }
     })
-    .join("");
+    .join('');
 }
 
 interface Props extends Project {
@@ -65,17 +65,18 @@ export function ProjectBlock({
   showMintEndDate,
   showPrice,
   showSupporters,
+  thumbnail,
 }: Props) {
   const isDisabled = status !== ProjectStatus.LIVE;
   const router = useRouter();
 
   const { data: onChainProjects } = useRadarEditionsGetEditions({
     address: CONTRACT_ADDRESS,
-    chainId: chains[0]?.id,
-    enabled: Boolean(chains[0]?.id),
+    chainId: chains[0].id,
+    enabled: Boolean(chains[0].id),
   });
   const editionId: number | undefined = onChainProjects?.findIndex(
-    (project) => project.id === _id
+    (project) => project.id === _id,
   );
   const { data: totalSupply } = useRadarEditionsTotalSupply({
     address: CONTRACT_ADDRESS,
@@ -83,23 +84,24 @@ export function ProjectBlock({
     args: [BigInt(Math.max(editionId! || 0, 0))],
     enabled: Boolean(chains[0]?.id) && editionId !== undefined,
   });
+  const countdown = useGetCountdown(new Date(mint_end_date));
 
   return (
     <div
       className={cn(
-        "col-span-1 flex h-auto w-full mb-4 flex-col",
-        isDisabled ? "opacity-70 cursor-default" : ""
+        'col-span-1 mb-4 flex h-auto w-full flex-col',
+        isDisabled ? 'cursor-default opacity-70' : '',
       )}
     >
       <div className="top-half-of-content">
         <div className="brief-wrapper items-center">
           <div className="div-block-102">
-            <div className="briefs-labels">{"Brief"}</div>
+            <div className="briefs-labels">{'Brief'}</div>
             {/* <div className="briefs-labels" fs-cmsfilter-field="brief">
             </div> */}
           </div>
-          <div className={cn("text-xs", isDisabled ? "text-gray-500" : "")}>
-            {isDisabled ? "LOADING" : brief}
+          <div className={cn('text-xs', isDisabled ? 'text-gray-500' : '')}>
+            {isDisabled ? 'LOADING' : brief}
           </div>
         </div>
         <div className="_10px-div" />
@@ -109,15 +111,18 @@ export function ProjectBlock({
               frameBorder={0}
               src={generateVideoEmbed(
                 video_url,
-                video_url.startsWith("https://www.youtube")
-                  ? "?controls=0&fs=0&loop=1&modestbranding=1&playsinline=1&iv_load_policy=3"
-                  : "?title=0&byline=0&portrait=0&sidedock=0&loop=1"
+                video_url.startsWith('https://www.youtube')
+                  ? '?controls=0&fs=0&loop=1&modestbranding=1&playsinline=1&iv_load_policy=3'
+                  : '?title=0&byline=0&portrait=0&sidedock=0&loop=1',
               )}
               className="aspect-video w-full"
               allow="autoplay; fullscreen; picture-in-picture"
             />
           ) : (
-            <img src={generateVideoThumbnail(video_url)} className="w-full" />
+            <img
+              src={thumbnail || generateVideoThumbnail(video_url)}
+              className="w-full"
+            />
             // <HoverVideoPlayer
             //   focused
             //   loop
@@ -129,12 +134,12 @@ export function ProjectBlock({
         <div className="_20px-div" />
         <Link
           className={cn(
-            "project-copy transition-opacity mb-1",
-            isDisabled ? "pointer-events-none" : "hover:opacity-70"
+            'project-copy mb-1 transition-opacity',
+            isDisabled ? 'pointer-events-none' : 'hover:opacity-70',
           )}
           href={`/project/${_id}`}
         >
-          <p className="project-title pb-0 uppercase leading-4 font-bolded">
+          <p className="project-title pb-0 font-bolded uppercase leading-4">
             {title}
           </p>
         </Link>
@@ -149,47 +154,45 @@ export function ProjectBlock({
       </div>
       <div className="bottom-half-of-content">
         <div className="collect-wrapper flex-row">
-          <div className="pt-3 flex border-t w-full border-t-[var(--line-83d2b2f6)] items-center justify-between">
+          <div className="flex w-full items-center justify-between border-t border-t-[var(--line-83d2b2f6)] pt-3">
             <div>
               {status === ProjectStatus.LIVE ? (
-                <div className="text-center w-full flex text-xs text-gray-700 divide-x">
+                <div className="flex w-full divide-x text-center text-xs text-gray-700">
                   {showMintEndDate && mint_end_date && (
-                    <p className="pr-2">
-                      {getCountdown(new Date(mint_end_date))}
-                    </p>
+                    <p className="pr-2">{countdown}</p>
                   )}
                   {/* TODO: change this to onchain fee / exchange rate */}
                   {showPrice && (
                     <p className="pr-2">
                       $
-                      {edition_price.toLocaleString("en-US", {
+                      {edition_price.toLocaleString('en-US', {
                         maximumFractionDigits: 0,
-                      })}{" "}
+                      })}{' '}
                       USD
                     </p>
                   )}
                   {showSupporters && totalSupply !== undefined && (
                     <p className="pl-2">
-                      {(totalSupply + BigInt(supporter_count || 0)).toString()}{" "}
+                      {(totalSupply + BigInt(supporter_count || 0)).toString()}{' '}
                       supporters
                     </p>
                   )}
                 </div>
               ) : (
                 <div className="count-block flex items-center justify-center">
-                  {getCountdown(new Date(mint_end_date))} until drop
+                  {countdown} until drop
                 </div>
               )}
             </div>
             <Button
               onClick={() => router.push(`/project/${_id}`)}
-              className="arrow-diagonal text-xl cursor-pointer hover:opacity-60 transition-opacity bg-transparent text-black hover:bg-transparent disabled:opacity-40 px-1 h-4"
+              className="arrow-diagonal h-4 cursor-pointer bg-transparent px-1 text-xl text-black transition-opacity hover:bg-transparent hover:opacity-60 disabled:opacity-40"
               disabled={
                 status === ProjectStatus.IN_REVIEW ||
                 status === ProjectStatus.APPROVED
               }
             >
-              {"↗"}
+              {'↗'}
             </Button>
           </div>
         </div>

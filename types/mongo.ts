@@ -20,7 +20,7 @@ export type Project = {
   team: Team[];
   collaborators?: string;
   waitlist: boolean;
-  milestones: MilestoneAmountText[];
+  milestones: AmountText[];
   edition_price: number;
   mint_end_date: string;
   benefits: AmountText[];
@@ -54,6 +54,7 @@ export type User = {
   socials?: string; // must be a twitter link for now
   wallets: string[];
   email?: string;
+  bypasser: boolean;
 };
 
 export type Wallet = {
@@ -85,11 +86,6 @@ type Team = {
   email: string;
 };
 
-type MilestoneAmountText = {
-  amount: number | string;
-  text: string;
-};
-
 type AmountText = {
   amount: number;
   text: string;
@@ -101,12 +97,12 @@ export type ProjectUpdate = {
 };
 
 export enum Brief {
-  THE_ENCHANTRESS = "The Enchantress",
-  THE_HEALER = "The Healer",
-  THE_MEDIATOR = "The Mediator",
-  THE_TEACHER = "The Teacher",
-  THE_ARTIST = "The Artist",
-  THE_NEW_PLAYERS = "The New Players",
+  THE_ENCHANTRESS = 'The Enchantress',
+  THE_HEALER = 'The Healer',
+  THE_MEDIATOR = 'The Mediator',
+  THE_TEACHER = 'The Teacher',
+  THE_ARTIST = 'The Artist',
+  THE_NEW_PLAYERS = 'The New Players',
 }
 
 export enum SupportType {

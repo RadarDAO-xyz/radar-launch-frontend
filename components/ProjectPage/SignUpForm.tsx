@@ -1,33 +1,33 @@
-import { useForm } from "react-hook-form";
-import { Button } from "../ui/button";
+import { useForm } from 'react-hook-form';
+import { Button } from '../ui/button';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "wagmi";
-import { SupportType } from "@/types/mongo";
-import { signupProject } from "@/lib/backend";
-import { useToast } from "../ui/use-toast";
+} from '../ui/form';
+import { Input } from '../ui/input';
+import * as z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from 'wagmi';
+import { SupportType } from '@/types/mongo';
+import { signupProject } from '@/lib/backend';
+import { useToast } from '../ui/use-toast';
 
 interface Props {
   id: string;
 }
 
 const formSchema = z.object({
-  email: z.string().email().min(1, { message: "Email is required" }),
+  email: z.string().email().min(1, { message: 'Email is required' }),
 });
 
 export function SignUpForm({ id }: Props) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
+      email: '',
     },
   });
   const { toast } = useToast();
@@ -38,21 +38,21 @@ export function SignUpForm({ id }: Props) {
     handleSubmit,
     formState: { errors },
   } = form;
-  const email = watch("email");
+  const email = watch('email');
 
   const { mutate, isSuccess, isLoading } = useMutation(
-    ["signup-project", SupportType.SIGN_UP, id, email],
+    ['signup-project', SupportType.SIGN_UP, id, email],
     () => signupProject(id, email),
     {
       onError: (e) => {
         console.error(e);
         toast({
-          variant: "destructive",
-          title: "An unexpected error occured",
-          description: "Check the console for more information",
+          variant: 'destructive',
+          title: 'An unexpected error occured',
+          description: 'Check the console for more information',
         });
       },
-    }
+    },
   );
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -63,13 +63,13 @@ export function SignUpForm({ id }: Props) {
   }
   return (
     <div>
-      <h2 className="text-xl text-center pt-4 pb-6 font-base">
+      <h2 className="pb-6 pt-4 text-center font-base text-xl">
         Be the first to use this Project
       </h2>
       {!isSuccess ? (
         <Form {...form}>
           {/* @ts-expect-error Netlify form submission */}
-          <form netlify={"true"} onSubmit={handleSubmit(onSubmit)}>
+          <form netlify={'true'} onSubmit={handleSubmit(onSubmit)}>
             <FormField
               control={control}
               name="email"
@@ -92,7 +92,7 @@ export function SignUpForm({ id }: Props) {
           </form>
         </Form>
       ) : (
-        <div className="text-center p-4">
+        <div className="p-4 text-center">
           Thank you! Your submission has been received!
         </div>
       )}
