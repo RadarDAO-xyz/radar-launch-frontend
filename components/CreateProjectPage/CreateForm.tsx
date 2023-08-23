@@ -20,29 +20,15 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useToast } from "@/components/ui/use-toast";
-import { CONTRACT_ADDRESS } from "@/constants/address";
 import { CacheKey } from "@/constants/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { useGetPools } from "@/hooks/useGetPools";
-import { generateVideoThumbnail } from "@/lib/generateVideoThumbnail";
-import {
-  usePrepareRadarEditionsCreateEdition,
-  useRadarEditionsCreateEdition,
-} from "@/lib/generated";
-import { convertAddressToChecksum } from "@/lib/utils";
+import { Project } from "@/types/mongo";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { isAddress } from "viem";
-import {
-  useAccount,
-  useEnsAddress,
-  useMutation,
-  useQuery,
-  useWaitForTransaction,
-} from "wagmi";
+import { useAccount, useEnsAddress, useMutation } from "wagmi";
 import * as z from "zod";
 import { CrowdFundSection } from "./CrowdFundSection";
 import { MilestoneSection } from "./MilestoneSection";
@@ -50,7 +36,7 @@ import { MilestoneSection } from "./MilestoneSection";
 async function createProject(
   idToken: string,
   values: z.infer<typeof createFormSchema> & { pool?: string }
-) {
+): Promise<Project> {
   const finalValues = {
     ...values,
     mint_end_date: values.mint_end_date.toISOString(),
@@ -87,40 +73,6 @@ async function createProject(
   }
 }
 
-async function getCheckoutLink(
-  fee: number,
-  address: string,
-  id: string,
-  title: string,
-  imageUrl: string,
-  payingWithCard: boolean = false
-): Promise<string> {
-  try {
-    const result = await fetch(`/api/get-checkout-link`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        fee,
-        address,
-        id,
-        title,
-        imageUrl,
-        payingWithCard,
-      }),
-    }).then((res) => res.json());
-    console.log(result);
-
-    if ("checkoutLinkIntentUrl" in result) {
-      return result.checkoutLinkIntentUrl;
-    }
-  } catch (e) {
-    console.error(e);
-  }
-  return "";
-}
-
 export const createFormSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
   description: z.string().min(1, { message: "Description is required" }),
@@ -147,7 +99,7 @@ export const createFormSchema = z.object({
   waitlist: z.boolean().default(true),
   milestones: z.array(
     z.object({
-      amount: z.string().min(1, { message: "Milestone is required" }),
+      amount: z.string(),
       text: z.string().min(1, { message: "Milestone description is required" }),
     })
   ),
@@ -182,18 +134,10 @@ export const createFormSchema = z.object({
     ),
 });
 
-enum ButtonPressed {
-  CARD,
-  ETH,
-  OPTIMISM,
-}
-
 export function CreateForm() {
   const { address } = useAccount();
-  const { idToken, isLoggedIn } = useAuth();
+  const { idToken } = useAuth();
   const { data: pools } = useGetPools();
-  const [buttonPressed, setButtonPressed] = useState<ButtonPressed>();
-  const [hasToasted, setHasToasted] = useState(false);
 
   const form = useForm<z.infer<typeof createFormSchema>>({
     resolver: zodResolver(createFormSchema),
@@ -227,23 +171,15 @@ export function CreateForm() {
     watch,
     formState: { errors, isValid, isDirty },
   } = form;
-  const fee = watch("edition_price");
   const admin_address = watch("admin_address");
-  const video_url = watch("video_url");
-  const title = watch("title");
 
   const { data: ensAddressData } = useEnsAddress({
     name: admin_address,
     chainId: chains[0].id,
     enabled: admin_address.endsWith(".eth"),
   });
-  const {
-    data: createProjectData,
-    mutate,
-    isLoading: isSubmitLoading,
-    isSuccess: isSubmitSuccess,
-  } = useMutation(
-    ["submit-project"],
+  const { mutate } = useMutation(
+    [CacheKey.CREATE_PROJECT],
     () => {
       const values = form.getValues();
       if (admin_address.endsWith(".eth")) {
@@ -265,141 +201,21 @@ export function CreateForm() {
           description: "Check the console for more information",
         });
       },
+      onSuccess: (data) => {
+        toast({
+          title: "Successfully submitted project!",
+          description:
+            "Your project is now under review. Check out your project looks like here.",
+          action: (
+            <Button asChild>
+              <Link href={`/project/${data._id}`}>View</Link>
+            </Button>
+          ),
+        });
+      },
     }
   );
-  const { config } = usePrepareRadarEditionsCreateEdition({
-    account: address,
-    address: CONTRACT_ADDRESS,
-    chainId: chains[0]?.id,
-    args: [
-      BigInt(fee),
-      convertAddressToChecksum(admin_address)!,
-      address!,
-      createProjectData?._id,
-    ],
-    enabled:
-      createProjectData?._id !== undefined &&
-      admin_address !== "" &&
-      address !== undefined &&
-      isLoggedIn,
-  });
-  const {
-    writeAsync,
-    data: createEditionData,
-    error,
-  } = useRadarEditionsCreateEdition(config);
-  const { isLoading, isSuccess } = useWaitForTransaction({
-    hash: createEditionData?.hash,
-    enabled: createEditionData?.hash !== undefined,
-  });
-  const { data: checkoutLinkForCard, isLoading: isCheckoutLinkForCardLoading } =
-    useQuery(
-      [
-        CacheKey.CHECKOUT_LINK,
-        fee,
-        createProjectData?._id,
-        ensAddressData || admin_address,
-        true,
-      ],
-      () =>
-        getCheckoutLink(
-          fee,
-          admin_address,
-          createProjectData._id,
-          title,
-          generateVideoThumbnail(video_url),
-          true
-        ),
-      {
-        enabled:
-          Boolean(createProjectData?._id) &&
-          Boolean(admin_address) &&
-          Boolean(title) &&
-          Boolean(video_url),
-      }
-    );
-  const { data: checkoutLinkForEth, isLoading: isCheckoutLinkForEthLoading } =
-    useQuery(
-      [
-        CacheKey.CHECKOUT_LINK,
-        fee,
-        createProjectData?._id,
-        ensAddressData || admin_address,
-        false,
-      ],
-      () =>
-        getCheckoutLink(
-          fee,
-          admin_address,
-          createProjectData._id,
-          title,
-          generateVideoThumbnail(video_url),
-          false
-        ),
-      {
-        enabled:
-          Boolean(createProjectData?._id) &&
-          Boolean(admin_address) &&
-          Boolean(title) &&
-          Boolean(video_url),
-      }
-    );
-  const router = useRouter();
   const { toast } = useToast();
-
-  useEffect(() => {
-    if (
-      isSubmitSuccess &&
-      createProjectData?._id &&
-      buttonPressed === ButtonPressed.OPTIMISM
-    ) {
-      try {
-        writeAsync?.();
-        setHasToasted(false);
-      } catch (e) {
-        // prevent error from crashing the app
-        console.log(e);
-      }
-      if (error) {
-        toast({
-          variant: "destructive",
-          title: "An unexpected error occured",
-          description: "Check the console for more information",
-        });
-      }
-    }
-  }, [
-    buttonPressed,
-    createProjectData?._id,
-    error,
-    isSubmitSuccess,
-    toast,
-    writeAsync,
-  ]);
-
-  useEffect(() => {
-    if (isLoading && createEditionData?.hash) {
-      toast({
-        title: "Transaction sent!",
-        description: "Awaiting for confirmation...",
-      });
-    }
-  }, [isLoading, createEditionData?.hash]);
-
-  useEffect(() => {
-    if (isSuccess && createEditionData?.hash && !hasToasted) {
-      toast({
-        title: "Success!",
-        description: "Your project has been created!",
-        action: (
-          <Button asChild>
-            <Link href={`/projects/${createProjectData?._id}`}>View</Link>
-          </Button>
-        ),
-      });
-      setHasToasted(true);
-    }
-  }, [isSuccess, createEditionData?.hash]);
 
   async function onSubmit(values: z.infer<typeof createFormSchema>) {
     // print form errors
@@ -410,34 +226,6 @@ export function CreateForm() {
     mutate();
   }
 
-  useEffect(() => {
-    if (
-      isSubmitSuccess &&
-      createProjectData &&
-      ((buttonPressed === ButtonPressed.CARD && checkoutLinkForCard) ||
-        (buttonPressed === ButtonPressed.ETH && checkoutLinkForEth))
-    ) {
-      toast({
-        title: "Redirecting to Paper for payment...",
-      });
-      setTimeout(() => {
-        if (buttonPressed === ButtonPressed.CARD) {
-          router.push(checkoutLinkForCard!);
-        } else {
-          router.push(checkoutLinkForEth!);
-        }
-      }, 2000);
-    }
-  }, [
-    isSubmitSuccess,
-    createProjectData,
-    toast,
-    router,
-    checkoutLinkForCard,
-    checkoutLinkForEth,
-    buttonPressed,
-  ]);
-
   if (address === undefined) {
     return (
       <div className="px-[5%] py-12 min-h-[calc(100vh-200px)] flex items-center justify-center">
@@ -445,9 +233,6 @@ export function CreateForm() {
       </div>
     );
   }
-  // if (!process.env.WHITELISTED_ADDRESSES?.split(" ").some(addr => address.toLowerCase() === addr.toLowerCase())) {
-  //   return <div className="px-[5%] py-12"><h1>Not Authorized</h1></div>
-  // }
 
   return (
     <Form {...form}>
@@ -542,32 +327,8 @@ export function CreateForm() {
                     Join our Email Newsletter
                   </Link>
                 </Button>
-                <Button
-                  className="w-full"
-                  disabled={isSubmitLoading || isCheckoutLinkForCardLoading}
-                  type="submit"
-                  onClick={() => setButtonPressed(ButtonPressed.CARD)}
-                  form="create-project"
-                >
-                  Pay with Credit Card
-                </Button>
-                <Button
-                  className="w-full"
-                  disabled={isSubmitLoading || isCheckoutLinkForEthLoading}
-                  type="submit"
-                  onClick={() => setButtonPressed(ButtonPressed.ETH)}
-                  form="create-project"
-                >
-                  Pay with ETH
-                </Button>
-                <Button
-                  className="w-full"
-                  disabled={isSubmitLoading}
-                  onClick={() => setButtonPressed(ButtonPressed.OPTIMISM)}
-                  type="submit"
-                  form="create-project"
-                >
-                  Pay with Optimism
+                <Button type="submit" form="create-project">
+                  SUBMIT
                 </Button>
               </DialogFooter>
             </DialogContent>
