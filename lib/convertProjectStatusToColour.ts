@@ -1,6 +1,9 @@
 import { ProjectStatus } from '@/types/mongo';
+import type { ClassValue } from 'clsx';
 
-export function convertProjectStatusToColour(status: ProjectStatus) {
+export function convertProjectStatusToColour(
+  status: ProjectStatus,
+): ClassValue {
   switch (status) {
     case ProjectStatus.IN_REVIEW:
       return 'bg-yellow-300';
@@ -15,6 +18,6 @@ export function convertProjectStatusToColour(status: ProjectStatus) {
     case ProjectStatus.CANCELLED:
       return 'bg-gray-900';
     default:
-      return 'Unknown status';
+      return '';
   }
 }
