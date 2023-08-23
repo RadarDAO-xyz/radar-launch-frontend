@@ -101,7 +101,10 @@ export default function AdminPage() {
             Admin creates on-chain edition and approves the project (2 buttons
             to press inside Actions)
           </li>
-          <li>User launches project (in /profile/:id page via Launch Project button)</li>
+          <li>
+            User launches project (in /profile/:id page via Launch Project
+            button)
+          </li>
           <li>Project is live!</li>
         </ul>
       </div>
@@ -117,7 +120,7 @@ export default function AdminPage() {
               Project Id (database): {project._id}
             </Link>
             <Link
-              href={`/profile/${project.admin_address}`}
+              href={`/profile/${project.founder}`}
               className="block break-all underline"
             >
               Admin address: {project.admin_address}
