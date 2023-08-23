@@ -93,6 +93,18 @@ export default function AdminPage() {
           <li>Delete the old project</li>
         </ul>
       </div>
+      <div>
+        Approval process of a project:
+        <ul>
+          <li>User creates project (in /project/create page)</li>
+          <li>
+            Admin creates on-chain edition and approves the project (2 buttons
+            to press inside Actions)
+          </li>
+          <li>User launches project (in /profile/:id page via Launch Project button)</li>
+          <li>Project is live!</li>
+        </ul>
+      </div>
       <div className="grid grid-cols-1 gap-4 pb-20 pt-4 lg:grid-cols-3">
         {projects.map((project) => (
           <div className="rounded border p-4" key={project._id}>
