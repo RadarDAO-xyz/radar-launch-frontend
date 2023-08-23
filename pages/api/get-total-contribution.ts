@@ -33,10 +33,12 @@ export default async function handler(
     return res.status(404).json({ message: 'Not found' });
   }
   if (cache.get('total-contribution') !== null) {
+    console.log('cache hit');
     return res
       .status(200)
       .json({ contributionInEth: cache.get('total-contribution') });
   }
+  console.log('cache miss');
   try {
     const response = await fetch(
       `https://opt-mainnet.g.alchemy.com/nft/v2/${process.env.ALCHEMY_API_KEY}/getOwnersForCollection?contractAddress=${CONTRACT_ADDRESS}&withTokenBalances=true`,

@@ -15,9 +15,10 @@ export enum CacheKey {
   PROJECT_UPDATES = 'project-updates',
   CHECKOUT_LINK = 'checkout-link',
   CHECKOUT_MINT_LINK = 'checkout-mint-link',
+  TOTAL_CONTRIBUTION = 'total-contribution',
   // mutation
   DOWNLOAD_PROJECT_SUPPORTERS = 'download-project-supporters',
   UDPATE_PROJECT_STATUS = 'update-project-status',
   DELETE_PROJECT = 'delete-project',
-  CREATE_PROJECT = 'create-project'
+  CREATE_PROJECT = 'create-project',
 }

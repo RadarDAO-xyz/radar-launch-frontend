@@ -243,6 +243,7 @@ export async function getTotalContributions(): Promise<{
   }
   return response.json();
 }
+
 export async function getUserProjects(
   idToken: string,
   id: string,
