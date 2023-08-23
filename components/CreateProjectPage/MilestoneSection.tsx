@@ -17,7 +17,10 @@ export function MilestoneSection() {
             refund.
           </p>
           <br />
-          <p>If you are not crowdfunding, leave the funding amounts blank.</p>
+          <p>
+            If you are not crowdfunding, leave the funding amounts blank or a
+            &quot;-&quot;
+          </p>
         </div>
         <div className="col-span-1">
           <MilestoneFields />

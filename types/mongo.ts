@@ -4,7 +4,7 @@ export enum ProjectStatus {
   LIVE,
   BUILDING,
   REJECTED,
-  CANCELLED
+  CANCELLED,
 }
 
 export type Project = {
@@ -20,7 +20,7 @@ export type Project = {
   team: Team[];
   collaborators?: string;
   waitlist: boolean;
-  milestones: MilestoneAmountText[];
+  milestones: AmountText[];
   edition_price: number;
   mint_end_date: string;
   benefits: AmountText[];
@@ -86,11 +86,6 @@ type Team = {
   email: string;
 };
 
-type MilestoneAmountText = {
-  amount: number | string;
-  text: string;
-};
-
 type AmountText = {
   amount: number;
   text: string;
@@ -107,10 +102,10 @@ export enum Brief {
   THE_MEDIATOR = 'The Mediator',
   THE_TEACHER = 'The Teacher',
   THE_ARTIST = 'The Artist',
-  THE_NEW_PLAYERS = 'The New Players'
+  THE_NEW_PLAYERS = 'The New Players',
 }
 
 export enum SupportType {
   SIGN_UP,
-  CONTRIBUTE
+  CONTRIBUTE,
 }
