@@ -16,7 +16,7 @@ export function GrantPoolProjectHeader({
     <section className="pl-[5%] pr-[5%] lg:border-b-2 lg:pr-0">
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-8">
         <div className="col-span-3 pr-6 pt-20 lg:border-r lg:pb-20">
-          <div>
+          <div className='pb-5'>
             <h2 className="mb-1 font-base text-xl text-gray-500">{subtitle}</h2>
             <h1 className="heading-trending-launch-page text-4xl uppercase">
               {title}
