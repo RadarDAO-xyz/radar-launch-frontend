@@ -10,6 +10,7 @@ import { useGetPools } from '@/hooks/useGetPools';
 import { Project } from '@/types/mongo';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { isAddress } from 'viem';
 import { useAccount, useMutation } from 'wagmi';
@@ -123,6 +124,7 @@ export const createFormSchema = z.object({
 });
 
 export function CreateForm() {
+  const router = useRouter();
   const { address } = useAccount();
   const { idToken } = useAuth();
   const { data: pools } = useGetPools();
@@ -164,7 +166,7 @@ export function CreateForm() {
   //   chainId: chains[0].id,
   //   enabled: admin_address.endsWith('.eth'),
   // });
-  const { mutate } = useMutation(
+  const { mutate, isLoading } = useMutation(
     [CacheKey.CREATE_PROJECT],
     () => {
       const values = form.getValues();
@@ -187,18 +189,23 @@ export function CreateForm() {
       return createProject(idToken, newValues);
     },
     {
-      onError: (e) => {},
+      onError: (e) => {
+        console.log(e);
+        toast({
+          variant: 'destructive',
+          title: 'An unexpected error occured',
+          description: 'Check the console for more information',
+        });
+      },
       onSuccess: (data) => {
         toast({
           title: 'Successfully submitted project!',
           description:
-            'Your project is now under review. Check out how your project looks like here.',
-          action: (
-            <Button asChild>
-              <Link href={`/project/${data._id}`}>View</Link>
-            </Button>
-          ),
+            'Your project is now under review. Redirecting you to your profile page...',
         });
+        setTimeout(() => {
+          router.push('/profile/' + data.founder);
+        }, 2000);
       },
     },
   );
@@ -206,7 +213,7 @@ export function CreateForm() {
 
   async function onSubmit(values: z.infer<typeof createFormSchema>) {
     // print form errors
-    if (errors) {
+    if (Object.keys(errors).length !== 0) {
       console.error({ errors, values });
     }
 
@@ -267,14 +274,16 @@ export function CreateForm() {
 
         <div className="flex flex-col gap-4 pb-20">
           <Button asChild variant="ghost">
-            <Link
-              href="https://airtable.com/appGvDqIhUSP0caqo/shrkX6fnUJrcYreUy"
-              target="_blank"
-            >
-              Join our Email Newsletter
+            <Link href="https://t.me/+e97ms5e1fvJiMjhk" target="_blank">
+              Join our Telegram group to get the alpha
             </Link>
           </Button>
-          <Button type="submit" form="create-project" disabled={idToken === ''}>
+          <Button
+            type="submit"
+            form="create-project"
+            disabled={idToken === '' || isLoading}
+            loading={isLoading}
+          >
             {idToken === '' ? 'Please Login' : 'Submit'}
           </Button>
         </div>
