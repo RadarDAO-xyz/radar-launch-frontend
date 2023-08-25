@@ -1,7 +1,6 @@
 import { ProjectSection } from '@/components/CreateProjectPage/ProjectSection';
 import { SupportSection } from '@/components/CreateProjectPage/SupportSection';
 import { TeamSection } from '@/components/CreateProjectPage/TeamSection';
-import { chains } from '@/components/Providers/Web3Provider';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { useToast } from '@/components/ui/use-toast';
@@ -13,7 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { isAddress } from 'viem';
-import { useAccount, useEnsAddress, useMutation } from 'wagmi';
+import { useAccount, useMutation } from 'wagmi';
 import * as z from 'zod';
 import { CrowdFundSection } from './CrowdFundSection';
 import { MilestoneSection } from './MilestoneSection';
@@ -157,10 +156,8 @@ export function CreateForm() {
   });
   const {
     handleSubmit,
-    watch,
     formState: { errors },
   } = form;
-  const admin_address = watch('admin_address');
 
   // const { data: ensAddressData } = useEnsAddress({
   //   name: admin_address,
@@ -268,7 +265,7 @@ export function CreateForm() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 px-16 pb-20">
+        <div className="flex flex-col gap-4 pb-20">
           <Button asChild variant="ghost">
             <Link
               href="https://airtable.com/appGvDqIhUSP0caqo/shrkX6fnUJrcYreUy"
