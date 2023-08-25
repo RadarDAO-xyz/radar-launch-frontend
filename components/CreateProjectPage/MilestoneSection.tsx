@@ -8,18 +8,16 @@ export function MilestoneSection() {
       <hr className="border-b-1 my-8 border-slate-200" />
       <div className="grid grid-cols-2 gap-10">
         <div className="col-span-1 pr-4">
-          <h2 className="font-base text-xl">Funding Milestones</h2>
+          <h2 className="font-base text-xl">Milestones</h2>
           <p>
             We believe that building is an evolutionary process and we need
             achievable milestones to help reach it, please list your milestones,
-            big or small, if you are crowdfunding, you must reach the amount in
-            milestone 1 to withdraw funds. Otherwise, supporters will receive a
-            refund.
+            big or small.
           </p>
           <br />
           <p>
-            If you are not crowdfunding, leave a &quot;-&quot; for the funding
-            amount
+            Please put a &quot;-&quot; for the funding amount if you want to add
+            numbered milestones: e.g Milestone 1, Milestone 2
           </p>
         </div>
         <div className="col-span-1">

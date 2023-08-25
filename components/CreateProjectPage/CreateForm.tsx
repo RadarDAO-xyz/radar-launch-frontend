@@ -274,8 +274,8 @@ export function CreateForm() {
               Join our Email Newsletter
             </Link>
           </Button>
-          <Button type="submit" form="create-project">
-            Submit
+          <Button type="submit" form="create-project" disabled={idToken === ''}>
+            {idToken === '' ? 'Please Login' : 'Submit'}
           </Button>
         </div>
       </form>
