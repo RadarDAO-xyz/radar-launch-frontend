@@ -314,9 +314,6 @@ export function CreateForm() {
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Create Project</DialogTitle>
-                <DialogDescription>
-                  You will be redirected to a separate website to make payments.
-                </DialogDescription>
               </DialogHeader>
               <DialogFooter className="flex space-x-0 space-y-2 sm:flex-col sm:space-x-0">
                 <Button asChild variant="ghost">
