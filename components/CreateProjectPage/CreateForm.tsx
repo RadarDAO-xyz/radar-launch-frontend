@@ -158,21 +158,29 @@ export function CreateForm() {
   const {
     handleSubmit,
     watch,
-    formState: { errors, isValid, isDirty },
+    formState: { errors },
   } = form;
   const admin_address = watch('admin_address');
 
-  const { data: ensAddressData } = useEnsAddress({
-    name: admin_address,
-    chainId: chains[0].id,
-    enabled: admin_address.endsWith('.eth'),
-  });
+  // const { data: ensAddressData } = useEnsAddress({
+  //   name: admin_address,
+  //   chainId: chains[0].id,
+  //   enabled: admin_address.endsWith('.eth'),
+  // });
   const { mutate } = useMutation(
     [CacheKey.CREATE_PROJECT],
     () => {
       const values = form.getValues();
-      if (admin_address.endsWith('.eth')) {
-        values.admin_address = ensAddressData || admin_address;
+      // resolve ENS address
+      // if (admin_address.endsWith('.eth')) {
+      //   values.admin_address = ensAddressData || admin_address;
+      // }
+      // add default benefit
+      if (values.benefits.length === 0) {
+        values.benefits.push({
+          amount: 1,
+          text: '<ul><li><p>Become an onchain patron of my journey</p></li></ul>',
+        });
       }
       const newValues = {
         ...values,

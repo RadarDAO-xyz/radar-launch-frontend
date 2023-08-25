@@ -1,10 +1,9 @@
-import { ReactNode } from 'react';
+import { TrashIcon } from 'lucide-react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { TinyMCE } from '../Layout/TinyMCE';
 import { Button } from '../ui/button';
 import { FormControl, FormField, FormItem, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
-import { TrashIcon } from 'lucide-react';
 
 export const TeamFields = () => {
   const { control } = useFormContext();
