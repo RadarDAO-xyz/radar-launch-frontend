@@ -4,12 +4,9 @@ import { TinyMCE } from '../Layout/TinyMCE';
 import { Button } from '../ui/button';
 import { FormControl, FormField, FormItem, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
+import { TrashIcon } from 'lucide-react';
 
-interface Props {
-  children?: ReactNode;
-}
-
-export const TeamFields = ({ children }: Props) => {
+export const TeamFields = () => {
   const { control } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     name: 'team',
@@ -17,21 +14,28 @@ export const TeamFields = ({ children }: Props) => {
   });
 
   return (
-    <fieldset>
+    <fieldset name="team">
       {fields.map((row, index) => (
         <div key={row.id} className="mb-6 space-y-4">
-          <FormField
-            key={row.id + 'name'}
-            name={`team.${index}.name`}
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input {...field} placeholder="Name" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+          <div className="flex justify-between gap-4">
+            <FormField
+              key={row.id + 'name'}
+              name={`team.${index}.name`}
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormControl>
+                    <Input {...field} placeholder="Name" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {index !== 0 && (
+              <Button variant={'ghost'} onClick={() => remove(index)}>
+                <TrashIcon className="h-4 w-4" />
+              </Button>
             )}
-          />
+          </div>
           <FormField
             key={row.id + 'bio'}
             name={`team.${index}.bio`}

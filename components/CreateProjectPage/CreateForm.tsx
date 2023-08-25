@@ -99,8 +99,10 @@ export const createFormSchema = z.object({
   }),
   benefits: z.array(
     z.object({
-      amount: z.coerce.number(),
-      text: z.string(),
+      amount: z.coerce
+        .number()
+        .nonnegative({ message: 'Amount cannot be negative' }),
+      text: z.string().min(1, { message: 'Benefit description is required' }),
     }),
   ),
   admin_address: z
@@ -204,14 +206,6 @@ export function CreateForm() {
     }
 
     mutate();
-  }
-
-  if (address === undefined) {
-    return (
-      <div className="flex min-h-[calc(100vh-200px)] items-center justify-center px-[5%] py-12">
-        <h1>Please login</h1>
-      </div>
-    );
   }
 
   return (

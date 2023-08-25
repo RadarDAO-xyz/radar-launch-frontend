@@ -10,6 +10,7 @@ import {
   FormLabel,
   FormMessage,
 } from '../ui/form';
+import { TrashIcon } from 'lucide-react';
 
 interface Props {
   children?: ReactNode;
@@ -39,6 +40,9 @@ export const BenefitsFields = ({ children }: Props) => {
                   <FormLabel className="mb-0 w-full">
                     editions collected
                   </FormLabel>
+                  <Button variant={'ghost'} onClick={() => remove(index)}>
+                    <TrashIcon className="h-4 w-4" />
+                  </Button>
                 </div>
                 <FormMessage />
               </FormItem>
