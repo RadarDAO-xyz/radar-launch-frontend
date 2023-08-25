@@ -25,7 +25,7 @@ export function CrowdFundSection() {
   const { control } = useFormContext();
   return (
     <div className="mb-10 rounded border border-slate-200 p-10">
-      <h1 className="font-base">Crowdfund (Optional)</h1>
+      <h1 className="font-base">Patronage</h1>
       <p className="form-subheading">
         On Launch, the public can support your project with $, do you want to
         choose an edition price and offer optional benefits to inspire people to
