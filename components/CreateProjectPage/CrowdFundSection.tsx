@@ -31,7 +31,7 @@ export function CrowdFundSection() {
         offer optional benefits to inspire people to support you?
       </p>
       <hr className="border-b-1 my-8 border-slate-200" />
-      <div className="grid grid-cols-2 gap-10">
+      {/* <div className="grid grid-cols-2 gap-10">
         <div className="col-span-1 pr-4">
           <h2 className="font-base text-xl">Crowdfunding</h2>
           <p>
@@ -62,7 +62,7 @@ export function CrowdFundSection() {
           />
         </div>
       </div>
-      <hr className="border-b-1 my-8 border-slate-200" />
+      <hr className="border-b-1 my-8 border-slate-200" /> */}
       <div className="grid grid-cols-2 gap-10">
         <div className="col-span-1 pr-4">
           <h2 className="font-base text-xl">Editions</h2>
