@@ -39,6 +39,12 @@ async function createProject(
 ): Promise<Project> {
   const finalValues = {
     ...values,
+    milestones: values.milestones.map((milestone) => {
+      if (milestone.amount === '') {
+        return { ...milestone, amount: '-' };
+      }
+      return milestone;
+    }),
     mint_end_date: values.mint_end_date.toISOString(),
     tags: values.tags.split(',').map((tag) => tag.trim()),
   };
@@ -193,19 +199,12 @@ export function CreateForm() {
       return createProject(idToken, newValues);
     },
     {
-      onError: (e) => {
-        console.error(e);
-        toast({
-          variant: 'destructive',
-          title: 'An unexpected error occured',
-          description: 'Check the console for more information',
-        });
-      },
+      onError: (e) => {},
       onSuccess: (data) => {
         toast({
           title: 'Successfully submitted project!',
           description:
-            'Your project is now under review. Check out your project looks like here.',
+            'Your project is now under review. Check out how your project looks like here.',
           action: (
             <Button asChild>
               <Link href={`/project/${data._id}`}>View</Link>
@@ -286,50 +285,18 @@ export function CreateForm() {
           </div>
         </div>
 
-        <div className="flex space-x-2 px-16 pb-20">
-          <Dialog>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild className="w-full">
-                  <div>
-                    <DialogTrigger asChild>
-                      <Button
-                        className="w-full"
-                        disabled={!isValid || !isDirty || !idToken}
-                      >
-                        Submit
-                      </Button>
-                    </DialogTrigger>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  {!idToken ? (
-                    <p>{"Please make sure you're logged in!"}</p>
-                  ) : (
-                    <p>Please check if you have missed any fields</p>
-                  )}
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Create Project</DialogTitle>
-              </DialogHeader>
-              <DialogFooter className="flex space-x-0 space-y-2 sm:flex-col sm:space-x-0">
-                <Button asChild variant="ghost">
-                  <Link
-                    href="https://airtable.com/appGvDqIhUSP0caqo/shrkX6fnUJrcYreUy"
-                    target="_blank"
-                  >
-                    Join our Email Newsletter
-                  </Link>
-                </Button>
-                <Button type="submit" form="create-project">
-                  SUBMIT
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+        <div className="flex flex-col gap-4 px-16 pb-20">
+          <Button asChild variant="ghost">
+            <Link
+              href="https://airtable.com/appGvDqIhUSP0caqo/shrkX6fnUJrcYreUy"
+              target="_blank"
+            >
+              Join our Email Newsletter
+            </Link>
+          </Button>
+          <Button type="submit" form="create-project">
+            Submit
+          </Button>
         </div>
       </form>
     </Form>
