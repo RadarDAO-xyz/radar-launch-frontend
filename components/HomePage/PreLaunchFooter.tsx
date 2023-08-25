@@ -77,6 +77,15 @@ export function PreLaunchFooter() {
             </Link>{' '}
             <ChevronRight className="ml-1 h-4 w-4 text-white" />
           </li>
+          <li className="footer-list-item right">
+            <Link
+              className="black-link hover:underline"
+              href="mailto:launch@radardao.xyz"
+            >
+              {'Contact us'}
+            </Link>{' '}
+            <ChevronRight className="ml-1 h-4 w-4 text-white" />
+          </li>
         </ul>
       </div>
       <div className="_20px-div" />
