@@ -18,8 +18,8 @@ export function MilestoneSection() {
           </p>
           <br />
           <p>
-            If you are not crowdfunding, leave the funding amounts blank or a
-            &quot;-&quot;
+            If you are not crowdfunding, leave a &quot;-&quot; for the funding
+            amount
           </p>
         </div>
         <div className="col-span-1">

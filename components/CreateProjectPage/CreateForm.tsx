@@ -3,22 +3,7 @@ import { SupportSection } from '@/components/CreateProjectPage/SupportSection';
 import { TeamSection } from '@/components/CreateProjectPage/TeamSection';
 import { chains } from '@/components/Providers/Web3Provider';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
 import { Form } from '@/components/ui/form';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { useToast } from '@/components/ui/use-toast';
 import { CacheKey } from '@/constants/react-query';
 import { useAuth } from '@/hooks/useAuth';
@@ -39,12 +24,6 @@ async function createProject(
 ): Promise<Project> {
   const finalValues = {
     ...values,
-    milestones: values.milestones.map((milestone) => {
-      if (milestone.amount === '') {
-        return { ...milestone, amount: '-' };
-      }
-      return milestone;
-    }),
     mint_end_date: values.mint_end_date.toISOString(),
     tags: values.tags.split(',').map((tag) => tag.trim()),
   };
@@ -105,7 +84,9 @@ export const createFormSchema = z.object({
   waitlist: z.boolean().default(true),
   milestones: z.array(
     z.object({
-      amount: z.string(),
+      amount: z
+        .string()
+        .min(1, { message: "Please leave a '-' if you are not crowdfunding" }),
       text: z.string().min(1, { message: 'Milestone description is required' }),
     }),
   ),
@@ -238,7 +219,7 @@ export function CreateForm() {
       <form
         id="create-project"
         onSubmit={handleSubmit(onSubmit)}
-        className="mx-auto mt-24 max-w-4xl"
+        className="mx-auto"
         // @ts-expect-error For netlify forms
         netlify="true"
       >
