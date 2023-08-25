@@ -27,8 +27,9 @@ export function CrowdFundSection() {
     <div className="mb-10 rounded border border-slate-200 p-10">
       <h1 className="font-base">Crowdfund (Optional)</h1>
       <p className="form-subheading">
-        Do you want to crowdfund to reach your milestones, raise capital and
-        offer optional benefits to inspire people to support you?
+        On Launch, the public can support your project with $, do you want to
+        choose an edition price and offer optional benefits to inspire people to
+        support you?
       </p>
       <hr className="border-b-1 my-8 border-slate-200" />
       {/* <div className="grid grid-cols-2 gap-10">
