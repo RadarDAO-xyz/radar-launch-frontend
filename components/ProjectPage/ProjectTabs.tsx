@@ -107,7 +107,7 @@ export function ProjectTabs({ id }: { id: string }) {
     enabled: Boolean(chains[0]?.id),
   });
 
-  const editionId: number | undefined = onChainProjects?.findIndex(
+  const editionId: number | undefined = onChainProjects?.findLastIndex(
     (project) => project.id === id,
   );
   const value =
@@ -136,7 +136,7 @@ export function ProjectTabs({ id }: { id: string }) {
       address !== undefined &&
       isLoggedIn,
   });
-  const { data: mintEditionData, writeAsync } =
+  const { data: mintEditionData, writeAsync, error: mintEditionError } =
     useRadarEditionsMintEdition(config);
   const { isLoading, isSuccess } = useWaitForTransaction({
     hash: mintEditionData?.hash,
@@ -408,7 +408,7 @@ export function ProjectTabs({ id }: { id: string }) {
                             // prevent error from crashing the app
                             console.log(e);
                           }
-                          if (error) {
+                          if (error || mintEditionError) {
                             toast({
                               variant: 'destructive',
                               title: 'An unexpected error occured',
