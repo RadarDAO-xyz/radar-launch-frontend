@@ -17,7 +17,7 @@ export function ProjectSection({ _id, title }: Pool) {
     <section className="px-[5%] py-12">
       <h2 className="border-none py-8 text-2xl">{title}</h2>
       <hr />
-      <div className="flex flex-col-reverse justify-between gap-4 pt-8 md:flex-row">
+      {/* <div className="flex flex-col-reverse justify-between gap-4 pt-8 pb-4 md:flex-row">
         <div className="flex w-full gap-4">
           <Button variant="ghost">Recently backed</Button>
           <Button variant="ghost">Most popular</Button>
@@ -27,8 +27,8 @@ export function ProjectSection({ _id, title }: Pool) {
           <SearchIcon className="my-2 ml-2 mr-3" />
           <Input className="rounded-l-none border-none bg-transparent !shadow-none !outline-0 !outline-offset-0 !ring-0 !ring-inset ring-gray-700 focus-visible:!ring-0 focus-visible:!ring-offset-0" />
         </div>
-      </div>
-      <div className="relative pt-12">
+      </div> */}
+      <div className="relative pt-8">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
           {liveProjects && liveProjects.length > 0 ? (
             liveProjects.map((project) => (
