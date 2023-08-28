@@ -75,7 +75,7 @@ export function ProjectBlock({
     chainId: chains[0].id,
     enabled: Boolean(chains[0].id),
   });
-  const editionId: number | undefined = onChainProjects?.findIndex(
+  const editionId: number | undefined = onChainProjects?.findLastIndex(
     (project) => project.id === _id,
   );
   const { data: totalSupply } = useRadarEditionsTotalSupply({
