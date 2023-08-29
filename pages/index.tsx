@@ -50,11 +50,11 @@ export default function HomePage() {
         }
       />
       <ProjectDiv
-        projectSectionTitle="CURATED VISIONS"
-        projectSectionDescription="Every month we invite a guest curator to spotlight 4 projects building a better future"
+        projectSectionTitle="CURATED BY CULTURE3"
+        projectSectionDescription="Culture3 spotlights 4 projects building a better future"
         projectSectionButton={
           <Button className="font-bolded font-bold" variant={'ghost'} asChild>
-            <Link href="https://t.me/+e97ms5e1fvJiMjhk" target="_blank">
+            <Link href="https://culture3.xyz" target="_blank">
               {'GET DROP UPDATES'}
             </Link>
           </Button>
