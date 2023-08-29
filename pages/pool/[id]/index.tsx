@@ -1,3 +1,4 @@
+import { Placeholder } from '@/components/Layout/Placeholder';
 import { GrantPoolProjectHeader } from '@/components/PoolPage/GrantPoolProjectHeader';
 import { ProjectSection } from '@/components/PoolPage/ProjectSection';
 import { ReadyToLaunchComponent } from '@/components/PoolPage/ReadyToLaunchComponent';
@@ -11,17 +12,17 @@ export default function PoolPage() {
 
   if (isLoading) {
     return (
-      <div className="flex h-[calc(100vh-200px)] items-center justify-center">
+      <Placeholder>
         <h1>Loading...</h1>
-      </div>
+      </Placeholder>
     );
   }
 
   if (!id || !data) {
     return (
-      <div className="flex h-[calc(100vh-200px)] items-center justify-center">
+      <Placeholder>
         <h1>No Pool Found</h1>
-      </div>
+      </Placeholder>
     );
   }
 

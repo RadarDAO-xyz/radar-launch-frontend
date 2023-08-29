@@ -1,9 +1,9 @@
-import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import { Placeholder } from '@/components/Layout/Placeholder';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useAuth } from '@/hooks/useAuth';
-import { HelpCircleIcon, RocketIcon } from 'lucide-react';
+import { HelpCircleIcon } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { useAccount } from 'wagmi';
 
 const CreateFormNoSSR = dynamic(
   () =>
@@ -18,9 +18,9 @@ export default function CreateProjectPage() {
 
   if (idToken === '') {
     return (
-      <div className="flex min-h-[calc(100vh-200px)] items-center justify-center px-[5%] py-12">
+      <Placeholder>
         <h1>Please login</h1>
-      </div>
+      </Placeholder>
     );
   }
 

@@ -15,6 +15,7 @@ import { Project, WalletResolvable } from '@/types/mongo';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Address } from 'wagmi';
+import { Placeholder } from '@/components/Layout/Placeholder';
 
 export interface OnChainProject {
   status: number;
@@ -125,9 +126,9 @@ export default function AdminPage() {
 
   if (userData === undefined) {
     return (
-      <div className="container mb-20 mt-36 text-center">
+      <Placeholder>
         <h1>No user data found</h1>
-      </div>
+      </Placeholder>
     );
   }
 

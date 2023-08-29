@@ -1,4 +1,5 @@
 import { AdminNav } from '@/components/Layout/AdminNav';
+import { Placeholder } from '@/components/Layout/Placeholder';
 import { useAuth } from '@/hooks/useAuth';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 import dynamic from 'next/dynamic';
@@ -15,9 +16,9 @@ export default function ProfilePage() {
 
   if (!idToken || !data) {
     return (
-      <section className="flex min-h-[calc(100vh-100px)] items-center justify-center px-[5%] py-12">
+      <Placeholder>
         <h1>Please login</h1>
-      </section>
+      </Placeholder>
     );
   }
 

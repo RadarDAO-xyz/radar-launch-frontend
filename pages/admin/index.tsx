@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 import { Project, ProjectStatus } from '@/types/mongo';
 import Link from 'next/link';
 import { OnChainProject } from '../profile/[id]';
+import { Placeholder } from '@/components/Layout/Placeholder';
 
 function transformProjects(
   databaseProjects?: Project[],
@@ -47,17 +48,17 @@ export default function AdminPage() {
   });
   if (!data?.wallets?.[0].address || !idToken) {
     return (
-      <section className="mx-auto mt-24 h-[400px] max-w-screen-lg">
-        <h1 className="text-center">Please login</h1>
-      </section>
+      <Placeholder>
+        <h1>Please Login</h1>
+      </Placeholder>
     );
   }
 
   if (!data.bypasser) {
     return (
-      <section className="mx-auto mt-24 h-[400px] max-w-screen-lg">
-        <h1 className="text-center">Not authorized to view this page</h1>
-      </section>
+      <Placeholder>
+        <h1>Not authorized to view this page</h1>
+      </Placeholder>
     );
   }
 

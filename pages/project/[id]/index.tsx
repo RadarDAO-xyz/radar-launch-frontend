@@ -1,4 +1,5 @@
 import { HTMLParsedComponent } from '@/components/Layout/HTMLParsedComponent';
+import { Placeholder } from '@/components/Layout/Placeholder';
 import { ProjectTabs } from '@/components/ProjectPage/ProjectTabs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -36,17 +37,17 @@ export default function IndividualProjectPage() {
 
   if (isProjectLoading || isUserLoading) {
     return (
-      <div className="px-[5%] py-20">
-        <h1 className="text-center text-3xl">Loading...</h1>
-      </div>
+      <Placeholder>
+        <h1>Loading...</h1>
+      </Placeholder>
     );
   }
 
   if (!id || !data) {
     return (
-      <div className="px-[5%] py-20">
-        <h1 className="text-center text-3xl">No project found</h1>
-      </div>
+      <Placeholder>
+        <h1>No project found</h1>
+      </Placeholder>
     );
   }
 
