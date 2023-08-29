@@ -6,7 +6,6 @@ export function useGetCountdown(date?: Date) {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log('interval', date);
       if (date !== undefined) {
         setCountdownString(getCountdown(date));
       }
