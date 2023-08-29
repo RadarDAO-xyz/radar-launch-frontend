@@ -21,4 +21,5 @@ export enum CacheKey {
   UDPATE_PROJECT_STATUS = 'update-project-status',
   DELETE_PROJECT = 'delete-project',
   CREATE_PROJECT = 'create-project',
+  CREATE_POOL = 'create-pool',
 }

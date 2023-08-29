@@ -320,11 +320,33 @@ export async function updateProject(
       },
     );
     if (!response.ok) {
-      throw new Error('Error updating project status');
+      throw new Error('Error updating project');
     }
     return response.json();
   } catch (e) {
     console.error(e);
   }
   return '';
+}
+
+export async function createPool(
+  idToken: string,
+  values: Omit<Pool, '_id'>,
+): Promise<Pool | undefined> {
+  try {
+    const response = await fetch(`${process.env.BACKEND_URL}/pools`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${idToken}`,
+      },
+      body: JSON.stringify(values),
+    });
+    if (!response.ok) {
+      throw new Error('Error creating pool');
+    }
+    return response.json();
+  } catch (e) {
+    console.error(e);
+  }
 }
