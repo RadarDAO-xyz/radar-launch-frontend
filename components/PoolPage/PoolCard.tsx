@@ -24,7 +24,7 @@ export function PoolCard({
       />
       <h2
         className={cn(
-          'mx-auto max-w-[140px] pt-4 text-center text-xl uppercase leading-5',
+          'mx-auto line-clamp-2 w-4/5 pt-4 text-center text-xl uppercase leading-5',
         )}
       >
         {title}
