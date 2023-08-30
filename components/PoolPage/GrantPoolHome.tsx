@@ -4,10 +4,12 @@ import { SetOwnBriefPoolCard } from './SetOwnBriefPoolCard';
 import { Button } from '../ui/button';
 import { useGetPool } from '@/hooks/useGetPool';
 
-const FEATURED_POOL_ID = '64d501ee081e901b9fdfaea9';
+const FEATURED_POOL_ONE_ID = '64d501ee081e901b9fdfaea9';
+const FEATURED_POOL_TWO_ID = '64ee74a442d2582b74e47f83';
 
 export function GrantPoolHome() {
-  const { data } = useGetPool(FEATURED_POOL_ID);
+  const { data: featuredPoolOneData } = useGetPool(FEATURED_POOL_ONE_ID);
+  const { data: featuredPoolTwoData } = useGetPool(FEATURED_POOL_TWO_ID);
 
   return (
     <div className="mx-auto px-[5%] py-20 md:px-0">
@@ -34,8 +36,8 @@ export function GrantPoolHome() {
       </div>
       <div className="_20px-div" />
       <div className="mx-auto grid w-[80%] grid-cols-1 gap-10 lg:grid-cols-2">
-        {data && <PoolCard {...data} />}
-        <SetOwnBriefPoolCard />
+        {featuredPoolOneData && <PoolCard {...featuredPoolOneData} />}
+        {featuredPoolTwoData && <PoolCard {...featuredPoolTwoData} />}
       </div>
     </div>
   );

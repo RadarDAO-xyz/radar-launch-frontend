@@ -53,7 +53,7 @@ export function GrantPoolProjectHeader({
             >
               <div>
                 <img
-                  className="image-26"
+                  className="image-26 aspect-square object-contain"
                   loading="lazy"
                   width="auto"
                   height="auto"

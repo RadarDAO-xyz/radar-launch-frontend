@@ -15,7 +15,7 @@ export function PoolCard({
   const { data } = useGetPoolProjects(_id);
   return (
     <div className="relative rounded-lg border px-5 py-10">
-      <Image
+      <img
         alt="Pool image"
         width={342}
         height={150}
@@ -58,9 +58,9 @@ export function PoolCard({
               typeof sponsor.logo === 'string' && sponsor.logo !== undefined,
           )
           .map((sponsor) => (
-            <Image
+            <img
               key={sponsor.name}
-              className={'rounded-full'}
+              className={'rounded-full aspect-square bg-white object-contain'}
               loading="lazy"
               alt={sponsor.name + ' logo image'}
               width={77}
