@@ -8,7 +8,7 @@ interface ProjectDivProps {
   curatorSection?: ReactNode;
 }
 
-export function ProjectDiv({
+export function ProjectCollection({
   projects,
   projectSectionDescription,
   projectSectionTitle,
@@ -30,13 +30,13 @@ export function ProjectDiv({
               {projectSectionDescription}
               <br />
             </p>
-            <div>{projectSectionButton}</div>
+            {projectSectionButton && <div>{projectSectionButton}</div>}
           </div>
         )}
       </div>
       <div className="month-curated">
         <div className="w-full">{projects}</div>
-        {/* <div className="div-block-101 top">{curatorSection}</div> */}
+        <div className="div-block-101 top">{curatorSection}</div>
       </div>
     </section>
   );

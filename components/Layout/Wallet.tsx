@@ -44,6 +44,9 @@ export function Wallet() {
               <DropdownMenuItem className="cursor-pointer" asChild>
                 <Link href="/admin">Admin</Link>
               </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer" asChild>
+                <Link href="/pool/create">Create Pool</Link>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
             </>
           )}

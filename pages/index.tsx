@@ -1,11 +1,12 @@
-import { GrantPoolHome } from '@/components/PoolPage/GrantPoolHome';
 import { HeaderHero } from '@/components/HomePage/HeaderHero';
 import { InspirationFooter } from '@/components/HomePage/InspirationFooter';
-import { Banner } from '@/components/Layout/Banner';
-import { ProjectDiv } from '@/components/HomePage/ProjectDiv';
+import { ProjectCollection } from '@/components/HomePage/ProjectCollection';
+import { GrantPoolHome } from '@/components/PoolPage/GrantPoolHome';
 import { Button } from '@/components/ui/button';
 import { useGetProjects } from '@/hooks/useGetProjects';
+import { ProjectStatus } from '@/types/mongo';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import Link from 'next/link';
 
 const ProjectBlockNoSSR = dynamic(
@@ -33,6 +34,14 @@ const CENTAUR_PROEJCT_IDS = [
   '64d3fbece93b67e1d4e27671',
 ];
 
+const PLAYFUL_FUTURE_POOL_IDS = [
+  'The Healer',
+  'The Enchantress',
+  'The Meditator',
+  'The Teacher',
+  'The Artist',
+];
+
 export default function HomePage() {
   const { data } = useGetProjects();
 
@@ -49,16 +58,9 @@ export default function HomePage() {
           />
         }
       />
-      <ProjectDiv
+      <ProjectCollection
         projectSectionTitle="CURATED BY CULTURE3"
         projectSectionDescription="Culture3 spotlights 4 projects building a better future"
-        projectSectionButton={
-          <Button className="font-bolded font-bold" variant={'ghost'} asChild>
-            <Link href="https://culture3.xyz" target="_blank">
-              {'GET DROP UPDATES'}
-            </Link>
-          </Button>
-        }
         projects={
           <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-4">
             {data
@@ -88,7 +90,7 @@ export default function HomePage() {
           </div>
         }
       />
-      <ProjectDiv
+      <ProjectCollection
         projectSectionTitle="OUR CENTAUR FUTURE"
         projectSectionDescription="Support over 10 weeks of collective discovery, exploration and innovation in Cycle #3"
         projectSectionButton={
@@ -106,6 +108,56 @@ export default function HomePage() {
               .map((project) => (
                 <ProjectBlockNoSSR key={project._id} {...project} showPrice />
               ))}
+          </div>
+        }
+      />
+      <ProjectCollection
+        projectSectionTitle="A MORE PLAYFUL FUTURE PRIZES"
+        projectSectionDescription="We're boosting projects with $5000 worth of prizes in September via Buidl Guidl."
+        projectSectionButton={
+          <Button className="font-bolded font-bold" variant={'ghost'} asChild>
+            <Link
+              href="https://radarxyz.notion.site/CALL-TO-BUILD-Kernel-x-BuidlGuidl-Monthly-Grant-Pool-Launch-a81e0de4301149f3ae333865cc9bae04?pvs=4"
+              target="_blank"
+            >
+              {'HOW IT WORKS'}
+            </Link>
+          </Button>
+        }
+        projects={
+          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-4">
+            {data
+              ?.filter(
+                (project) =>
+                  PLAYFUL_FUTURE_POOL_IDS.includes(project.brief) &&
+                  project.status === ProjectStatus.LIVE,
+              )
+              .sort((a, b) => parseInt(b._id) - parseInt(a._id))
+              .slice(0, 12)
+              .map((project) => (
+                <ProjectBlockNoSSR key={project._id} {...project} showPrice />
+              ))}
+          </div>
+        }
+        curatorSection={
+          <div className="flex items-center gap-2">
+            Powered by{' '}
+            <Link href="https://buidlguidl.com/" target="_blank" rel="noopener">
+              <Image
+                alt="buidl guidl"
+                src="/buidl-guidl.svg"
+                width={80}
+                height={19}
+              />
+            </Link>
+            x{' '}
+            <Link
+              href="https://www.kernel.community/en/"
+              target="_blank"
+              rel="noopener"
+            >
+              <Image alt="Kernel" src="/kernel.png" width={90} height={52} />
+            </Link>
           </div>
         }
       />
