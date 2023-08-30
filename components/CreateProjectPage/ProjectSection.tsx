@@ -20,8 +20,6 @@ import {
 } from '../ui/select';
 import { createFormSchema } from './CreateForm';
 
-const HIDDEN_POOLS = ['64d6184622f75fd347e91906'];
-
 export function ProjectSection() {
   const { control } = useFormContext<z.infer<typeof createFormSchema>>();
   const { data } = useGetPools();
@@ -212,7 +210,7 @@ export function ProjectSection() {
                   </FormControl>
                   <SelectContent>
                     {data
-                      ?.filter((pool) => !HIDDEN_POOLS.includes(pool._id))
+                      ?.filter((pool) => !pool.is_hidden)
                       .map((pool) => (
                         <SelectItem key={pool._id} value={pool._id}>
                           {pool.title}
