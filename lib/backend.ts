@@ -5,6 +5,7 @@ import {
   type ProjectUpdate,
   type User,
   type WalletResolvable,
+  ProjectBeliever,
 } from '@/types/mongo';
 import type { RecursivePartial } from '@/types/utils';
 
@@ -61,6 +62,19 @@ export async function getProjectSupporters(
   if (!response.ok) {
     console.error(response);
     throw new Error('Failed to fetch project supporters');
+  }
+  return response.json();
+}
+
+export async function getProjectBelievers(
+  projectId: string,
+): Promise<ProjectBeliever[]> {
+  const response = await fetch(
+    `${process.env.BACKEND_URL}/projects/${projectId}/supporters/believers`,
+  );
+  if (!response.ok) {
+    console.error(response);
+    throw new Error('Failed to fetch project believers');
   }
   return response.json();
 }
@@ -155,6 +169,37 @@ export async function contributeProject(
         skillset,
         contribution,
         type: SupportType.CONTRIBUTE,
+      }),
+    },
+  );
+  if (!response.ok) {
+    console.error(response);
+    throw new Error('Failed to contribute project');
+  }
+  return response.json();
+}
+
+export async function believeProject(
+  projectId: string,
+  signatureHash: string,
+  signedMessage: string,
+  signingAddress: string,
+) {
+  if (!signatureHash || !signedMessage || !signingAddress) {
+    return '';
+  }
+  const response = await fetch(
+    `${process.env.BACKEND_URL}/projects/${projectId}/supporters`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        signatureHash,
+        signedMessage,
+        signingAddress,
+        type: SupportType.BELIEVE,
       }),
     },
   );

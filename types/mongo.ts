@@ -114,4 +114,13 @@ export enum Brief {
 export enum SupportType {
   SIGN_UP,
   CONTRIBUTE,
+  BELIEVE
+}
+
+export interface ProjectBeliever {
+  createdAt: string;
+  updatedAt: string;
+  signatureHash: string;
+  signedMessage: string;
+  signingAddress: string;
 }

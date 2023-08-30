@@ -79,12 +79,12 @@ export function ContributeForm({ id }: Props) {
         <Form {...form}>
           {/* @ts-expect-error Netlify form submission */}
           <form netlify={'true'} onSubmit={handleSubmit(onSubmit)}>
-            <div className="mb-4 flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
+            <div className="mb-4 w-full flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
               <FormField
                 control={control}
                 name="social"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className='w-full'>
                     <FormControl>
                       <Input {...field} placeholder="Social Media" />
                     </FormControl>
@@ -96,7 +96,7 @@ export function ContributeForm({ id }: Props) {
                 control={control}
                 name="email"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className='w-full'>
                     <FormControl>
                       <Input {...field} placeholder="Your Email" type="email" />
                     </FormControl>

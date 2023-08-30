@@ -217,7 +217,7 @@ export default function IndividualProjectPage() {
             </div>
             <SheetFooter className="w-full py-6">
               <SheetClose asChild>
-                <Button>CLOSE</Button>
+                <Button className='w-full'>CLOSE</Button>
               </SheetClose>
             </SheetFooter>
           </SheetContent>

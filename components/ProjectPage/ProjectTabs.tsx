@@ -35,6 +35,7 @@ import { Input } from '../ui/input';
 import { useToast } from '../ui/use-toast';
 import { ContributeForm } from './ContributeForm';
 import { SignUpForm } from './SignUpForm';
+import { BelieveTabContent } from './BelieveTabContent';
 
 async function getMintCheckoutLink(
   quantity: number,
@@ -83,6 +84,7 @@ async function getMintCheckoutLink(
 }
 
 enum Tab {
+  BELIEVE = 'believe',
   COLLECT = 'collect',
   SIGN_UP = 'sign-up',
   CONTRIBUTE = 'contribute',
@@ -136,8 +138,11 @@ export function ProjectTabs({ id }: { id: string }) {
       address !== undefined &&
       isLoggedIn,
   });
-  const { data: mintEditionData, writeAsync, error: mintEditionError } =
-    useRadarEditionsMintEdition(config);
+  const {
+    data: mintEditionData,
+    writeAsync,
+    error: mintEditionError,
+  } = useRadarEditionsMintEdition(config);
   const { isLoading, isSuccess } = useWaitForTransaction({
     hash: mintEditionData?.hash,
     enabled: mintEditionData?.hash !== undefined,
@@ -222,10 +227,18 @@ export function ProjectTabs({ id }: { id: string }) {
 
   return (
     <Tabs
-      defaultValue={Tab.COLLECT}
+      defaultValue={Tab.BELIEVE}
       onValueChange={(e) => setCurrentTab(e as Tab)}
     >
       <TabsList className="grid h-auto w-full grid-cols-2 gap-2 px-0 lg:grid-cols-3">
+        <TabsTrigger value={Tab.BELIEVE} asChild>
+          <Button
+            className="w-full border-b-0 !bg-gray-100 p-2 px-4 no-underline hover:!bg-gray-200 data-[state=active]:!bg-gray-300 md:col-span-1 lg:col-span-3"
+            variant={'ghost'}
+          >
+            Believe <MoveDown className="ml-1 h-3 w-3" />
+          </Button>
+        </TabsTrigger>
         <TabsTrigger value={Tab.COLLECT} asChild>
           <Button
             className="col-span-1 w-full border-b-0 !bg-gray-100 p-2 px-4 no-underline hover:!bg-gray-200 data-[state=active]:!bg-gray-300"
@@ -259,6 +272,12 @@ export function ProjectTabs({ id }: { id: string }) {
           </Button>
         </TabsTrigger>
       </TabsList>
+      <TabsContent
+        value={Tab.BELIEVE}
+        className="rounded-md border px-8 py-6 pb-10"
+      >
+        <BelieveTabContent id={id} />
+      </TabsContent>
       <TabsContent value={Tab.COLLECT} className="rounded-md border px-4 py-2">
         {typeof value === 'bigint' && typeof protocolFee === 'bigint' ? (
           <div className="p-4 lg:p-6">
