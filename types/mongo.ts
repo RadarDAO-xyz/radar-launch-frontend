@@ -10,6 +10,7 @@ export enum ProjectStatus {
 export type Project = {
   _id: string;
   title: string;
+  pool: string;
   founder: string;
   description: string;
   video_url: string;

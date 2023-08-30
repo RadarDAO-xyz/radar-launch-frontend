@@ -34,6 +34,8 @@ const CENTAUR_PROEJCT_IDS = [
   '64d3fbece93b67e1d4e27671',
 ];
 
+const A_MORE_PLAYFUL_FUTURE_POOL_ID = '64ee74a442d2582b74e47f83';
+
 export default function HomePage() {
   const { data } = useGetProjects();
 
@@ -107,22 +109,28 @@ export default function HomePage() {
         projectSectionTitle="A MORE PLAYFUL FUTURE PRIZES"
         projectSectionDescription="We're boosting projects with $5000 worth of prizes in September via Buidl Guidl."
         projectSectionButton={
-          <Button className="font-bolded font-bold" variant={'ghost'} asChild>
-            <Link
-              href="https://radarxyz.notion.site/CALL-TO-BUILD-Kernel-x-BuidlGuidl-Monthly-Grant-Pool-Launch-a81e0de4301149f3ae333865cc9bae04?pvs=4"
-              target="_blank"
-            >
-              {'HOW IT WORKS'}
-            </Link>
-          </Button>
+          <>
+            <Button className="mr-3 font-bolded" variant={'ghost'} asChild>
+              <Link href={`/pool/${A_MORE_PLAYFUL_FUTURE_POOL_ID}`}>
+                {'SEE ALL'}
+              </Link>
+            </Button>
+            <Button className="font-bolded font-bold" variant={'ghost'} asChild>
+              <Link
+                href="https://radarxyz.notion.site/CALL-TO-BUILD-Kernel-x-BuidlGuidl-Monthly-Grant-Pool-Launch-a81e0de4301149f3ae333865cc9bae04?pvs=4"
+                target="_blank"
+              >
+                {'HOW IT WORKS'}
+              </Link>
+            </Button>
+          </>
         }
         projects={
           <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-4">
             {data
               ?.filter(
                 (project) =>
-                  project.brief !== 'The New Players' &&
-                  project.brief !== 'Centaur Future' &&
+                  project.pool === A_MORE_PLAYFUL_FUTURE_POOL_ID &&
                   project.status === ProjectStatus.LIVE,
               )
               .sort((a, b) =>
