@@ -43,7 +43,10 @@ export type Pool = {
   pool_amount: number;
   hero_image?: string;
   sponsors: Sponsor[];
-  video: string;
+  video?: string;
+  is_hidden: boolean;
+  brief_button_link: string;
+  event_button_link: string;
 };
 
 export type User = {

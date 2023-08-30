@@ -1,7 +1,8 @@
 import { AdminNav } from '@/components/Layout/AdminNav';
+import { Placeholder } from '@/components/Layout/Placeholder';
 import { CollectedVisions } from '@/components/ProfilePage/CollectedVisions';
-import { chains } from '@/components/Providers/Web3Provider';
 import { YourVisions } from '@/components/ProfilePage/YourVisions';
+import { chains } from '@/components/Providers/Web3Provider';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CONTRACT_ADDRESS } from '@/constants/address';
 import { useGetProjects } from '@/hooks/useGetProjects';
@@ -12,13 +13,13 @@ import {
 } from '@/lib/generated';
 import { convertAddressToChecksum } from '@/lib/utils';
 import { Project, WalletResolvable } from '@/types/mongo';
+import { EditionStatus } from '@/types/web3';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Address } from 'wagmi';
-import { Placeholder } from '@/components/Layout/Placeholder';
 
 export interface OnChainProject {
-  status: number;
+  status: EditionStatus;
   fee: bigint;
   balance: bigint;
   owner: `0x${string}`;

@@ -11,12 +11,14 @@ export function GrantPoolProjectHeader({
   hero_image,
   subtitle,
   video,
+  brief_button_link,
+  event_button_link,
 }: Pool) {
   return (
     <section className="pl-[5%] pr-[5%] lg:border-b-2 lg:pr-0">
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-8">
         <div className="col-span-3 pr-6 pt-20 lg:border-r lg:pb-20">
-          <div className='pb-5'>
+          <div className="pb-5">
             <h2 className="mb-1 font-base text-xl text-gray-500">{subtitle}</h2>
             <h1 className="heading-trending-launch-page text-4xl uppercase">
               {title}
@@ -26,18 +28,12 @@ export function GrantPoolProjectHeader({
           </div>
           <div>
             <Button asChild className="mb-3 w-full">
-              <Link
-                target="_blank"
-                href="https://docsend.com/view/hpkv9gtxdgdpszn8"
-              >
+              <Link target="_blank" href={brief_button_link}>
                 {'READ THE BRIEF'}
               </Link>
             </Button>
             <Button variant={'ghost'} className="w-full" asChild>
-              <Link
-                target="_blank"
-                href="https://partiful.com/e/sEZdyAoor2KxsZIhdZAo"
-              >
+              <Link target="_blank" href={event_button_link}>
                 {'SIGN UP TO NPC DAY'}
               </Link>
             </Button>

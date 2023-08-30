@@ -13,6 +13,7 @@ import { Project, ProjectStatus } from '@/types/mongo';
 import Link from 'next/link';
 import { OnChainProject } from '../profile/[id]';
 import { Placeholder } from '@/components/Layout/Placeholder';
+import { convertOnChainStatusName } from '@/lib/convertOnChainStatusName';
 
 function transformProjects(
   databaseProjects?: Project[],
@@ -136,7 +137,9 @@ export default function AdminPage() {
                 )}
               />
             </div>
-            <p>On Chain Status: {project.onChainStatus}</p>
+            <p>
+              On Chain Status: {convertOnChainStatusName(project.onChainStatus)}
+            </p>
             <p>
               Curation Start:{' '}
               {new Date(project.curation?.start).toLocaleDateString()}
