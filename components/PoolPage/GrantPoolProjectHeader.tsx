@@ -29,12 +29,12 @@ export function GrantPoolProjectHeader({
           <div>
             <Button asChild className="mb-3 w-full">
               <Link target="_blank" href={brief_button_link}>
-                {'READ THE BRIEF'}
+                {'HOW IT WORKS'}
               </Link>
             </Button>
             <Button variant={'ghost'} className="w-full" asChild>
               <Link target="_blank" href={event_button_link}>
-                {'SIGN UP TO NPC DAY'}
+                {'ATTEND UPCOMING EVENTS'}
               </Link>
             </Button>
           </div>
