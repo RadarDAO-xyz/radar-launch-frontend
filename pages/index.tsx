@@ -135,6 +135,7 @@ export default function HomePage() {
                   {...project}
                   showSupporters
                   showMintEndDate
+                  showPrice
                 />
               ))}
           </div>
