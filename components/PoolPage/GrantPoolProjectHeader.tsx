@@ -72,7 +72,7 @@ export function GrantPoolProjectHeader({
         <div className="col-span-3 max-h-[520px] overflow-hidden text-center">
           <img
             src={hero_image}
-            className="min-h-full min-w-full max-w-none rounded-none lg:shadow-lg"
+            className="min-h-full w-full min-w-full max-w-none rounded-none lg:shadow-lg"
             alt="Pool hero"
           />
         </div>
