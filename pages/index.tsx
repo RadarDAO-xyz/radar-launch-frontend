@@ -125,10 +125,17 @@ export default function HomePage() {
                   project.brief !== 'Centaur Future' &&
                   project.status === ProjectStatus.LIVE,
               )
-              .sort((a, b) => parseInt(b._id) - parseInt(a._id))
+              .sort((a, b) =>
+                new Date(b.createdAt) > new Date(a.createdAt) ? 1 : -1,
+              )
               .slice(0, 12)
               .map((project) => (
-                <ProjectBlockNoSSR key={project._id} {...project} showSupporters showMintEndDate />
+                <ProjectBlockNoSSR
+                  key={project._id}
+                  {...project}
+                  showSupporters
+                  showMintEndDate
+                />
               ))}
           </div>
         }

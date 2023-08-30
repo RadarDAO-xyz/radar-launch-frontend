@@ -27,12 +27,14 @@ export type Project = {
   admin_address: string;
   supporter_count: number;
   status: ProjectStatus;
-  launched_at: string; // ISO Datestring
+  launched_at: string; // ISO Date string
   curation: {
-    start: string; // ISO Datestring
-    end: string; // ISO Datestring
+    start: string; // ISO Date string
+    end: string; // ISO Date string
   };
   thumbnail?: string;
+  createdAt: string; // ISO Date string
+  updatedAt: string; // ISO Date string
 };
 
 export type Pool = {
