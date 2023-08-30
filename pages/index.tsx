@@ -34,14 +34,6 @@ const CENTAUR_PROEJCT_IDS = [
   '64d3fbece93b67e1d4e27671',
 ];
 
-const PLAYFUL_FUTURE_POOL_IDS = [
-  'The Healer',
-  'The Enchantress',
-  'The Meditator',
-  'The Teacher',
-  'The Artist',
-];
-
 export default function HomePage() {
   const { data } = useGetProjects();
 
@@ -129,13 +121,14 @@ export default function HomePage() {
             {data
               ?.filter(
                 (project) =>
-                  PLAYFUL_FUTURE_POOL_IDS.includes(project.brief) &&
+                  project.brief !== 'The New Players' &&
+                  project.brief !== 'Centaur Future' &&
                   project.status === ProjectStatus.LIVE,
               )
               .sort((a, b) => parseInt(b._id) - parseInt(a._id))
               .slice(0, 12)
               .map((project) => (
-                <ProjectBlockNoSSR key={project._id} {...project} showPrice />
+                <ProjectBlockNoSSR key={project._id} {...project} showSupporters showMintEndDate />
               ))}
           </div>
         }
