@@ -1,7 +1,6 @@
 import { BenefitsFields } from '@/components/CreateProjectPage/BenefitsFields';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import { Checkbox } from '@/components/ui/checkbox';
 import {
   FormControl,
   FormDescription,
@@ -21,7 +20,11 @@ import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
 
-export function CrowdFundSection() {
+interface Props {
+  isEdit?: boolean;
+}
+
+export function CrowdFundSection({ isEdit }: Props) {
   const { control } = useFormContext();
   return (
     <div className="mb-10 rounded border border-slate-200 p-10">
@@ -64,25 +67,29 @@ export function CrowdFundSection() {
         </div>
       </div>
       <hr className="border-b-1 my-8 border-slate-200" /> */}
-      <div className="grid grid-cols-2 gap-10">
-        <div className="col-span-1 pr-4">
-          <h2 className="font-base text-xl">Editions</h2>
-          <p>
-            Adding patronage is completely up to you, projects can believe in
-            you for free onchain, but additionally they can support you
-            financially by collecting your project edition.
-            <br />
-            <br />
-            Setting a free NFT mint will not decrease prize opportunities,
-            you&apos;ll just be airdropped to the wallet address you created the
-            project with.
-            <br />
-            <br />
-            We recommend setting a low 1$-5$ edition to allow people to support
-            you with micro-prizes and allows prizes to be directly distributed
-            through the platform.
-          </p>
-        </div>
+      <div
+        className={cn('grid gap-10', isEdit ? 'grid-cols-1' : 'grid-cols-2')}
+      >
+        {!isEdit && (
+          <div className="col-span-1 pr-4">
+            <h2 className="font-base text-xl">Editions</h2>
+            <p>
+              Adding patronage is completely up to you, projects can believe in
+              you for free onchain, but additionally they can support you
+              financially by collecting your project edition.
+              <br />
+              <br />
+              Setting a free NFT mint will not decrease prize opportunities,
+              you&apos;ll just be airdropped to the wallet address you created
+              the project with.
+              <br />
+              <br />
+              We recommend setting a low 1$-5$ edition to allow people to
+              support you with micro-prizes and allows prizes to be directly
+              distributed through the platform.
+            </p>
+          </div>
+        )}
         <div className="col-span-1">
           <FormField
             control={control}
@@ -143,37 +150,45 @@ export function CrowdFundSection() {
         </div>
       </div>
       <hr className="border-b-1 my-8 border-slate-200" />
-      <div className="grid grid-cols-2 gap-10">
-        <div className="col-span-1 pr-4">
-          <h2 className="font-base text-xl">
-            Optional Benefits for supporters
-          </h2>
-          <p>
-            Set benefits for collectors of your editions, this will be listed on
-            your project page.
-            <br />
-            <br />
-            Think of incentives to support you, it could be first access to a
-            product, a physical redemption, membership to community.
-            <br />
-            <br />
-            At the current time, you cannot offer equity or revenue share
-            through Launch.
-          </p>
-        </div>
+      <div
+        className={cn('grid gap-10', isEdit ? 'grid-cols-1' : 'grid-cols-2')}
+      >
+        {!isEdit && (
+          <div className="col-span-1 pr-4">
+            <h2 className="font-base text-xl">
+              Optional Benefits for supporters
+            </h2>
+            <p>
+              Set benefits for collectors of your editions, this will be listed
+              on your project page.
+              <br />
+              <br />
+              Think of incentives to support you, it could be first access to a
+              product, a physical redemption, membership to community.
+              <br />
+              <br />
+              At the current time, you cannot offer equity or revenue share
+              through Launch.
+            </p>
+          </div>
+        )}
         <div className="col-span-1">
           <BenefitsFields />
         </div>
       </div>
       <hr className="border-b-1 my-8 border-slate-200" />
-      <div className="grid grid-cols-2 gap-10">
-        <div className="col-span-1 pr-4">
-          <h2 className="font-base text-xl">Set your admin address</h2>
-          <p>
-            Please share an Ethereum address which can withdraw your crowdfund,
-            please ensure you have access to this address.
-          </p>
-        </div>
+      <div
+        className={cn('grid gap-10', isEdit ? 'grid-cols-1' : 'grid-cols-2')}
+      >
+        {!isEdit && (
+          <div className="col-span-1 pr-4">
+            <h2 className="font-base text-xl">Set your admin address</h2>
+            <p>
+              Please share an Ethereum address which can withdraw your
+              crowdfund, please ensure you have access to this address.
+            </p>
+          </div>
+        )}
         <div className="col-span-1">
           <FormField
             control={control}

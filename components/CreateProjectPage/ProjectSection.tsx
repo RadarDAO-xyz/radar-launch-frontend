@@ -1,4 +1,5 @@
 import { useGetPools } from '@/hooks/useGetPools';
+import { cn } from '@/lib/utils';
 import { useFormContext } from 'react-hook-form';
 import * as z from 'zod';
 import { TinyMCE } from '../Layout/TinyMCE';
@@ -20,7 +21,12 @@ import {
 } from '../ui/select';
 import { createFormSchema } from './CreateForm';
 
-export function ProjectSection() {
+interface Props {
+  isEdit?: boolean;
+  thumbnail?: string;
+}
+
+export function ProjectSection({ isEdit, thumbnail }: Props) {
   const { control } = useFormContext<z.infer<typeof createFormSchema>>();
   const { data } = useGetPools();
 
@@ -31,19 +37,24 @@ export function ProjectSection() {
         {"Hey there future maker, what's your project?"}
       </p>
       <hr className="border-b-1 my-8 border-slate-200" />
-      <div className="grid grid-cols-2 gap-10">
-        <div className="col-span-1 pr-4">
-          <h2 className="font-base text-xl">Basic Info</h2>
-          <p>
-            Write a Clear and Concise Title and Subtitle for Your Project
-            <br />
-            <br />
-            Your project title and subtitle will appear on your project and
-            pre-launch pages, as well as in category pages, search results, and
-            emails we send to our community. Make sure they accurately represent
-            your project and are easy to understand for potential supporters.
-          </p>
-        </div>
+      <div
+        className={cn('grid gap-10', isEdit ? 'grid-cols-1' : 'grid-cols-2')}
+      >
+        {!isEdit && (
+          <div className="col-span-1 pr-4">
+            <h2 className="font-base text-xl">Basic Info</h2>
+            <p>
+              Write a Clear and Concise Title and Subtitle for Your Project
+              <br />
+              <br />
+              Your project title and subtitle will appear on your project and
+              pre-launch pages, as well as in category pages, search results,
+              and emails we send to our community. Make sure they accurately
+              represent your project and are easy to understand for potential
+              supporters.
+            </p>
+          </div>
+        )}
         <div className="col-span-1">
           <FormField
             control={control}
@@ -85,19 +96,24 @@ export function ProjectSection() {
         </div>
       </div>
       <hr className="border-b-1 my-8 border-slate-200" />
-      <div className="grid grid-cols-2 gap-10">
-        <div className="col-span-1 pr-4">
-          <h2 className="font-base text-xl">Summary</h2>
-          <p>
-            Please provide a brief summary that will motivate supporters to
-            believe in your vision. Be genuine rather than polished!
-            <br />
-            <br />
-            Explain what you aim to achieve with the funding, how you intend to
-            accomplish it, who you are, and why this project is important to
-            you. Demonstrations and step-by-step guides are highly effective!
-          </p>
-        </div>
+      <div
+        className={cn('grid gap-10', isEdit ? 'grid-cols-1' : 'grid-cols-2')}
+      >
+        {!isEdit && (
+          <div className="col-span-1 pr-4">
+            <h2 className="font-base text-xl">Summary</h2>
+            <p>
+              Please provide a brief summary that will motivate supporters to
+              believe in your vision. Be genuine rather than polished!
+              <br />
+              <br />
+              Explain what you aim to achieve with the funding, how you intend
+              to accomplish it, who you are, and why this project is important
+              to you. Demonstrations and step-by-step guides are highly
+              effective!
+            </p>
+          </div>
+        )}
         <div className="col-span-1">
           <FormField
             control={control}
@@ -139,21 +155,27 @@ export function ProjectSection() {
         </div>
       </div>
       <hr className="border-b-1 my-8 border-slate-200" />
-      <div className="grid grid-cols-2 gap-10">
-        <div className="col-span-1 pr-4">
-          <h2 className="font-base text-xl">Project Image</h2>
-          <p>
-            Please upload an image to represent your project, make it authentic.
-            <br />
-            <br />
-            This will appear for collectors in their wallet and on their
-            profile.
-            <br />
-            <br />
-            Note: you can leave this empty and this image will be taken from the
-            thumbnail of your uploaded video.
-          </p>
-        </div>
+      <div
+        className={cn('grid gap-10', isEdit ? 'grid-cols-1' : 'grid-cols-2')}
+      >
+        {!isEdit && (
+          <div className="col-span-1 pr-4">
+            <h2 className="font-base text-xl">Project Image</h2>
+            <p>
+              Please upload an image to represent your project, make it
+              authentic.
+              <br />
+              <br />
+              This will appear for collectors in their wallet and on their
+              profile.
+              <br />
+              <br />
+              Note: you can leave this empty and this image will be taken from
+              the thumbnail of your uploaded video.
+            </p>
+          </div>
+        )}
+        {isEdit && thumbnail && <img src={thumbnail} alt="Project Thumbnail" />}
         <div className="col-span-1 space-y-2">
           <FormField
             control={control}
@@ -183,15 +205,19 @@ export function ProjectSection() {
         </div>
       </div>
       <hr className="border-b-1 my-8 border-slate-200" />
-      <div className="grid grid-cols-2 gap-10">
-        <div className="col-span-1 pr-4">
-          <h2 className="font-base text-xl">Inspiration</h2>
-          <p>
-            {
-              "Choose a brief that inspires a playful future, or select one of our partner briefs and explain why you're building it. We'll use this to communicate your vision in any email newsletters, interviews or social campaigns."
-            }
-          </p>
-        </div>
+      <div
+        className={cn('grid gap-10', isEdit ? 'grid-cols-1' : 'grid-cols-2')}
+      >
+        {!isEdit && (
+          <div className="col-span-1 pr-4">
+            <h2 className="font-base text-xl">Inspiration</h2>
+            <p>
+              {
+                "Choose a brief that inspires a playful future, or select one of our partner briefs and explain why you're building it. We'll use this to communicate your vision in any email newsletters, interviews or social campaigns."
+              }
+            </p>
+          </div>
+        )}
         <div className="col-span-1">
           <FormField
             control={control}
@@ -246,16 +272,20 @@ export function ProjectSection() {
         </div>
       </div>
       <hr className="border-b-1 my-8 border-slate-200" />
-      <div className="grid grid-cols-2 gap-10">
-        <div className="col-span-1 pr-4">
-          <h2 className="font-base text-xl">Tags</h2>
-          <p>
-            Give your project tags that you believe reflect a future it is
-            building towards. These are one word tags like:
-          </p>
-          <br />
-          <p>AI, crypto, worldbuilding, storytelling</p>
-        </div>
+      <div
+        className={cn('grid gap-10', isEdit ? 'grid-cols-1' : 'grid-cols-2')}
+      >
+        {!isEdit && (
+          <div className="col-span-1 pr-4">
+            <h2 className="font-base text-xl">Tags</h2>
+            <p>
+              Give your project tags that you believe reflect a future it is
+              building towards. These are one word tags like:
+            </p>
+            <br />
+            <p>AI, crypto, worldbuilding, storytelling</p>
+          </div>
+        )}
         <div className="col-span-1">
           <FormField
             control={control}

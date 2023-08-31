@@ -7,33 +7,27 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { CONTRACT_ADDRESS } from '@/constants/address';
 import { CacheKey } from '@/constants/react-query';
 import { useAuth } from '@/hooks/useAuth';
 import { useGetProject } from '@/hooks/useGetProject';
-import { useGetProjectBelievers } from '@/hooks/useGetProjectBelievers';
-import { believeProject } from '@/lib/backend';
+import {
+  usePrepareRadarEditionsBelieveProject,
+  useRadarEditionsBelieveProject
+} from '@/lib/generated';
+import { shortenAddress } from '@/lib/utils';
+import { ProjectStatus } from '@/types/mongo';
+import { useEffect, useState } from 'react';
 import {
   useAccount,
   usePublicClient,
   useQuery,
   useQueryClient,
   useSignMessage,
-  useWaitForTransaction,
-  useWalletClient,
+  useWaitForTransaction
 } from 'wagmi';
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
-import { useEffect, useState } from 'react';
-import { ProjectStatus } from '@/types/mongo';
-import { format } from 'date-fns';
-import { shortenAddress } from '@/lib/utils';
-import {
-  radarEditionsABI,
-  usePrepareRadarEditionsBelieveProject,
-  useRadarEditionsBelieveProject,
-  useRadarEditionsEditionBelievedEvent,
-} from '@/lib/generated';
-import { CONTRACT_ADDRESS } from '@/constants/address';
 
 interface Props {
   id: string;
@@ -233,7 +227,7 @@ and a better future in: ${projectData?.tags.join(', ')}`,
         </DialogContent>
       </Dialog>
       <p className="text-center text-muted-foreground">
-        Build reputation on {projectData?.tags.join(', ') ?? 'Launch'}
+        Build reputation in {projectData?.tags.join(', ') ?? 'Launch'}
       </p>
       <div className="grid gap-2 pt-6">
         {believerLogs?.slice(0, 20).map((believer) => (

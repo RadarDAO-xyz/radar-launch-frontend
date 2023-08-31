@@ -37,6 +37,7 @@ import { ApproveEditionButton } from './ApproveEditionButton';
 import { CreateEditionButton } from './CreateEditionButton';
 import { DeleteProjectButton } from './DeleteProjectButton';
 import { DisapproveEditionButton } from './DisapproveEditionButton';
+import Link from 'next/link';
 
 interface ProjectWithChainData extends Project {
   editionId?: number;
@@ -92,6 +93,9 @@ export function ProjectActions(props: ProjectWithChainData) {
 
   return (
     <div className="mt-4 flex gap-4">
+      <Button asChild>
+        <Link href={`/project/${_id}/edit`}>Edit</Link>
+      </Button>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
           <Button>Actions</Button>

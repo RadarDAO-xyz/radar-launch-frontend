@@ -1,3 +1,4 @@
+import { createFormSchema } from '@/components/CreateProjectPage/CreateForm';
 import {
   SupportType,
   type Pool,
@@ -6,8 +7,10 @@ import {
   type User,
   type WalletResolvable,
   ProjectBeliever,
+  ProjectStatus,
 } from '@/types/mongo';
 import type { RecursivePartial } from '@/types/utils';
+import * as z from 'zod';
 
 export async function getPools(): Promise<Pool[]> {
   const response = await fetch(`${process.env.BACKEND_URL}/pools`);
@@ -347,27 +350,105 @@ export async function getProjectUpdates(
   return [];
 }
 
+export async function createProject(
+  idToken: string,
+  values: z.infer<typeof createFormSchema> & { pool?: string },
+): Promise<Project> {
+  const finalValues = {
+    ...values,
+    mint_end_date: values.mint_end_date.toISOString(),
+    tags: values.tags.split(',').map((tag) => tag.trim()),
+  };
+  if (finalValues.thumbnail) {
+    const formData = new FormData();
+    formData.append('thumbnail', finalValues.thumbnail);
+    formData.append(
+      'payload_json',
+      JSON.stringify({
+        ...finalValues,
+        thumbnail: finalValues.thumbnail.name,
+      }),
+    );
+    const res = await fetch(`${process.env.BACKEND_URL}/projects`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${idToken}`,
+      },
+      body: formData,
+    });
+    return await res.json();
+  } else {
+    const res = await fetch(`${process.env.BACKEND_URL}/projects`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${idToken}`,
+      },
+      body: JSON.stringify(finalValues),
+    });
+    return await res.json();
+  }
+}
+
 export async function updateProject(
-  fields: RecursivePartial<Project>,
+  values: Partial<z.infer<typeof createFormSchema>> & {
+    pool?: string;
+    status?: ProjectStatus;
+    curation?: {
+      start?: string;
+      end?: string;
+    };
+  },
   projectId: string,
   idToken: string,
 ) {
+  const finalValues = {
+    ...values,
+    mint_end_date: values?.mint_end_date?.toISOString(),
+    tags: values.tags?.split(',').map((tag) => tag.trim()),
+  };
   try {
-    const response = await fetch(
-      `${process.env.BACKEND_URL}/projects/${projectId}`,
-      {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${idToken}`,
+    if (finalValues.thumbnail !== undefined) {
+      const formData = new FormData();
+      formData.append('thumbnail', finalValues.thumbnail);
+      formData.append(
+        'payload_json',
+        JSON.stringify({
+          ...finalValues,
+          thumbnail: finalValues.thumbnail.name,
+        }),
+      );
+      const res = await fetch(
+        `${process.env.BACKEND_URL}/projects/${projectId}`,
+        {
+          method: 'PATCH',
+          headers: {
+            Authorization: `Bearer ${idToken}`,
+          },
+          body: formData,
         },
-        body: JSON.stringify(fields),
-      },
-    );
-    if (!response.ok) {
-      throw new Error('Error updating project');
+      );
+      if (!res.ok) {
+        throw new Error('Error updating project');
+      }
+      return await res.json();
+    } else {
+      const res = await fetch(
+        `${process.env.BACKEND_URL}/projects/${projectId}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${idToken}`,
+          },
+          body: JSON.stringify(finalValues),
+        },
+      );
+      if (!res.ok) {
+        throw new Error('Error updating project');
+      }
+      return await res.json();
     }
-    return response.json();
   } catch (e) {
     console.error(e);
   }

@@ -159,11 +159,13 @@ export function ProjectBlock({
               {status === ProjectStatus.LIVE ? (
                 <div className="flex w-full divide-x text-center text-xs text-gray-700">
                   {showMintEndDate && mint_end_date && (
-                    <p className="[&:not(:first-child)]:pl-2 pr-2">{countdown}</p>
+                    <p className="pr-2 [&:not(:first-child)]:pl-2">
+                      {countdown}
+                    </p>
                   )}
                   {/* TODO: change this to onchain fee / exchange rate */}
                   {showPrice && (
-                    <p className="[&:not(:first-child)]:pl-2 pr-2">
+                    <p className="pr-2 [&:not(:first-child)]:pl-2">
                       $
                       {edition_price.toLocaleString('en-US', {
                         maximumFractionDigits: 0,
@@ -172,7 +174,7 @@ export function ProjectBlock({
                     </p>
                   )}
                   {showSupporters && totalSupply !== undefined && (
-                    <p className="[&:not(:first-child)]:pl-2 pr-2">
+                    <p className="pr-2 [&:not(:first-child)]:pl-2">
                       {(totalSupply + BigInt(supporter_count || 0)).toString()}{' '}
                       supporters
                     </p>
@@ -180,7 +182,9 @@ export function ProjectBlock({
                 </div>
               ) : (
                 <div className="count-block flex items-center justify-center">
-                  {countdown} until drop
+                  {countdown !== 'CLOSED'
+                    ? `${countdown} until drop`
+                    : countdown}
                 </div>
               )}
             </div>

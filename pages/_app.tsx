@@ -11,14 +11,15 @@ import Head from 'next/head';
 import Script from 'next/script';
 import { ThemeProvider } from '@/components/Providers/ThemeProvider';
 import CookieConsent from '@/components/Layout/CookieConsent';
+import { Web3Provider } from '@/components/Providers/Web3Provider';
 
-const Web3ProviderNoSSR = dynamic(
-  () =>
-    import('@/components/Providers/Web3Provider').then(
-      (mod) => mod.Web3Provider,
-    ),
-  { ssr: false },
-);
+// const Web3ProviderNoSSR = dynamic(
+//   () =>
+//     import('@/components/Providers/Web3Provider').then(
+//       (mod) => mod.Web3Provider,
+//     ),
+//   { ssr: false },
+// );
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -81,7 +82,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
         <link rel="icon" href="/favicon.png" sizes="any" />
       </Head>
-      <Web3ProviderNoSSR>
+      <Web3Provider>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -95,7 +96,7 @@ export default function App({ Component, pageProps }: AppProps) {
             <CookieConsent />
           </AuthProvider>
         </ThemeProvider>
-      </Web3ProviderNoSSR>
+      </Web3Provider>
     </>
   );
 }

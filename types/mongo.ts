@@ -21,7 +21,7 @@ export type Project = {
   team: Team[];
   collaborators?: string;
   waitlist: boolean;
-  milestones: AmountText[];
+  milestones: MilestoneAmountText[];
   edition_price: number;
   mint_end_date: string;
   benefits: AmountText[];
@@ -97,6 +97,11 @@ type AmountText = {
   text: string;
 };
 
+type MilestoneAmountText = {
+  amount: string;
+  text: string;
+};
+
 export type ProjectUpdate = {
   project: string;
   text: string;
@@ -114,7 +119,7 @@ export enum Brief {
 export enum SupportType {
   SIGN_UP,
   CONTRIBUTE,
-  BELIEVE
+  BELIEVE,
 }
 
 export interface ProjectBeliever {

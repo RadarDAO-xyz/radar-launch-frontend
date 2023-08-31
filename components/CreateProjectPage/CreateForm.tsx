@@ -7,7 +7,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { CacheKey } from '@/constants/react-query';
 import { useAuth } from '@/hooks/useAuth';
 import { useGetPools } from '@/hooks/useGetPools';
-import { Project } from '@/types/mongo';
+import { createProject } from '@/lib/backend';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -17,46 +17,6 @@ import { useAccount, useMutation } from 'wagmi';
 import * as z from 'zod';
 import { CrowdFundSection } from './CrowdFundSection';
 import { MilestoneSection } from './MilestoneSection';
-
-async function createProject(
-  idToken: string,
-  values: z.infer<typeof createFormSchema> & { pool?: string },
-): Promise<Project> {
-  const finalValues = {
-    ...values,
-    mint_end_date: values.mint_end_date.toISOString(),
-    tags: values.tags.split(',').map((tag) => tag.trim()),
-  };
-  if (finalValues.thumbnail) {
-    const formData = new FormData();
-    formData.append('thumbnail', finalValues.thumbnail);
-    formData.append(
-      'payload_json',
-      JSON.stringify({
-        ...finalValues,
-        thumbnail: finalValues.thumbnail.name,
-      }),
-    );
-    const res = await fetch(`${process.env.BACKEND_URL}/projects`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${idToken}`,
-      },
-      body: formData,
-    });
-    return await res.json();
-  } else {
-    const res = await fetch(`${process.env.BACKEND_URL}/projects`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${idToken}`,
-      },
-      body: JSON.stringify(finalValues),
-    });
-    return await res.json();
-  }
-}
 
 export const createFormSchema = z.object({
   title: z.string().min(1, { message: 'Title is required' }),
@@ -226,8 +186,6 @@ export function CreateForm() {
         id="create-project"
         onSubmit={handleSubmit(onSubmit)}
         className="mx-auto"
-        // @ts-expect-error For netlify forms
-        netlify="true"
       >
         <ProjectSection />
         <TeamSection />

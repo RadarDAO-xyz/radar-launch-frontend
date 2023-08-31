@@ -11,8 +11,13 @@ import { Textarea } from '../ui/textarea';
 import { createFormSchema } from './CreateForm';
 import * as z from 'zod';
 import { TinyMCE } from '../Layout/TinyMCE';
+import { cn } from '@/lib/utils';
 
-export function SupportSection() {
+interface Props {
+  isEdit?: boolean;
+}
+
+export function SupportSection({ isEdit }: Props) {
   const { control } = useFormContext<z.infer<typeof createFormSchema>>();
 
   return (
@@ -20,15 +25,19 @@ export function SupportSection() {
       <h1 className="font-base">Support</h1>
       <p className="form-subheading">What support are you looking for?</p>
       <hr className="border-b-1 my-8 border-slate-200" />
-      <div className="grid grid-cols-2 gap-10">
-        <div className="col-span-1 pr-4">
-          <h2 className="font-base text-xl">Collaborators</h2>
-          <p>
-            Specify the type of collaborators you need, technical or
-            non-technical, advisors, audiences, or allies. Provide a project
-            description to invite people to assist you.
-          </p>
-        </div>
+      <div
+        className={cn('grid gap-10', isEdit ? 'grid-cols-1' : 'grid-cols-2')}
+      >
+        {!isEdit && (
+          <div className="col-span-1 pr-4">
+            <h2 className="font-base text-xl">Collaborators</h2>
+            <p>
+              Specify the type of collaborators you need, technical or
+              non-technical, advisors, audiences, or allies. Provide a project
+              description to invite people to assist you.
+            </p>
+          </div>
+        )}
         <div className="col-span-1">
           <FormField
             control={control}

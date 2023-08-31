@@ -21,6 +21,7 @@ export enum CacheKey {
   // mutation
   DOWNLOAD_PROJECT_SUPPORTERS = 'download-project-supporters',
   BELIEVE_PROJECT = 'believe-project',
+  UPDATE_PROJECT = 'update-project',
   UDPATE_PROJECT_STATUS = 'update-project-status',
   DELETE_PROJECT = 'delete-project',
   CREATE_PROJECT = 'create-project',
