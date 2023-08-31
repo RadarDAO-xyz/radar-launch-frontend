@@ -32,7 +32,17 @@
     },
     {
       "inputs": [],
+      "name": "NotCorrectUser",
+      "type": "error"
+    },
+    {
+      "inputs": [],
       "name": "NotEditionOwner",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotEnoughFees",
       "type": "error"
     },
     {
@@ -138,6 +148,62 @@
         }
       ],
       "name": "EditionBalanceWithdrawn",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "believer",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "editionId",
+          "type": "uint256"
+        }
+      ],
+      "name": "EditionBeliefRemoved",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "believer",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "editionId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "hashOne",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "hashTwo",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "hashThree",
+          "type": "bytes32"
+        }
+      ],
+      "name": "EditionBelieved",
       "type": "event"
     },
     {
@@ -492,6 +558,34 @@
     {
       "inputs": [
         {
+          "internalType": "uint256",
+          "name": "editionId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "hashOne",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "hashTwo",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "hashThree",
+          "type": "bytes32"
+        }
+      ],
+      "name": "believeProject",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "address",
           "name": "account",
           "type": "address"
@@ -533,6 +627,19 @@
       "name": "burnBatch",
       "outputs": [],
       "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "contractURI",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -893,6 +1000,19 @@
     {
       "inputs": [
         {
+          "internalType": "uint256",
+          "name": "editionId",
+          "type": "uint256"
+        }
+      ],
+      "name": "removeBelief",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "bytes32",
           "name": "role",
           "type": "bytes32"
@@ -1155,7 +1275,7 @@
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "",
+          "name": "id",
           "type": "uint256"
         }
       ],

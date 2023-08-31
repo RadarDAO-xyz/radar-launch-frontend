@@ -92,7 +92,7 @@ enum Tab {
 }
 
 export function ProjectTabs({ id }: { id: string }) {
-  const [currentTab, setCurrentTab] = useState(Tab.COLLECT);
+  const [currentTab, setCurrentTab] = useState(Tab.BELIEVE);
   const [quantity, setQuantity] = useState(1);
   const [hasToasted, setHasToasted] = useState(false);
 
@@ -276,7 +276,7 @@ export function ProjectTabs({ id }: { id: string }) {
         value={Tab.BELIEVE}
         className="rounded-md border px-8 py-6 pb-10"
       >
-        <BelieveTabContent id={id} />
+        <BelieveTabContent id={id} editionId={editionId} />
       </TabsContent>
       <TabsContent value={Tab.COLLECT} className="rounded-md border px-4 py-2">
         {typeof value === 'bigint' && typeof protocolFee === 'bigint' ? (
@@ -447,7 +447,7 @@ export function ProjectTabs({ id }: { id: string }) {
 
             <p className="pb-4 pt-8 text-center text-gray-700">
               {projectData?.mint_end_date &&
-              new Date(projectData.mint_end_date) > new Date() ? (
+                new Date(projectData.mint_end_date) > new Date() ? (
                 <>
                   <span>{countdown}</span>
                   <DotIcon className="inline" />

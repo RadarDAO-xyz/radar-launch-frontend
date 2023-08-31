@@ -17,6 +17,7 @@ export enum CacheKey {
   CHECKOUT_LINK = 'checkout-link',
   CHECKOUT_MINT_LINK = 'checkout-mint-link',
   TOTAL_CONTRIBUTION = 'total-contribution',
+  BELIEVER_LOGS = 'believer-logs',
   // mutation
   DOWNLOAD_PROJECT_SUPPORTERS = 'download-project-supporters',
   BELIEVE_PROJECT = 'believe-project',
