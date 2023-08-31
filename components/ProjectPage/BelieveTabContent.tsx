@@ -55,6 +55,9 @@ export function BelieveTabContent({ id, editionId }: Props) {
     () =>
       getLogs({
         address: CONTRACT_ADDRESS,
+        args: {
+          editionId: BigInt(editionId || 0),
+        },
         event: {
           type: 'event',
           anonymous: false,
