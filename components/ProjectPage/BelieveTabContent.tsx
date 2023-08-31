@@ -12,76 +12,99 @@ import { useAuth } from '@/hooks/useAuth';
 import { useGetProject } from '@/hooks/useGetProject';
 import { useGetProjectBelievers } from '@/hooks/useGetProjectBelievers';
 import { believeProject } from '@/lib/backend';
-import { useAccount, usePublicClient, useQuery, useQueryClient, useSignMessage, useWaitForTransaction, useWalletClient } from 'wagmi';
+import {
+  useAccount,
+  usePublicClient,
+  useQuery,
+  useQueryClient,
+  useSignMessage,
+  useWaitForTransaction,
+  useWalletClient,
+} from 'wagmi';
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
 import { useEffect, useState } from 'react';
 import { ProjectStatus } from '@/types/mongo';
 import { format } from 'date-fns';
 import { shortenAddress } from '@/lib/utils';
-import { radarEditionsABI, usePrepareRadarEditionsBelieveProject, useRadarEditionsBelieveProject, useRadarEditionsEditionBelievedEvent } from '@/lib/generated';
+import {
+  radarEditionsABI,
+  usePrepareRadarEditionsBelieveProject,
+  useRadarEditionsBelieveProject,
+  useRadarEditionsEditionBelievedEvent,
+} from '@/lib/generated';
 import { CONTRACT_ADDRESS } from '@/constants/address';
 
 interface Props {
   id: string;
-  editionId?: number
+  editionId?: number;
 }
 
 export function BelieveTabContent({ id, editionId }: Props) {
-  const { getLogs } = usePublicClient()
+  const { getLogs } = usePublicClient();
   const [isOpen, setIsOpen] = useState(false);
   const { data: projectData } = useGetProject(id);
   const { isLoggedIn, login } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const { address } = useAccount();
-  const [hasToasted, setHasToasted] = useState(false)
+  const [hasToasted, setHasToasted] = useState(false);
 
-  const { data: believerLogs } = useQuery([CacheKey.BELIEVER_LOGS, editionId], () => getLogs({
-    address: CONTRACT_ADDRESS,
-    event: {
-      type: 'event',
-      anonymous: false,
-      inputs: [
-        {
-          name: 'believer',
-          internalType: 'address',
-          type: 'address',
-          indexed: true,
+  const { data: believerLogs } = useQuery(
+    [CacheKey.BELIEVER_LOGS, editionId, id],
+    () =>
+      getLogs({
+        address: CONTRACT_ADDRESS,
+        event: {
+          type: 'event',
+          anonymous: false,
+          inputs: [
+            {
+              name: 'believer',
+              internalType: 'address',
+              type: 'address',
+              indexed: true,
+            },
+            {
+              name: 'editionId',
+              internalType: 'uint256',
+              type: 'uint256',
+              indexed: true,
+            },
+            {
+              name: 'hashOne',
+              internalType: 'bytes32',
+              type: 'bytes32',
+              indexed: false,
+            },
+            {
+              name: 'hashTwo',
+              internalType: 'bytes32',
+              type: 'bytes32',
+              indexed: false,
+            },
+            {
+              name: 'hashThree',
+              internalType: 'bytes32',
+              type: 'bytes32',
+              indexed: false,
+            },
+          ],
+          name: 'EditionBelieved',
         },
-        {
-          name: 'editionId',
-          internalType: 'uint256',
-          type: 'uint256',
-          indexed: true,
-        },
-        {
-          name: 'hashOne',
-          internalType: 'bytes32',
-          type: 'bytes32',
-          indexed: false,
-        },
-        {
-          name: 'hashTwo',
-          internalType: 'bytes32',
-          type: 'bytes32',
-          indexed: false,
-        },
-        {
-          name: 'hashThree',
-          internalType: 'bytes32',
-          type: 'bytes32',
-          indexed: false,
-        },
-      ],
-      name: 'EditionBelieved',
-    },
-    fromBlock: 108947105n
-  }), { enabled: editionId !== undefined })
+        fromBlock: 108947105n,
+      }),
+    { enabled: editionId !== undefined },
+  );
 
-  const { data: signData, signMessageAsync, isLoading } = useSignMessage({
-    message: `I ${address ? `(${address})` : ''
-      } support ${projectData?.title} at ${new Date().toISOString()}
+  const {
+    data: signData,
+    signMessageAsync,
+    isLoading,
+  } = useSignMessage({
+    message: `I ${
+      address ? `(${address})` : ''
+    } support ${projectData?.title} at ${new Date().toISOString()}
 
 and a better future in: ${projectData?.tags.join(', ')}`,
     onSuccess: async (data, variables) => {
@@ -95,14 +118,29 @@ and a better future in: ${projectData?.tags.join(', ')}`,
   const { config } = usePrepareRadarEditionsBelieveProject({
     address: CONTRACT_ADDRESS,
     account: address,
-    args: [BigInt(editionId || 0), `0x${signData?.substring(2, 66)}`, `0x${signData?.substring(66, 130)}`, `0x${signData?.substring(130)}00000000000000000000000000000000000000000000000000000000000000`],
-    enabled: Boolean(signData?.length) && address !== undefined && editionId !== undefined
+    args: [
+      BigInt(editionId || 0),
+      `0x${signData?.substring(2, 66)}`,
+      `0x${signData?.substring(66, 130)}`,
+      `0x${signData?.substring(
+        130,
+      )}00000000000000000000000000000000000000000000000000000000000000`,
+    ],
+    enabled:
+      Boolean(signData?.length) &&
+      address !== undefined &&
+      editionId !== undefined,
   });
-  const { data: believeProjectData, writeAsync: believeProjectWriteAsync, isLoading: believeProjectIsLoading } = useRadarEditionsBelieveProject(config);
-  const { isLoading: believeProjectTxIsLoading, isSuccess } = useWaitForTransaction({
-    hash: believeProjectData?.hash,
-    enabled: believeProjectData?.hash !== undefined,
-  });
+  const {
+    data: believeProjectData,
+    writeAsync: believeProjectWriteAsync,
+    isLoading: believeProjectIsLoading,
+  } = useRadarEditionsBelieveProject(config);
+  const { isLoading: believeProjectTxIsLoading, isSuccess } =
+    useWaitForTransaction({
+      hash: believeProjectData?.hash,
+      enabled: believeProjectData?.hash !== undefined,
+    });
 
   useEffect(() => {
     if (believeProjectTxIsLoading && believeProjectData?.hash) {
@@ -137,9 +175,10 @@ and a better future in: ${projectData?.tags.join(', ')}`,
         });
       }
     }
-  }
+  };
 
-  const hasBelieved = believerLogs?.find(log => log.args.believer === address) !== undefined
+  const hasBelieved =
+    believerLogs?.find((log) => log.args.believer === address) !== undefined;
 
   return (
     <div>
@@ -154,8 +193,9 @@ and a better future in: ${projectData?.tags.join(', ')}`,
             disabled={projectData?.status !== ProjectStatus.LIVE || hasBelieved}
             loading={isLoading}
           >
-            {hasBelieved ? "Thank you for believing in this project!" : "I believe in this project"
-            }
+            {hasBelieved
+              ? 'Thank you for believing in this project!'
+              : 'I believe in this project'}
           </Button>
         </DialogTrigger>
         <DialogContent>
@@ -180,7 +220,11 @@ and a better future in: ${projectData?.tags.join(', ')}`,
               }}
               loading={isLoading || believeProjectIsLoading}
             >
-              {!isLoggedIn ? 'LOGIN' : signData === undefined ? "SIGN MESSAGE" : "UPLOAD SIGNATURE"}
+              {!isLoggedIn
+                ? 'LOGIN'
+                : signData === undefined
+                ? 'SIGN MESSAGE'
+                : 'UPLOAD SIGNATURE'}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -194,9 +238,9 @@ and a better future in: ${projectData?.tags.join(', ')}`,
             key={believer.transactionHash}
             className="flex justify-between border-y pb-2 pt-2 text-xs"
           >
-            {believer.args.believer &&
+            {believer.args.believer && (
               <p>{shortenAddress(believer.args.believer)}</p>
-            }
+            )}
             <div className="text-right text-muted-foreground">
               <p>{believer.blockNumber.toString()}</p>
             </div>
