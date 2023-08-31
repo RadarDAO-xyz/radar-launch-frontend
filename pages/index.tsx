@@ -53,59 +53,6 @@ export default function HomePage() {
         }
       />
       <ProjectCollection
-        projectSectionTitle="CURATED BY CULTURE3"
-        projectSectionDescription="Culture3 spotlights 4 projects building a better future"
-        projects={
-          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-4">
-            {data
-              ?.filter(
-                (project) =>
-                  project.curation?.start &&
-                  new Date(project.curation.start) <= new Date() &&
-                  // if no curation end date, show it indefinitely
-                  (project.curation?.end ||
-                    new Date(project.curation.end) >= new Date()),
-              )
-              // sort by ascending start dates
-              .sort(
-                (a, b) =>
-                  new Date(a.curation.start).getTime() -
-                  new Date(b.curation.start).getTime(),
-              )
-              .slice(0, 4)
-              .map((project) => (
-                <ProjectBlockNoSSR
-                  key={project._id}
-                  {...project}
-                  showMintEndDate
-                  showSupporters
-                />
-              ))}
-          </div>
-        }
-      />
-      <ProjectCollection
-        projectSectionTitle="OUR CENTAUR FUTURE"
-        projectSectionDescription="Support over 10 weeks of collective discovery, exploration and innovation in Cycle #3"
-        projectSectionButton={
-          <Button className="font-bolded font-bold" variant={'ghost'} asChild>
-            <Link href="https://www.radardao.xyz/patron" target="_blank">
-              {'READ MORE'}
-            </Link>
-          </Button>
-        }
-        projects={
-          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-4">
-            {data
-              ?.filter((project) => CENTAUR_PROEJCT_IDS.includes(project._id))
-              .sort((a, b) => a.edition_price - b.edition_price)
-              .map((project) => (
-                <ProjectBlockNoSSR key={project._id} {...project} showPrice />
-              ))}
-          </div>
-        }
-      />
-      <ProjectCollection
         projectSectionTitle="A MORE PLAYFUL FUTURE PRIZES"
         projectSectionDescription="We're boosting projects with $5000 worth of prizes in September via Buidl Guidl."
         projectSectionButton={
@@ -167,6 +114,59 @@ export default function HomePage() {
             >
               <Image alt="Kernel" src="/kernel.png" width={90} height={52} />
             </Link>
+          </div>
+        }
+      />
+      <ProjectCollection
+        projectSectionTitle="CURATED BY CULTURE3"
+        projectSectionDescription="Culture3 spotlights 4 projects building a better future"
+        projects={
+          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-4">
+            {data
+              ?.filter(
+                (project) =>
+                  project.curation?.start &&
+                  new Date(project.curation.start) <= new Date() &&
+                  // if no curation end date, show it indefinitely
+                  (project.curation?.end ||
+                    new Date(project.curation.end) >= new Date()),
+              )
+              // sort by ascending start dates
+              .sort(
+                (a, b) =>
+                  new Date(a.curation.start).getTime() -
+                  new Date(b.curation.start).getTime(),
+              )
+              .slice(0, 4)
+              .map((project) => (
+                <ProjectBlockNoSSR
+                  key={project._id}
+                  {...project}
+                  showMintEndDate
+                  showSupporters
+                />
+              ))}
+          </div>
+        }
+      />
+      <ProjectCollection
+        projectSectionTitle="OUR CENTAUR FUTURE"
+        projectSectionDescription="Support over 10 weeks of collective discovery, exploration and innovation in Cycle #3"
+        projectSectionButton={
+          <Button className="font-bolded font-bold" variant={'ghost'} asChild>
+            <Link href="https://www.radardao.xyz/patron" target="_blank">
+              {'READ MORE'}
+            </Link>
+          </Button>
+        }
+        projects={
+          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-4">
+            {data
+              ?.filter((project) => CENTAUR_PROEJCT_IDS.includes(project._id))
+              .sort((a, b) => a.edition_price - b.edition_price)
+              .map((project) => (
+                <ProjectBlockNoSSR key={project._id} {...project} showPrice />
+              ))}
           </div>
         }
       />
