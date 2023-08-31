@@ -20,7 +20,7 @@ export function PreLaunchFooter() {
         <div className="div-block-108">
           <p className="body-text white">
             {
-              'RADAR Launch is a crowdraising platform for future makers and early adopters.'
+              'RADAR Launch is a platform for future makers and early adopters.'
             }
             <br />
             <br />

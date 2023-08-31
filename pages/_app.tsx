@@ -56,7 +56,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta property="og:image:alt" content="RADAR Launch image" />
         <meta
           property="og:description"
-          content="Launch your projects with RADAR"
+          content="RADAR Launch is a platform for future makers and early adopters"
         />
         <meta property="og:site_name" content="RADAR Launch" />
         <meta property="og:locale" content="en_US" />
