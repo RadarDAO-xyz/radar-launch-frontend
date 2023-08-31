@@ -4,7 +4,14 @@ import { MetamaskAdapter } from '@web3auth/metamask-adapter';
 import { Web3Auth } from '@web3auth/modal';
 import { OpenloginAdapter } from '@web3auth/openlogin-adapter';
 import { Web3AuthConnector } from '@web3auth/web3auth-wagmi-connector';
-import { ReactNode, createContext, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  createContext,
+  useEffect,
+  useState,
+} from 'react';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { optimism, optimismGoerli } from 'wagmi/chains';
 import { InjectedConnector } from 'wagmi/connectors/injected';
@@ -53,6 +60,7 @@ const metamaskAdapter = new MetamaskAdapter({
 
 interface Web3ContextType {
   web3Auth?: Web3Auth;
+  setWeb3Auth: Dispatch<SetStateAction<Web3Auth | undefined>>;
   web3AuthConnecter?: Web3AuthConnector;
 }
 
@@ -112,7 +120,7 @@ export const Web3Provider = ({ children }: { children?: ReactNode }) => {
   }, []);
 
   return (
-    <Web3Context.Provider value={{ web3Auth, web3AuthConnecter }}>
+    <Web3Context.Provider value={{ web3Auth, setWeb3Auth, web3AuthConnecter }}>
       <WagmiConfig config={wagmiConfig}>{children}</WagmiConfig>
     </Web3Context.Provider>
   );

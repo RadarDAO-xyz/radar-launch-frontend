@@ -1,3 +1,6 @@
+import { CacheKey } from '@/constants/react-query';
+import { authenticateUser } from '@/lib/backend';
+import { getPublicCompressed } from '@toruslabs/eccrypto';
 import {
   Dispatch,
   ReactNode,
@@ -7,12 +10,8 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { useConnect, useDisconnect, useAccount, useQuery } from 'wagmi';
+import { useAccount, useConnect, useDisconnect, useQuery } from 'wagmi';
 import { Web3Context } from './Web3Provider';
-import { authenticateUser } from '@/lib/backend';
-import { getPublicCompressed } from '@toruslabs/eccrypto';
-import { Web3AuthConnector } from '@web3auth/web3auth-wagmi-connector';
-import { CacheKey } from '@/constants/react-query';
 
 interface AuthContextType {
   idToken: string;
@@ -46,28 +45,31 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
 
   // backend auth
   useQuery(
-    [CacheKey.LOGIN, isWalletLogin, idToken],
+    [CacheKey.LOGIN, isWalletLogin, idToken, address, appPubKey],
     () => authenticateUser({ idToken, isWalletLogin, address, appPubKey }),
     {
       enabled:
         isLoggedIn &&
-        idToken !== '' &&
-        (address !== undefined || appPubKey !== ''),
+        idToken.length > 0 &&
+        (address !== undefined || appPubKey.length > 0),
     },
   );
 
   useEffect(() => {
-    if (idToken !== undefined && isConnected) {
+    if (idToken.length > 0 && isConnected && web3Auth !== undefined) {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
     }
-  }, [idToken, isConnected]);
+  }, [idToken, isConnected, web3Auth]);
+  console.log({ web3Auth, idToken, address });
 
   useEffect(() => {
     (async () => {
       if (isLoggedIn && web3Auth && !idToken) {
         const socialLoginUserInfo = await web3Auth?.getUserInfo();
+
+        console.log({ socialLoginUserInfo });
         // social login here
         if (socialLoginUserInfo?.idToken) {
           setIsWalletLoggedIn(false);
@@ -84,7 +86,9 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
         } else {
           setIsWalletLoggedIn(true);
         }
-        setIdToken((await web3Auth.authenticateUser()).idToken);
+        const userAuthInfo = await web3Auth.authenticateUser();
+        console.log({ userAuthInfo });
+        setIdToken(userAuthInfo.idToken);
       }
     })();
   }, [idToken, isLoggedIn, setIdToken, web3Auth]);
