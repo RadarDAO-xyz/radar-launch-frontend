@@ -55,7 +55,7 @@ export function LaunchProjectButton({ status, _id }: Project) {
         <DialogHeader>
           <DialogTitle>Launch Project</DialogTitle>
           <DialogDescription>
-            Your project will be launched and displayed on the respective grant
+            Your project will be launched and displayed on the respective prize
             pool page.
           </DialogDescription>
         </DialogHeader>

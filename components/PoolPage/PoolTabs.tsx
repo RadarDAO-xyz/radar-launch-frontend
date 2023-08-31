@@ -9,7 +9,7 @@ enum Tab {
   CREATING_POOL = 'creating-pool',
 }
 
-export function GrantPoolTabs() {
+export function PoolTabs() {
   return (
     <div className={'funding-pool-header'}>
       <div className={'funding-pool-title'}>

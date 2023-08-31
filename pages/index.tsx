@@ -1,7 +1,7 @@
 import { HeaderHero } from '@/components/HomePage/HeaderHero';
 import { InspirationFooter } from '@/components/HomePage/InspirationFooter';
 import { ProjectCollection } from '@/components/HomePage/ProjectCollection';
-import { GrantPoolHome } from '@/components/PoolPage/GrantPoolHome';
+import { PoolHome } from '@/components/PoolPage/PoolHome';
 import { Button } from '@/components/ui/button';
 import { useGetProjects } from '@/hooks/useGetProjects';
 import { ProjectStatus } from '@/types/mongo';
@@ -149,7 +149,7 @@ export default function HomePage() {
           </div>
         }
         curatorSection={
-          <div className='flex items-center gap-2'>
+          <div className="flex items-center gap-2">
             <span>Curated By</span>
             <Image
               src="/culture3.svg"
@@ -181,7 +181,7 @@ export default function HomePage() {
           </div>
         }
       />
-      <GrantPoolHome />
+      <PoolHome />
       <InspirationFooter />
     </section>
   );

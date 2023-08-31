@@ -1,10 +1,10 @@
-import { GrantPoolHome } from '@/components/PoolPage/GrantPoolHome';
-import { GrantPoolTabs } from '@/components/PoolPage/GrantPoolTabs';
+import { PoolHome } from '@/components/PoolPage/PoolHome';
+import { PoolTabs } from '@/components/PoolPage/PoolTabs';
 
 export default function PoolPage() {
   return (
     <section className="mt-[80px]">
-      <GrantPoolHome />
+      <PoolHome />
       {/* <FundingPoolTabs /> */}
     </section>
   );

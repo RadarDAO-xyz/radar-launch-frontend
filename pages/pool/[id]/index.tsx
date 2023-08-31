@@ -1,5 +1,5 @@
 import { Placeholder } from '@/components/Layout/Placeholder';
-import { GrantPoolProjectHeader } from '@/components/PoolPage/GrantPoolProjectHeader';
+import { PoolProjectHeader } from '@/components/PoolPage/PoolProjectHeader';
 import { ProjectSection } from '@/components/PoolPage/ProjectSection';
 import { ReadyToLaunchComponent } from '@/components/PoolPage/ReadyToLaunchComponent';
 import { useGetPool } from '@/hooks/useGetPool';
@@ -28,7 +28,7 @@ export default function PoolPage() {
 
   return (
     <>
-      <GrantPoolProjectHeader {...data} />
+      <PoolProjectHeader {...data} />
       <ProjectSection {...data} />
       <ReadyToLaunchComponent />
     </>

@@ -7,7 +7,7 @@ import { useGetPool } from '@/hooks/useGetPool';
 const FEATURED_POOL_ONE_ID = '64d501ee081e901b9fdfaea9';
 const FEATURED_POOL_TWO_ID = '64ee74a442d2582b74e47f83';
 
-export function GrantPoolHome() {
+export function PoolHome() {
   const { data: featuredPoolOneData } = useGetPool(FEATURED_POOL_ONE_ID);
   const { data: featuredPoolTwoData } = useGetPool(FEATURED_POOL_TWO_ID);
 

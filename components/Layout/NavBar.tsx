@@ -50,7 +50,7 @@ export function NavBar() {
               <NavigationMenuItem>
                 <Link href="/pool" legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    GRANT POOLS
+                    PRIZE POOLS
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
@@ -137,7 +137,7 @@ export function NavBar() {
               <div className="flex flex-col py-4">
                 <Button asChild variant="link" className="justify-start">
                   <Link className="" href="/pool">
-                    GRANT POOLS
+                    PRIZE POOLS
                   </Link>
                 </Button>
                 <Button asChild variant="link" className="justify-start">

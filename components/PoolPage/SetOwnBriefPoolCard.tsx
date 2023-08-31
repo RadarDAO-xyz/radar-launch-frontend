@@ -19,7 +19,7 @@ export function SetOwnBriefPoolCard() {
       </h2>
       <div className="flex w-full flex-col justify-between space-y-2 px-2 pt-2 md:flex-row md:space-x-2 md:space-y-0">
         <div className="w-full rounded-lg border p-4">
-          <div className="small-text">{'Remaining Grant pool'}</div>
+          <div className="small-text">{'Remaining Prize pool'}</div>
           <div className="_5px-div" />
           <div className={'funding-pool-numbers'}>
             <span className="small">{'$'}</span>
