@@ -148,6 +148,17 @@ export default function HomePage() {
               ))}
           </div>
         }
+        curatorSection={
+          <div className='flex items-center gap-2'>
+            <span>Curated By</span>
+            <Image
+              src="/culture3.svg"
+              alt="Culture 3 Logo"
+              width={56}
+              height={20}
+            />
+          </div>
+        }
       />
       <ProjectCollection
         projectSectionTitle="OUR CENTAUR FUTURE"
