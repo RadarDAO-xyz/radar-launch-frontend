@@ -33,7 +33,7 @@ export const AuthContext = createContext<AuthContextType>({
 export const AuthProvider = ({ children }: { children?: ReactNode }) => {
   const { connectAsync } = useConnect();
   const { disconnectAsync } = useDisconnect({});
-  const { web3Auth } = useContext(Web3Context) ?? {};
+  const { web3Auth, web3AuthConnecter } = useContext(Web3Context) ?? {};
   const { address, isConnected } = useAccount();
 
   const [idToken, setIdToken] = useState('');
@@ -94,11 +94,7 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
       await web3Auth?.connect();
 
       await connectAsync({
-        connector: new Web3AuthConnector({
-          options: {
-            web3AuthInstance: web3Auth!,
-          },
-        }),
+        connector: web3AuthConnecter,
       });
       setIsLoggedIn(true);
     }
