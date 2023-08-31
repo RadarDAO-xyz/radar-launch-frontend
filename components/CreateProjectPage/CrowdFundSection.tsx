@@ -68,15 +68,19 @@ export function CrowdFundSection() {
         <div className="col-span-1 pr-4">
           <h2 className="font-base text-xl">Editions</h2>
           <p>
-            On Launch, projects start with a default edition price of $0.
+            Adding patronage is completely up to you, projects can believe in
+            you for free onchain, but additionally they can support you
+            financially by collecting your project edition.
             <br />
             <br />
-            You can offer benefits and set an alternate price for your editions
-            to incentivize supporters.
+            Setting a free NFT mint will not decrease prize opportunities,
+            you&apos;ll just be airdropped to the wallet address you created the
+            project with.
             <br />
             <br />
-            Edition prices are set at a maximum of $20 to make supporting
-            projects accessible.
+            We recommend setting a low 1$-5$ edition to allow people to support
+            you with micro-prizes and allows prizes to be directly distributed
+            through the platform.
           </p>
         </div>
         <div className="col-span-1">

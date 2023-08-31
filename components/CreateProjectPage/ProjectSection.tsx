@@ -141,7 +141,7 @@ export function ProjectSection() {
       <hr className="border-b-1 my-8 border-slate-200" />
       <div className="grid grid-cols-2 gap-10">
         <div className="col-span-1 pr-4">
-          <h2 className="font-base text-xl">NFT Image</h2>
+          <h2 className="font-base text-xl">Project Image</h2>
           <p>
             Please upload an image to represent your project, make it authentic.
             <br />
