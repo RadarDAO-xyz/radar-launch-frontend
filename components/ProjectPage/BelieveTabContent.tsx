@@ -233,7 +233,7 @@ and a better future in: ${projectData?.tags.join(', ')}`,
         </DialogContent>
       </Dialog>
       <p className="text-center text-muted-foreground">
-        Build reputation on Launch
+        Build reputation on {projectData?.tags.join(', ') ?? 'Launch'}
       </p>
       <div className="grid gap-2 pt-6">
         {believerLogs?.slice(0, 20).map((believer) => (

@@ -14,11 +14,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { CacheKey } from '@/constants/react-query';
 import { useAuth } from '@/hooks/useAuth';
 import { updateProject } from '@/lib/backend';
 import { cn } from '@/lib/utils';
-import { Project } from '@/types/mongo';
+import { Project, ProjectStatus } from '@/types/mongo';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { useRef, useState } from 'react';
@@ -27,9 +34,9 @@ import { DownloadSupporters } from '../ProfilePage/DownloadSupporters';
 import { DialogFooter } from '../ui/dialog';
 import { useToast } from '../ui/use-toast';
 import { ApproveEditionButton } from './ApproveEditionButton';
+import { CreateEditionButton } from './CreateEditionButton';
 import { DeleteProjectButton } from './DeleteProjectButton';
 import { DisapproveEditionButton } from './DisapproveEditionButton';
-import { CreateEditionButton } from './CreateEditionButton';
 
 interface ProjectWithChainData extends Project {
   editionId?: number;
@@ -43,7 +50,7 @@ export function ProjectActions(props: ProjectWithChainData) {
   const [isOpen, setIsOpen] = useState(false);
 
   const { idToken } = useAuth();
-  const projectStatusRef = useRef<HTMLInputElement>(null);
+  const [projectStatus, setProjectStatus] = useState(status);
   const [curationStart, setCurationStart] = useState<Date | undefined>(
     curation?.start ? new Date(curation.start) : undefined,
   );
@@ -55,11 +62,11 @@ export function ProjectActions(props: ProjectWithChainData) {
   const queryClient = useQueryClient();
 
   const { mutate, isLoading: isUpdateLoading } = useMutation(
-    [CacheKey.UDPATE_PROJECT_STATUS, _id, projectStatusRef.current?.value],
+    [CacheKey.UDPATE_PROJECT_STATUS, _id, projectStatus],
     () =>
       updateProject(
         {
-          status: +projectStatusRef.current!.value,
+          status: projectStatus,
           curation: {
             start: curationStart?.toISOString(),
             end: curationEnd?.toISOString(),
@@ -100,12 +107,23 @@ export function ProjectActions(props: ProjectWithChainData) {
               defaultValue={String(editionId)}
             />
             <Label>New Database Project Status</Label>
-            <Input
-              placeholder="New Project Status"
-              type="number"
-              ref={projectStatusRef}
-              defaultValue={status}
-            />
+            <Select
+              onValueChange={(value) => setProjectStatus(+value)}
+              defaultValue={projectStatus.toString()}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select a Brief" />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.keys(ProjectStatus)
+                  .filter((value) => !isNaN(+value))
+                  .map((status) => (
+                    <SelectItem key={status} value={status.toString()}>
+                      {ProjectStatus[+status]}
+                    </SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
             <Label>Curation Start</Label>
             <Popover>
               <PopoverTrigger asChild>
