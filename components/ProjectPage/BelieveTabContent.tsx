@@ -32,7 +32,7 @@ export function BelieveTabContent({ id }: Props) {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const { address } = useAccount();
-  const { signMessage } = useSignMessage({
+  const { signMessage, isLoading } = useSignMessage({
     message: `I ${
       address ? `(${address})` : ''
     } support ${projectData?.title} at ${new Date().toISOString()}
@@ -67,9 +67,11 @@ and a better future in: ${projectData?.tags.join(', ')}`,
         <DialogTrigger asChild>
           <Button
             className="mb-4 w-full"
-            disabled={projectData?.status !== ProjectStatus.LIVE}
+            // disabled={projectData?.status !== ProjectStatus.LIVE}
+            disabled
+            loading={isLoading}
           >
-            I believe in this project
+            Coming soon...
           </Button>
         </DialogTrigger>
         <DialogContent>
