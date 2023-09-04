@@ -101,19 +101,19 @@ export default function IndividualProjectPage() {
             </div>
           )}
           <Tabs defaultValue={Tab.DETAILS} className="rounded-lg border py-8">
-            <TabsList className="grid w-full grid-cols-3 px-14 md:grid-cols-4 lg:grid-cols-6">
+            <TabsList className="grid w-full grid-cols-3 px-8 md:px-14 md:grid-cols-4 lg:grid-cols-6">
               <TabsTrigger value={Tab.DETAILS}>DETAILS</TabsTrigger>
               <TabsTrigger value={Tab.UPDATES}>UPDATES</TabsTrigger>
             </TabsList>
-            <TabsContent value={Tab.DETAILS} className="px-14 py-6">
+            <TabsContent value={Tab.DETAILS} className="px-8 md:px-14 py-6">
               <div className="pb-16">
-                <h3 className="pb-8 text-lg font-medium underline decoration-slate-100 underline-offset-[16px]">
+                <h3 className="pb-8 text-lg font-medium decoration-slate-100">
                   Project TLDR
                 </h3>
                 <HTMLParsedComponent text={data.tldr} />
               </div>
               <hr />
-              <h3 className="pb-8 pt-10 text-lg font-medium underline decoration-slate-100 underline-offset-[16px]">
+              <h3 className="pb-8 pt-10 text-lg font-medium decoration-slate-100">
                 Who is the team executing on this project
               </h3>
               {data.team.map((teamMember, index) => (
@@ -126,18 +126,18 @@ export default function IndividualProjectPage() {
                 </div>
               ))}
               <hr />
-              <div className="pb-16 pt-10">
-                <h3 className="pb-4 text-lg font-medium underline decoration-slate-100 underline-offset-[16px]">
-                  This project is looking for:
-                </h3>
-                {data.collaborators && (
+              {data.collaborators && (
+                <div className="pb-16 pt-10">
+                  <h3 className="pb-4 text-lg font-medium decoration-slate-100">
+                    This project is looking for:
+                  </h3>
                   <HTMLParsedComponent text={data.collaborators} />
-                )}
-              </div>
+                </div>
+              )}
               <hr />
               {data?.milestones?.length > 0 && (
                 <>
-                  <h3 className="pb-16 pt-10 text-lg font-medium underline decoration-slate-100 underline-offset-[16px]">
+                  <h3 className="pb-16 pt-10 text-lg font-medium decoration-slate-100">
                     Funding Goals
                   </h3>
                   <Table>
@@ -231,12 +231,18 @@ function renderMilestoneAmount(
   milestoneAmount: string | number,
   index: number,
 ) {
-  if (!isNaN(milestoneAmount as number)) {
+  if (
+    typeof milestoneAmount === 'number' ||
+    !isNaN(+milestoneAmount.replaceAll(',', ''))
+  ) {
     return (
       <span className="text-normal">
         ${' '}
         <span className="text-lg text-gray-400">
-          {(+milestoneAmount).toFixed(2)}
+          {(typeof milestoneAmount === 'number'
+            ? milestoneAmount
+            : +milestoneAmount.replaceAll(',', '')
+          ).toFixed(2)}
         </span>
       </span>
     );
