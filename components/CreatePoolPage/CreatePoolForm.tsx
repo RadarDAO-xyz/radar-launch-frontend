@@ -40,7 +40,7 @@ export const createPoolFormSchema = z.object({
         .min(1, { message: 'Contribution amount required' }),
     }),
   ),
-  video: z.string().url().min(1, { message: 'Video url required' }),
+  video: z.string().url({ message: 'Not URL' }),
   brief_button_link: z.string().url({ message: 'Not URL' }),
   brief_button_text: z.string().min(1, { message: 'Required' }),
   event_button_link: z.string().url({ message: 'Not URL' }),
