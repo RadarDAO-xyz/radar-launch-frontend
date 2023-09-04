@@ -147,7 +147,7 @@ export function BelieveTabContent({ id, editionId, tags }: Props) {
             // disabled={projectData?.status !== ProjectStatus.LIVE || hasBelieved}
             // loading={isLoading}
           >
-            asd
+            I believe in this project
             {/* {hasBelieved
               ? 'Thank you for believing in this project!'
               : 'I believe in this project'} */}
