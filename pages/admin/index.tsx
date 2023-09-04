@@ -15,6 +15,7 @@ import { OnChainProject } from '../profile/[id]';
 import { Placeholder } from '@/components/Layout/Placeholder';
 import { convertOnChainStatusName } from '@/lib/convertOnChainStatusName';
 import { useGetPools } from '@/hooks/useGetPools';
+import { Button } from '@/components/ui/button';
 
 function transformProjects(
   databaseProjects?: Project[],
@@ -164,6 +165,9 @@ export default function AdminPage() {
             <p>Title: {pool.title}</p>
             <p>Subtitle: {pool.subtitle}</p>
             <p>Is hidden: {pool.is_hidden ? 'true' : 'false'}</p>
+            <Button asChild>
+              <Link href={`/pool/${pool._id}/edit`}>Edit</Link>
+            </Button>
           </div>
         ))}
       </div>

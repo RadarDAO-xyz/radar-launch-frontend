@@ -11,8 +11,8 @@ import {
   FormMessage,
 } from '../ui/form';
 import { TrashIcon } from 'lucide-react';
-import { createPoolFormSchema } from '@/pages/pool/create';
 import * as z from 'zod';
+import { createPoolFormSchema } from './CreatePoolForm';
 
 export const SponsorFields = () => {
   const { control } = useFormContext<z.infer<typeof createPoolFormSchema>>();

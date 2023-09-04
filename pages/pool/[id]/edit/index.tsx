@@ -2,8 +2,15 @@ import { CreatePoolForm } from '@/components/CreatePoolPage/CreatePoolForm';
 import { Placeholder } from '@/components/Layout/Placeholder';
 import { useAuth } from '@/hooks/useAuth';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
-export default function CreatePoolPage() {
+import { useGetPool } from '@/hooks/useGetPool';
+import { useRouter } from 'next/router';
+
+export default function EditPoolPage() {
+  const router = useRouter();
+  const { id } = router.query;
+
   const { data } = useGetCurrentUser();
+  const { data: pool } = useGetPool(id?.toString());
   const { idToken } = useAuth();
 
   if (!data?.wallets?.[0].address || !idToken) {
@@ -22,9 +29,17 @@ export default function CreatePoolPage() {
     );
   }
 
+  if (!id) {
+    return (
+      <Placeholder>
+        <h1>No pool found</h1>
+      </Placeholder>
+    );
+  }
+
   return (
     <section className="mx-auto mt-24 max-w-screen-lg">
-      <CreatePoolForm {...data} />
+      <CreatePoolForm isEdit {...pool} />
     </section>
   );
 }
