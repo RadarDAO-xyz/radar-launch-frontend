@@ -45,7 +45,7 @@ export function BelieveTabContent({ id, editionId, tags }: Props) {
   const { toast } = useToast();
   const { address } = useAccount();
   const [hasToasted, setHasToasted] = useState(false);
-  const { data: believerLogs } = useQuery(
+  const { data: believerLogs, isLoading } = useQuery(
     [CacheKey.BELIEVER_LOGS, editionId, id],
     () =>
       getLogs({
@@ -61,6 +61,12 @@ export function BelieveTabContent({ id, editionId, tags }: Props) {
               internalType: 'uint256',
               name: 'editionId',
               type: 'uint256',
+            },
+            {
+              indexed: true,
+              internalType: 'address',
+              name: 'believer',
+              type: 'address',
             },
             {
               indexed: false,
@@ -112,26 +118,12 @@ export function BelieveTabContent({ id, editionId, tags }: Props) {
       });
       setHasToasted(true);
       setIsOpen(false);
+      queryClient.invalidateQueries([CacheKey.BELIEVER_LOGS, editionId, id]);
     }
   }, [isSuccess, believeProjectData?.hash]);
 
-  // const uploadSignature = async () => {
-  //   if (isOpen && signData?.length) {
-  //     try {
-  //       await believeProjectWriteAsync?.();
-  //     } catch (e) {
-  //       console.error(e);
-  //       toast({
-  //         variant: 'destructive',
-  //         title: 'An unexpected error occured',
-  //         description: 'Check the console for more information',
-  //       });
-  //     }
-  //   }
-  // };
-
-  // const hasBelieved =
-  //   believerLogs?.find((log) => log.args.believer === address) !== undefined;
+  const hasBelieved =
+    believerLogs?.find((log) => log.args?.believer === address) !== undefined;
 
   return (
     <div>
@@ -143,14 +135,12 @@ export function BelieveTabContent({ id, editionId, tags }: Props) {
         <DialogTrigger asChild>
           <Button
             className="mb-4 w-full"
-            disabled={projectData?.status !== ProjectStatus.LIVE}
-            // disabled={projectData?.status !== ProjectStatus.LIVE || hasBelieved}
-            // loading={isLoading}
+            disabled={projectData?.status !== ProjectStatus.LIVE || hasBelieved}
+            loading={isLoading}
           >
-            I believe in this project
-            {/* {hasBelieved
+            {hasBelieved
               ? 'Thank you for believing in this project!'
-              : 'I believe in this project'} */}
+              : 'I believe in this project'}
           </Button>
         </DialogTrigger>
         <DialogContent>
@@ -170,14 +160,8 @@ export function BelieveTabContent({ id, editionId, tags }: Props) {
                 } else {
                   believeProjectWriteAsync?.();
                 }
-                // } else if (signData === undefined) {
-                //   await signMessageAsync();
-                // } else {
-                //   await uploadSignature();
-                // }
               }}
-              loading={believeProjectIsLoading}
-              // loading={isLoading || believeProjectIsLoading}
+              loading={isLoading || believeProjectIsLoading}
             >
               {!isLoggedIn ? 'LOGIN' : 'UPLOAD BELIEF SIGNATURE'}
             </Button>
@@ -188,19 +172,23 @@ export function BelieveTabContent({ id, editionId, tags }: Props) {
         Build reputation in {projectData?.tags.join(', ') ?? 'Launch'}
       </p>
       <div className="grid gap-2 pt-6">
-        {believerLogs?.slice(0, 20).map((believer) => (
-          <div
-            key={believer.transactionHash}
-            className="flex justify-between border-y pb-2 pt-2 text-xs"
-          >
-            {/* {believer && (
-              <p>{shortenAddress(believer.args.believer)}</p>
-            )} */}
-            <div className="text-right text-muted-foreground">
-              {/* <p>{believer.blockNumber.toString()}</p> */}
+        {believerLogs
+          ?.slice(0, 20)
+          .filter(
+            (log) =>
+              log.args?.believer !== undefined && log.args?.tags !== undefined,
+          )
+          .map((believer) => (
+            <div
+              key={believer.transactionHash}
+              className="flex justify-between border-y pb-2 pt-2 text-xs"
+            >
+              <p>{shortenAddress(believer.args.believer!)}</p>
+              <div className="text-right text-muted-foreground">
+                <p>{believer.blockNumber.toString()}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );
