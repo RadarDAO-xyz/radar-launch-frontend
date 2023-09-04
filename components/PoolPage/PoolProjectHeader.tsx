@@ -50,28 +50,30 @@ export function PoolProjectHeader({
           {sponsors.length > 0 && (
             <>
               <p className="small-text">{'FUNDED BY:'}</p>
-              {sponsors.map((sponsor) => (
-                <div
-                  className="columns-27 border-b-0 lg:border-b-2"
-                  key={sponsor.name}
-                >
-                  <div>
-                    <img
-                      className="image-26 aspect-square object-contain"
-                      loading="lazy"
-                      width="auto"
-                      height="auto"
-                      src={sponsor.logo}
-                    />
+              <div className='grid divide-y'>
+                {sponsors.map((sponsor) => (
+                  <div
+                    className="flex items-center gap-4 py-3"
+                    key={sponsor.name}
+                  >
+                    <div className="">
+                      <img
+                        className="aspect-square object-contain"
+                        loading="lazy"
+                        width="64"
+                        height="64"
+                        src={sponsor.logo}
+                      />
+                    </div>
+                    <div className="">
+                      <p>
+                        {sponsor.name}
+                        <br />${sponsor.contribution.toLocaleString()}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p>
-                      {sponsor.name}
-                      <br />${sponsor.contribution.toLocaleString()}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </>
           )}
         </div>
