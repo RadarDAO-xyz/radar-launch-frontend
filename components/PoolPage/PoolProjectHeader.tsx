@@ -45,29 +45,33 @@ export function PoolProjectHeader({
               ${pool_amount.toLocaleString()}
             </h1>
           </div>
-          <p className="small-text">{'FUNDED BY:'}</p>
-          {sponsors.map((sponsor) => (
-            <div
-              className="columns-27 border-b-0 lg:border-b-2"
-              key={sponsor.name}
-            >
-              <div>
-                <img
-                  className="image-26 aspect-square object-contain"
-                  loading="lazy"
-                  width="auto"
-                  height="auto"
-                  src={sponsor.logo}
-                />
-              </div>
-              <div>
-                <p>
-                  {sponsor.name}
-                  <br />${sponsor.contribution.toLocaleString()}
-                </p>
-              </div>
-            </div>
-          ))}
+          {sponsors.length > 0 && (
+            <>
+              <p className="small-text">{'FUNDED BY:'}</p>
+              {sponsors.map((sponsor) => (
+                <div
+                  className="columns-27 border-b-0 lg:border-b-2"
+                  key={sponsor.name}
+                >
+                  <div>
+                    <img
+                      className="image-26 aspect-square object-contain"
+                      loading="lazy"
+                      width="auto"
+                      height="auto"
+                      src={sponsor.logo}
+                    />
+                  </div>
+                  <div>
+                    <p>
+                      {sponsor.name}
+                      <br />${sponsor.contribution.toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
         </div>
         <div className="col-span-3 max-h-[520px] overflow-hidden text-center">
           <img
