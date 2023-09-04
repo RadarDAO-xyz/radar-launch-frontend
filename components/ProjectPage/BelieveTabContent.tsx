@@ -13,7 +13,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { useGetProject } from '@/hooks/useGetProject';
 import {
   usePrepareRadarEditionsBelieveProject,
-  useRadarEditionsBelieveProject
+  useRadarEditionsBelieveProject,
+  useRadarEditionsEditionBelievedEvent,
 } from '@/lib/generated';
 import { shortenAddress } from '@/lib/utils';
 import { ProjectStatus } from '@/types/mongo';
@@ -24,7 +25,7 @@ import {
   useQuery,
   useQueryClient,
   useSignMessage,
-  useWaitForTransaction
+  useWaitForTransaction,
 } from 'wagmi';
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
@@ -32,9 +33,10 @@ import { useToast } from '../ui/use-toast';
 interface Props {
   id: string;
   editionId?: number;
+  tags: string;
 }
 
-export function BelieveTabContent({ id, editionId }: Props) {
+export function BelieveTabContent({ id, editionId, tags }: Props) {
   const { getLogs } = usePublicClient();
   const [isOpen, setIsOpen] = useState(false);
   const { data: projectData } = useGetProject(id);
@@ -43,7 +45,6 @@ export function BelieveTabContent({ id, editionId }: Props) {
   const { toast } = useToast();
   const { address } = useAccount();
   const [hasToasted, setHasToasted] = useState(false);
-
   const { data: believerLogs } = useQuery(
     [CacheKey.BELIEVER_LOGS, editionId, id],
     () =>
@@ -53,80 +54,35 @@ export function BelieveTabContent({ id, editionId }: Props) {
           editionId: BigInt(editionId || 0),
         },
         event: {
-          type: 'event',
           anonymous: false,
           inputs: [
             {
-              name: 'believer',
-              internalType: 'address',
-              type: 'address',
               indexed: true,
-            },
-            {
-              name: 'editionId',
               internalType: 'uint256',
+              name: 'editionId',
               type: 'uint256',
-              indexed: true,
             },
             {
-              name: 'hashOne',
-              internalType: 'bytes32',
-              type: 'bytes32',
               indexed: false,
-            },
-            {
-              name: 'hashTwo',
-              internalType: 'bytes32',
-              type: 'bytes32',
-              indexed: false,
-            },
-            {
-              name: 'hashThree',
-              internalType: 'bytes32',
-              type: 'bytes32',
-              indexed: false,
+              internalType: 'string',
+              name: 'tags',
+              type: 'string',
             },
           ],
           name: 'EditionBelieved',
+          type: 'event',
         },
         fromBlock: 108947105n,
       }),
     { enabled: editionId !== undefined },
   );
 
-  const {
-    data: signData,
-    signMessageAsync,
-    isLoading,
-  } = useSignMessage({
-    message: `I ${
-      address ? `(${address})` : ''
-    } support ${projectData?.title} at ${new Date().toISOString()}
-
-and a better future in: ${projectData?.tags.join(', ')}`,
-    onSuccess: async (data, variables) => {
-      // await queryClient.invalidateQueries([CacheKey.PROJECT_BELIEVERS, id]);
-      toast({
-        title: 'Message successfully signed, please upload it on-chain',
-      });
-    },
-  });
-
   const { config } = usePrepareRadarEditionsBelieveProject({
     address: CONTRACT_ADDRESS,
     account: address,
-    args: [
-      BigInt(editionId || 0),
-      `0x${signData?.substring(2, 66)}`,
-      `0x${signData?.substring(66, 130)}`,
-      `0x${signData?.substring(
-        130,
-      )}00000000000000000000000000000000000000000000000000000000000000`,
-    ],
+    args: [BigInt(editionId || 0), tags],
     enabled:
-      Boolean(signData?.length) &&
-      address !== undefined &&
-      editionId !== undefined,
+      address !== undefined && editionId !== undefined && tags.length > 0,
   });
   const {
     data: believeProjectData,
@@ -159,23 +115,23 @@ and a better future in: ${projectData?.tags.join(', ')}`,
     }
   }, [isSuccess, believeProjectData?.hash]);
 
-  const uploadSignature = async () => {
-    if (isOpen && signData?.length) {
-      try {
-        await believeProjectWriteAsync?.();
-      } catch (e) {
-        console.error(e);
-        toast({
-          variant: 'destructive',
-          title: 'An unexpected error occured',
-          description: 'Check the console for more information',
-        });
-      }
-    }
-  };
+  // const uploadSignature = async () => {
+  //   if (isOpen && signData?.length) {
+  //     try {
+  //       await believeProjectWriteAsync?.();
+  //     } catch (e) {
+  //       console.error(e);
+  //       toast({
+  //         variant: 'destructive',
+  //         title: 'An unexpected error occured',
+  //         description: 'Check the console for more information',
+  //       });
+  //     }
+  //   }
+  // };
 
-  const hasBelieved =
-    believerLogs?.find((log) => log.args.believer === address) !== undefined;
+  // const hasBelieved =
+  //   believerLogs?.find((log) => log.args.believer === address) !== undefined;
 
   return (
     <div>
@@ -187,12 +143,14 @@ and a better future in: ${projectData?.tags.join(', ')}`,
         <DialogTrigger asChild>
           <Button
             className="mb-4 w-full"
-            disabled={projectData?.status !== ProjectStatus.LIVE || hasBelieved}
-            loading={isLoading}
+            disabled={projectData?.status !== ProjectStatus.LIVE}
+            // disabled={projectData?.status !== ProjectStatus.LIVE || hasBelieved}
+            // loading={isLoading}
           >
-            {hasBelieved
+            asd
+            {/* {hasBelieved
               ? 'Thank you for believing in this project!'
-              : 'I believe in this project'}
+              : 'I believe in this project'} */}
           </Button>
         </DialogTrigger>
         <DialogContent>
@@ -209,19 +167,19 @@ and a better future in: ${projectData?.tags.join(', ')}`,
               onClick={async () => {
                 if (!isLoggedIn) {
                   login();
-                } else if (signData === undefined) {
-                  await signMessageAsync();
                 } else {
-                  await uploadSignature();
+                  believeProjectWriteAsync?.();
                 }
+                // } else if (signData === undefined) {
+                //   await signMessageAsync();
+                // } else {
+                //   await uploadSignature();
+                // }
               }}
-              loading={isLoading || believeProjectIsLoading}
+              loading={believeProjectIsLoading}
+              // loading={isLoading || believeProjectIsLoading}
             >
-              {!isLoggedIn
-                ? 'LOGIN'
-                : signData === undefined
-                ? 'SIGN MESSAGE'
-                : 'UPLOAD SIGNATURE'}
+              {!isLoggedIn ? 'LOGIN' : 'UPLOAD BELIEF SIGNATURE'}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -235,11 +193,11 @@ and a better future in: ${projectData?.tags.join(', ')}`,
             key={believer.transactionHash}
             className="flex justify-between border-y pb-2 pt-2 text-xs"
           >
-            {believer.args.believer && (
+            {/* {believer && (
               <p>{shortenAddress(believer.args.believer)}</p>
-            )}
+            )} */}
             <div className="text-right text-muted-foreground">
-              <p>{believer.blockNumber.toString()}</p>
+              {/* <p>{believer.blockNumber.toString()}</p> */}
             </div>
           </div>
         ))}

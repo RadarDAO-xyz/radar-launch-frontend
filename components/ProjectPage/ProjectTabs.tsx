@@ -36,6 +36,7 @@ import { useToast } from '../ui/use-toast';
 import { ContributeForm } from './ContributeForm';
 import { SignUpForm } from './SignUpForm';
 import { BelieveTabContent } from './BelieveTabContent';
+import { Project } from '@/types/mongo';
 
 async function getMintCheckoutLink(
   quantity: number,
@@ -91,7 +92,16 @@ enum Tab {
   BENEFITS = 'benefits',
 }
 
-export function ProjectTabs({ id }: { id: string }) {
+export function ProjectTabs({
+  _id,
+  tags,
+  founder,
+  mint_end_date,
+  title,
+  video_url,
+  benefits,
+  supporter_count,
+}: Project) {
   const [currentTab, setCurrentTab] = useState(Tab.BELIEVE);
   const [quantity, setQuantity] = useState(1);
   const [hasToasted, setHasToasted] = useState(false);
@@ -110,7 +120,7 @@ export function ProjectTabs({ id }: { id: string }) {
   });
 
   const editionId: number | undefined = onChainProjects?.findLastIndex(
-    (project) => project.id === id,
+    (project) => project.id === _id,
   );
   const value =
     editionId !== undefined ? onChainProjects?.[editionId]?.fee : undefined;
@@ -149,12 +159,9 @@ export function ProjectTabs({ id }: { id: string }) {
   });
 
   const { data: exchangeRateData } = useGetExchangeRate();
-  const { data: projectData } = useGetProject(id.toString());
-  const { data: userData } = useGetUser(projectData?.founder.toString());
+  const { data: userData } = useGetUser(founder.toString());
   const countdown = useGetCountdown(
-    projectData?.mint_end_date
-      ? new Date(projectData.mint_end_date)
-      : undefined,
+    mint_end_date ? new Date(mint_end_date) : undefined,
   );
 
   const { data: checkoutLinkForEth, isLoading: isCheckoutLinkForEthLoading } =
@@ -165,9 +172,9 @@ export function ProjectTabs({ id }: { id: string }) {
           quantity,
           editionId,
           (value! + protocolFee!).toString(),
-          projectData?.title,
-          generateVideoThumbnail(projectData?.video_url!),
-          projectData?._id,
+          title,
+          generateVideoThumbnail(video_url!),
+          _id,
           userData?.socials?.replace('https://twitter.com/', ''),
           false,
         ),
@@ -176,8 +183,7 @@ export function ProjectTabs({ id }: { id: string }) {
           editionId !== undefined &&
           value !== undefined &&
           protocolFee !== undefined &&
-          currentTab === Tab.COLLECT &&
-          projectData !== undefined,
+          currentTab === Tab.COLLECT,
       },
     );
   const { data: checkoutLinkForCard, isLoading: isCheckoutLinkForCardLoading } =
@@ -188,9 +194,9 @@ export function ProjectTabs({ id }: { id: string }) {
           quantity,
           editionId,
           (value! + protocolFee!).toString(),
-          projectData?.title,
-          generateVideoThumbnail(projectData?.video_url!),
-          projectData?._id,
+          title,
+          generateVideoThumbnail(video_url!),
+          _id,
           userData?.socials?.replace('https://twitter.com/', ''),
           true,
         ),
@@ -199,8 +205,7 @@ export function ProjectTabs({ id }: { id: string }) {
           editionId !== undefined &&
           value !== undefined &&
           protocolFee !== undefined &&
-          currentTab === Tab.COLLECT &&
-          projectData !== undefined,
+          currentTab === Tab.COLLECT,
       },
     );
 
@@ -276,7 +281,11 @@ export function ProjectTabs({ id }: { id: string }) {
         value={Tab.BELIEVE}
         className="rounded-md border px-8 py-6 pb-10"
       >
-        <BelieveTabContent id={id} editionId={editionId} />
+        <BelieveTabContent
+          id={_id}
+          editionId={editionId}
+          tags={tags.join(',')}
+        />
       </TabsContent>
       <TabsContent value={Tab.COLLECT} className="rounded-md border px-4 py-2">
         {typeof value === 'bigint' && typeof protocolFee === 'bigint' ? (
@@ -366,9 +375,7 @@ export function ProjectTabs({ id }: { id: string }) {
                 <Button
                   className="w-full"
                   disabled={
-                    projectData?.mint_end_date
-                      ? new Date(projectData.mint_end_date) < new Date()
-                      : false
+                    mint_end_date ? new Date(mint_end_date) < new Date() : false
                   }
                 >
                   COLLECT
@@ -446,8 +453,7 @@ export function ProjectTabs({ id }: { id: string }) {
             </Dialog>
 
             <p className="pb-4 pt-8 text-center text-gray-700">
-              {projectData?.mint_end_date &&
-                new Date(projectData.mint_end_date) > new Date() ? (
+              {mint_end_date && new Date(mint_end_date) > new Date() ? (
                 <>
                   <span>{countdown}</span>
                   <DotIcon className="inline" />
@@ -455,9 +461,7 @@ export function ProjectTabs({ id }: { id: string }) {
               ) : null}
               {totalSupply !== undefined && (
                 <span>
-                  {(
-                    totalSupply + BigInt(projectData?.supporter_count || 0)
-                  ).toString()}{' '}
+                  {(totalSupply + BigInt(supporter_count || 0)).toString()}{' '}
                   supporters
                 </span>
               )}
@@ -478,17 +482,17 @@ export function ProjectTabs({ id }: { id: string }) {
         value={Tab.SIGN_UP}
         className="rounded-md border px-8 py-6 pb-10"
       >
-        <SignUpForm id={id} />
+        <SignUpForm id={_id} />
       </TabsContent>
       <TabsContent
         value={Tab.CONTRIBUTE}
         className="rounded-md border px-4 pb-10 pt-8"
       >
-        <ContributeForm id={id} />
+        <ContributeForm id={_id} />
       </TabsContent>
       <TabsContent value={Tab.BENEFITS} className="">
-        {projectData?.benefits.length ? (
-          projectData.benefits.filter(Boolean).map((benefit) => (
+        {benefits.length ? (
+          benefits.filter(Boolean).map((benefit) => (
             <div
               key={benefit.text}
               className="mt-4 rounded-md border last:pb-12"

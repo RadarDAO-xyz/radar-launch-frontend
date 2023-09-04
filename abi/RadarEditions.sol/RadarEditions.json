@@ -155,12 +155,6 @@
       "inputs": [
         {
           "indexed": true,
-          "internalType": "address",
-          "name": "believer",
-          "type": "address"
-        },
-        {
-          "indexed": true,
           "internalType": "uint256",
           "name": "editionId",
           "type": "uint256"
@@ -174,33 +168,15 @@
       "inputs": [
         {
           "indexed": true,
-          "internalType": "address",
-          "name": "believer",
-          "type": "address"
-        },
-        {
-          "indexed": true,
           "internalType": "uint256",
           "name": "editionId",
           "type": "uint256"
         },
         {
           "indexed": false,
-          "internalType": "bytes32",
-          "name": "hashOne",
-          "type": "bytes32"
-        },
-        {
-          "indexed": false,
-          "internalType": "bytes32",
-          "name": "hashTwo",
-          "type": "bytes32"
-        },
-        {
-          "indexed": false,
-          "internalType": "bytes32",
-          "name": "hashThree",
-          "type": "bytes32"
+          "internalType": "string",
+          "name": "tags",
+          "type": "string"
         }
       ],
       "name": "EditionBelieved",
@@ -563,19 +539,9 @@
           "type": "uint256"
         },
         {
-          "internalType": "bytes32",
-          "name": "hashOne",
-          "type": "bytes32"
-        },
-        {
-          "internalType": "bytes32",
-          "name": "hashTwo",
-          "type": "bytes32"
-        },
-        {
-          "internalType": "bytes32",
-          "name": "hashThree",
-          "type": "bytes32"
+          "internalType": "string",
+          "name": "tags",
+          "type": "string"
         }
       ],
       "name": "believeProject",

@@ -189,7 +189,7 @@ export default function IndividualProjectPage() {
           <hr />
 
           <div className="pb-4 pt-4">
-            <ProjectTabs id={id.toString()} />
+            <ProjectTabs {...data} />
           </div>
         </div>
       </div>
@@ -213,11 +213,11 @@ export default function IndividualProjectPage() {
             </div>
             <hr />
             <div>
-              <ProjectTabs id={id.toString()} />
+              <ProjectTabs {...data} />
             </div>
             <SheetFooter className="w-full py-6">
               <SheetClose asChild>
-                <Button className='w-full'>CLOSE</Button>
+                <Button className="w-full">CLOSE</Button>
               </SheetClose>
             </SheetFooter>
           </SheetContent>
