@@ -115,13 +115,13 @@ export function ProjectBlock({
                   ? '?controls=0&fs=0&loop=1&modestbranding=1&playsinline=1&iv_load_policy=3'
                   : '?title=0&byline=0&portrait=0&sidedock=0&loop=1',
               )}
-              className="aspect-video w-full"
+              className="aspect-video w-full object-cover"
               allow="autoplay; fullscreen; picture-in-picture"
             />
           ) : (
             <img
               src={thumbnail || generateVideoThumbnail(video_url)}
-              className="w-full"
+              className="w-full aspect-video object-cover"
             />
             // <HoverVideoPlayer
             //   focused

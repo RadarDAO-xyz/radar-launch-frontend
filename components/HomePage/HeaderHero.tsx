@@ -17,7 +17,7 @@ interface Props {
 export function HeaderHero({ visionOfTheWeekSlot }: Props) {
   return (
     <section className="header-featured z-20 bg-transparent pt-10">
-      {/* <div className="floating-down-arrow absolute right-[5%] top-[calc(100vh-200px)] hidden items-center justify-between lg:flex">
+      <div className="floating-down-arrow absolute right-[5%] top-[calc(100vh-200px)] hidden items-center justify-between lg:flex">
         <p className="body-text text-base">
           {'Curated projects dropping weekly ↓'}
           <br />
@@ -36,7 +36,7 @@ export function HeaderHero({ visionOfTheWeekSlot }: Props) {
           />
           <div className="arrow-diagonal">{'↗'}</div>
         </Link>
-      </div> */}
+      </div>
       <div className="featured-project-tabs space-x-4 md:w-[80%] lg:w-[80%] lg:space-x-8">
         <div className="about-div home px-[5%]">
           <h1 className="heading-5">

@@ -160,6 +160,33 @@ export default function HomePage() {
         }
       />
       <ProjectCollection
+        projectSectionTitle="THE NEW PLAYERS"
+        projectSectionButton={
+          <Button className="font-bolded font-bold" variant={'ghost'} asChild>
+            <Link href="/pool/64ee74a442d2582b74e47f83" target="_blank">
+              {'SEE MORE'}
+            </Link>
+          </Button>
+        }
+        projects={
+          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-4">
+            {data
+              ?.filter(
+                (project) =>
+                  project.pool === '64ee74a442d2582b74e47f83' &&
+                  project.status === ProjectStatus.LIVE,
+              )
+              .sort((a, b) =>
+                new Date(b.createdAt) > new Date(a.createdAt) ? 1 : -1,
+              )
+              .slice(0, 4)
+              .map((project) => (
+                <ProjectBlockNoSSR key={project._id} {...project} showPrice />
+              ))}
+          </div>
+        }
+      />
+      <ProjectCollection
         projectSectionTitle="OUR CENTAUR FUTURE"
         projectSectionDescription="Support over 10 weeks of collective discovery, exploration and innovation in Cycle #3"
         projectSectionButton={
