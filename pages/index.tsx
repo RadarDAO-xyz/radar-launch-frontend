@@ -177,7 +177,12 @@ export default function HomePage() {
               )
               .slice(0, 4)
               .map((project) => (
-                <ProjectBlockNoSSR key={project._id} {...project} showPrice />
+                <ProjectBlockNoSSR
+                  key={project._id}
+                  {...project}
+                  showSupporters
+                  showMintEndDate
+                />
               ))}
           </div>
         }
