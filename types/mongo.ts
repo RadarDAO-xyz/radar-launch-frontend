@@ -49,7 +49,9 @@ export type Pool = {
   video?: string;
   is_hidden: boolean;
   brief_button_link: string;
+  brief_button_text: string;
   event_button_link: string;
+  event_button_text: string;
 };
 
 export type User = {

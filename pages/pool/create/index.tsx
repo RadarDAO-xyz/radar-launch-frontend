@@ -40,6 +40,10 @@ export const createPoolFormSchema = z.object({
     }),
   ),
   video: z.string().url().min(1, { message: 'Video url required' }),
+  brief_button_link: z.string().url({ message: 'Not URL' }),
+  brief_button_text: z.string().min(1, { message: 'Required' }),
+  event_button_link: z.string().url({ message: 'Not URL' }),
+  event_button_text: z.string().min(1, { message: 'Required' }),
 });
 
 export default function CreatePoolPage() {
@@ -215,6 +219,58 @@ export default function CreatePoolPage() {
             )}
           />
           <SponsorFields />
+          <FormField
+            control={control}
+            name="brief_button_text"
+            render={({ field }) => (
+              <FormItem className="pb-4 pt-4">
+                <FormLabel>Brief Button Text</FormLabel>
+                <FormControl>
+                  <Input type="text" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={control}
+            name="brief_button_link"
+            render={({ field }) => (
+              <FormItem className="pb-4">
+                <FormLabel>Brief Button Link</FormLabel>
+                <FormControl>
+                  <Input type="url" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={control}
+            name="event_button_text"
+            render={({ field }) => (
+              <FormItem className="pb-4">
+                <FormLabel>Event Button Text</FormLabel>
+                <FormControl>
+                  <Input type="text" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={control}
+            name="event_button_link"
+            render={({ field }) => (
+              <FormItem className="pb-4">
+                <FormLabel>Event Button Link</FormLabel>
+                <FormControl>
+                  <Input type="url" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <Button
             type="submit"
             disabled={idToken === '' || isLoading}
