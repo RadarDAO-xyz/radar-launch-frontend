@@ -14,6 +14,7 @@ import Link from 'next/link';
 import { OnChainProject } from '../profile/[id]';
 import { Placeholder } from '@/components/Layout/Placeholder';
 import { convertOnChainStatusName } from '@/lib/convertOnChainStatusName';
+import { useGetPools } from '@/hooks/useGetPools';
 
 function transformProjects(
   databaseProjects?: Project[],
@@ -40,6 +41,7 @@ function transformProjects(
 export default function AdminPage() {
   const { data } = useGetCurrentUser();
   const { data: databaseProjectData } = useGetProjects();
+  const { data: poolsData } = useGetPools();
   const { idToken } = useAuth();
 
   const { data: onChainProjects } = useRadarEditionsGetEditions({
@@ -149,6 +151,19 @@ export default function AdminPage() {
               {new Date(project.curation?.end).toLocaleDateString()}
             </p>
             <ProjectActions {...project} />
+          </div>
+        ))}
+      </div>
+      <h2 className="text-3xl font-bold">Pools</h2>
+      <div className="grid grid-cols-3 gap-4">
+        {poolsData?.map((pool) => (
+          <div key={pool._id} className="rounded-lg border p-4">
+            <Link href={`/pool/${pool._id}`} className="underline">
+              ID: {pool._id}
+            </Link>
+            <p>Title: {pool.title}</p>
+            <p>Subtitle: {pool.subtitle}</p>
+            <p>Is hidden: {pool.is_hidden ? 'true' : 'false'}</p>
           </div>
         ))}
       </div>
