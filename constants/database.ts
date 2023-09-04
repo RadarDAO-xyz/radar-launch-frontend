@@ -6,3 +6,5 @@ export const CENTAUR_PROEJCT_IDS = [
 ];
 
 export const A_MORE_PLAYFUL_FUTURE_POOL_ID = '64ee74a442d2582b74e47f83';
+
+export const THE_NEW_PLAYERS_POOL_ID = '64d501ee081e901b9fdfaea9';

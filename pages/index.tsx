@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import {
   A_MORE_PLAYFUL_FUTURE_POOL_ID,
   CENTAUR_PROEJCT_IDS,
+  THE_NEW_PLAYERS_POOL_ID,
 } from '@/constants/database';
 import { useGetProjects } from '@/hooks/useGetProjects';
 import { ProjectStatus } from '@/types/mongo';
@@ -158,7 +159,7 @@ export default function HomePage() {
         projectSectionTitle="THE NEW PLAYERS"
         projectSectionButton={
           <Button className="font-bolded font-bold" variant={'ghost'} asChild>
-            <Link href="/pool/64ee74a442d2582b74e47f83" target="_blank">
+            <Link href={`/pool/${THE_NEW_PLAYERS_POOL_ID}`} target="_blank">
               {'SEE MORE'}
             </Link>
           </Button>
@@ -168,7 +169,7 @@ export default function HomePage() {
             {data
               ?.filter(
                 (project) =>
-                  project.pool === A_MORE_PLAYFUL_FUTURE_POOL_ID &&
+                  project.pool === THE_NEW_PLAYERS_POOL_ID &&
                   project.status === ProjectStatus.LIVE,
               )
               .sort((a, b) =>
