@@ -1,16 +1,18 @@
-import { useGetPoolProjects } from '@/hooks/useGetPoolProjects';
+import { useGetProjects } from '@/hooks/useGetProjects';
 import { Pool, ProjectStatus } from '@/types/mongo';
-import { SearchIcon } from 'lucide-react';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { ProjectBlock } from '../Layout/ProjectBlock';
 import Link from 'next/link';
+import { ProjectBlock } from '../Layout/ProjectBlock';
+import { Button } from '../ui/button';
+import { A_MORE_PLAYFUL_FUTURE_POOL_ID } from '@/constants/database';
 
 export function ProjectSection({ _id, title }: Pool) {
-  const { data } = useGetPoolProjects(_id);
+  const { data } = useGetProjects();
 
   const liveProjects = data?.filter(
-    (project) => project.status === ProjectStatus.LIVE,
+    (project) =>
+      // All projects will be shown for this pool
+      (project.pool === _id || _id === A_MORE_PLAYFUL_FUTURE_POOL_ID) &&
+      project.status === ProjectStatus.LIVE,
   );
 
   return (

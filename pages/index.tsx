@@ -3,6 +3,10 @@ import { InspirationFooter } from '@/components/HomePage/InspirationFooter';
 import { ProjectCollection } from '@/components/HomePage/ProjectCollection';
 import { PoolHome } from '@/components/PoolPage/PoolHome';
 import { Button } from '@/components/ui/button';
+import {
+  A_MORE_PLAYFUL_FUTURE_POOL_ID,
+  CENTAUR_PROEJCT_IDS,
+} from '@/constants/database';
 import { useGetProjects } from '@/hooks/useGetProjects';
 import { ProjectStatus } from '@/types/mongo';
 import dynamic from 'next/dynamic';
@@ -26,15 +30,6 @@ const VisionOfTheWeekProjectNoSSR = dynamic(
     ssr: false,
   },
 );
-
-const CENTAUR_PROEJCT_IDS = [
-  '64d3ef19d96faeddac76d82b',
-  '64d3f328d96faeddac76d848',
-  '64d3f928d96faeddac76d86d',
-  '64d3fbece93b67e1d4e27671',
-];
-
-const A_MORE_PLAYFUL_FUTURE_POOL_ID = '64ee74a442d2582b74e47f83';
 
 export default function HomePage() {
   const { data } = useGetProjects();
@@ -173,7 +168,7 @@ export default function HomePage() {
             {data
               ?.filter(
                 (project) =>
-                  project.pool === '64ee74a442d2582b74e47f83' &&
+                  project.pool === A_MORE_PLAYFUL_FUTURE_POOL_ID &&
                   project.status === ProjectStatus.LIVE,
               )
               .sort((a, b) =>
