@@ -13,6 +13,8 @@ export function PoolProjectHeader({
   video,
   brief_button_link,
   event_button_link,
+  brief_button_text,
+  event_button_text,
 }: Pool) {
   return (
     <section className="pl-[5%] pr-[5%] lg:border-b-2 lg:pr-0">
@@ -29,12 +31,12 @@ export function PoolProjectHeader({
           <div>
             <Button asChild className="mb-3 w-full">
               <Link target="_blank" href={brief_button_link}>
-                {'HOW IT WORKS'}
+                {brief_button_text}
               </Link>
             </Button>
             <Button variant={'ghost'} className="w-full" asChild>
               <Link target="_blank" href={event_button_link}>
-                {'ATTEND UPCOMING EVENTS'}
+                {event_button_text}
               </Link>
             </Button>
           </div>
