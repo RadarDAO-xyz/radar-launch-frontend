@@ -77,6 +77,7 @@ export default function CreatePoolPage() {
           ...sponsor,
           contribution: sponsor.contribution.toString(),
         })),
+        is_hidden: false,
       };
       // @ts-expect-error the sponsor contribution type is incorrect in the backend schema
       return createPool(idToken, newValues);
