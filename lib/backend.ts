@@ -1,15 +1,14 @@
 import { createFormSchema } from '@/components/CreateProjectPage/CreateForm';
 import {
+  ProjectBeliever,
+  ProjectStatus,
   SupportType,
   type Pool,
   type Project,
   type ProjectUpdate,
   type User,
   type WalletResolvable,
-  ProjectBeliever,
-  ProjectStatus,
 } from '@/types/mongo';
-import type { RecursivePartial } from '@/types/utils';
 import * as z from 'zod';
 
 export async function getPools(): Promise<Pool[]> {
@@ -470,6 +469,30 @@ export async function createPool(
     });
     if (!response.ok) {
       throw new Error('Error creating pool');
+    }
+    return response.json();
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+
+export async function updatePool(
+  idToken: string,
+  poolId: string,
+  values: Omit<Pool, '_id'>,
+): Promise<Pool | undefined> {
+  try {
+    const response = await fetch(`${process.env.BACKEND_URL}/pools/${poolId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${idToken}`,
+      },
+      body: JSON.stringify(values),
+    });
+    if (!response.ok) {
+      throw new Error('Error updating pool');
     }
     return response.json();
   } catch (e) {

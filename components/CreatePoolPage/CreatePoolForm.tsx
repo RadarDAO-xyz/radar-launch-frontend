@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useMutation } from 'wagmi';
-import { createPool } from '@/lib/backend';
+import { createPool, updatePool } from '@/lib/backend';
 import { CacheKey } from '@/constants/react-query';
 import { SponsorFields } from '@/components/CreatePoolPage/SponsorFields';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -33,7 +33,7 @@ export const createPoolFormSchema = z.object({
   sponsors: z.array(
     z.object({
       logo: z.string(),
-      link: z.string(),
+      link: z.string().optional(),
       name: z.string().min(1, { message: 'Name required' }),
       contribution: z.coerce
         .number()
@@ -74,7 +74,6 @@ export function CreatePoolForm(props: Props) {
     handleSubmit,
     control,
     formState: { errors },
-    setValue,
   } = form;
   const { toast } = useToast();
 
@@ -82,6 +81,10 @@ export function CreatePoolForm(props: Props) {
     [CacheKey.CREATE_POOL, isEdit],
     () => {
       const values = form.getValues();
+      if (isEdit) {
+        // @ts-expect-error FIXME: update when is hidden checkbox is added
+        return updatePool(idToken, pool._id!, values);
+      }
       const newValues = {
         ...values,
         is_hidden: false,
@@ -99,19 +102,13 @@ export function CreatePoolForm(props: Props) {
       },
       onSuccess: () => {
         toast({
-          title: 'Successfully created pool!',
+          title: isEdit
+            ? 'Successfully edited pool!'
+            : 'Successfully created pool!',
         });
       },
     },
   );
-
-  useEffect(() => {
-    if (isEdit && pool !== undefined) {
-      for (const key in pool) {
-        setValue(key as any, pool[key as keyof Pool] as any);
-      }
-    }
-  }, [pool, isEdit]);
 
   function onSubmit(values: z.infer<typeof createPoolFormSchema>) {
     // print form errors
