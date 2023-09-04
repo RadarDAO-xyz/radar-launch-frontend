@@ -117,11 +117,14 @@ export function ProjectBlock({
               )}
               className="aspect-video w-full object-cover"
               allow="autoplay; fullscreen; picture-in-picture"
+              loading="lazy"
             />
           ) : (
             <img
               src={thumbnail || generateVideoThumbnail(video_url)}
-              className="w-full aspect-video object-cover"
+              className="aspect-video w-full object-cover"
+              alt="Project image"
+              loading="lazy"
             />
             // <HoverVideoPlayer
             //   focused

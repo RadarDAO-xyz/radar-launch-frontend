@@ -55,6 +55,7 @@ export function VisionOfTheWeek({ projectId }: Props) {
             )}
             className="aspect-video w-full"
             allow="autoplay; fullscreen; picture-in-picture"
+            loading="lazy"
           />
         ) : (
           <HoverVideoPlayer
