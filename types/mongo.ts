@@ -43,7 +43,7 @@ export type Pool = {
   title: string;
   subtitle: string;
   description: string;
-  pool_amount: number;
+  pool_amount?: number;
   hero_image?: string;
   sponsors: Sponsor[];
   video?: string;

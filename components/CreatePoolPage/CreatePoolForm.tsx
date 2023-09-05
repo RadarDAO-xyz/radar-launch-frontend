@@ -20,7 +20,6 @@ import * as z from 'zod';
 import { useAuth } from '@/hooks/useAuth';
 import { Pool } from '@/types/mongo';
 import { RecursivePartial } from '@/types/utils';
-import { useEffect } from 'react';
 
 export const createPoolFormSchema = z.object({
   title: z.string().min(1, { message: 'Title is required' }),
@@ -28,7 +27,8 @@ export const createPoolFormSchema = z.object({
   description: z.string().min(1, { message: 'Description is required' }),
   pool_amount: z.coerce
     .number()
-    .min(0, { message: 'Pool amount must at least be 0' }),
+    .nonnegative({ message: 'Pool amount must at least be 0' })
+    .optional(),
   hero_image: z.string(),
   sponsors: z.array(
     z.object({
@@ -40,7 +40,7 @@ export const createPoolFormSchema = z.object({
         .min(1, { message: 'Contribution amount required' }),
     }),
   ),
-  video: z.string().url({ message: 'Not URL' }),
+  video: z.string().url({ message: 'Not URL' }).optional(),
   brief_button_link: z.string().url({ message: 'Not URL' }),
   brief_button_text: z.string().min(1, { message: 'Required' }),
   event_button_link: z.string().url({ message: 'Not URL' }),
