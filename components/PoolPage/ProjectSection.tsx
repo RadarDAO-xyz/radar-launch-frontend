@@ -8,12 +8,14 @@ import { A_MORE_PLAYFUL_FUTURE_POOL_ID } from '@/constants/database';
 export function ProjectSection({ _id, title }: Pool) {
   const { data } = useGetProjects();
 
-  const liveProjects = data?.filter(
-    (project) =>
-      // All projects will be shown for this pool
-      (project.pool === _id || _id === A_MORE_PLAYFUL_FUTURE_POOL_ID) &&
-      project.status === ProjectStatus.LIVE,
-  );
+  const liveProjects = data
+    ?.filter(
+      (project) =>
+        // All projects will be shown for this pool
+        (project.pool === _id || _id === A_MORE_PLAYFUL_FUTURE_POOL_ID) &&
+        project.status === ProjectStatus.LIVE,
+    )
+    .sort((a, b) => (new Date(b.createdAt) > new Date(a.createdAt) ? 1 : -1));
 
   return (
     <section className="px-[5%] py-12">

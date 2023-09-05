@@ -24,6 +24,7 @@ import {
 } from '../ui/sheet';
 import { Banner } from './Banner';
 import Image from 'next/image';
+import { A_MORE_PLAYFUL_FUTURE_POOL_ID } from '@/constants/database';
 
 const WalletNoSSR = dynamic(() => import('./Wallet').then((res) => res.Wallet));
 
@@ -47,6 +48,17 @@ export function NavBar() {
           </div>
           <NavigationMenu className="z-50 hidden lg:flex">
             <NavigationMenuList className="space-x-0">
+              <NavigationMenuItem>
+                <Link
+                  href={`/pool/${A_MORE_PLAYFUL_FUTURE_POOL_ID}`}
+                  legacyBehavior
+                  passHref
+                >
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    ALL
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
               <NavigationMenuItem>
                 <Link href="/pool" legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
@@ -135,6 +147,11 @@ export function NavBar() {
                 <SheetDescription></SheetDescription>
               </SheetHeader>
               <div className="flex flex-col py-4">
+                <Button asChild variant="link" className="justify-start">
+                  <Link href={`/pool/${A_MORE_PLAYFUL_FUTURE_POOL_ID}`}>
+                    ALL
+                  </Link>
+                </Button>
                 <Button asChild variant="link" className="justify-start">
                   <Link className="" href="/pool">
                     PRIZE POOLS
