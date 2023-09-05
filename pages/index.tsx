@@ -7,6 +7,7 @@ import {
   A_MORE_PLAYFUL_FUTURE_POOL_ID,
   CENTAUR_PROEJCT_IDS,
   THE_NEW_PLAYERS_POOL_ID,
+  USE_PLAY_TO_BULD_A_BETTER_WEB_POOL_ID,
 } from '@/constants/database';
 import { useGetProjects } from '@/hooks/useGetProjects';
 import { ProjectStatus } from '@/types/mongo';
@@ -73,7 +74,7 @@ export default function HomePage() {
             {data
               ?.filter(
                 (project) =>
-                  project.pool === A_MORE_PLAYFUL_FUTURE_POOL_ID &&
+                  project.pool === USE_PLAY_TO_BULD_A_BETTER_WEB_POOL_ID &&
                   project.status === ProjectStatus.LIVE,
               )
               .sort((a, b) =>
