@@ -33,10 +33,12 @@ export function PoolCard({
         <div className="w-full rounded-lg border p-4">
           <div className="small-text">{'Remaining Prize pool'}</div>
           <div className="_5px-div" />
-          <div className={cn('funding-pool-numbers')}>
-            <span className="small">{'$'}</span>
-            {pool_amount.toLocaleString()}
-          </div>
+          {pool_amount !== undefined && (
+            <div className={cn('funding-pool-numbers')}>
+              <span className="small">{'$'}</span>
+              {pool_amount.toLocaleString()}
+            </div>
+          )}
         </div>
         <div className="w-full rounded-lg border p-4">
           <div className={'small-text'}>{'Projects Submitted '}</div>
@@ -60,7 +62,7 @@ export function PoolCard({
           .map((sponsor) => (
             <img
               key={sponsor.name}
-              className={'rounded-full aspect-square bg-white object-contain'}
+              className={'aspect-square rounded-full bg-white object-contain'}
               loading="lazy"
               alt={sponsor.name + ' logo image'}
               width={77}
