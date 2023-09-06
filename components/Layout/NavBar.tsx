@@ -26,7 +26,10 @@ import { Banner } from './Banner';
 import Image from 'next/image';
 import { A_MORE_PLAYFUL_FUTURE_POOL_ID } from '@/constants/database';
 
-const WalletNoSSR = dynamic(() => import('./Wallet').then((res) => res.Wallet));
+const WalletNoSSR = dynamic(
+  () => import('./Wallet').then((res) => res.Wallet),
+  { ssr: false },
+);
 
 export function NavBar() {
   const router = useRouter();
