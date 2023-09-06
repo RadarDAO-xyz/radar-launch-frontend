@@ -132,6 +132,8 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
       return;
     }
     await disconnectAsync();
+    localStorage.removeItem(JWT_LOCAL_STORAGE_KEY);
+    setIdToken('');
   }
 
   return (
