@@ -82,9 +82,10 @@ export function ProjectBlock({
     address: CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
     args: [BigInt(Math.max(editionId! || 0, 0))],
-    enabled: Boolean(chains[0]?.id) && editionId !== undefined,
+    enabled:
+      Boolean(chains[0]?.id) && editionId !== undefined && showSupporters,
   });
-  const countdown = useGetCountdown(new Date(mint_end_date));
+  const countdown = useGetCountdown(new Date(mint_end_date), showMintEndDate);
 
   return (
     <div
