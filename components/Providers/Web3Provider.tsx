@@ -4,7 +4,15 @@ import { Web3Auth } from '@web3auth/modal';
 import { OpenloginAdapter } from '@web3auth/openlogin-adapter';
 import { Web3AuthConnector } from '@web3auth/web3auth-wagmi-connector';
 import { ReactNode, createContext, useEffect, useState } from 'react';
-import { WagmiConfig, configureChains, createConfig } from 'wagmi';
+import {
+  Config,
+  PublicClient,
+  WagmiConfig,
+  WagmiConfigProps,
+  WebSocketPublicClient,
+  configureChains,
+  createConfig,
+} from 'wagmi';
 import { optimism, optimismGoerli } from 'wagmi/chains';
 import { infuraProvider } from 'wagmi/providers/infura';
 import { publicProvider } from 'wagmi/providers/public';
@@ -50,17 +58,12 @@ export const Web3Context = createContext<Web3ContextType | null>(null);
 
 export const Web3Provider = ({ children }: { children?: ReactNode }) => {
   const [web3Auth, setWeb3Auth] = useState<Web3Auth>();
-  const [wagmiConfig, setWagmiConfig] = useState(
-    createConfig({
-      autoConnect: true,
-      publicClient,
-      webSocketPublicClient,
-      connectors: [],
-    }),
-  );
+  const [wagmiConfig, setWagmiConfig] =
+    useState<ReturnType<typeof createConfig>>();
 
   useEffect(() => {
     const init = async () => {
+      console.log('initializing web3auth');
       const web3AuthInstance = new Web3Auth({
         clientId: process.env.VITE_WEB3AUTH_CLIENT_ID!,
         web3AuthNetwork: 'cyan',
@@ -79,7 +82,7 @@ export const Web3Provider = ({ children }: { children?: ReactNode }) => {
       await web3AuthInstance.initModal();
       setWagmiConfig(
         createConfig({
-          autoConnect: true,
+          autoConnect: false,
           publicClient,
           webSocketPublicClient,
           connectors: [
@@ -89,12 +92,16 @@ export const Web3Provider = ({ children }: { children?: ReactNode }) => {
               },
             }),
           ],
-        }),
+        }) as any,
       );
     };
 
     init().catch(console.error);
   }, []);
+
+  if (!wagmiConfig) {
+    return null;
+  }
 
   return (
     <Web3Context.Provider value={{ web3Auth }}>

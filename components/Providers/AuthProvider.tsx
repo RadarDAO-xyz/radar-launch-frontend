@@ -59,6 +59,8 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
     },
   );
 
+  console.log({ idToken, address, isLoggedIn });
+
   useEffect(() => {
     const jwtToken = localStorage.getItem(JWT_LOCAL_STORAGE_KEY);
     if (jwtToken) {
