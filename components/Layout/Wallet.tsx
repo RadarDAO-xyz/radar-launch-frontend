@@ -75,8 +75,7 @@ export function Wallet() {
       }}
       variant={'ghost'}
     >
-      {address === undefined ?  "LOGIN ⚙" : "SIGN WALLET ⚙"}
-      
+      {address === undefined ? 'LOGIN ⚙' : 'SIGN WALLET ⚙'}
     </Button>
   );
 }

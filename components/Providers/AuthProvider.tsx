@@ -46,6 +46,8 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
   // for backend auth
   const [isWalletLogin, setIsWalletLoggedIn] = useState(false);
   const [appPubKey, setAppPubKey] = useState('');
+
+  // create user if not exists
   useQuery(
     [CacheKey.LOGIN, isWalletLogin, idToken, address, appPubKey],
     () => authenticateUser({ idToken, isWalletLogin, address, appPubKey }),
@@ -64,10 +66,22 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
     }
   }, []);
 
+  // to auto login with wallet
+  useEffect(() => {
+    if (connectors.length > 0) {
+      connectAsync({
+        connector: connectors[0],
+      });
+    }
+  }, [connectAsync, connectors]);
+
+  console.log({ isLoggedIn, idToken, address });
   useEffect(() => {
     (async () => {
       if (isLoggedIn && web3Auth && !idToken) {
         const socialLoginUserInfo = await web3Auth.getUserInfo();
+
+        console.log({ socialLoginUserInfo });
 
         // social login here
         if (socialLoginUserInfo?.idToken) {
