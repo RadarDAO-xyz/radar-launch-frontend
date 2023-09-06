@@ -43,14 +43,16 @@ export default function AdminPage() {
   const { data } = useGetCurrentUser();
   const { data: databaseProjectData } = useGetProjects();
   const { data: poolsData } = useGetPools();
-  const { idToken } = useAuth();
+  const { isLoggedIn } = useAuth();
 
   const { data: onChainProjects } = useRadarEditionsGetEditions({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
     enabled: Boolean(chains[0].id),
   });
-  if (!data?.wallets?.[0].address || !idToken) {
+
+  console.log({ data, aasd: data?.bypasser });
+  if (!data?.wallets?.[0].address || !isLoggedIn) {
     return (
       <Placeholder>
         <h1>Please Login</h1>
