@@ -1,7 +1,7 @@
-import dynamic from "next/dynamic";
-import Link from "next/link";
-import { ReactNode } from "react";
-import { HeroSectionAmount } from "./HeroSectionAmount";
+import dynamic from 'next/dynamic';
+import Link from 'next/link';
+import { ReactNode } from 'react';
+import { HeroSectionAmount } from './HeroSectionAmount';
 
 const HeroSectionAmountNoSSR = dynamic(
   () => Promise.resolve(HeroSectionAmount),
@@ -40,22 +40,13 @@ export function HeaderHero({ visionOfTheWeekSlot }: Props) {
       <div className="featured-project-tabs space-x-4 md:w-[80%] lg:w-[80%] lg:space-x-8">
         <div className="about-div home px-[5%]">
           <h1 className="heading-5">
-            {'SUPPORT IDEAS AND BUILDERS OF FUTURES YOU BELIEVE IN'}
+            {'BUILD & SUPPORT FUTURES YOU BELIEVE IN'}
           </h1>
           <div className="_10px-div" />
           <p className="body-text larger">
             {
-              'We believe the future is multiplayer and we need future makers, future adopters and future backers to accelerate adoption.'
+              'Launch is where you share project updates, win prizes for building the future, unlock reputation and connect with early adopters.'
             }
-            <br />
-            <br />{' '}
-            {
-              'Launch is where you can support future makers, unlock benefits as a patron and build reputation as an future adopter.'
-            }
-            <Link href="/">
-              <span className="underline">{''}</span>
-            </Link>
-            <br />
           </p>
           <div className="div-block-99">
             <HeroSectionAmountNoSSR />
