@@ -75,13 +75,10 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
     }
   }, [connectAsync, connectors]);
 
-  console.log({ isLoggedIn, idToken, address });
   useEffect(() => {
     (async () => {
       if (isLoggedIn && web3Auth && !idToken) {
         const socialLoginUserInfo = await web3Auth.getUserInfo();
-
-        console.log({ socialLoginUserInfo });
 
         // social login here
         if (socialLoginUserInfo?.idToken) {
