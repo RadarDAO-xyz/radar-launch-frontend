@@ -1,20 +1,11 @@
 import isTestnet from '@/lib/isTestnet';
 import { CHAIN_NAMESPACES } from '@web3auth/base';
-import { MetamaskAdapter } from '@web3auth/metamask-adapter';
 import { Web3Auth } from '@web3auth/modal';
 import { OpenloginAdapter } from '@web3auth/openlogin-adapter';
 import { Web3AuthConnector } from '@web3auth/web3auth-wagmi-connector';
-import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  createContext,
-  useEffect,
-  useState,
-} from 'react';
+import { ReactNode, createContext, useEffect, useState } from 'react';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { optimism, optimismGoerli } from 'wagmi/chains';
-import { InjectedConnector } from 'wagmi/connectors/injected';
 import { infuraProvider } from 'wagmi/providers/infura';
 import { publicProvider } from 'wagmi/providers/public';
 
@@ -51,44 +42,26 @@ const chainConfig = {
   blockExplorer: chains[0]?.blockExplorers.default?.url,
 };
 
-const metamaskAdapter = new MetamaskAdapter({
-  clientId: process.env.VITE_WEB3AUTH_CLIENT_ID,
-  sessionTime: 86400,
-  web3AuthNetwork: isTestnet() ? 'testnet' : 'cyan',
-  chainConfig,
-});
-
 interface Web3ContextType {
   web3Auth?: Web3Auth;
-  setWeb3Auth: Dispatch<SetStateAction<Web3Auth | undefined>>;
-  web3AuthConnecter?: Web3AuthConnector;
 }
-
-const wagmiConfig = createConfig({
-  autoConnect: true,
-  publicClient,
-  webSocketPublicClient,
-  connectors: [
-    new InjectedConnector({
-      chains,
-      options: {
-        name: 'Injected',
-        shimDisconnect: true,
-      },
-    }),
-  ],
-});
 
 export const Web3Context = createContext<Web3ContextType | null>(null);
 
 export const Web3Provider = ({ children }: { children?: ReactNode }) => {
   const [web3Auth, setWeb3Auth] = useState<Web3Auth>();
-  const [web3AuthConnecter, setWeb3AuthConnector] =
-    useState<Web3AuthConnector>();
+  const [wagmiConfig, setWagmiConfig] = useState(
+    createConfig({
+      autoConnect: true,
+      publicClient,
+      webSocketPublicClient,
+      connectors: [],
+    }),
+  );
 
   useEffect(() => {
     const init = async () => {
-      const newWeb3Auth = new Web3Auth({
+      const web3AuthInstance = new Web3Auth({
         clientId: process.env.VITE_WEB3AUTH_CLIENT_ID!,
         web3AuthNetwork: 'cyan',
         chainConfig,
@@ -99,19 +72,23 @@ export const Web3Provider = ({ children }: { children?: ReactNode }) => {
         },
       });
 
-      newWeb3Auth.configureAdapter(openloginAdapter);
+      web3AuthInstance.configureAdapter(openloginAdapter);
 
-      newWeb3Auth.configureAdapter(metamaskAdapter);
+      setWeb3Auth(web3AuthInstance);
 
-      setWeb3Auth(newWeb3Auth);
-
-      await newWeb3Auth.initModal();
-
-      setWeb3AuthConnector(
-        new Web3AuthConnector({
-          options: {
-            web3AuthInstance: newWeb3Auth!,
-          },
+      await web3AuthInstance.initModal();
+      setWagmiConfig(
+        createConfig({
+          autoConnect: true,
+          publicClient,
+          webSocketPublicClient,
+          connectors: [
+            new Web3AuthConnector({
+              options: {
+                web3AuthInstance: web3AuthInstance,
+              },
+            }),
+          ],
         }),
       );
     };
@@ -120,7 +97,7 @@ export const Web3Provider = ({ children }: { children?: ReactNode }) => {
   }, []);
 
   return (
-    <Web3Context.Provider value={{ web3Auth, setWeb3Auth, web3AuthConnecter }}>
+    <Web3Context.Provider value={{ web3Auth }}>
       <WagmiConfig config={wagmiConfig}>{children}</WagmiConfig>
     </Web3Context.Provider>
   );

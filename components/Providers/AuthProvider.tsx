@@ -34,9 +34,9 @@ export const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider = ({ children }: { children?: ReactNode }) => {
-  const { connectAsync } = useConnect();
+  const { connectAsync, connectors } = useConnect();
   const { disconnectAsync } = useDisconnect({});
-  const { web3Auth, web3AuthConnecter } = useContext(Web3Context) ?? {};
+  const { web3Auth } = useContext(Web3Context) ?? {};
   const { address, isConnected } = useAccount();
 
   const [idToken, setIdToken] = useState('');
@@ -56,7 +56,6 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
         (address !== undefined || appPubKey.length > 0),
     },
   );
-  console.log({ idToken, address, isLoggedIn });
 
   useEffect(() => {
     const jwtToken = localStorage.getItem(JWT_LOCAL_STORAGE_KEY);
@@ -94,26 +93,32 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
   }, [idToken, isLoggedIn, setIdToken, web3Auth]);
 
   async function login() {
-    if (web3Auth && !isLoggedIn) {
-      await web3Auth.connect();
-      await connectAsync({
-        connector: web3AuthConnecter,
-      });
+    if (!web3Auth || isLoggedIn || connectors.length === 0) {
+      console.log('error logging in', { web3Auth, isLoggedIn, connectors });
+      return;
     }
+    await web3Auth.connect();
+    await connectAsync({
+      connector: connectors[0],
+    });
   }
 
   async function authenticate() {
-    if (web3Auth) {
-      const userAuthInfo = await web3Auth.authenticateUser();
-      localStorage.setItem(JWT_LOCAL_STORAGE_KEY, userAuthInfo.idToken);
-      setIdToken(userAuthInfo.idToken);
+    if (!web3Auth) {
+      console.log('no web3auth found');
+      return;
     }
+    const userAuthInfo = await web3Auth.authenticateUser();
+    localStorage.setItem(JWT_LOCAL_STORAGE_KEY, userAuthInfo.idToken);
+    setIdToken(userAuthInfo.idToken);
   }
 
   async function logout() {
-    if (web3Auth && isLoggedIn) {
-      await disconnectAsync();
+    if (!web3Auth || !isLoggedIn) {
+      console.log('error logging out', { web3Auth, isLoggedIn });
+      return;
     }
+    await disconnectAsync();
   }
 
   return (
