@@ -173,7 +173,8 @@ export function BelieveTabContent({ id, editionId, tags }: Props) {
       </p>
       <div className="grid gap-2 pt-6">
         {believerLogs
-          ?.slice(0, 20)
+          ?.reverse()
+          .slice(0, 20)
           .filter(
             (log) =>
               log.args?.believer !== undefined && log.args?.tags !== undefined,

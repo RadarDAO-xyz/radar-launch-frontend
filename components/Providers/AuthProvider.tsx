@@ -16,16 +16,20 @@ import { Web3Context } from './Web3Provider';
 interface AuthContextType {
   idToken: string;
   setIdToken: Dispatch<SetStateAction<string>>;
-  login: () => void;
-  logout: () => void;
+  login: () => Promise<void>;
+  logout: () => Promise<void>;
+  authenticate: () => Promise<void>;
   isLoggedIn: boolean;
 }
+
+const JWT_LOCAL_STORAGE_KEY = 'radar_login_token';
 
 export const AuthContext = createContext<AuthContextType>({
   idToken: '',
   setIdToken: () => {},
-  login: () => {},
-  logout: () => {},
+  login: async () => {},
+  logout: async () => {},
+  authenticate: async () => {},
   isLoggedIn: false,
 });
 
@@ -37,13 +41,11 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
 
   const [idToken, setIdToken] = useState('');
   // logged in status is dependent on backend as well, hence we use idToken and not isConnected
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    idToken !== undefined && isConnected,
-  );
+  const isLoggedIn = idToken.length > 0 && isConnected;
+
+  // for backend auth
   const [isWalletLogin, setIsWalletLoggedIn] = useState(false);
   const [appPubKey, setAppPubKey] = useState('');
-
-  // backend auth
   useQuery(
     [CacheKey.LOGIN, isWalletLogin, idToken, address, appPubKey],
     () => authenticateUser({ idToken, isWalletLogin, address, appPubKey }),
@@ -54,22 +56,20 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
         (address !== undefined || appPubKey.length > 0),
     },
   );
+  console.log({ idToken, address, isLoggedIn });
 
   useEffect(() => {
-    if (idToken.length > 0 && isConnected && web3Auth !== undefined) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
+    const jwtToken = localStorage.getItem(JWT_LOCAL_STORAGE_KEY);
+    if (jwtToken) {
+      setIdToken(jwtToken);
     }
-  }, [idToken, isConnected, web3Auth]);
-  console.log({ web3Auth, idToken, address });
+  }, []);
 
   useEffect(() => {
     (async () => {
       if (isLoggedIn && web3Auth && !idToken) {
-        const socialLoginUserInfo = await web3Auth?.getUserInfo();
+        const socialLoginUserInfo = await web3Auth.getUserInfo();
 
-        console.log({ socialLoginUserInfo });
         // social login here
         if (socialLoginUserInfo?.idToken) {
           setIsWalletLoggedIn(false);
@@ -87,7 +87,7 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
           setIsWalletLoggedIn(true);
         }
         const userAuthInfo = await web3Auth.authenticateUser();
-        console.log({ userAuthInfo });
+        localStorage.setItem(JWT_LOCAL_STORAGE_KEY, userAuthInfo.idToken);
         setIdToken(userAuthInfo.idToken);
       }
     })();
@@ -95,25 +95,30 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
 
   async function login() {
     if (web3Auth && !isLoggedIn) {
-      await web3Auth?.connect();
-
+      await web3Auth.connect();
       await connectAsync({
         connector: web3AuthConnecter,
       });
-      setIsLoggedIn(true);
+    }
+  }
+
+  async function authenticate() {
+    if (web3Auth) {
+      const userAuthInfo = await web3Auth.authenticateUser();
+      localStorage.setItem(JWT_LOCAL_STORAGE_KEY, userAuthInfo.idToken);
+      setIdToken(userAuthInfo.idToken);
     }
   }
 
   async function logout() {
     if (web3Auth && isLoggedIn) {
       await disconnectAsync();
-      setIsLoggedIn(false);
     }
   }
 
   return (
     <AuthContext.Provider
-      value={{ idToken, setIdToken, login, logout, isLoggedIn }}
+      value={{ idToken, setIdToken, login, logout, authenticate, isLoggedIn }}
     >
       {children}
     </AuthContext.Provider>

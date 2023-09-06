@@ -11,16 +11,15 @@ import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 import { shortenAddress } from '@/lib/utils';
 import { ChevronDown } from 'lucide-react';
 import Link from 'next/link';
-import { useAccount, useEnsName } from 'wagmi';
-import { chains } from '../Providers/Web3Provider';
+import { mainnet, useAccount, useEnsName } from 'wagmi';
 import { Button } from '../ui/button';
 
 export function Wallet() {
-  const { login, logout, isLoggedIn } = useAuth();
+  const { login, logout, isLoggedIn, authenticate } = useAuth();
   const { address } = useAccount();
   const { data: ensName } = useEnsName({
     address,
-    chainId: chains[0].id,
+    chainId: mainnet.id,
     enabled: address !== undefined,
   });
   const { data: currentUserData } = useGetCurrentUser();
@@ -68,7 +67,11 @@ export function Wallet() {
   return (
     <Button
       onClick={() => {
-        login();
+        if (address === undefined) {
+          login();
+        } else {
+          authenticate();
+        }
       }}
       variant={'ghost'}
     >

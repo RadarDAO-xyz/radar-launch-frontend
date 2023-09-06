@@ -1,7 +1,6 @@
 import { useGetPoolProjects } from '@/hooks/useGetPoolProjects';
 import { cn } from '@/lib/utils';
 import { Pool, ProjectStatus } from '@/types/mongo';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '../ui/button';
 

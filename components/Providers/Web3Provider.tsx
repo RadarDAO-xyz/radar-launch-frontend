@@ -65,7 +65,7 @@ interface Web3ContextType {
 }
 
 const wagmiConfig = createConfig({
-  // autoConnect: true,
+  autoConnect: true,
   publicClient,
   webSocketPublicClient,
   connectors: [
@@ -89,7 +89,7 @@ export const Web3Provider = ({ children }: { children?: ReactNode }) => {
   useEffect(() => {
     const init = async () => {
       const newWeb3Auth = new Web3Auth({
-        clientId: process.env.VITE_WEB3AUTH_CLIENT_ID || '',
+        clientId: process.env.VITE_WEB3AUTH_CLIENT_ID!,
         web3AuthNetwork: 'cyan',
         chainConfig,
         uiConfig: {

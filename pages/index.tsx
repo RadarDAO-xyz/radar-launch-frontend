@@ -1,7 +1,6 @@
 import { HeaderHero } from '@/components/HomePage/HeaderHero';
 import { InspirationFooter } from '@/components/HomePage/InspirationFooter';
 import { ProjectCollection } from '@/components/HomePage/ProjectCollection';
-import { PoolHome } from '@/components/PoolPage/PoolHome';
 import { Button } from '@/components/ui/button';
 import {
   A_MORE_PLAYFUL_FUTURE_POOL_ID,
@@ -31,6 +30,11 @@ const VisionOfTheWeekProjectNoSSR = dynamic(
   {
     ssr: false,
   },
+);
+
+const PoolHome = dynamic(
+  () => import('@/components/PoolPage/PoolHome').then((mod) => mod.PoolHome),
+  { ssr: false },
 );
 
 export default function HomePage() {
