@@ -18,6 +18,7 @@ import { useGetProject } from '@/hooks/useGetProject';
 import { useGetUser } from '@/hooks/useGetUser';
 import { generateVideoEmbed } from '@/lib/generateVideoEmbed';
 import { isValidVideoLink } from '@/lib/isValidVideoLink';
+import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -53,17 +54,38 @@ export default function IndividualProjectPage() {
 
   return (
     <>
+      <Head>
+        <meta property="og:type" content="video" />
+        <meta property="og:video:height" content="944" />
+        <meta property="og:video:width" content="531" />
+        <meta property="og:title" content={data.title} />
+        <meta
+          property="twitter:player"
+          content={
+            isValidVideoLink(data.video_url || '')
+              ? generateVideoEmbed(
+                  data.video_url,
+                  data.video_url.includes('youtube')
+                    ? '?controls=0&fs=0&loop=1&modestbranding=1&playsinline=1&iv_load_policy=3'
+                    : '',
+                )
+              : data.video_url
+          }
+        />
+        <meta property="twitter:player:height" content="944" />
+        <meta property="twitter:player:width" content="531" />
+      </Head>
       <div className="grid grid-cols-1 bg-white px-[5%] md:grid-cols-6">
         <div className="col-span-1 md:col-span-4 md:max-h-screen md:overflow-y-scroll md:pr-10">
           <div>
-            {isValidVideoLink(data?.video_url || '') ? (
+            {isValidVideoLink(data.video_url || '') ? (
               <iframe
                 width={'100%'}
                 className="aspect-video"
                 frameBorder={0}
                 src={generateVideoEmbed(
-                  data?.video_url,
-                  data?.video_url.includes('youtube')
+                  data.video_url,
+                  data.video_url.includes('youtube')
                     ? '?controls=0&fs=0&loop=1&modestbranding=1&playsinline=1&iv_load_policy=3'
                     : '',
                 )}
@@ -102,11 +124,11 @@ export default function IndividualProjectPage() {
             </div>
           )}
           <Tabs defaultValue={Tab.DETAILS} className="rounded-lg border py-8">
-            <TabsList className="grid w-full grid-cols-3 px-8 md:px-14 md:grid-cols-4 lg:grid-cols-6">
+            <TabsList className="grid w-full grid-cols-3 px-8 md:grid-cols-4 md:px-14 lg:grid-cols-6">
               <TabsTrigger value={Tab.DETAILS}>DETAILS</TabsTrigger>
               <TabsTrigger value={Tab.UPDATES}>UPDATES</TabsTrigger>
             </TabsList>
-            <TabsContent value={Tab.DETAILS} className="px-8 md:px-14 py-6">
+            <TabsContent value={Tab.DETAILS} className="px-8 py-6 md:px-14">
               <div className="pb-16">
                 <h3 className="pb-8 text-lg font-medium decoration-slate-100">
                   Project TLDR
