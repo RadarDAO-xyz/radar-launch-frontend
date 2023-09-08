@@ -23,6 +23,7 @@ interface AuthContextType {
 }
 
 const JWT_LOCAL_STORAGE_KEY = 'radar_login_token';
+const AUTH_SESSION_DURATION = 1000 * 60 * 60 * 24 * 1; // 1 day
 
 export const AuthContext = createContext<AuthContextType>({
   idToken: '',
@@ -55,27 +56,38 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
       enabled:
         isLoggedIn &&
         idToken.length > 0 &&
-        (address !== undefined || appPubKey.length > 0),
+        (isWalletLogin ? address !== undefined : appPubKey.length > 0),
     },
   );
 
   console.log({ idToken, address, isLoggedIn });
 
   useEffect(() => {
-    const jwtToken = localStorage.getItem(JWT_LOCAL_STORAGE_KEY);
-    if (jwtToken) {
-      setIdToken(jwtToken);
+    const storageString = localStorage.getItem(JWT_LOCAL_STORAGE_KEY);
+    try {
+      const { jwtToken, timestamp } = JSON.parse(storageString ?? '{}');
+      if (timestamp && jwtToken) {
+        const timeDiff = new Date().getTime() - timestamp;
+        if (timeDiff > AUTH_SESSION_DURATION) {
+          localStorage.removeItem(JWT_LOCAL_STORAGE_KEY);
+          return;
+        }
+        setIdToken(jwtToken);
+      }
+    } catch (e) {
+      console.log('Error retrieving jwt', e);
+      localStorage.removeItem(JWT_LOCAL_STORAGE_KEY);
     }
   }, []);
 
   // to auto login with wallet
   useEffect(() => {
-    if (connectors.length > 0) {
+    if (connectors.length > 0 && idToken) {
       connectAsync({
         connector: connectors[0],
       });
     }
-  }, [connectAsync, connectors]);
+  }, [connectAsync, connectors, idToken]);
 
   useEffect(() => {
     (async () => {
@@ -99,7 +111,11 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
           setIsWalletLoggedIn(true);
         }
         const userAuthInfo = await web3Auth.authenticateUser();
-        localStorage.setItem(JWT_LOCAL_STORAGE_KEY, userAuthInfo.idToken);
+        const storageString = JSON.stringify({
+          jwtToken: userAuthInfo.idToken,
+          timestamp: new Date().getTime(),
+        });
+        localStorage.setItem(JWT_LOCAL_STORAGE_KEY, storageString);
         setIdToken(userAuthInfo.idToken);
       }
     })();

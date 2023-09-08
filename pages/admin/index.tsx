@@ -9,7 +9,7 @@ import { convertProjectStatusName } from '@/lib/convertProjectStatusName';
 import { convertProjectStatusToColour } from '@/lib/convertProjectStatusToColour';
 import { useRadarEditionsGetEditions } from '@/lib/generated';
 import { cn } from '@/lib/utils';
-import { Project, ProjectStatus } from '@/types/mongo';
+import { Project } from '@/types/mongo';
 import Link from 'next/link';
 import { OnChainProject } from '../profile/[id]';
 import { Placeholder } from '@/components/Layout/Placeholder';
