@@ -33,7 +33,7 @@ export function VisionCard(props: ProjectWithChainData) {
       <img
         src={generateVideoThumbnail(video_url)}
         alt={title + ' thumbnail'}
-        className="w-full"
+        className="w-full aspect-video object-cover"
       />
       <div className="my-4">
         <Link href={`/project/${_id}`} className="hover:opacity-70">

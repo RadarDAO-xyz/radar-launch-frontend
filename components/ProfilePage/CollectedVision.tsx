@@ -17,6 +17,7 @@ export function CollectedVision({
       <img
         src={generateVideoThumbnail(video_url)}
         alt={title + ' thumbnail'}
+        className="aspect-video w-full object-cover"
       />{' '}
       <h3 className="py-3 font-semibold leading-5 transition-opacity hover:opacity-60">
         <Link href={`/project/${_id}`}>{title}</Link>
@@ -27,7 +28,7 @@ export function CollectedVision({
           text={tldr}
         />
         {tldr.length > 60 && (
-          <span className="relative -top-1 text-sm">...</span>
+          <span className="relative text-xs">...</span>
         )}
       </div>
       <Button className="w-full" asChild>
