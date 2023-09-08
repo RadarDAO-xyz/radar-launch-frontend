@@ -89,9 +89,10 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
     }
   }, [connectAsync, connectors, idToken]);
 
+  // to prompt user to sign message
   useEffect(() => {
     (async () => {
-      if (isLoggedIn && web3Auth && !idToken) {
+      if (!isLoggedIn && web3Auth && !idToken && address !== undefined) {
         const socialLoginUserInfo = await web3Auth.getUserInfo();
 
         // social login here
@@ -119,7 +120,7 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
         setIdToken(userAuthInfo.idToken);
       }
     })();
-  }, [idToken, isLoggedIn, setIdToken, web3Auth]);
+  }, [address, idToken, isLoggedIn, setIdToken, web3Auth]);
 
   async function login() {
     if (!web3Auth || isLoggedIn || connectors.length === 0) {
@@ -130,6 +131,8 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
     await connectAsync({
       connector: connectors[0],
     });
+
+    await authenticate();
   }
 
   async function authenticate() {
