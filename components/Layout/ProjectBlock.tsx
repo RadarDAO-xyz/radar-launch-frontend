@@ -1,5 +1,6 @@
 import { CONTRACT_ADDRESS } from '@/constants/address';
 import { useGetCountdown } from '@/hooks/useGetCountdown';
+import { useGetPools } from '@/hooks/useGetPools';
 import { generateVideoEmbed } from '@/lib/generateVideoEmbed';
 import { generateVideoThumbnail } from '@/lib/generateVideoThumbnail';
 import {
@@ -66,8 +67,9 @@ export function ProjectBlock({
   showPrice,
   showSupporters,
   thumbnail,
+  pool,
 }: Props) {
-  const isDisabled = status !== ProjectStatus.LIVE;
+  const { data: poolsData } = useGetPools();
   const router = useRouter();
 
   const { data: onChainProjects } = useRadarEditionsGetEditions({
@@ -87,6 +89,9 @@ export function ProjectBlock({
   });
   const countdown = useGetCountdown(new Date(mint_end_date), showMintEndDate);
 
+  const isDisabled = status !== ProjectStatus.LIVE;
+  const projectPool = poolsData?.find((poolData) => poolData._id === pool);
+
   return (
     <div
       className={cn(
@@ -102,7 +107,11 @@ export function ProjectBlock({
             </div> */}
           </div>
           <div className={cn('text-xs', isDisabled ? 'text-gray-500' : '')}>
-            {isDisabled ? 'LOADING' : brief}
+            {isDisabled
+              ? 'LOADING'
+              : projectPool !== undefined
+              ? projectPool.title
+              : brief}
           </div>
         </div>
         <div className="_10px-div" />

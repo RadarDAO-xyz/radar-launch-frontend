@@ -15,6 +15,7 @@ export type Project = {
   description: string;
   video_url: string;
   tldr: string;
+  /* @deprecated use pool instead */
   brief: string;
   tags: string[];
   inspiration: string;
