@@ -141,7 +141,11 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
       return;
     }
     const userAuthInfo = await web3Auth.authenticateUser();
-    localStorage.setItem(JWT_LOCAL_STORAGE_KEY, userAuthInfo.idToken);
+    const storageString = JSON.stringify({
+      jwtToken: userAuthInfo.idToken,
+      timestamp: new Date().getTime(),
+    });
+    localStorage.setItem(JWT_LOCAL_STORAGE_KEY, storageString);
     setIdToken(userAuthInfo.idToken);
   }
 
