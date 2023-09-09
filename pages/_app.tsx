@@ -1,7 +1,7 @@
 import '@/devlink/global.css';
 import '@/styles/globals.css';
 
-import { PreLaunchFooter } from '@/components/HomePage/PreLaunchFooter';
+import { Footer } from '@/components/HomePage/Footer';
 import CookieConsent from '@/components/Layout/CookieConsent';
 import { NavBar } from '@/components/Layout/NavBar';
 import { AuthProvider } from '@/components/Providers/AuthProvider';
@@ -78,7 +78,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <AuthProvider>
             <NavBar />
             <Component {...pageProps} />
-            <PreLaunchFooter />
+            <Footer />
             <Toaster />
             <CookieConsent />
           </AuthProvider>

@@ -21,6 +21,7 @@ import { ProjectStatus } from '@/types/mongo';
 import { useEffect, useState } from 'react';
 import {
   useAccount,
+  useBlockNumber,
   usePublicClient,
   useQuery,
   useQueryClient,
@@ -36,15 +37,20 @@ interface Props {
   tags: string;
 }
 
+const START_BLOCK_FOR_BELIEVE = 108947105n;
+const BLOCK_TIME_IN_SECONDS = 2;
+
 export function BelieveTabContent({ id, editionId, tags }: Props) {
-  const { getLogs } = usePublicClient();
   const [isOpen, setIsOpen] = useState(false);
+  const [hasToasted, setHasToasted] = useState(false);
+
+  const { getLogs } = usePublicClient();
   const { data: projectData } = useGetProject(id);
   const { isLoggedIn, login } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const { address } = useAccount();
-  const [hasToasted, setHasToasted] = useState(false);
+  const { data: blockNumber } = useBlockNumber();
   const { data: believerLogs, isLoading } = useQuery(
     [CacheKey.BELIEVER_LOGS, editionId, id],
     () =>
@@ -78,11 +84,10 @@ export function BelieveTabContent({ id, editionId, tags }: Props) {
           name: 'EditionBelieved',
           type: 'event',
         },
-        fromBlock: 108947105n,
+        fromBlock: START_BLOCK_FOR_BELIEVE,
       }),
     { enabled: editionId !== undefined },
   );
-
   const { config } = usePrepareRadarEditionsBelieveProject({
     address: CONTRACT_ADDRESS,
     account: address,
@@ -179,17 +184,25 @@ export function BelieveTabContent({ id, editionId, tags }: Props) {
             (log) =>
               log.args?.believer !== undefined && log.args?.tags !== undefined,
           )
-          .map((believer) => (
-            <div
-              key={believer.transactionHash}
-              className="flex justify-between border-y pb-2 pt-2 text-xs"
-            >
-              <p>{shortenAddress(believer.args.believer!)}</p>
-              <div className="text-right text-muted-foreground">
-                <p>{believer.blockNumber.toString()}</p>
+          .map((believer) => {
+            const timeDifferenceInSeconds =
+              BigInt(blockNumber || 0) - believer.blockNumber;
+            const date = new Date(
+              Date.now() -
+                Number(timeDifferenceInSeconds) * BLOCK_TIME_IN_SECONDS * 1000,
+            );
+            return (
+              <div
+                key={believer.transactionHash}
+                className="flex justify-between border-y pb-2 pt-2 text-xs"
+              >
+                <p>{shortenAddress(believer.args.believer!)}</p>
+                <div className="text-right text-muted-foreground">
+                  <p>{date.toLocaleDateString()}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
       </div>
     </div>
   );

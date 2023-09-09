@@ -4,7 +4,6 @@ import { CacheKey } from '@/constants/react-query';
 import { useAuth } from '@/hooks/useAuth';
 import { useGetCountdown } from '@/hooks/useGetCountdown';
 import { useGetExchangeRate } from '@/hooks/useGetExchangeRate';
-import { useGetProject } from '@/hooks/useGetProject';
 import { useGetUser } from '@/hooks/useGetUser';
 import { generateVideoThumbnail } from '@/lib/generateVideoThumbnail';
 import {
@@ -15,6 +14,7 @@ import {
   useRadarEditionsTotalSupply,
 } from '@/lib/generated';
 import { cn } from '@/lib/utils';
+import { Project } from '@/types/mongo';
 import parse from 'html-react-parser';
 import { DotIcon, MinusIcon, MoveDown, PlusIcon } from 'lucide-react';
 import Link from 'next/link';
@@ -33,10 +33,9 @@ import {
 } from '../ui/dialog';
 import { Input } from '../ui/input';
 import { useToast } from '../ui/use-toast';
+import { BelieveTabContent } from './BelieveTabContent';
 import { ContributeForm } from './ContributeForm';
 import { SignUpForm } from './SignUpForm';
-import { BelieveTabContent } from './BelieveTabContent';
-import { Project } from '@/types/mongo';
 
 async function getMintCheckoutLink(
   quantity: number,

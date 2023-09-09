@@ -1,7 +1,7 @@
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
-export function PreLaunchFooter() {
+export function Footer() {
   return (
     <footer className="footer">
       <div>
@@ -20,7 +20,7 @@ export function PreLaunchFooter() {
         <div className="div-block-108">
           <p className="body-text white">
             {
-              'RADAR Launch is a platform for future makers and early adopters.'
+              'RADAR Launch is a platform connecting future makers and early adopters.'
             }
             <br />
             <br />

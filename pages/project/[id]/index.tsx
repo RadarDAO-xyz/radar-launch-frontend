@@ -60,7 +60,7 @@ export default function IndividualProjectPage() {
           type: 'video',
         }}
         twitter={{}}
-        title={data.title}
+        title={data.title + ' | RADAR Launch'}
       />
       <Head>
         <meta
