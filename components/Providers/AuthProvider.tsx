@@ -66,14 +66,22 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
     },
     {
       enabled:
-        isLoggedIn &&
+        !isVerified &&
         idToken.length > 0 &&
         (isWalletLogin ? address !== undefined : appPubKey.length > 0),
     },
   );
 
-  console.log({ idToken, address, isLoggedIn, isWalletLogin, appPubKey, isVerified });
+  console.log({
+    idToken,
+    address,
+    isLoggedIn,
+    isWalletLogin,
+    appPubKey,
+    isVerified,
+  });
 
+  // retrieve jwt from storage
   useEffect(() => {
     const storageString = localStorage.getItem(JWT_LOCAL_STORAGE_KEY);
     try {
@@ -101,11 +109,6 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
     }
   }, [connectAsync, connectors, idToken]);
 
-  // to prompt user to sign message
-  useEffect(() => {
-    (async () => {})();
-  }, [address, idToken, isLoggedIn, setIdToken, web3Auth]);
-
   async function login() {
     if (!web3Auth || isLoggedIn || connectors.length === 0) {
       console.log('error logging in', { web3Auth, isLoggedIn, connectors });
@@ -120,7 +123,7 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
   }
 
   async function verify() {
-    if (!isVerified && web3Auth && !idToken && address !== undefined) {
+    if (!isVerified && web3Auth && !idToken) {
       const socialLoginUserInfo = await web3Auth.getUserInfo();
 
       // social login here
