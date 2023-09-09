@@ -150,10 +150,6 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
   }
 
   async function logout() {
-    if (!web3Auth || !isLoggedIn) {
-      console.log('error logging out', { web3Auth, isLoggedIn });
-      return;
-    }
     await disconnectAsync();
     localStorage.removeItem(JWT_LOCAL_STORAGE_KEY);
     setIdToken('');
