@@ -21,8 +21,16 @@ export function EditForm(props: Project) {
   const { idToken } = useAuth();
   const { data: pools } = useGetPools();
 
-  const form = useForm<z.infer<typeof createFormSchema>>({
-    resolver: zodResolver(createFormSchema),
+  const editFormSchema = createFormSchema.extend({
+    mint_end_date: z
+      .date()
+      .refine((current) => current > new Date(props.createdAt), {
+        message: 'Must end later than creation date',
+      }),
+  });
+
+  const form = useForm<z.infer<typeof editFormSchema>>({
+    resolver: zodResolver(editFormSchema),
     mode: 'onBlur',
     defaultValues: {
       ...props,
@@ -77,7 +85,7 @@ export function EditForm(props: Project) {
   );
   const { toast } = useToast();
 
-  async function onSubmit(values: z.infer<typeof createFormSchema>) {
+  async function onSubmit(values: z.infer<typeof editFormSchema>) {
     // print form errors
     if (Object.keys(errors).length !== 0) {
       console.error({ errors, values });
@@ -85,6 +93,8 @@ export function EditForm(props: Project) {
 
     mutate();
   }
+
+  console.log({ asd: form.getValues() });
 
   return (
     <Form {...form}>
