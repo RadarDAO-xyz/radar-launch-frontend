@@ -39,8 +39,8 @@ export const createFormSchema = z.object({
         .email({ message: 'Please enter a valid email' }),
     }),
   ),
-  tags: z.string().optional(),
-  collaborators: z.string().optional(),
+  tags: z.string(),
+  collaborators: z.string(),
   waitlist: z.boolean().default(true),
   milestones: z.array(
     z.object({
