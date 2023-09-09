@@ -43,7 +43,7 @@ export function Wallet() {
   }
 
   if (isLoading) {
-    return <Button loading />;
+    return <Button variant="ghost" loading />;
   }
 
   if (currentUserData === undefined) {
