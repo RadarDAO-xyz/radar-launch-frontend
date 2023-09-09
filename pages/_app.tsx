@@ -1,25 +1,17 @@
 import '@/devlink/global.css';
 import '@/styles/globals.css';
 
-import { AuthProvider } from '@/components/Providers/AuthProvider';
 import { PreLaunchFooter } from '@/components/HomePage/PreLaunchFooter';
+import CookieConsent from '@/components/Layout/CookieConsent';
 import { NavBar } from '@/components/Layout/NavBar';
+import { AuthProvider } from '@/components/Providers/AuthProvider';
+import { ThemeProvider } from '@/components/Providers/ThemeProvider';
+import { Web3Provider } from '@/components/Providers/Web3Provider';
 import { Toaster } from '@/components/ui/toaster';
 import type { AppProps } from 'next/app';
-import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Script from 'next/script';
-import { ThemeProvider } from '@/components/Providers/ThemeProvider';
-import CookieConsent from '@/components/Layout/CookieConsent';
-import { Web3Provider } from '@/components/Providers/Web3Provider';
-
-// const Web3ProviderNoSSR = dynamic(
-//   () =>
-//     import('@/components/Providers/Web3Provider').then(
-//       (mod) => mod.Web3Provider,
-//     ),
-//   { ssr: false },
-// );
+import { DefaultSeo, NextSeo } from 'next-seo';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -38,47 +30,42 @@ export default function App({ Component, pageProps }: AppProps) {
         `}
       </Script>
       <Head>
-        <title>RADAR Launch</title>
-        <meta name="keywords" content="radar, nft, launch" />
-        <meta name="author" content="RADAR Launch" />
+        <DefaultSeo
+          canonical="https://radarlaunch.app"
+          title="RADAR Launch"
+          openGraph={{
+            title: 'RADAR Launch',
+            url: 'https://radarlaunch.app',
+            type: 'website',
+            images: [
+              {
+                url: 'https://radarlaunch.app/project-image.png',
+                alt: 'RADAR Launch',
+              },
+            ],
+            description:
+              'RADAR Launch is a platform for future makers and early adopters',
+            siteName: 'RADAR Launch',
+            locale: 'en_US',
+          }}
+          twitter={{
+            cardType: 'summary_large_image',
+            site: 'https://radarlaunch.app',
+            handle: '@Radarxyz',
+          }}
+        />
+        <meta key="keywords" name="keywords" content="radar, nft, launch" />
+        <meta key="author" name="author" content="RADAR Launch" />
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+          key="viewport"
+          name="viewport"
+          content="width=device-width, initial-scale=1.0"
+        />
+        <meta name="robots" content="index,follow" />
         {process.env.NODE_ENV === 'production' && (
           <base href="https://radarlaunch.app" />
         )}
-
-        <meta property="og:url" content="https://radarlaunch.app" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="RADAR Launch" />
-        <meta
-          property="og:image"
-          content="https://radarlaunch.app/project-image.png"
-        />
-        <meta property="og:image:alt" content="RADAR Launch image" />
-        <meta
-          property="og:description"
-          content="RADAR Launch is a platform for future makers and early adopters"
-        />
-        <meta property="og:site_name" content="RADAR Launch" />
-        <meta property="og:locale" content="en_US" />
-        <meta property="article:author" content="RADAR Launch" />
-
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@Radarxyz" />
-        <meta name="twitter:creator" content="@Radarxyz" />
-        <meta name="twitter:url" content="https://radarlaunch.app" />
-        <meta name="twitter:title" content="RADAR Launch" />
-        <meta
-          name="twitter:description"
-          content="Launch your projects with RADAR"
-        />
-        <meta
-          name="twitter:image"
-          content="https://radarlaunch.app/project-image.png"
-        />
-        <meta property="twitter:image:alt" content="RADAR Launch image" />
-
-        <meta name="robots" content="index,follow" />
 
         <link rel="icon" href="/favicon.png" sizes="any" />
       </Head>

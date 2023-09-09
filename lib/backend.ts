@@ -105,7 +105,7 @@ export async function getCurrentUser(
   return response.json();
 }
 
-export async function getProject(id: string): Promise<Project | undefined> {
+export async function getProject(id: string): Promise<Project> {
   const response = await fetch(`${process.env.BACKEND_URL}/projects/${id}`);
 
   if (!response.ok) {
@@ -475,7 +475,6 @@ export async function createPool(
     console.error(e);
   }
 }
-
 
 export async function updatePool(
   idToken: string,

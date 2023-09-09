@@ -10,6 +10,12 @@ import { Badge } from '../ui/badge';
 import { VisionCardActions } from './VisionCardActions';
 import { convertProjectStatusName } from '@/lib/convertProjectStatusName';
 import { convertProjectStatusToColour } from '@/lib/convertProjectStatusToColour';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../ui/tooltip';
 
 export function VisionCard(props: ProjectWithChainData) {
   const { _id, status, video_url, title, supporter_count, balance, editionId } =
@@ -33,12 +39,32 @@ export function VisionCard(props: ProjectWithChainData) {
       <img
         src={generateVideoThumbnail(video_url)}
         alt={title + ' thumbnail'}
-        className="w-full aspect-video object-cover"
+        className="aspect-video w-full object-cover"
       />
       <div className="my-4">
-        <Link href={`/project/${_id}`} className="hover:opacity-70">
+        <Link
+          href={`/project/${_id}`}
+          className="hover:underline hover:opacity-70"
+        >
           {title}
         </Link>
+        {editionId && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href={`${chains[0].blockExplorers.etherscan.url}/address/${CONTRACT_ADDRESS}`}
+                  className="text-sm text-muted-foreground hover:underline block"
+                >
+                  Edition ID: {editionId}
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>View contract</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
       </div>
       <hr className="mb-3" />
       <div className="space-y-2 pb-8">

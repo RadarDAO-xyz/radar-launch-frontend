@@ -18,6 +18,7 @@ import { useGetProject } from '@/hooks/useGetProject';
 import { useGetUser } from '@/hooks/useGetUser';
 import { generateVideoEmbed } from '@/lib/generateVideoEmbed';
 import { isValidVideoLink } from '@/lib/isValidVideoLink';
+import { NextSeo } from 'next-seo';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -54,12 +55,16 @@ export default function IndividualProjectPage() {
 
   return (
     <>
+      <NextSeo
+        openGraph={{
+          type: 'video',
+        }}
+        twitter={{}}
+        title={data.title}
+      />
       <Head>
-        <meta property="og:type" content="video" />
-        <meta property="og:video:height" content="944" />
-        <meta property="og:video:width" content="531" />
-        <meta property="og:title" content={data.title} />
         <meta
+          key="twitter:player"
           property="twitter:player"
           content={
             isValidVideoLink(data.video_url || '')
@@ -72,8 +77,16 @@ export default function IndividualProjectPage() {
               : data.video_url
           }
         />
-        <meta property="twitter:player:height" content="944" />
-        <meta property="twitter:player:width" content="531" />
+        <meta
+          key="twitter:player:height"
+          property="twitter:player:height"
+          content="944"
+        />
+        <meta
+          key="twitter:player:width"
+          property="twitter:player:width"
+          content="531"
+        />
       </Head>
       <div className="grid grid-cols-1 bg-white px-[5%] md:grid-cols-6">
         <div className="col-span-1 md:col-span-4 md:max-h-screen md:overflow-y-scroll md:pr-10">
