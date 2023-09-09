@@ -18,8 +18,9 @@ interface AuthContextType {
   setIdToken: Dispatch<SetStateAction<string>>;
   login: () => Promise<void>;
   logout: () => Promise<void>;
-  authenticate: () => Promise<void>;
+  verify: () => Promise<void>;
   isLoggedIn: boolean;
+  isVerified: boolean;
 }
 
 const JWT_LOCAL_STORAGE_KEY = 'radar_login_token';
@@ -30,8 +31,9 @@ export const AuthContext = createContext<AuthContextType>({
   setIdToken: () => {},
   login: async () => {},
   logout: async () => {},
-  authenticate: async () => {},
+  verify: async () => {},
   isLoggedIn: false,
+  isVerified: false,
 });
 
 export const AuthProvider = ({ children }: { children?: ReactNode }) => {
@@ -41,17 +43,27 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
   const { address, isConnected } = useAccount();
 
   const [idToken, setIdToken] = useState('');
-  // logged in status is dependent on backend as well, hence we use idToken and not isConnected
-  const isLoggedIn = idToken.length > 0 && isConnected;
 
   // for backend auth
   const [isWalletLogin, setIsWalletLoggedIn] = useState(false);
   const [appPubKey, setAppPubKey] = useState('');
+  const [isVerified, setIsVerified] = useState(false);
+
+  // logged in status is dependent on backend as well, hence we use idToken and not isConnected
+  const isLoggedIn = idToken.length > 0 && isConnected && isVerified;
 
   // create user if not exists
   useQuery(
     [CacheKey.LOGIN, isWalletLogin, idToken, address, appPubKey],
-    () => authenticateUser({ idToken, isWalletLogin, address, appPubKey }),
+    async () => {
+      try {
+        await authenticateUser({ idToken, isWalletLogin, address, appPubKey });
+        setIsVerified(true);
+      } catch (e) {
+        console.error(e);
+        setIsVerified(false);
+      }
+    },
     {
       enabled:
         isLoggedIn &&
@@ -60,7 +72,7 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
     },
   );
 
-  console.log({ idToken, address, isLoggedIn });
+  console.log({ idToken, address, isLoggedIn, isWalletLogin, appPubKey, isVerified });
 
   useEffect(() => {
     const storageString = localStorage.getItem(JWT_LOCAL_STORAGE_KEY);
@@ -91,35 +103,7 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
 
   // to prompt user to sign message
   useEffect(() => {
-    (async () => {
-      if (!isLoggedIn && web3Auth && !idToken && address !== undefined) {
-        const socialLoginUserInfo = await web3Auth.getUserInfo();
-
-        // social login here
-        if (socialLoginUserInfo?.idToken) {
-          setIsWalletLoggedIn(false);
-          const app_scoped_privkey = await web3Auth.provider?.request({
-            method: 'eth_private_key',
-          });
-          const app_pub_key = getPublicCompressed(
-            Buffer.from(
-              (app_scoped_privkey as string).padStart(64, '0'),
-              'hex',
-            ),
-          ).toString('hex');
-          setAppPubKey(app_pub_key);
-        } else {
-          setIsWalletLoggedIn(true);
-        }
-        const userAuthInfo = await web3Auth.authenticateUser();
-        const storageString = JSON.stringify({
-          jwtToken: userAuthInfo.idToken,
-          timestamp: new Date().getTime(),
-        });
-        localStorage.setItem(JWT_LOCAL_STORAGE_KEY, storageString);
-        setIdToken(userAuthInfo.idToken);
-      }
-    })();
+    (async () => {})();
   }, [address, idToken, isLoggedIn, setIdToken, web3Auth]);
 
   async function login() {
@@ -132,21 +116,34 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
       connector: connectors[0],
     });
 
-    await authenticate();
+    await verify();
   }
 
-  async function authenticate() {
-    if (!web3Auth) {
-      console.log('no web3auth found');
-      return;
+  async function verify() {
+    if (!isVerified && web3Auth && !idToken && address !== undefined) {
+      const socialLoginUserInfo = await web3Auth.getUserInfo();
+
+      // social login here
+      if (socialLoginUserInfo?.idToken) {
+        setIsWalletLoggedIn(false);
+        const app_scoped_privkey = await web3Auth.provider?.request({
+          method: 'eth_private_key',
+        });
+        const app_pub_key = getPublicCompressed(
+          Buffer.from((app_scoped_privkey as string).padStart(64, '0'), 'hex'),
+        ).toString('hex');
+        setAppPubKey(app_pub_key);
+      } else {
+        setIsWalletLoggedIn(true);
+      }
+      const userAuthInfo = await web3Auth.authenticateUser();
+      const storageString = JSON.stringify({
+        jwtToken: userAuthInfo.idToken,
+        timestamp: new Date().getTime(),
+      });
+      localStorage.setItem(JWT_LOCAL_STORAGE_KEY, storageString);
+      setIdToken(userAuthInfo.idToken);
     }
-    const userAuthInfo = await web3Auth.authenticateUser();
-    const storageString = JSON.stringify({
-      jwtToken: userAuthInfo.idToken,
-      timestamp: new Date().getTime(),
-    });
-    localStorage.setItem(JWT_LOCAL_STORAGE_KEY, storageString);
-    setIdToken(userAuthInfo.idToken);
   }
 
   async function logout() {
@@ -161,7 +158,15 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ idToken, setIdToken, login, logout, authenticate, isLoggedIn }}
+      value={{
+        idToken,
+        setIdToken,
+        login,
+        logout,
+        verify,
+        isLoggedIn,
+        isVerified,
+      }}
     >
       {children}
     </AuthContext.Provider>

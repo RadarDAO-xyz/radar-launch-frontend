@@ -15,7 +15,7 @@ import { mainnet, useAccount, useEnsName } from 'wagmi';
 import { Button } from '../ui/button';
 
 export function Wallet() {
-  const { login, logout, isLoggedIn, authenticate } = useAuth();
+  const { login, logout, isLoggedIn, verify: authenticate } = useAuth();
   const { address } = useAccount();
   const { data: ensName } = useEnsName({
     address,
@@ -23,6 +23,7 @@ export function Wallet() {
     enabled: address !== undefined,
   });
   const { data: currentUserData } = useGetCurrentUser();
+  console.log({ currentUserData });
 
   if (isLoggedIn && address !== undefined && currentUserData !== undefined) {
     return (
