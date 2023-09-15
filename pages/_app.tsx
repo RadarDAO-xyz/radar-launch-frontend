@@ -69,12 +69,8 @@ export default function App({ Component, pageProps }: AppProps) {
 
         <link rel="icon" href="/favicon.png" sizes="any" />
       </Head>
-      <Web3Provider>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          themes={['light']}
-        >
+      <ThemeProvider attribute="class" defaultTheme="light" themes={['light']}>
+        <Web3Provider>
           <AuthProvider>
             <NavBar />
             <Component {...pageProps} />
@@ -82,8 +78,8 @@ export default function App({ Component, pageProps }: AppProps) {
             <Toaster />
             <CookieConsent />
           </AuthProvider>
-        </ThemeProvider>
-      </Web3Provider>
+        </Web3Provider>
+      </ThemeProvider>
     </>
   );
 }

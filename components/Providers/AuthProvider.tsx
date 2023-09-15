@@ -68,7 +68,7 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
       enabled:
         !isVerified &&
         idToken.length > 0 &&
-        (isWalletLogin ? address !== undefined : appPubKey.length > 0),
+        (address !== undefined || appPubKey.length > 0),
     },
   );
 
@@ -102,24 +102,27 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
 
   // to auto login with wallet
   useEffect(() => {
-    if (connectors.length > 0 && idToken) {
+    if (connectors.length > 0 && idToken && !isConnected) {
       connectAsync({
         connector: connectors[0],
       });
     }
-  }, [connectAsync, connectors, idToken]);
+  }, []);
 
   async function login() {
     if (!web3Auth || isLoggedIn || connectors.length === 0) {
       console.log('error logging in', { web3Auth, isLoggedIn, connectors });
       return;
     }
-    await web3Auth.connect();
-    await connectAsync({
-      connector: connectors[0],
-    });
-
-    await verify();
+    try {
+      await web3Auth.connect();
+      await connectAsync({
+        connector: connectors[0],
+      });
+      await verify();
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   async function verify() {
@@ -150,7 +153,11 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
   }
 
   async function logout() {
-    await disconnectAsync();
+    try {
+      await Promise.all([disconnectAsync(), web3Auth?.logout()]);
+    } catch (e) {
+      console.log(e);
+    }
     localStorage.removeItem(JWT_LOCAL_STORAGE_KEY);
     setIdToken('');
     setIsWalletLoggedIn(false);
