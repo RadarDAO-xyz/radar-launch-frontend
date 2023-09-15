@@ -138,7 +138,7 @@ export function NavBar() {
               </div>
             </div>
           </nav>
-          <Sheet>
+          <Sheet modal={false}>
             <SheetTrigger asChild className="ml-2 block lg:hidden">
               <Button variant="outline">
                 <MenuIcon />
