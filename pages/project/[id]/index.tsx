@@ -225,7 +225,7 @@ export default function IndividualProjectPage() {
           <hr />
 
           <div className="pb-4 pt-4">
-            <ProjectTabs {...data} />
+            <ProjectTabs key={data._id} {...data} />
           </div>
         </div>
       </div>
@@ -249,7 +249,7 @@ export default function IndividualProjectPage() {
             </div>
             <hr />
             <div>
-              <ProjectTabs {...data} />
+              <ProjectTabs key={data._id} {...data} />
             </div>
             <SheetFooter className="w-full py-6">
               <SheetClose asChild>

@@ -14,7 +14,6 @@ import { useGetProject } from '@/hooks/useGetProject';
 import {
   usePrepareRadarEditionsBelieveProject,
   useRadarEditionsBelieveProject,
-  useRadarEditionsEditionBelievedEvent,
 } from '@/lib/generated';
 import { shortenAddress } from '@/lib/utils';
 import { ProjectStatus } from '@/types/mongo';
@@ -25,7 +24,6 @@ import {
   usePublicClient,
   useQuery,
   useQueryClient,
-  useSignMessage,
   useWaitForTransaction,
 } from 'wagmi';
 import { Button } from '../ui/button';
@@ -46,10 +44,10 @@ export function BelieveTabContent({ id, editionId, tags }: Props) {
 
   const { getLogs } = usePublicClient();
   const { data: projectData } = useGetProject(id);
-  const { isLoggedIn, login } = useAuth();
+  const { login } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
   const { data: blockNumber } = useBlockNumber();
   const { data: believerLogs, isLoading } = useQuery(
     [CacheKey.BELIEVER_LOGS, editionId, id],
@@ -160,7 +158,7 @@ export function BelieveTabContent({ id, editionId, tags }: Props) {
             <Button
               type="submit"
               onClick={async () => {
-                if (!isLoggedIn) {
+                if (!isConnected) {
                   login();
                 } else {
                   believeProjectWriteAsync?.();
@@ -168,7 +166,7 @@ export function BelieveTabContent({ id, editionId, tags }: Props) {
               }}
               loading={isLoading || believeProjectIsLoading}
             >
-              {!isLoggedIn ? 'LOGIN' : 'UPLOAD BELIEF SIGNATURE'}
+              {!isConnected ? 'LOGIN' : 'UPLOAD BELIEF SIGNATURE'}
             </Button>
           </DialogFooter>
         </DialogContent>

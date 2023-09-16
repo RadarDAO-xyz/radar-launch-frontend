@@ -59,10 +59,12 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
       try {
         await authenticateUser({ idToken, isWalletLogin, address, appPubKey });
         setIsVerified(true);
+        return true;
       } catch (e) {
         console.error(e);
         setIsVerified(false);
       }
+      return false;
     },
     {
       enabled:
