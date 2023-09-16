@@ -24,6 +24,7 @@ import { NextSeo } from 'next-seo';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 enum Tab {
   DETAILS = 'ONE',
@@ -34,6 +35,8 @@ enum Tab {
 export default function IndividualProjectPage() {
   const router = useRouter();
   const { id } = router.query;
+
+  const [isOpen, setIsOpen] = useState(false);
 
   const { data, isLoading: isProjectLoading } = useGetProject(id?.toString());
   const { data: userData, isLoading: isUserLoading } = useGetUser(
@@ -193,7 +196,7 @@ export default function IndividualProjectPage() {
         </div>
       </div>
       <div className="sticky bottom-0 border bg-white px-[5%] py-4 md:hidden">
-        <Sheet modal={false}>
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
             <Button className="w-full">SUPPORT</Button>
           </SheetTrigger>
@@ -212,7 +215,11 @@ export default function IndividualProjectPage() {
             </div>
             <hr />
             <div>
-              <ProjectTabs key={data._id} {...data} />
+              <ProjectTabs
+                key={data._id}
+                {...data}
+                closeSheet={() => setIsOpen(false)}
+              />
             </div>
             <SheetFooter className="w-full py-6">
               <SheetClose asChild>

@@ -115,7 +115,7 @@ export function BelieveProjectDialog({
     believerLogs?.find((log) => log.args?.believer === address) !== undefined;
 
   return (
-    <Dialog modal={false} open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
           variant="outline"
@@ -125,7 +125,7 @@ export function BelieveProjectDialog({
           BELIEVE +
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-screen w-full overflow-y-auto p-10 lg:max-w-3xl">
+      <DialogContent className="max-h-screen w-full overflow-y-auto p-10 scrollbar-hide lg:max-w-3xl">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
           <ProjectVideo
             videoUrl={video_url}
@@ -139,7 +139,7 @@ export function BelieveProjectDialog({
               {tags.map((tag) => (
                 <Badge
                   key={tag}
-                  className="text-xs !rounded-sm font-normal text-gray-600"
+                  className="!rounded-sm text-xs font-normal text-gray-600"
                   variant="outline"
                 >
                   {tag.toUpperCase()}
@@ -158,17 +158,10 @@ export function BelieveProjectDialog({
                 editionId === undefined
               }
               onClick={async () => {
-                console.log({
-                  isConnected,
-                  isOpen,
-                  tags,
-                  address,
-                  believeProjectWriteAsync,
-                  editionId,
-                });
                 // here we use isConnected instead since web3 interaction
                 if (!isConnected) {
                   login();
+                  setIsOpen(false);
                 } else {
                   believeProjectWriteAsync?.();
                 }

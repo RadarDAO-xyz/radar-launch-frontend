@@ -87,6 +87,10 @@ enum Tab {
   COLLECT = 'collect',
 }
 
+interface Props extends Project {
+  closeSheet?: () => void;
+}
+
 export function ProjectTabs({
   _id,
   tags,
@@ -94,10 +98,12 @@ export function ProjectTabs({
   mint_end_date,
   title,
   video_url,
-}: Project) {
+  closeSheet,
+}: Props) {
   const [currentTab, setCurrentTab] = useState(Tab.BELIEVE);
   const [quantity, setQuantity] = useState(1);
   const [hasToasted, setHasToasted] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const { address } = useAccount();
   const { login, isLoggedIn } = useAuth();
@@ -255,6 +261,7 @@ export function ProjectTabs({
           editionId={editionId}
           tags={tags.join(',')}
           isSelected={currentTab === Tab.BELIEVE}
+          closeSheet={closeSheet}
         />
       </TabsContent>
       <TabsContent value={Tab.COLLECT} className="rounded-md border px-4 py-2">
@@ -340,7 +347,7 @@ export function ProjectTabs({
                 <PlusIcon />
               </Button>
             </div>
-            <Dialog modal={false}>
+            <Dialog open={isOpen} onOpenChange={setIsOpen}>
               <DialogTrigger asChild>
                 <Button
                   className="w-full"
@@ -396,6 +403,8 @@ export function ProjectTabs({
                       onClick={() => {
                         if (!isLoggedIn) {
                           login();
+                          setIsOpen(false);
+                          closeSheet?.();
                         } else {
                           try {
                             writeAsync?.();

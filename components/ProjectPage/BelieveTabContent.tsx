@@ -24,7 +24,7 @@ import {
   useAccount,
   useBlockNumber,
   useQueryClient,
-  useWaitForTransaction
+  useWaitForTransaction,
 } from 'wagmi';
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
@@ -34,11 +34,18 @@ interface Props {
   editionId?: number;
   tags: string;
   isSelected: boolean;
+  closeSheet?: () => void;
 }
 
 const BLOCK_TIME_IN_SECONDS = 2;
 
-export function BelieveTabContent({ _id, editionId, tags, isSelected }: Props) {
+export function BelieveTabContent({
+  _id,
+  editionId,
+  tags,
+  isSelected,
+  closeSheet,
+}: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [hasToasted, setHasToasted] = useState(false);
 
@@ -101,7 +108,7 @@ export function BelieveTabContent({ _id, editionId, tags, isSelected }: Props) {
         <p>Believers</p>
         <p>{believerLogs?.length || 0}</p>
       </div>
-      <Dialog open={isOpen} onOpenChange={setIsOpen} modal={false}>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
           <Button
             className="mb-4 w-full"
@@ -127,6 +134,8 @@ export function BelieveTabContent({ _id, editionId, tags, isSelected }: Props) {
               onClick={async () => {
                 if (!isConnected) {
                   login();
+                  setIsOpen(false);
+                  closeSheet?.();
                 } else {
                   believeProjectWriteAsync?.();
                 }

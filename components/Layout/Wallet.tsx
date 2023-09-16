@@ -23,7 +23,6 @@ export function Wallet() {
     enabled: address !== undefined,
   });
   const { data: currentUserData, isLoading } = useGetCurrentUser();
-  console.log({ currentUserData });
 
   if (address === undefined) {
     return (
