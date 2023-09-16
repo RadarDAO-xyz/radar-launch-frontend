@@ -152,8 +152,8 @@ export function ProjectBlock(props: Props) {
       </div>
       <div className="bottom-half-of-content">
         <div className="collect-wrapper flex-row">
-          <div className="flex w-full items-center justify-between border-t border-t-[var(--line-83d2b2f6)] pt-3">
-            <div>
+          <div className="flex w-full items-center justify-between border-t border-t-[var(--line-83d2b2f6)] pt-3 gap-4">
+            <div className='flex-1'>
               {status === ProjectStatus.LIVE ? (
                 <div className="flex w-full divide-x text-center text-xs text-gray-700">
                   {showMintEndDate && mint_end_date && (
@@ -181,7 +181,7 @@ export function ProjectBlock(props: Props) {
                     <BelieveProjectDialog
                       {...props}
                       buttonProps={{
-                        className: 'max-w-[200px]',
+                        className: 'w-full',
                       }}
                     />
                   )}
