@@ -15,7 +15,6 @@ import {
 } from '@/lib/generated';
 import { cn } from '@/lib/utils';
 import { Project } from '@/types/mongo';
-import parse from 'html-react-parser';
 import { DotIcon, MinusIcon, MoveDown, PlusIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -86,7 +85,6 @@ async function getMintCheckoutLink(
 enum Tab {
   BELIEVE = 'believe',
   COLLECT = 'collect',
-  BENEFITS = 'benefits',
 }
 
 export function ProjectTabs({
@@ -96,7 +94,6 @@ export function ProjectTabs({
   mint_end_date,
   title,
   video_url,
-  benefits,
 }: Project) {
   const [currentTab, setCurrentTab] = useState(Tab.BELIEVE);
   const [quantity, setQuantity] = useState(1);
@@ -246,14 +243,6 @@ export function ProjectTabs({
             variant={'ghost'}
           >
             Collect <MoveDown className="ml-1 h-3 w-3" />
-          </Button>
-        </TabsTrigger>
-        <TabsTrigger value={Tab.BENEFITS} asChild>
-          <Button
-            className="col-span-1 w-full border-b-0 !bg-gray-100 p-2 px-4 no-underline hover:!bg-gray-200 data-[state=active]:!bg-gray-300"
-            variant={'ghost'}
-          >
-            Benefits <MoveDown className="ml-1 h-3 w-3" />
           </Button>
         </TabsTrigger>
       </TabsList>
@@ -453,25 +442,6 @@ export function ProjectTabs({
           </div>
         ) : (
           <div className="py-4">Not available for collection</div>
-        )}
-      </TabsContent>
-      <TabsContent value={Tab.BENEFITS} className="">
-        {benefits.length ? (
-          benefits.filter(Boolean).map((benefit) => (
-            <div
-              key={benefit.text}
-              className="mt-4 rounded-md border last:pb-12"
-            >
-              <h3 className="p-6 text-gray-500">
-                Collect <span className="text-black">{benefit.amount}</span> or
-                more editions and get
-              </h3>
-              <hr />
-              <div className="p-6 px-10">{parse(benefit.text)}</div>
-            </div>
-          ))
-        ) : (
-          <div className="rounded-md border p-6">No benefits found</div>
         )}
       </TabsContent>
     </Tabs>

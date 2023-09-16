@@ -1,6 +1,7 @@
 import { HTMLParsedComponent } from '@/components/Layout/HTMLParsedComponent';
 import { Placeholder } from '@/components/Layout/Placeholder';
 import { ContributeForm } from '@/components/ProjectPage/ContributeForm';
+import { ProjectDescription } from '@/components/ProjectPage/ProjectDescription';
 import { ProjectTabs } from '@/components/ProjectPage/ProjectTabs';
 import { SignUpForm } from '@/components/ProjectPage/SignUpForm';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -13,7 +14,6 @@ import {
   SheetFooter,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DEFAULT_AVATAR_IMAGE } from '@/constants/links';
 import { useGetProject } from '@/hooks/useGetProject';
@@ -148,58 +148,7 @@ export default function IndividualProjectPage() {
               </TabsTrigger>
             </TabsList>
             <TabsContent value={Tab.DETAILS} className="px-8 py-6 md:px-14">
-              <div className="pb-16">
-                <h3 className="pb-8 text-lg font-medium decoration-slate-100">
-                  Project TLDR
-                </h3>
-                <HTMLParsedComponent text={data.tldr} />
-              </div>
-              <hr />
-              <h3 className="pb-8 pt-10 text-lg font-medium decoration-slate-100">
-                Who is the team executing on this project
-              </h3>
-              {data.team.map((teamMember, index) => (
-                <div key={teamMember.name} className="space-y-2 pb-4 last:pb-8">
-                  <h4 className="font-semibold">{teamMember.name}</h4>
-                  <HTMLParsedComponent
-                    className="text-gray-600"
-                    text={teamMember.bio}
-                  />
-                </div>
-              ))}
-              <hr />
-              {data.collaborators && (
-                <div className="pb-16 pt-10">
-                  <h3 className="pb-4 text-lg font-medium decoration-slate-100">
-                    This project is looking for:
-                  </h3>
-                  <HTMLParsedComponent text={data.collaborators} />
-                </div>
-              )}
-              <hr />
-              {data?.milestones?.length > 0 && (
-                <>
-                  <h3 className="pb-16 pt-10 text-lg font-medium decoration-slate-100">
-                    Funding Goals
-                  </h3>
-                  <Table>
-                    <TableBody>
-                      {data.milestones.map((milestone, index) => (
-                        <TableRow key={milestone.text}>
-                          <TableCell
-                            className={'align-top text-xl font-medium'}
-                          >
-                            {renderMilestoneAmount(milestone.amount, index)}
-                          </TableCell>
-                          <TableCell className="border-l">
-                            <HTMLParsedComponent text={milestone.text} />
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </>
-              )}
+              <ProjectDescription {...data} />
             </TabsContent>
             <TabsContent value={Tab.UPDATES} className="p-8">
               Coming soon...
@@ -275,32 +224,4 @@ export default function IndividualProjectPage() {
       </div>
     </>
   );
-}
-
-function renderMilestoneAmount(
-  milestoneAmount: string | number,
-  index: number,
-) {
-  if (
-    typeof milestoneAmount === 'number' ||
-    !isNaN(+milestoneAmount.replaceAll(',', ''))
-  ) {
-    return (
-      <span className="text-normal">
-        ${' '}
-        <span className="text-lg text-gray-400">
-          {(typeof milestoneAmount === 'number'
-            ? milestoneAmount
-            : +milestoneAmount.replaceAll(',', '')
-          ).toFixed(2)}
-        </span>
-      </span>
-    );
-  }
-
-  if (milestoneAmount !== '' && milestoneAmount !== '-') {
-    return <span>{milestoneAmount}</span>;
-  }
-
-  return `${index + 1}.`;
 }
