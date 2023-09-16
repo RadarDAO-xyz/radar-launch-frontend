@@ -54,36 +54,34 @@ export function VisionOfTheWeek(props: Project) {
             </p>
           </div>
         </Link>
-        <div className="">
+        <div>
           {description && (
             <HTMLParsedComponent
-              className="text-xs text-gray-700"
+              className="text-xs text-gray-700 pb-4"
               text={description}
             />
           )}
           <div className="_10px-div" />
-          <div className="collect-wrapper main bottom-1 w-full md:bottom-[5%]">
-            <div className="w-full text-xs text-gray-400">
+          <div className="collect-wrapper main bottom-1 w-full md:bottom-[5%] gap-4">
+            <div className="flex-1">
               {status === ProjectStatus.LIVE ? (
-                <div className="flex max-w-[300px] gap-3 text-gray-700">
-                  <BelieveProjectDialog
-                    {...props}
-                    editionId={editionId !== -1 ? editionId : undefined}
-                    buttonProps={{
-                      className: 'text-lg',
-                    }}
-                  />
-                  {/* {mint_end_date ? (
-                      <span className="border-r pr-3">{countdown}</span>
-                    ) : null}
-                    <span>
-                      {(
-                        (totalSupply || 0n) + BigInt(supporter_count || 0)
-                      ).toString()}{' '}
-                      supporters
-                    </span> */}
-                </div>
+                <BelieveProjectDialog
+                  {...props}
+                  editionId={editionId !== -1 ? editionId : undefined}
+                  buttonProps={{
+                    className: 'text-lg',
+                  }}
+                />
               ) : (
+                // {/* {mint_end_date ? (
+                //     <span className="border-r pr-3">{countdown}</span>
+                //   ) : null}
+                //   <span>
+                //     {(
+                //       (totalSupply || 0n) + BigInt(supporter_count || 0)
+                //     ).toString()}{' '}
+                //     supporters
+                //   </span> */}
                 <div>{countdown} until drop</div>
               )}
             </div>
