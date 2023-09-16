@@ -10,11 +10,12 @@ import {
 import { isValidVideoLink } from '@/lib/isValidVideoLink';
 import { cn } from '@/lib/utils';
 import { Project, ProjectStatus } from '@/types/mongo';
+import { format } from 'date-fns';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { BelieveProjectDialog } from '../HomePage/BelieveProjectDIalog';
 import { chains } from '../Providers/Web3Provider';
 import { Button } from '../ui/button';
-import { format } from 'date-fns';
 
 interface Props extends Project {
   showDropDate?: boolean;
@@ -23,22 +24,24 @@ interface Props extends Project {
   showSupporters?: boolean;
 }
 
-export function ProjectBlock({
-  _id,
-  status,
-  video_url,
-  title,
-  mint_end_date,
-  supporter_count,
-  brief,
-  edition_price,
-  showDropDate,
-  showMintEndDate,
-  showPrice,
-  showSupporters,
-  thumbnail,
-  pool,
-}: Props) {
+export function ProjectBlock(props: Props) {
+  const {
+    _id,
+    status,
+    video_url,
+    title,
+    mint_end_date,
+    supporter_count,
+    brief,
+    edition_price,
+    showDropDate,
+    showMintEndDate,
+    showPrice,
+    showSupporters,
+    thumbnail,
+    tags,
+    pool,
+  } = props;
   const { data: poolsData } = useGetPools();
   const router = useRouter();
 
@@ -65,7 +68,7 @@ export function ProjectBlock({
   return (
     <div
       className={cn(
-        'col-span-1 mb-4 flex h-auto w-full flex-col',
+        'col-span-1 mb-4 flex h-auto w-full flex-col border p-4',
         isDisabled ? 'cursor-default opacity-70' : '',
       )}
     >
@@ -126,6 +129,16 @@ export function ProjectBlock({
             {title}
           </p>
         </Link>
+        <div className="flex flex-wrap gap-2 divide-x pb-2 pt-3 text-xs">
+          {tags.map((tag) => (
+            <p
+              key={tag}
+              className="py-1 tracking-tight [&:not(:first-child)]:pl-2"
+            >
+              {tag.toUpperCase()}
+            </p>
+          ))}
+        </div>
         {showDropDate && (
           <div className="featured-project-bio mb-2">
             <p className="project-byline">
@@ -182,6 +195,9 @@ export function ProjectBlock({
               {'↗'}
             </Button>
           </div>
+        </div>
+        <div className="pt-3">
+          <BelieveProjectDialog {...props} />
         </div>
       </div>
     </div>

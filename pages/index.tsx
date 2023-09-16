@@ -16,7 +16,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const ProjectBlockNoSSR = dynamic(
+const ProjectBlock = dynamic(
   () =>
     import('@/components/Layout/ProjectBlock').then((res) => res.ProjectBlock),
   {
@@ -24,7 +24,7 @@ const ProjectBlockNoSSR = dynamic(
   },
 );
 
-const VisionOfTheWeekProjectNoSSR = dynamic(
+const VisionOfTheWeekProject = dynamic(
   () =>
     import('@/components/HomePage/VisionOfTheWeek').then(
       (res) => res.VisionOfTheWeek,
@@ -50,7 +50,7 @@ export default function HomePage() {
 
       <HeaderHero
         visionOfTheWeekSlot={
-          <VisionOfTheWeekProjectNoSSR
+          <VisionOfTheWeekProject
             projectId={process.env.FEATURED_PROJECT_ID!}
           />
         }
@@ -88,7 +88,7 @@ export default function HomePage() {
               )
               .slice(0, 12)
               .map((project) => (
-                <ProjectBlockNoSSR
+                <ProjectBlock
                   key={project._id}
                   {...project}
                   showSupporters
@@ -141,7 +141,7 @@ export default function HomePage() {
               )
               .slice(0, 4)
               .map((project) => (
-                <ProjectBlockNoSSR
+                <ProjectBlock
                   key={project._id}
                   {...project}
                   showMintEndDate
@@ -184,7 +184,7 @@ export default function HomePage() {
               )
               .slice(0, 4)
               .map((project) => (
-                <ProjectBlockNoSSR
+                <ProjectBlock
                   key={project._id}
                   {...project}
                   showSupporters
@@ -210,7 +210,7 @@ export default function HomePage() {
               ?.filter((project) => CENTAUR_PROEJCT_IDS.includes(project._id))
               .sort((a, b) => a.edition_price - b.edition_price)
               .map((project) => (
-                <ProjectBlockNoSSR key={project._id} {...project} showPrice />
+                <ProjectBlock key={project._id} {...project} showPrice />
               ))}
           </div>
         }

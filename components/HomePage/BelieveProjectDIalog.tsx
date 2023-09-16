@@ -35,6 +35,7 @@ import {
 } from '@/components/ui/tooltip';
 import { format } from 'date-fns';
 import { ProjectVideo } from './ProjectVideo';
+import Link from 'next/link';
 
 const START_BLOCK_FOR_BELIEVE = 108947105n;
 const BLOCK_TIME_IN_SECONDS = 2;
@@ -164,25 +165,30 @@ export function BelieveProjectDialog({
           </div>
         </div>
         <DialogDescription className="space-y-4">
-          <Button
-            className="mb-4 mt-4 w-full"
-            disabled={status !== ProjectStatus.LIVE || hasBelieved}
-            onClick={async () => {
-              // here we use isConnected instead since web3 interaction
-              if (!isConnected) {
-                login();
-              } else {
-                believeProjectWriteAsync?.();
-              }
-            }}
-            loading={isLoading || believeProjectIsLoading}
-          >
-            {!isConnected
-              ? 'Please login to believe in this project'
-              : hasBelieved
-              ? 'Thank you for believing in this project!'
-              : 'I believe in this project'}
-          </Button>
+          <div className="mb-4 mt-4 flex gap-4">
+            <Button
+              className="flex-1"
+              disabled={status !== ProjectStatus.LIVE || hasBelieved}
+              onClick={async () => {
+                // here we use isConnected instead since web3 interaction
+                if (!isConnected) {
+                  login();
+                } else {
+                  believeProjectWriteAsync?.();
+                }
+              }}
+              loading={isLoading || believeProjectIsLoading}
+            >
+              {!isConnected
+                ? 'Please login to believe in this project'
+                : hasBelieved
+                ? 'Thank you for believing in this project!'
+                : 'I believe in this project'}
+            </Button>
+            <Button asChild>
+              <Link href={`/project/${_id}`}>Read More</Link>
+            </Button>
+          </div>
           <div className="flex items-center justify-between">
             <p className="text-2xl">BELIEVERS</p>
             <p>{believerLogs?.length || 0}</p>
