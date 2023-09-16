@@ -24,7 +24,7 @@ const ProjectBlock = dynamic(
   },
 );
 
-const VisionOfTheWeekProject = dynamic(
+const VisionOfTheWeek = dynamic(
   () =>
     import('@/components/HomePage/VisionOfTheWeek').then(
       (res) => res.VisionOfTheWeek,
@@ -42,19 +42,55 @@ const PoolHome = dynamic(
 export default function HomePage() {
   const { data } = useGetProjects();
 
+  const featuredProject = data?.find(
+    (project) => project._id === process.env.FEATURED_PROJECT_ID,
+  );
+  const usePlayToBuildABetterWebProjects = data
+    ?.filter(
+      (project) =>
+        project.pool === USE_PLAY_TO_BULD_A_BETTER_WEB_POOL_ID &&
+        project.status === ProjectStatus.LIVE,
+    )
+    .sort((a, b) => (new Date(b.createdAt) > new Date(a.createdAt) ? 1 : -1))
+    .slice(0, 12);
+  const curatedByCulture3Projects = data
+    ?.filter(
+      (project) =>
+        project.curation?.start &&
+        new Date(project.curation.start) <= new Date() &&
+        // if no curation end date, show it indefinitely
+        (project.curation?.end || new Date(project.curation.end) >= new Date()),
+    )
+    // sort by ascending start dates
+    .sort(
+      (a, b) =>
+        new Date(a.curation.start).getTime() -
+        new Date(b.curation.start).getTime(),
+    )
+    .slice(0, 4);
+  const theNewPlayersProjects = data
+    ?.filter(
+      (project) =>
+        project.pool === THE_NEW_PLAYERS_POOL_ID &&
+        project.status === ProjectStatus.LIVE,
+    )
+    .sort((a, b) => (new Date(b.createdAt) > new Date(a.createdAt) ? 1 : -1))
+    .slice(0, 4);
+  const centaurProjects = data
+    ?.filter((project) => CENTAUR_PROEJCT_IDS.includes(project._id))
+    .sort((a, b) => a.edition_price - b.edition_price);
+
   return (
     <section>
       <div className="absolute left-0 top-[100px] z-10 w-full overflow-hidden whitespace-nowrap font-bolded text-[200px] font-bold leading-none text-gray-100">
         A MORE PLAYFUL FUTURE
       </div>
 
-      <HeaderHero
-        visionOfTheWeekSlot={
-          <VisionOfTheWeekProject
-            projectId={process.env.FEATURED_PROJECT_ID!}
-          />
-        }
-      />
+      {featuredProject !== undefined && (
+        <HeaderHero
+          visionOfTheWeekSlot={<VisionOfTheWeek {...featuredProject} />}
+        />
+      )}
       <ProjectCollection
         projectSectionTitle="A MORE PLAYFUL FUTURE PRIZES"
         projectSectionDescription="We're boosting projects with $5000 worth of prizes in September via Buidl Guidl."
@@ -77,23 +113,9 @@ export default function HomePage() {
         }
         projects={
           <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-4">
-            {data
-              ?.filter(
-                (project) =>
-                  project.pool === USE_PLAY_TO_BULD_A_BETTER_WEB_POOL_ID &&
-                  project.status === ProjectStatus.LIVE,
-              )
-              .sort((a, b) =>
-                new Date(b.createdAt) > new Date(a.createdAt) ? 1 : -1,
-              )
-              .slice(0, 12)
-              .map((project) => (
-                <ProjectBlock
-                  key={project._id}
-                  {...project}
-                  showBelieveButton
-                />
-              ))}
+            {usePlayToBuildABetterWebProjects?.map((project) => (
+              <ProjectBlock key={project._id} {...project} showBelieveButton />
+            ))}
           </div>
         }
         curatorSection={
@@ -123,30 +145,9 @@ export default function HomePage() {
         projectSectionDescription="Culture3 spotlights 4 projects building a better future"
         projects={
           <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-4">
-            {data
-              ?.filter(
-                (project) =>
-                  project.curation?.start &&
-                  new Date(project.curation.start) <= new Date() &&
-                  // if no curation end date, show it indefinitely
-                  (project.curation?.end ||
-                    new Date(project.curation.end) >= new Date()),
-              )
-              // sort by ascending start dates
-              .sort(
-                (a, b) =>
-                  new Date(a.curation.start).getTime() -
-                  new Date(b.curation.start).getTime(),
-              )
-              .slice(0, 4)
-              .map((project) => (
-                <ProjectBlock
-                  key={project._id}
-                  {...project}
-                  showMintEndDate
-                  showSupporters
-                />
-              ))}
+            {curatedByCulture3Projects?.map((project) => (
+              <ProjectBlock key={project._id} {...project} showBelieveButton />
+            ))}
           </div>
         }
         curatorSection={
@@ -172,24 +173,9 @@ export default function HomePage() {
         }
         projects={
           <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-4">
-            {data
-              ?.filter(
-                (project) =>
-                  project.pool === THE_NEW_PLAYERS_POOL_ID &&
-                  project.status === ProjectStatus.LIVE,
-              )
-              .sort((a, b) =>
-                new Date(b.createdAt) > new Date(a.createdAt) ? 1 : -1,
-              )
-              .slice(0, 4)
-              .map((project) => (
-                <ProjectBlock
-                  key={project._id}
-                  {...project}
-                  showSupporters
-                  showMintEndDate
-                />
-              ))}
+            {theNewPlayersProjects?.map((project) => (
+              <ProjectBlock key={project._id} {...project} showBelieveButton />
+            ))}
           </div>
         }
       />
@@ -205,12 +191,9 @@ export default function HomePage() {
         }
         projects={
           <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-4">
-            {data
-              ?.filter((project) => CENTAUR_PROEJCT_IDS.includes(project._id))
-              .sort((a, b) => a.edition_price - b.edition_price)
-              .map((project) => (
-                <ProjectBlock key={project._id} {...project} showPrice />
-              ))}
+            {centaurProjects?.map((project) => (
+              <ProjectBlock key={project._id} {...project} showBelieveButton />
+            ))}
           </div>
         }
       />

@@ -36,12 +36,7 @@ export function ProjectSection({ _id, title }: Pool) {
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
           {liveProjects && liveProjects.length > 0 ? (
             liveProjects.map((project) => (
-              <ProjectBlock
-                key={project._id}
-                {...project}
-                showMintEndDate
-                showSupporters
-              />
+              <ProjectBlock key={project._id} {...project} showBelieveButton />
             ))
           ) : (
             <>
