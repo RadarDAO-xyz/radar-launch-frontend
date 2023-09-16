@@ -49,6 +49,7 @@ export function BelieveProjectDialog({
   status,
 }: ProjectWithChainData) {
   const [hasToasted, setHasToasted] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const { getLogs } = usePublicClient();
   const { isConnected, address } = useAccount();
@@ -91,7 +92,7 @@ export function BelieveProjectDialog({
         },
         fromBlock: START_BLOCK_FOR_BELIEVE,
       }),
-    { enabled: editionId !== undefined },
+    { enabled: editionId !== undefined && isOpen },
   );
   const queryClient = useQueryClient();
   const { config } = usePrepareRadarEditionsBelieveProject({
@@ -99,7 +100,10 @@ export function BelieveProjectDialog({
     account: address,
     args: [BigInt(editionId || 0), tags.join(',')],
     enabled:
-      address !== undefined && editionId !== undefined && tags.length > 0,
+      address !== undefined &&
+      editionId !== undefined &&
+      tags.length > 0 &&
+      isOpen,
   });
   const {
     data: believeProjectData,
@@ -134,8 +138,9 @@ export function BelieveProjectDialog({
 
   const hasBelieved =
     believerLogs?.find((log) => log.args?.believer === address) !== undefined;
+
   return (
-    <Dialog modal={false}>
+    <Dialog modal={false} open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">BELIEVE +</Button>
       </DialogTrigger>
