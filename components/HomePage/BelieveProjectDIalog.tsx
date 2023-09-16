@@ -37,6 +37,7 @@ import {
 import { useToast } from '../ui/use-toast';
 import { ProjectVideo } from './ProjectVideo';
 import { useGetBelieveEvents } from '@/hooks/useGetBelieveEvents';
+import { Badge } from '../ui/badge';
 
 const START_BLOCK_FOR_BELIEVE = 108947105n;
 const BLOCK_TIME_IN_SECONDS = 2;
@@ -124,7 +125,7 @@ export function BelieveProjectDialog({
           BELIEVE +
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-screen w-full overflow-y-auto lg:max-w-3xl">
+      <DialogContent className="max-h-screen w-full overflow-y-auto p-10 lg:max-w-3xl">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
           <ProjectVideo
             videoUrl={video_url}
@@ -132,18 +133,17 @@ export function BelieveProjectDialog({
             videoClassName="rounded-lg"
           />
           <div className="col-span-2">
-            <DialogTitle className="text-2xl">{title}</DialogTitle>
+            <DialogTitle className="text-2xl uppercase">{title}</DialogTitle>
             <HTMLParsedComponent className="text-gray-700" text={description} />
             <div className="flex flex-wrap gap-2 pt-2">
               {tags.map((tag) => (
-                <Button
+                <Badge
                   key={tag}
-                  className="text-xs"
+                  className="text-xs !rounded-sm font-normal text-gray-600"
                   variant="outline"
-                  disabled
                 >
                   {tag.toUpperCase()}
-                </Button>
+                </Badge>
               ))}
             </div>
           </div>
