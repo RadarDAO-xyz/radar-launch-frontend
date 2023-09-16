@@ -179,8 +179,20 @@ export function BelieveProjectDialog({
           <div className="mb-4 mt-4 flex gap-4">
             <Button
               className="flex-1"
-              disabled={status !== ProjectStatus.LIVE || hasBelieved}
+              disabled={
+                status !== ProjectStatus.LIVE ||
+                hasBelieved ||
+                editionId === undefined
+              }
               onClick={async () => {
+                console.log({
+                  isConnected,
+                  isOpen,
+                  tags,
+                  address,
+                  believeProjectWriteAsync,
+                  editionId,
+                });
                 // here we use isConnected instead since web3 interaction
                 if (!isConnected) {
                   login();
@@ -190,7 +202,9 @@ export function BelieveProjectDialog({
               }}
               loading={isLoading || believeProjectIsLoading}
             >
-              {!isConnected
+              {editionId === undefined
+                ? 'Project not available for beliefs yet'
+                : !isConnected
                 ? 'Please login to believe in this project'
                 : hasBelieved
                 ? 'Thank you for believing in this project!'
