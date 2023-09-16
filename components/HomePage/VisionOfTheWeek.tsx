@@ -32,7 +32,7 @@ export function VisionOfTheWeek(props: Project) {
     <div className="featured-project-wrapper">
       <p className="mobile-subtitle">{'Featured Project'}</p>
       <div className="floating-weekly-featured full !bg-gray-600/30">
-        {'✨ DROP OF THE WEEK ✨'}
+        {'✨ LAUNCH OF THE WEEK ✨'}
       </div>
       <ProjectVideo videoUrl={video_url} />
       <div className="feature-project-div">
