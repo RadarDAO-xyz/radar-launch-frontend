@@ -14,37 +14,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { chains } from '../Providers/Web3Provider';
 import { Button } from '../ui/button';
-
-// date formatter to convert dates to DD.MM.YYYY format
-const dateFormatter = new Intl.DateTimeFormat('en-GB', {
-  day: 'numeric',
-  month: 'numeric',
-  year: 'numeric',
-});
-
-function formatDate(date: Date) {
-  return dateFormatter
-    .formatToParts(date)
-    .map(({ type, value }) => {
-      switch (type) {
-        case 'literal':
-          if (value === '/') {
-            return '.';
-          }
-          return value;
-        case 'day':
-        case 'month':
-        case 'year':
-          if (value.length < 2) {
-            return `0${value}`;
-          }
-          return value;
-        default:
-          return value;
-      }
-    })
-    .join('');
-}
+import { format } from 'date-fns';
 
 interface Props extends Project {
   showDropDate?: boolean;
@@ -160,7 +130,7 @@ export function ProjectBlock({
           <div className="featured-project-bio mb-2">
             <p className="project-byline">
               {/* TODO: change to launch_date */}
-              {formatDate(new Date(mint_end_date))}
+              {format(new Date(mint_end_date), 'dd.MM.yy')}
             </p>
           </div>
         )}
