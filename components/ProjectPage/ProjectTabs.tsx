@@ -86,8 +86,6 @@ async function getMintCheckoutLink(
 enum Tab {
   BELIEVE = 'believe',
   COLLECT = 'collect',
-  SIGN_UP = 'sign-up',
-  CONTRIBUTE = 'contribute',
   BENEFITS = 'benefits',
 }
 
@@ -234,10 +232,10 @@ export function ProjectTabs({
       defaultValue={Tab.BELIEVE}
       onValueChange={(e) => setCurrentTab(e as Tab)}
     >
-      <TabsList className="grid h-auto w-full grid-cols-2 gap-2 px-0 lg:grid-cols-3">
+      <TabsList className="grid h-auto w-full grid-cols-2 gap-2 px-0 lg:grid-cols-2">
         <TabsTrigger value={Tab.BELIEVE} asChild>
           <Button
-            className="w-full border-b-0 !bg-gray-100 p-2 px-4 no-underline hover:!bg-gray-200 data-[state=active]:!bg-gray-300 md:col-span-1 lg:col-span-3"
+            className="col-span-1 w-full border-b-0 !bg-gray-100 p-2 px-4 no-underline hover:!bg-gray-200 data-[state=active]:!bg-gray-300"
             variant={'ghost'}
           >
             Believe <MoveDown className="ml-1 h-3 w-3" />
@@ -251,25 +249,9 @@ export function ProjectTabs({
             Collect <MoveDown className="ml-1 h-3 w-3" />
           </Button>
         </TabsTrigger>
-        <TabsTrigger value={Tab.SIGN_UP} asChild>
-          <Button
-            className="col-span-1 w-full border-b-0 !bg-gray-100 p-2 px-4 no-underline hover:!bg-gray-200 data-[state=active]:!bg-gray-300"
-            variant={'ghost'}
-          >
-            Sign Up <MoveDown className="ml-1 h-3 w-3" />
-          </Button>
-        </TabsTrigger>
-        <TabsTrigger value={Tab.CONTRIBUTE} asChild>
-          <Button
-            className="col-span-1 w-full border-b-0 !bg-gray-100 p-2 px-4 no-underline hover:!bg-gray-200 data-[state=active]:!bg-gray-300"
-            variant={'ghost'}
-          >
-            Contribute <MoveDown className="ml-1 h-3 w-3" />
-          </Button>
-        </TabsTrigger>
         <TabsTrigger value={Tab.BENEFITS} asChild>
           <Button
-            className="w-full border-b-0 !bg-gray-100 p-2 px-4 no-underline hover:!bg-gray-200 data-[state=active]:!bg-gray-300 md:col-span-1 lg:col-span-3"
+            className="col-span-1 w-full border-b-0 !bg-gray-100 p-2 px-4 no-underline hover:!bg-gray-200 data-[state=active]:!bg-gray-300"
             variant={'ghost'}
           >
             Benefits <MoveDown className="ml-1 h-3 w-3" />
@@ -476,18 +458,6 @@ export function ProjectTabs({
         ) : (
           <div className="py-4">Not available for collection</div>
         )}
-      </TabsContent>
-      <TabsContent
-        value={Tab.SIGN_UP}
-        className="rounded-md border px-8 py-6 pb-10"
-      >
-        <SignUpForm id={_id} />
-      </TabsContent>
-      <TabsContent
-        value={Tab.CONTRIBUTE}
-        className="rounded-md border px-4 pb-10 pt-8"
-      >
-        <ContributeForm id={_id} />
       </TabsContent>
       <TabsContent value={Tab.BENEFITS} className="">
         {benefits.length ? (

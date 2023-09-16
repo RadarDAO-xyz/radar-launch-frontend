@@ -1,12 +1,23 @@
-import { Button } from '@/components/ui/button';
+import { Button, ButtonProps } from '@/components/ui/button';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-} from '../ui/dialog';
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { CONTRACT_ADDRESS } from '@/constants/address';
+import { CacheKey } from '@/constants/react-query';
+import { useAuth } from '@/hooks/useAuth';
+import {
+  usePrepareRadarEditionsBelieveProject,
+  useRadarEditionsBelieveProject,
+} from '@/lib/generated';
+import { cn, shortenAddress } from '@/lib/utils';
 import { ProjectWithChainData } from '@/pages/profile/[id]';
+import { ProjectStatus } from '@/types/mongo';
+import { format } from 'date-fns';
+import Link from 'next/link';
+import { RefAttributes, useEffect, useState } from 'react';
 import {
   useAccount,
   useBlockNumber,
@@ -15,30 +26,23 @@ import {
   useQueryClient,
   useWaitForTransaction,
 } from 'wagmi';
-import { CacheKey } from '@/constants/react-query';
-import { CONTRACT_ADDRESS } from '@/constants/address';
-import {
-  usePrepareRadarEditionsBelieveProject,
-  useRadarEditionsBelieveProject,
-} from '@/lib/generated';
-import { useEffect, useState } from 'react';
-import { useToast } from '../ui/use-toast';
-import { shortenAddress } from '@/lib/utils';
 import { HTMLParsedComponent } from '../Layout/HTMLParsedComponent';
-import { ProjectStatus } from '@/types/mongo';
-import { useAuth } from '@/hooks/useAuth';
 import {
-  TooltipProvider,
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-} from '@/components/ui/tooltip';
-import { format } from 'date-fns';
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from '../ui/dialog';
+import { useToast } from '../ui/use-toast';
 import { ProjectVideo } from './ProjectVideo';
-import Link from 'next/link';
 
 const START_BLOCK_FOR_BELIEVE = 108947105n;
 const BLOCK_TIME_IN_SECONDS = 2;
+
+interface Props extends ProjectWithChainData {
+  buttonProps?: ButtonProps & RefAttributes<HTMLButtonElement>;
+}
 
 export function BelieveProjectDialog({
   _id,
@@ -48,7 +52,8 @@ export function BelieveProjectDialog({
   description,
   video_url,
   status,
-}: ProjectWithChainData) {
+  buttonProps,
+}: Props) {
   const [hasToasted, setHasToasted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -143,7 +148,13 @@ export function BelieveProjectDialog({
   return (
     <Dialog modal={false} open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">BELIEVE +</Button>
+        <Button
+          variant="outline"
+          {...buttonProps}
+          className={cn('w-full rounded-none', buttonProps?.className)}
+        >
+          BELIEVE +
+        </Button>
       </DialogTrigger>
       <DialogContent className="max-h-screen w-full overflow-y-auto lg:max-w-3xl">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">

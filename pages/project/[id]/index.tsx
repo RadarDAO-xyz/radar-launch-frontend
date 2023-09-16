@@ -1,6 +1,8 @@
 import { HTMLParsedComponent } from '@/components/Layout/HTMLParsedComponent';
 import { Placeholder } from '@/components/Layout/Placeholder';
+import { ContributeForm } from '@/components/ProjectPage/ContributeForm';
 import { ProjectTabs } from '@/components/ProjectPage/ProjectTabs';
+import { SignUpForm } from '@/components/ProjectPage/SignUpForm';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -26,6 +28,7 @@ import { useRouter } from 'next/router';
 enum Tab {
   DETAILS = 'ONE',
   UPDATES = 'TWO',
+  SIGNUP_AND_CONTRIBUTE = 'THREE',
 }
 
 export default function IndividualProjectPage() {
@@ -137,9 +140,12 @@ export default function IndividualProjectPage() {
             </div>
           )}
           <Tabs defaultValue={Tab.DETAILS} className="rounded-lg border py-8">
-            <TabsList className="grid w-full grid-cols-3 px-8 md:grid-cols-4 md:px-14 lg:grid-cols-6">
+            <TabsList className="grid w-full grid-cols-3 px-8 md:px-14 lg:grid-cols-4">
               <TabsTrigger value={Tab.DETAILS}>DETAILS</TabsTrigger>
               <TabsTrigger value={Tab.UPDATES}>UPDATES</TabsTrigger>
+              <TabsTrigger value={Tab.SIGNUP_AND_CONTRIBUTE}>
+                SIGN UP & CONTRIBUTE
+              </TabsTrigger>
             </TabsList>
             <TabsContent value={Tab.DETAILS} className="px-8 py-6 md:px-14">
               <div className="pb-16">
@@ -197,6 +203,14 @@ export default function IndividualProjectPage() {
             </TabsContent>
             <TabsContent value={Tab.UPDATES} className="p-8">
               Coming soon...
+            </TabsContent>
+            <TabsContent value={Tab.SIGNUP_AND_CONTRIBUTE}>
+              <div className="px-8 py-6 pb-10">
+                <SignUpForm id={data._id} />
+              </div>
+              <div className="px-8 py-6 pb-10">
+                <ContributeForm id={data._id} />
+              </div>
             </TabsContent>
           </Tabs>
         </div>

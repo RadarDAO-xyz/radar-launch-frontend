@@ -71,10 +71,13 @@ export function VisionOfTheWeek({ projectId }: Props) {
           <div className="collect-wrapper main bottom-1 w-full md:bottom-[5%]">
             <div className="w-full text-xs text-gray-400">
               {data?.status === ProjectStatus.LIVE ? (
-                <div className="flex w-full gap-3 text-gray-700">
+                <div className="flex max-w-[300px] gap-3 text-gray-700">
                   <BelieveProjectDialog
                     {...data}
                     editionId={editionId !== -1 ? editionId : undefined}
+                    buttonProps={{
+                      className: 'text-lg',
+                    }}
                   />
                   {/* {data?.mint_end_date ? (
                       <span className="border-r pr-3">{countdown}</span>

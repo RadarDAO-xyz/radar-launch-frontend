@@ -91,8 +91,7 @@ export default function HomePage() {
                 <ProjectBlock
                   key={project._id}
                   {...project}
-                  showSupporters
-                  showMintEndDate
+                  showBelieveButton
                 />
               ))}
           </div>

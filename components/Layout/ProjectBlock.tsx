@@ -22,6 +22,7 @@ interface Props extends Project {
   showMintEndDate?: boolean;
   showPrice?: boolean;
   showSupporters?: boolean;
+  showBelieveButton?: boolean;
 }
 
 export function ProjectBlock(props: Props) {
@@ -41,6 +42,7 @@ export function ProjectBlock(props: Props) {
     thumbnail,
     tags,
     pool,
+    showBelieveButton,
   } = props;
   const { data: poolsData } = useGetPools();
   const router = useRouter();
@@ -129,11 +131,11 @@ export function ProjectBlock(props: Props) {
             {title}
           </p>
         </Link>
-        <div className="flex flex-wrap gap-2 divide-x pb-2 pt-3 text-xs">
+        <div className="flex gap-2 divide-x overflow-x-auto pb-2 pt-3 text-xs scrollbar-hide">
           {tags.map((tag) => (
             <p
               key={tag}
-              className="py-1 tracking-tight [&:not(:first-child)]:pl-2"
+              className="whitespace-pre py-1 tracking-tight [&:not(:first-child)]:pl-2"
             >
               {tag.toUpperCase()}
             </p>
@@ -175,6 +177,14 @@ export function ProjectBlock(props: Props) {
                       supporters
                     </p>
                   )}
+                  {showBelieveButton && (
+                    <BelieveProjectDialog
+                      {...props}
+                      buttonProps={{
+                        className: 'max-w-[200px]',
+                      }}
+                    />
+                  )}
                 </div>
               ) : (
                 <div className="count-block flex items-center justify-center">
@@ -196,9 +206,7 @@ export function ProjectBlock(props: Props) {
             </Button>
           </div>
         </div>
-        <div className="pt-3">
-          <BelieveProjectDialog {...props} />
-        </div>
+        <div className="pt-3"></div>
       </div>
     </div>
   );
