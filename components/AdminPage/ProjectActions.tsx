@@ -25,10 +25,12 @@ import { CacheKey } from '@/constants/react-query';
 import { useAuth } from '@/hooks/useAuth';
 import { updateProject } from '@/lib/backend';
 import { cn } from '@/lib/utils';
-import { Project, ProjectStatus } from '@/types/mongo';
+import { ProjectWithChainData } from '@/pages/profile/[id]';
+import { ProjectStatus } from '@/types/mongo';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
-import { useRef, useState } from 'react';
+import Link from 'next/link';
+import { useState } from 'react';
 import { useMutation, useQueryClient } from 'wagmi';
 import { DownloadSupporters } from '../ProfilePage/DownloadSupporters';
 import { DialogFooter } from '../ui/dialog';
@@ -37,12 +39,6 @@ import { ApproveEditionButton } from './ApproveEditionButton';
 import { CreateEditionButton } from './CreateEditionButton';
 import { DeleteProjectButton } from './DeleteProjectButton';
 import { DisapproveEditionButton } from './DisapproveEditionButton';
-import Link from 'next/link';
-
-interface ProjectWithChainData extends Project {
-  editionId?: number;
-  onChainStatus?: number;
-}
 
 export function ProjectActions(props: ProjectWithChainData) {
   const { _id, status, editionId, curation, edition_price, admin_address } =

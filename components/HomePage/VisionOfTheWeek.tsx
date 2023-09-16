@@ -7,7 +7,7 @@ import { ProjectStatus } from '@/types/mongo';
 import Link from 'next/link';
 import { HTMLParsedComponent } from '../Layout/HTMLParsedComponent';
 import { chains } from '../Providers/Web3Provider';
-import { BelieveProjectDialog } from './BelieveProjectDIalog';
+import { BelieveProjectDialog } from './BelieveProjectDialog';
 import { ProjectVideo } from './ProjectVideo';
 
 interface Props {

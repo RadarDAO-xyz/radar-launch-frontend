@@ -13,7 +13,7 @@ import { Project, ProjectStatus } from '@/types/mongo';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { BelieveProjectDialog } from '../HomePage/BelieveProjectDIalog';
+import { BelieveProjectDialog } from '../HomePage/BelieveProjectDialog';
 import { chains } from '../Providers/Web3Provider';
 import { Button } from '../ui/button';
 
@@ -152,8 +152,8 @@ export function ProjectBlock(props: Props) {
       </div>
       <div className="bottom-half-of-content">
         <div className="collect-wrapper flex-row">
-          <div className="flex w-full items-center justify-between border-t border-t-[var(--line-83d2b2f6)] pt-3 gap-4">
-            <div className='flex-1'>
+          <div className="flex w-full items-center justify-between gap-4 border-t border-t-[var(--line-83d2b2f6)] pt-3">
+            <div className="flex-1">
               {status === ProjectStatus.LIVE ? (
                 <div className="flex w-full divide-x text-center text-xs text-gray-700">
                   {showMintEndDate && mint_end_date && (
@@ -180,6 +180,7 @@ export function ProjectBlock(props: Props) {
                   {showBelieveButton && (
                     <BelieveProjectDialog
                       {...props}
+                      editionId={editionId}
                       buttonProps={{
                         className: 'w-full',
                       }}

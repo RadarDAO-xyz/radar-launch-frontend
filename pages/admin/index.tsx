@@ -9,35 +9,13 @@ import { convertProjectStatusName } from '@/lib/convertProjectStatusName';
 import { convertProjectStatusToColour } from '@/lib/convertProjectStatusToColour';
 import { useRadarEditionsGetEditions } from '@/lib/generated';
 import { cn } from '@/lib/utils';
-import { Project } from '@/types/mongo';
 import Link from 'next/link';
 import { OnChainProject } from '../profile/[id]';
 import { Placeholder } from '@/components/Layout/Placeholder';
 import { convertOnChainStatusName } from '@/lib/convertOnChainStatusName';
 import { useGetPools } from '@/hooks/useGetPools';
 import { Button } from '@/components/ui/button';
-
-function transformProjects(
-  databaseProjects?: Project[],
-  chainProjects?: OnChainProject[],
-) {
-  if (!databaseProjects || !chainProjects) {
-    return [];
-  }
-
-  const projectIdToEditionId = chainProjects.reduce<
-    Record<string, { index: number; onChainStatus: number }>
-  >((acc, project, index) => {
-    acc[project.id] = { index, onChainStatus: project.status };
-    return acc;
-  }, {});
-
-  return databaseProjects.map((project) => ({
-    ...project,
-    editionId: projectIdToEditionId[project._id]?.index,
-    onChainStatus: projectIdToEditionId[project._id]?.onChainStatus,
-  }));
-}
+import { transformProjects } from '../../lib/transformProjectsWithChainData';
 
 export default function AdminPage() {
   const { data } = useGetCurrentUser();
