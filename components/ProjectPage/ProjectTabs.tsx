@@ -97,7 +97,6 @@ export function ProjectTabs({
   title,
   video_url,
   benefits,
-  supporter_count,
 }: Project) {
   const [currentTab, setCurrentTab] = useState(Tab.BELIEVE);
   const [quantity, setQuantity] = useState(1);
@@ -441,10 +440,7 @@ export function ProjectTabs({
                 </>
               ) : null}
               {totalSupply !== undefined && (
-                <span>
-                  {(totalSupply + BigInt(supporter_count || 0)).toString()}{' '}
-                  supporters
-                </span>
+                <span>{totalSupply.toString()} collectors</span>
               )}
             </p>
             <Link
