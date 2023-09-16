@@ -251,9 +251,10 @@ export function ProjectTabs({
         className="rounded-md border px-8 py-6 pb-10"
       >
         <BelieveTabContent
-          id={_id}
+          _id={_id}
           editionId={editionId}
           tags={tags.join(',')}
+          isSelected={currentTab === Tab.BELIEVE}
         />
       </TabsContent>
       <TabsContent value={Tab.COLLECT} className="rounded-md border px-4 py-2">

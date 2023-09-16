@@ -36,6 +36,7 @@ import {
 } from '../ui/dialog';
 import { useToast } from '../ui/use-toast';
 import { ProjectVideo } from './ProjectVideo';
+import { useGetBelieveEvents } from '@/hooks/useGetBelieveEvents';
 
 const START_BLOCK_FOR_BELIEVE = 108947105n;
 const BLOCK_TIME_IN_SECONDS = 2;
@@ -57,48 +58,15 @@ export function BelieveProjectDialog({
   const [hasToasted, setHasToasted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  const { getLogs } = usePublicClient();
   const { isConnected, address } = useAccount();
   const { toast } = useToast();
   const { login } = useAuth();
   const { data: blockNumber } = useBlockNumber();
 
-  const { data: believerLogs, isLoading } = useQuery(
-    [CacheKey.BELIEVER_LOGS, editionId, _id],
-    () =>
-      getLogs({
-        address: CONTRACT_ADDRESS,
-        args: {
-          editionId: BigInt(editionId || 0),
-        },
-        event: {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: 'uint256',
-              name: 'editionId',
-              type: 'uint256',
-            },
-            {
-              indexed: true,
-              internalType: 'address',
-              name: 'believer',
-              type: 'address',
-            },
-            {
-              indexed: false,
-              internalType: 'string',
-              name: 'tags',
-              type: 'string',
-            },
-          ],
-          name: 'EditionBelieved',
-          type: 'event',
-        },
-        fromBlock: START_BLOCK_FOR_BELIEVE,
-      }),
-    { enabled: editionId !== undefined && isOpen },
+  const { data: believerLogs, isLoading } = useGetBelieveEvents(
+    _id,
+    editionId,
+    !isOpen,
   );
   const queryClient = useQueryClient();
   const { config } = usePrepareRadarEditionsBelieveProject({
@@ -168,7 +136,12 @@ export function BelieveProjectDialog({
             <HTMLParsedComponent className="text-gray-700" text={description} />
             <div className="flex flex-wrap gap-2 pt-2">
               {tags.map((tag) => (
-                <Button key={tag} className="text-xs" variant="outline" disabled>
+                <Button
+                  key={tag}
+                  className="text-xs"
+                  variant="outline"
+                  disabled
+                >
                   {tag.toUpperCase()}
                 </Button>
               ))}
@@ -210,7 +183,7 @@ export function BelieveProjectDialog({
                 ? 'Thank you for believing in this project!'
                 : 'I believe in this project'}
             </Button>
-            <Button asChild>
+            <Button asChild variant="ghost">
               <Link href={`/project/${_id}`}>Read More</Link>
             </Button>
           </div>

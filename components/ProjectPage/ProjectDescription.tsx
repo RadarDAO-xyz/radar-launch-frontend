@@ -1,7 +1,6 @@
-import { HTMLParsedComponent } from '../Layout/HTMLParsedComponent';
-import { Table, TableBody, TableRow, TableCell } from '../ui/table';
 import { Project } from '@/types/mongo';
-import parse from 'html-react-parser';
+import { HTMLParsedComponent } from '../Layout/HTMLParsedComponent';
+import { Table, TableBody, TableCell, TableRow } from '../ui/table';
 
 export function ProjectDescription({
   team,
@@ -47,7 +46,7 @@ export function ProjectDescription({
           <h3 className="pb-8 text-lg font-medium decoration-slate-100">
             Benefits for Patrons
           </h3>
-          <div className='grid grid-cols-1 gap-4'>
+          <div className="grid grid-cols-1 gap-4">
             {benefits.filter(Boolean).map((benefit) => (
               <div key={benefit.text} className="rounded-md border">
                 <h3 className="px-6 py-4 text-gray-500">

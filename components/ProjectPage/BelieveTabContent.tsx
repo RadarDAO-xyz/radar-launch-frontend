@@ -10,6 +10,7 @@ import {
 import { CONTRACT_ADDRESS } from '@/constants/address';
 import { CacheKey } from '@/constants/react-query';
 import { useAuth } from '@/hooks/useAuth';
+import { useGetBelieveEvents } from '@/hooks/useGetBelieveEvents';
 import { useGetProject } from '@/hooks/useGetProject';
 import {
   usePrepareRadarEditionsBelieveProject,
@@ -17,74 +18,40 @@ import {
 } from '@/lib/generated';
 import { shortenAddress } from '@/lib/utils';
 import { ProjectStatus } from '@/types/mongo';
+import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import {
   useAccount,
   useBlockNumber,
-  usePublicClient,
-  useQuery,
   useQueryClient,
-  useWaitForTransaction,
+  useWaitForTransaction
 } from 'wagmi';
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
 
 interface Props {
-  id: string;
+  _id: string;
   editionId?: number;
   tags: string;
+  isSelected: boolean;
 }
 
-const START_BLOCK_FOR_BELIEVE = 108947105n;
 const BLOCK_TIME_IN_SECONDS = 2;
 
-export function BelieveTabContent({ id, editionId, tags }: Props) {
+export function BelieveTabContent({ _id, editionId, tags, isSelected }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [hasToasted, setHasToasted] = useState(false);
 
-  const { getLogs } = usePublicClient();
-  const { data: projectData } = useGetProject(id);
+  const { data: projectData } = useGetProject(_id);
   const { login } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const { address, isConnected } = useAccount();
   const { data: blockNumber } = useBlockNumber();
-  const { data: believerLogs, isLoading } = useQuery(
-    [CacheKey.BELIEVER_LOGS, editionId, id],
-    () =>
-      getLogs({
-        address: CONTRACT_ADDRESS,
-        args: {
-          editionId: BigInt(editionId || 0),
-        },
-        event: {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: 'uint256',
-              name: 'editionId',
-              type: 'uint256',
-            },
-            {
-              indexed: true,
-              internalType: 'address',
-              name: 'believer',
-              type: 'address',
-            },
-            {
-              indexed: false,
-              internalType: 'string',
-              name: 'tags',
-              type: 'string',
-            },
-          ],
-          name: 'EditionBelieved',
-          type: 'event',
-        },
-        fromBlock: START_BLOCK_FOR_BELIEVE,
-      }),
-    { enabled: editionId !== undefined },
+  const { data: believerLogs, isLoading } = useGetBelieveEvents(
+    _id,
+    editionId,
+    !isSelected,
   );
   const { config } = usePrepareRadarEditionsBelieveProject({
     address: CONTRACT_ADDRESS,
@@ -121,7 +88,7 @@ export function BelieveTabContent({ id, editionId, tags }: Props) {
       });
       setHasToasted(true);
       setIsOpen(false);
-      queryClient.invalidateQueries([CacheKey.BELIEVER_LOGS, editionId, id]);
+      queryClient.invalidateQueries([CacheKey.BELIEVER_LOGS, editionId, _id]);
     }
   }, [isSuccess, believeProjectData?.hash]);
 
@@ -196,7 +163,8 @@ export function BelieveTabContent({ id, editionId, tags }: Props) {
               >
                 <p>{shortenAddress(believer.args.believer!)}</p>
                 <div className="text-right text-muted-foreground">
-                  <p>{date.toLocaleDateString()}</p>
+                  <p>{format(date, 'do MMMM yyyy')}</p>
+                  <p>{format(date, 'hh:mm a')}</p>{' '}
                 </div>
               </div>
             );
