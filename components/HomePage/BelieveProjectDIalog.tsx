@@ -168,7 +168,7 @@ export function BelieveProjectDialog({
             <HTMLParsedComponent className="text-gray-700" text={description} />
             <div className="flex flex-wrap gap-2 pt-2">
               {tags.map((tag) => (
-                <Button key={tag} className="" variant="outline" disabled>
+                <Button key={tag} className="text-xs" variant="outline" disabled>
                   {tag.toUpperCase()}
                 </Button>
               ))}
