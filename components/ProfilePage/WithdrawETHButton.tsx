@@ -12,7 +12,7 @@ import {
   useRadarEditionsWithdrawEditionBalance,
 } from '@/lib/generated';
 import { parseEther } from '@/lib/utils';
-import { ProjectWithChainData } from '@/pages/profile/[id]';
+import { ProjectWithChainData } from '@/types/web3';
 import { ProjectStatus } from '@/types/mongo';
 import { useEffect, useState } from 'react';
 import { useAccount, useWaitForTransaction } from 'wagmi';

@@ -1,5 +1,5 @@
 import { generateVideoThumbnail } from '@/lib/generateVideoThumbnail';
-import { ProjectWithOwnedAmount } from '@/pages/profile/[id]';
+import { ProjectWithOwnedAmount } from '@/types/web3';
 import Link from 'next/link';
 import { HTMLParsedComponent } from '../Layout/HTMLParsedComponent';
 import { Button } from '../ui/button';
@@ -27,9 +27,7 @@ export function CollectedVision({
           className="h-8 overflow-hidden text-ellipsis  whitespace-nowrap text-xs"
           text={tldr}
         />
-        {tldr.length > 60 && (
-          <span className="relative text-xs">...</span>
-        )}
+        {tldr.length > 60 && <span className="relative text-xs">...</span>}
       </div>
       <Button className="w-full" asChild>
         <Link href={`/project/${_id}`}>View Updates</Link>

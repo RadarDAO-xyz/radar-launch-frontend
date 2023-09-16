@@ -25,7 +25,7 @@ import { CacheKey } from '@/constants/react-query';
 import { useAuth } from '@/hooks/useAuth';
 import { updateProject } from '@/lib/backend';
 import { cn } from '@/lib/utils';
-import { ProjectWithChainData } from '@/pages/profile/[id]';
+import { ProjectWithChainData } from '@/types/web3';
 import { ProjectStatus } from '@/types/mongo';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';

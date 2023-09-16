@@ -1,4 +1,4 @@
-import { ProjectWithChainData } from '@/pages/profile/[id]';
+import { ProjectWithChainData } from '@/types/web3';
 import { ProjectStatus } from '@/types/mongo';
 import { Button } from '../ui/button';
 import { CancelSubmissionButton } from './CancelSubmissionButton';

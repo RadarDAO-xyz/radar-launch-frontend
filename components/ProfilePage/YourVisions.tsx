@@ -1,5 +1,5 @@
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
-import { ProjectWithChainData } from '@/pages/profile/[id]';
+import { ProjectWithChainData } from '@/types/web3';
 import { ProjectStatus } from '@/types/mongo';
 import { VisionCard } from './VisionCard';
 import { ProjectBlock } from '../Layout/ProjectBlock';

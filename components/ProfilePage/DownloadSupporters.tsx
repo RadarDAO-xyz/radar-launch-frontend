@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import { useAuth } from '@/hooks/useAuth';
 import { downloadProjectSupporters } from '@/lib/backend';
-import { ProjectWithChainData } from '@/pages/profile/[id]';
+import { ProjectWithChainData } from '@/types/web3';
 import { Project, ProjectStatus } from '@/types/mongo';
 import { DownloadIcon } from 'lucide-react';
 import { useMutation } from 'wagmi';

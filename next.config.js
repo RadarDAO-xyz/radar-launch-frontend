@@ -1,3 +1,7 @@
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -7,8 +11,8 @@ const nextConfig = {
     BACKEND_URL: process.env.BACKEND_URL,
     WHITELISTED_ADDRESSES: process.env.WHITELISTED_ADDRESSES,
     TINYMCE_API_KEY: process.env.TINYMCE_API_KEY,
-    FEATURED_PROJECT_ID: process.env.FEATURED_PROJECT_ID
-  }
+    FEATURED_PROJECT_ID: process.env.FEATURED_PROJECT_ID,
+  },
   // see https://github.com/vercel/next.js/pull/53483/files
   // modularizeImports: {
   //   "lucide-react": {
@@ -56,4 +60,4 @@ const nextConfig = {
   // },
 };
 
-module.exports = nextConfig;
+module.exports = withBundleAnalyzer(nextConfig);

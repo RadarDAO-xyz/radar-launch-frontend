@@ -1,5 +1,5 @@
 import { Project } from '@/types/mongo';
-import { OnChainProject } from '../pages/profile/[id]';
+import { OnChainProject } from '@/types/web3';
 
 export function transformProjects(
   databaseProjects?: Project[],

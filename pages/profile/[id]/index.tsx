@@ -13,33 +13,15 @@ import {
 } from '@/lib/generated';
 import { convertAddressToChecksum } from '@/lib/utils';
 import { Project, WalletResolvable } from '@/types/mongo';
-import { EditionStatus } from '@/types/web3';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Address } from 'wagmi';
-
-export interface OnChainProject {
-  status: EditionStatus;
-  fee: bigint;
-  balance: bigint;
-  owner: `0x${string}`;
-  id: string;
-}
-
-export interface ProjectIdWithBalance {
-  id: string;
-  amount: bigint;
-}
-
-export interface ProjectWithChainData extends Project {
-  balance?: bigint;
-  editionId?: number;
-}
-
-export interface ProjectWithOwnedAmount extends Project {
-  ownedAmount: bigint;
-  editionId: number;
-}
+import {
+  OnChainProject,
+  ProjectWithChainData,
+  ProjectIdWithBalance,
+  ProjectWithOwnedAmount,
+} from '../../../types/web3';
 
 function transformYourVisionsProjects(
   userId?: string,

@@ -10,7 +10,7 @@ import { convertProjectStatusToColour } from '@/lib/convertProjectStatusToColour
 import { useRadarEditionsGetEditions } from '@/lib/generated';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import { OnChainProject } from '../profile/[id]';
+import { OnChainProject } from '../../types/web3';
 import { Placeholder } from '@/components/Layout/Placeholder';
 import { convertOnChainStatusName } from '@/lib/convertOnChainStatusName';
 import { useGetPools } from '@/hooks/useGetPools';

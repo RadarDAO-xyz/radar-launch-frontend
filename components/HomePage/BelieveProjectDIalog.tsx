@@ -13,7 +13,7 @@ import {
   useRadarEditionsBelieveProject,
 } from '@/lib/generated';
 import { cn, shortenAddress } from '@/lib/utils';
-import { ProjectWithChainData } from '@/pages/profile/[id]';
+import { ProjectWithChainData } from '@/types/web3';
 import { ProjectStatus } from '@/types/mongo';
 import { format } from 'date-fns';
 import Link from 'next/link';

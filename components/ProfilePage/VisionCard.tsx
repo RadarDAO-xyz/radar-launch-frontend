@@ -2,7 +2,7 @@ import { CONTRACT_ADDRESS } from '@/constants/address';
 import { generateVideoThumbnail } from '@/lib/generateVideoThumbnail';
 import { useRadarEditionsTotalSupply } from '@/lib/generated';
 import { cn } from '@/lib/utils';
-import { ProjectWithChainData } from '@/pages/profile/[id]';
+import { ProjectWithChainData } from '@/types/web3';
 import Link from 'next/link';
 import { formatEther } from 'viem';
 import { chains } from '../Providers/Web3Provider';
@@ -54,7 +54,7 @@ export function VisionCard(props: ProjectWithChainData) {
               <TooltipTrigger asChild>
                 <Link
                   href={`${chains[0].blockExplorers.etherscan.url}/address/${CONTRACT_ADDRESS}`}
-                  className="text-sm text-muted-foreground hover:underline block"
+                  className="block text-sm text-muted-foreground hover:underline"
                 >
                   Edition ID: {editionId}
                 </Link>

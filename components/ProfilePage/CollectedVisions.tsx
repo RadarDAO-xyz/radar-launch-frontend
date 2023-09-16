@@ -1,4 +1,4 @@
-import { ProjectWithOwnedAmount } from '@/pages/profile/[id]';
+import { ProjectWithOwnedAmount } from '@/types/web3';
 import { CollectedVision } from './CollectedVision';
 
 export function CollectedVisions({
