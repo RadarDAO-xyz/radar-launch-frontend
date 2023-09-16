@@ -22,7 +22,7 @@ export function HeaderHero({ visionOfTheWeekSlot }: Props) {
           {'Curated projects dropping weekly ↓'}
           <br />
         </p>
-        <Link href="https://www.culture3.xyz/" target="_blank" className="flex">
+        {/* <Link href="https://www.culture3.xyz/" target="_blank" className="flex">
           <span className="curator-text">
             august curated by
             <br />
@@ -35,7 +35,7 @@ export function HeaderHero({ visionOfTheWeekSlot }: Props) {
             src="https://uploads-ssl.webflow.com/64548f6f8feacfafa79c9592/64a6a82851e7ea1f12599225_62c421c68db31c451cbecc30_c3full_off_black.svg"
           />
           <div className="arrow-diagonal">{'↗'}</div>
-        </Link>
+        </Link> */}
       </div>
       <div className="featured-project-tabs space-x-4 md:w-[80%] lg:w-[80%] lg:space-x-8">
         <div className="about-div home px-[5%]">
