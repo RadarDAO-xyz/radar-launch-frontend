@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from '../ui/select';
 import { createFormSchema } from './CreateForm';
+import { VideoUpload } from './VideoUpload';
 
 interface Props {
   isEdit?: boolean;
@@ -115,6 +116,7 @@ export function ProjectSection({ isEdit, thumbnail }: Props) {
           </div>
         )}
         <div className="col-span-1">
+          <VideoUpload />
           <FormField
             control={control}
             name="video_url"

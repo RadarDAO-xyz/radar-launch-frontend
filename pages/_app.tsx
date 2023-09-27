@@ -11,7 +11,14 @@ import { Toaster } from '@/components/ui/toaster';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import Script from 'next/script';
-import { DefaultSeo, NextSeo } from 'next-seo';
+import { DefaultSeo } from 'next-seo';
+import { LivepeerConfig, createReactClient, studioProvider } from '@livepeer/react';
+
+const livepeerClient = createReactClient({
+  provider: studioProvider({
+    apiKey: process.env.LIVEPEER_API_KEY!,
+  }),
+});
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -72,11 +79,13 @@ export default function App({ Component, pageProps }: AppProps) {
       <ThemeProvider attribute="class" defaultTheme="light" themes={['light']}>
         <Web3Provider>
           <AuthProvider>
-            <NavBar />
-            <Component {...pageProps} />
-            <Footer />
-            <Toaster />
-            <CookieConsent />
+            <LivepeerConfig client={livepeerClient}>
+              <NavBar />
+              <Component {...pageProps} />
+              <Footer />
+              <Toaster />
+              <CookieConsent />
+            </LivepeerConfig>
           </AuthProvider>
         </Web3Provider>
       </ThemeProvider>
