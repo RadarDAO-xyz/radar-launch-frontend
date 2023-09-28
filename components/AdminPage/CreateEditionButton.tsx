@@ -19,6 +19,7 @@ interface Props {
   fee: number;
   address: string;
 }
+
 export function CreateEditionButton({
   isOpen,
   projectId,

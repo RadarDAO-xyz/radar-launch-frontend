@@ -12,6 +12,7 @@ interface Props {
   isOpen: boolean;
   editionId?: number;
 }
+
 export function DisapproveEditionButton({ isOpen, editionId }: Props) {
   const { toast } = useToast();
   const { address } = useAccount();

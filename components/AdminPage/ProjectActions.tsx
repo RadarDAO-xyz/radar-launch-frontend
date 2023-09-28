@@ -39,6 +39,7 @@ import { ApproveEditionButton } from './ApproveEditionButton';
 import { CreateEditionButton } from './CreateEditionButton';
 import { DeleteProjectButton } from './DeleteProjectButton';
 import { DisapproveEditionButton } from './DisapproveEditionButton';
+import { MintVideoNftButton } from './MintVideoNftButton';
 
 export function ProjectActions(props: ProjectWithChainData) {
   const { _id, status, editionId, curation, edition_price, admin_address } =
@@ -206,6 +207,7 @@ export function ProjectActions(props: ProjectWithChainData) {
         </DialogContent>
       </Dialog>
       <DownloadSupporters {...props} />
+      <MintVideoNftButton videoId={props.video_id} />
     </div>
   );
 }
