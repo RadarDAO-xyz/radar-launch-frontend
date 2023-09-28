@@ -100,7 +100,7 @@ export const VideoUpload = () => {
                 video && 'bg-slate-100/50',
               )}
             >
-              <Input type="file" {...field} {...getInputProps()} />
+              <Input type="file" {...getInputProps()} />
               {video ? (
                 <div className="text-center">
                   <h4>{video.name}</h4>
