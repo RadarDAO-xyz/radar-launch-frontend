@@ -113,6 +113,8 @@ export default function AdminPage() {
               <TableHead>Founder Address</TableHead>
               <TableHead>Status (on-chain)</TableHead>
               <TableHead>Status (database)</TableHead>
+              <TableHead>Video URL</TableHead>
+              <TableHead>Video ID</TableHead>
               <TableHead>Curation Start</TableHead>
               <TableHead>Curation End</TableHead>
               <TableHead>Actions</TableHead>
@@ -149,13 +151,21 @@ export default function AdminPage() {
                 <TableCell>
                   <p>{convertOnChainStatusName(project.onChainStatus)}</p>
                 </TableCell>
+                <TableCell>{project.video_url}</TableCell>
+                <TableCell>{project.video_id || 'NA'}</TableCell>
                 <TableCell>
                   <p>
-                    {new Date(project.curation?.start).toLocaleDateString()}
+                    {project.curation?.start
+                      ? new Date(project.curation.start).toLocaleDateString()
+                      : 'NA'}
                   </p>
                 </TableCell>
                 <TableCell>
-                  <p>{new Date(project.curation?.end).toLocaleDateString()}</p>
+                  <p>
+                    {project.curation?.end
+                      ? new Date(project.curation.end).toLocaleDateString()
+                      : 'NA'}
+                  </p>
                 </TableCell>
                 <ProjectActions {...project} />
               </TableRow>
