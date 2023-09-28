@@ -25,6 +25,7 @@ export const createFormSchema = z.object({
     .string()
     .url({ message: 'Please enter a valid URL' })
     .min(1, { message: 'Video URL is required' }),
+  video_id: z.string().min(1),
   tldr: z.string().min(1, { message: 'Brief description is required' }),
   thumbnail: z.optional(z.instanceof(File)),
   brief: z.string().min(1, { message: 'Brief is required' }),
@@ -141,6 +142,7 @@ export function CreateForm() {
           text: '<ul><li><p>Become an onchain patron of my journey</p></li></ul>',
         });
       }
+      // swap brief and pool fields
       const newValues = {
         ...values,
         pool: values.brief,

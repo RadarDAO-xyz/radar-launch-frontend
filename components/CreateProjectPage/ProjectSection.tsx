@@ -119,22 +119,6 @@ export function ProjectSection({ isEdit, thumbnail }: Props) {
           <VideoUpload />
           <FormField
             control={control}
-            name="video_url"
-            render={({ field }) => (
-              <FormItem className="pb-4">
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormDescription>
-                  Share a brief 3-minute video through a URL (e.g. Vimeo or
-                  YouTube) introducing your vision for a better future.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={control}
             name="tldr"
             render={({ field }) => {
               const { onChange, ...rest } = field;
