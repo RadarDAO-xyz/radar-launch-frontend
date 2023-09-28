@@ -8,25 +8,26 @@ import {
 import { CONTRACT_ADDRESS } from '@/constants/address';
 import { CacheKey } from '@/constants/react-query';
 import { useAuth } from '@/hooks/useAuth';
+import { useGetBelieveEvents } from '@/hooks/useGetBelieveEvents';
 import {
   usePrepareRadarEditionsBelieveProject,
   useRadarEditionsBelieveProject,
 } from '@/lib/generated';
 import { cn, shortenAddress } from '@/lib/utils';
-import { ProjectWithChainData } from '@/types/web3';
 import { ProjectStatus } from '@/types/mongo';
+import { ProjectWithChainData } from '@/types/web3';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import { RefAttributes, useEffect, useState } from 'react';
 import {
   useAccount,
   useBlockNumber,
-  usePublicClient,
-  useQuery,
   useQueryClient,
   useWaitForTransaction,
 } from 'wagmi';
 import { HTMLParsedComponent } from '../Layout/HTMLParsedComponent';
+import { ProjectVideoPlayer } from '../Layout/ProjectVideoPlayer';
+import { Badge } from '../ui/badge';
 import {
   Dialog,
   DialogContent,
@@ -35,10 +36,6 @@ import {
   DialogTrigger,
 } from '../ui/dialog';
 import { useToast } from '../ui/use-toast';
-import { ProjectVideo } from './ProjectVideo';
-import { useGetBelieveEvents } from '@/hooks/useGetBelieveEvents';
-import { Badge } from '../ui/badge';
-import { ProjectVideoPlayer } from '../Layout/ProjectVideoPlayer';
 
 const START_BLOCK_FOR_BELIEVE = 108947105n;
 const BLOCK_TIME_IN_SECONDS = 2;
