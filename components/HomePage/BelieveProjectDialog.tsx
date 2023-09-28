@@ -38,6 +38,7 @@ import { useToast } from '../ui/use-toast';
 import { ProjectVideo } from './ProjectVideo';
 import { useGetBelieveEvents } from '@/hooks/useGetBelieveEvents';
 import { Badge } from '../ui/badge';
+import { ProjectVideoPlayer } from '../Layout/ProjectVideoPlayer';
 
 const START_BLOCK_FOR_BELIEVE = 108947105n;
 const BLOCK_TIME_IN_SECONDS = 2;
@@ -127,11 +128,12 @@ export function BelieveProjectDialog({
       </DialogTrigger>
       <DialogContent className="max-h-screen w-full overflow-y-auto p-10 scrollbar-hide lg:max-w-3xl">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
-          <ProjectVideo
-            videoUrl={video_url}
-            className="col-span-2 pt-2 lg:pt-0"
-            videoClassName="rounded-lg"
-          />
+          <div className={cn('col-span-2 w-full pt-2 lg:pt-0')}>
+            <ProjectVideoPlayer
+              videoUrl={video_url}
+              videoClassName="rounded-lg"
+            />
+          </div>
           <div className="col-span-2">
             <DialogTitle className="text-2xl uppercase">{title}</DialogTitle>
             <HTMLParsedComponent className="text-gray-700" text={description} />

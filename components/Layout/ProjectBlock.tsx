@@ -7,7 +7,7 @@ import {
   useRadarEditionsGetEditions,
   useRadarEditionsTotalSupply,
 } from '@/lib/generated';
-import { isValidVideoLink } from '@/lib/isValidVideoLink';
+import { isYoutubeOrVimeoVideoLink } from '@/lib/isYoutubeOrVimeoVideoLink';
 import { cn } from '@/lib/utils';
 import { Project, ProjectStatus } from '@/types/mongo';
 import { format } from 'date-fns';
@@ -16,6 +16,7 @@ import { useRouter } from 'next/navigation';
 import { chains } from '../Providers/Web3Provider';
 import { Button } from '../ui/button';
 import { BelieveProjectDialog } from '../HomePage/BelieveProjectDialog';
+import { ProjectVideoPlayer } from './ProjectVideoPlayer';
 
 interface Props extends Project {
   showDropDate?: boolean;
@@ -91,33 +92,11 @@ export function ProjectBlock(props: Props) {
         </div>
         <div className="_10px-div" />
         <div className="project-image w-full">
-          {isValidVideoLink(video_url) ? (
-            <iframe
-              frameBorder={0}
-              src={generateVideoEmbed(
-                video_url,
-                video_url.startsWith('https://www.youtube')
-                  ? '?controls=0&fs=0&loop=1&modestbranding=1&playsinline=1&iv_load_policy=3'
-                  : '?title=0&byline=0&portrait=0&sidedock=0&loop=1',
-              )}
-              className="aspect-video w-full bg-gray-100 object-cover"
-              allow="autoplay; fullscreen; picture-in-picture"
-              loading="lazy"
-            />
-          ) : (
-            <img
-              src={thumbnail || generateVideoThumbnail(video_url)}
-              className="aspect-video w-full bg-gray-100 object-cover"
-              alt="Project image"
-              loading="lazy"
-            />
-            // <HoverVideoPlayer
-            //   focused
-            //   loop
-            //   videoSrc={generateHoverVideoLink(video_url)}
-            //   className="!hidden md:!inline-block"
-            // />
-          )}
+          <ProjectVideoPlayer
+            videoUrl={video_url}
+            thumbnail={thumbnail}
+            isThumbnail
+          />
         </div>
         <div className="_20px-div" />
         <Link

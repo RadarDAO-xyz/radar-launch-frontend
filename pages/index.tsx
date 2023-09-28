@@ -8,12 +8,9 @@ import {
   THE_NEW_PLAYERS_POOL_ID,
   USE_PLAY_TO_BULD_A_BETTER_WEB_POOL_ID,
 } from '@/constants/database';
-import { useGetBelieveEvents } from '@/hooks/useGetBelieveEvents';
 import { useGetProjects } from '@/hooks/useGetProjects';
 import { ProjectStatus } from '@/types/mongo';
-import { NextSeo } from 'next-seo';
 import dynamic from 'next/dynamic';
-import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 
