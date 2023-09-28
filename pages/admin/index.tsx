@@ -16,6 +16,15 @@ import { convertOnChainStatusName } from '@/lib/convertOnChainStatusName';
 import { useGetPools } from '@/hooks/useGetPools';
 import { Button } from '@/components/ui/button';
 import { transformProjects } from '../../lib/transformProjectsWithChainData';
+import {
+  Table,
+  TableCaption,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from '@/components/ui/table';
 
 export default function AdminPage() {
   const { data } = useGetCurrentUser();
@@ -93,63 +102,105 @@ export default function AdminPage() {
           <li>Project is live!</li>
         </ul>
       </div>
-      <div className="grid grid-cols-1 gap-4 pb-20 pt-4 lg:grid-cols-3">
-        {projects.map((project) => (
-          <div className="rounded border p-4" key={project._id}>
-            {project.editionId === undefined && (
-              <strong>No onchain project found</strong>
-            )}
-            <h3 className="mb-0 pb-0">{project.title}</h3>
-            <p>Edition Id (on-chain): {project.editionId}</p>
-            <Link href={`/project/${project._id}`} className="block underline">
-              Project Id (database): {project._id}
-            </Link>
-            <Link
-              href={`/profile/${project.founder}`}
-              className="block break-all underline"
-            >
-              Admin address: {project.admin_address}
-            </Link>
-            <div>
-              Database Status: {convertProjectStatusName(project.status)}{' '}
-              <Badge
-                variant="none"
-                className={cn(
-                  convertProjectStatusToColour(project.status),
-                  'h-3 w-3 p-0',
-                )}
-              />
-            </div>
-            <p>
-              On Chain Status: {convertOnChainStatusName(project.onChainStatus)}
-            </p>
-            <p>
-              Curation Start:{' '}
-              {new Date(project.curation?.start).toLocaleDateString()}
-            </p>
-            <p>
-              Curation End:{' '}
-              {new Date(project.curation?.end).toLocaleDateString()}
-            </p>
-            <ProjectActions {...project} />
-          </div>
-        ))}
+      <h2 className="py-4 text-3xl font-bold">Projects</h2>
+      <div className="">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Title</TableHead>
+              <TableHead>ID (on-chain)</TableHead>
+              <TableHead>ID (database)</TableHead>
+              <TableHead>Founder Address</TableHead>
+              <TableHead>Status (on-chain)</TableHead>
+              <TableHead>Status (database)</TableHead>
+              <TableHead>Curation Start</TableHead>
+              <TableHead>Curation End</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {projects.map((project) => (
+              <TableRow key={project._id}>
+                <TableCell>{project.title}</TableCell>
+                <TableCell>{project.editionId ?? 'NA'}</TableCell>
+                <TableCell>
+                  <Link href={`/project/${project._id}`} className="underline">
+                    {project._id}
+                  </Link>
+                </TableCell>
+                <TableCell>
+                  <Link
+                    href={`/profile/${project.founder}`}
+                    className="underline"
+                  >
+                    {project.admin_address}
+                  </Link>
+                </TableCell>
+                <TableCell>
+                  {convertProjectStatusName(project.status)}{' '}
+                  <Badge
+                    variant="none"
+                    className={cn(
+                      convertProjectStatusToColour(project.status),
+                      'h-3 w-3 p-0',
+                    )}
+                  />
+                </TableCell>
+                <TableCell>
+                  <p>{convertOnChainStatusName(project.onChainStatus)}</p>
+                </TableCell>
+                <TableCell>
+                  <p>
+                    {new Date(project.curation?.start).toLocaleDateString()}
+                  </p>
+                </TableCell>
+                <TableCell>
+                  <p>{new Date(project.curation?.end).toLocaleDateString()}</p>
+                </TableCell>
+                <ProjectActions {...project} />
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
-      <h2 className="text-3xl font-bold">Pools</h2>
-      <div className="grid grid-cols-3 gap-4">
-        {poolsData?.map((pool) => (
-          <div key={pool._id} className="rounded-lg border p-4">
-            <Link href={`/pool/${pool._id}`} className="underline">
-              ID: {pool._id}
-            </Link>
-            <p>Title: {pool.title}</p>
-            <p>Subtitle: {pool.subtitle}</p>
-            <p>Is hidden: {pool.is_hidden ? 'true' : 'false'}</p>
-            <Button asChild>
-              <Link href={`/pool/${pool._id}/edit`}>Edit</Link>
-            </Button>
-          </div>
-        ))}
+      <h2 className="py-4 text-3xl font-bold">Pools</h2>
+      <div>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Title</TableHead>
+              <TableHead>ID (database)</TableHead>
+              <TableHead>Subtitle</TableHead>
+              <TableHead>Is Hidden?</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {poolsData?.map((pool) => (
+              <TableRow key={pool._id}>
+                <TableCell>
+                  <Link href={`/pool/${pool._id}`} className="underline">
+                    {pool._id}
+                  </Link>
+                </TableCell>
+                <TableCell>
+                  <p>{pool.title}</p>
+                </TableCell>
+                <TableCell>
+                  <p>{pool.subtitle}</p>
+                </TableCell>
+                <TableCell>
+                  <p>{pool.is_hidden ? 'true' : 'false'}</p>
+                </TableCell>
+                <TableCell>
+                  <Button asChild>
+                    <Link href={`/pool/${pool._id}/edit`}>Edit</Link>
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
     </section>
   );
