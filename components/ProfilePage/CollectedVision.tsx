@@ -3,22 +3,24 @@ import { ProjectWithOwnedAmount } from '@/types/web3';
 import Link from 'next/link';
 import { HTMLParsedComponent } from '../Layout/HTMLParsedComponent';
 import { Button } from '../ui/button';
+import { ProjectThumbnail } from '../Layout/ProjectThumbnail';
 
 export function CollectedVision({
   brief,
   title,
   tldr,
   video_url,
+  thumbnail,
   _id,
 }: ProjectWithOwnedAmount) {
   return (
     <div className="col-span-1 p-2">
       <HTMLParsedComponent text={brief} className="pb-2 text-xs" />
-      <img
-        src={generateVideoThumbnail(video_url)}
-        alt={title + ' thumbnail'}
-        className="aspect-video w-full object-cover"
-      />{' '}
+      <ProjectThumbnail
+        thumbnail={thumbnail}
+        videoUrl={video_url}
+        title={title}
+      />
       <h3 className="py-3 font-semibold leading-5 transition-opacity hover:opacity-60">
         <Link href={`/project/${_id}`}>{title}</Link>
       </h3>

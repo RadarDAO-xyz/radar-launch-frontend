@@ -1,17 +1,9 @@
-import {
-  usePrepareRadarVideoNftMint,
-  useRadarVideoNftMint,
-} from '@/lib/generated';
-import { Button } from '../ui/button';
-import { VIDEO_CONTRACT_ADDRESS } from '@/constants/address';
-import { chains } from '../Providers/Web3Provider';
-import { useAccount } from 'wagmi';
-import { useUpdateAsset } from '@livepeer/react';
-import { Project } from '@/types/mongo';
-import { ProjectWithChainData } from '@/types/web3';
 import { generateVideoThumbnail } from '@/lib/generateVideoThumbnail';
-import TurndownService from 'turndown';
+import { ProjectWithChainData } from '@/types/web3';
+import { useUpdateAsset } from '@livepeer/react';
 import { useEffect } from 'react';
+import TurndownService from 'turndown';
+import { Button } from '../ui/button';
 
 const turndownService = new TurndownService();
 

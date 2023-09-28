@@ -1,16 +1,16 @@
 import { generateVideoEmbed } from '@/lib/generateVideoEmbed';
-import { generateVideoThumbnail } from '@/lib/generateVideoThumbnail';
 import { isYoutubeOrVimeoVideoLink } from '@/lib/isYoutubeOrVimeoVideoLink';
 import { cn } from '@/lib/utils';
-import { PlaybackInfo, Player, useLivepeerProvider } from '@livepeer/react';
-import { useEffect, useMemo, useState } from 'react';
+import { Player } from '@livepeer/react';
 import { useAccount } from 'wagmi';
+import { ProjectThumbnail } from './ProjectThumbnail';
 
 interface Props {
   videoUrl: string;
   thumbnail?: string;
   isThumbnail?: boolean;
   videoClassName?: string;
+  title?: string;
 }
 
 export function ProjectVideoPlayer({
@@ -18,9 +18,9 @@ export function ProjectVideoPlayer({
   thumbnail,
   videoClassName,
   isThumbnail,
+  title,
 }: Props) {
   const { address } = useAccount();
-  const provider = useLivepeerProvider();
 
   if (isYoutubeOrVimeoVideoLink(videoUrl)) {
     if (isThumbnail) {
@@ -74,12 +74,7 @@ export function ProjectVideoPlayer({
   }
 
   return (
-    <img
-      src={thumbnail || generateVideoThumbnail(videoUrl)}
-      className={cn('aspect-video w-full bg-gray-100 object-cover')}
-      alt="Project image"
-      loading="lazy"
-    />
+    <ProjectThumbnail videoUrl={videoUrl} thumbnail={thumbnail} title={title} />
     // <HoverVideoPlayer
     //   focused
     //   loop

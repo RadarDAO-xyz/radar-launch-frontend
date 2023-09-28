@@ -1,21 +1,18 @@
 import { CONTRACT_ADDRESS } from '@/constants/address';
 import { useGetCountdown } from '@/hooks/useGetCountdown';
 import { useGetPools } from '@/hooks/useGetPools';
-import { generateVideoEmbed } from '@/lib/generateVideoEmbed';
-import { generateVideoThumbnail } from '@/lib/generateVideoThumbnail';
 import {
   useRadarEditionsGetEditions,
   useRadarEditionsTotalSupply,
 } from '@/lib/generated';
-import { isYoutubeOrVimeoVideoLink } from '@/lib/isYoutubeOrVimeoVideoLink';
 import { cn } from '@/lib/utils';
 import { Project, ProjectStatus } from '@/types/mongo';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { BelieveProjectDialog } from '../HomePage/BelieveProjectDialog';
 import { chains } from '../Providers/Web3Provider';
 import { Button } from '../ui/button';
-import { BelieveProjectDialog } from '../HomePage/BelieveProjectDialog';
 import { ProjectVideoPlayer } from './ProjectVideoPlayer';
 
 interface Props extends Project {

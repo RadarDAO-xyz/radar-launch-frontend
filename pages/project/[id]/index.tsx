@@ -98,7 +98,7 @@ export default function IndividualProjectPage() {
       <div className="grid grid-cols-1 bg-white px-[5%] md:grid-cols-6">
         <div className="col-span-1 md:col-span-4 md:max-h-screen md:overflow-y-scroll md:pr-10">
           <div>
-            <ProjectVideoPlayer videoUrl={data.video_url} />
+            <ProjectVideoPlayer videoUrl={data.video_url} title={data.title} />
           </div>
           <div className="pb-4 pt-10 text-normal text-gray-400">
             The Brief: <span className="font-semibold">{data.brief}</span>
