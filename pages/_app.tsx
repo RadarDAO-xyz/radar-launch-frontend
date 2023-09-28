@@ -70,9 +70,9 @@ export default function App({ Component, pageProps }: AppProps) {
           content="width=device-width, initial-scale=1.0"
         />
         <meta name="robots" content="index,follow" />
-        {process.env.NODE_ENV === 'production' && (
+        {/* {process.env.NODE_ENV === 'production' && (
           <base href="https://radarlaunch.app" />
-        )}
+        )} */}
 
         <link rel="icon" href="/favicon.png" sizes="any" />
       </Head>
