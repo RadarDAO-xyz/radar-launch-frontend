@@ -6,6 +6,7 @@ import { Button } from '../ui/button';
 import { VIDEO_CONTRACT_ADDRESS } from '@/constants/address';
 import { chains } from '../Providers/Web3Provider';
 import { useAccount } from 'wagmi';
+import { useEffect } from 'react';
 
 export function MintVideoNftButton({ videoId }: { videoId?: string }) {
   const { address } = useAccount();
@@ -19,7 +20,11 @@ export function MintVideoNftButton({ videoId }: { videoId?: string }) {
   });
   const { data, write, error } = useRadarVideoNftMint(config);
 
-  console.log({ data, error });
+  useEffect(() => {
+    if (data || error) {
+      console.log('mint video', data, error);
+    }
+  }, [data, error]);
 
   return (
     <Button
