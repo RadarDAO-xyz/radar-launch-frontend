@@ -6,7 +6,7 @@ import {
 import { usePrivy } from '@privy-io/react-auth';
 import { useEffect } from 'react';
 import type { Address } from 'viem';
-import { chains } from '../Providers/Web3Provider';
+import { chains } from '../../lib/wagmi';
 import { Button } from '../ui/button';
 
 export function MintVideoNftButton({ videoId }: { videoId?: string }) {

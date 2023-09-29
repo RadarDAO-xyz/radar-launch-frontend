@@ -21,7 +21,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Address, useQuery, useWaitForTransaction } from 'wagmi';
 import { convertWeiToUsdOrEth } from '../../lib/convertWeiToUsdOrEth';
-import { chains } from '../Providers/Web3Provider';
+import { chains } from '../../lib/wagmi';
 import { Button } from '../ui/button';
 import {
   Dialog,

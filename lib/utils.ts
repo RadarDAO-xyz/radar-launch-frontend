@@ -1,4 +1,4 @@
-import { chains } from '@/components/Providers/Web3Provider';
+import { chains } from '@/lib/wagmi';
 import { clsx, type ClassValue } from 'clsx';
 import { differenceInSeconds } from 'date-fns';
 import differenceInDays from 'date-fns/differenceInDays';

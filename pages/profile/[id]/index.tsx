@@ -2,7 +2,7 @@ import { AdminNav } from '@/components/Layout/AdminNav';
 import { Placeholder } from '@/components/Layout/Placeholder';
 import { CollectedVisions } from '@/components/ProfilePage/CollectedVisions';
 import { YourVisions } from '@/components/ProfilePage/YourVisions';
-import { chains } from '@/components/Providers/Web3Provider';
+import { chains } from '@/lib/wagmi';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CONTRACT_ADDRESS } from '@/constants/address';
 import { useGetProjects } from '@/hooks/useGetProjects';

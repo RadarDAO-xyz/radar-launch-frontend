@@ -17,7 +17,7 @@ import { ProjectWithChainData } from '@/types/web3';
 import { usePrivy } from '@privy-io/react-auth';
 import { useEffect, useState } from 'react';
 import { Address, useWaitForTransaction } from 'wagmi';
-import { chains } from '../Providers/Web3Provider';
+import { chains } from '../../lib/wagmi';
 import { Button } from '../ui/button';
 import { DialogFooter, DialogHeader } from '../ui/dialog';
 import { Input } from '../ui/input';

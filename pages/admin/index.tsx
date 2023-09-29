@@ -1,5 +1,5 @@
 import { ProjectActions } from '@/components/AdminPage/ProjectActions';
-import { chains } from '@/components/Providers/Web3Provider';
+import { chains } from '@/lib/wagmi';
 import { Badge } from '@/components/ui/badge';
 import { CONTRACT_ADDRESS } from '@/constants/address';
 import { useAuth } from '@/hooks/useAuth';

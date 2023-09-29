@@ -3,12 +3,12 @@ import { CONTRACT_ADDRESS } from '@/constants/address';
 import { useGetExchangeRate } from '@/hooks/useGetExchangeRate';
 import {
   usePrepareRadarEditionsCreateEdition,
-  useRadarEditionsCreateEdition
+  useRadarEditionsCreateEdition,
 } from '@/lib/generated';
 import { convertAddressToChecksum } from '@/lib/utils';
 import { usePrivy } from '@privy-io/react-auth';
 import { Address, parseEther } from 'viem';
-import { chains } from '../Providers/Web3Provider';
+import { chains } from '../../lib/wagmi';
 import { useToast } from '../ui/use-toast';
 
 interface Props {

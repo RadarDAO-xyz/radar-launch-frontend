@@ -6,7 +6,7 @@ import CookieConsent from '@/components/Layout/CookieConsent';
 import { NavBar } from '@/components/Layout/NavBar';
 import { AuthProvider } from '@/components/Providers/AuthProvider';
 import { ThemeProvider } from '@/components/Providers/ThemeProvider';
-import { configureChainsConfig } from '@/components/Providers/Web3Provider';
+import { configureChainsConfig } from '@/lib/wagmi';
 import { Toaster } from '@/components/ui/toaster';
 import {
   LivepeerConfig,

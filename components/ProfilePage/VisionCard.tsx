@@ -7,7 +7,7 @@ import { ProjectWithChainData } from '@/types/web3';
 import Link from 'next/link';
 import { formatEther } from 'viem';
 import { ProjectThumbnail } from '../Layout/ProjectThumbnail';
-import { chains } from '../Providers/Web3Provider';
+import { chains } from '../../lib/wagmi';
 import { Badge } from '../ui/badge';
 import {
   Tooltip,

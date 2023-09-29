@@ -11,7 +11,7 @@ import { format } from 'date-fns';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { BelieveProjectDialog } from '../HomePage/BelieveProjectDialog';
-import { chains } from '../Providers/Web3Provider';
+import { chains } from '../../lib/wagmi';
 import { Button } from '../ui/button';
 import { ProjectVideoPlayer } from './ProjectVideoPlayer';
 

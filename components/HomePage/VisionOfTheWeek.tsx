@@ -6,7 +6,7 @@ import { Project, ProjectStatus } from '@/types/mongo';
 import Link from 'next/link';
 import { HTMLParsedComponent } from '../Layout/HTMLParsedComponent';
 import { ProjectVideoPlayer } from '../Layout/ProjectVideoPlayer';
-import { chains } from '../Providers/Web3Provider';
+import { chains } from '../../lib/wagmi';
 import { BelieveProjectDialog } from './BelieveProjectDialog';
 
 export function VisionOfTheWeek(props: Project) {

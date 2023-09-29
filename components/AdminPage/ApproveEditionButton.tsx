@@ -6,7 +6,7 @@ import {
 } from '@/lib/generated';
 import { usePrivy } from '@privy-io/react-auth';
 import type { Address } from 'viem';
-import { chains } from '../Providers/Web3Provider';
+import { chains } from '../../lib/wagmi';
 import { useToast } from '../ui/use-toast';
 
 interface Props {
