@@ -596,7 +596,6 @@ h3 {
 h4 {
   font-size: 18px;
   line-height: 24px;
-  margin-top: 10px;
 }
 h5 {
   font-size: 14px;
@@ -693,7 +692,6 @@ fieldset {
 }
 label {
   display: block;
-  margin-bottom: 5px;
   font-weight: bold;
 }
 .w-input,
@@ -2252,10 +2250,6 @@ h3 {
 }
 
 h4 {
-  margin-top: 20px;
-  margin-bottom: 10px;
-  padding-bottom: 5px;
-
   border-bottom: 1px none hsla(0, 0%, 81.18%, 1);
 
   font-family: Inter;
@@ -2313,7 +2307,6 @@ img {
 
 label {
   display: block;
-  margin-bottom: 10px;
 
   /* font-family: "Space Grotesk"; */
   color: var(--backgroundsBlack-4be50407);

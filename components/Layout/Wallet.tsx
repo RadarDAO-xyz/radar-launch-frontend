@@ -9,40 +9,66 @@ import {
 import { useAuth } from '@/hooks/useAuth';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 import { shortenAddress } from '@/lib/utils';
+import { usePrivy } from '@privy-io/react-auth';
 import { ChevronDown } from 'lucide-react';
 import Link from 'next/link';
-import { mainnet, useAccount, useEnsName } from 'wagmi';
+import { Address, mainnet, useEnsName } from 'wagmi';
 import { Button } from '../ui/button';
 
 export function Wallet() {
-  const { login, logout, isVerified, verify: authenticate } = useAuth();
-  const { address } = useAccount();
-  const { data: ensName } = useEnsName({
-    address,
-    chainId: mainnet.id,
-    enabled: address !== undefined,
-  });
-  const { data: currentUserData, isLoading } = useGetCurrentUser();
+  const { linkWallet, user } = usePrivy();
+  const { login, logout, isLoggedIn, isLoading } = useAuth();
 
-  if (address === undefined) {
+  const { data: ensName } = useEnsName({
+    address: user?.wallet?.address as Address,
+    chainId: mainnet.id,
+    enabled: user?.wallet?.address !== undefined,
+  });
+  const { data: currentUserData, isLoading: isCurrentUserLoading } =
+    useGetCurrentUser();
+
+  if (!isLoggedIn) {
     return (
       <Button
         onClick={() => {
-          if (address === undefined) {
-            login();
-          } else {
-            authenticate();
-          }
+          login();
         }}
         variant={'ghost'}
+        loading={isLoading || isCurrentUserLoading}
       >
-        {address === undefined ? 'LOGIN ⚙' : 'SIGN WALLET ⚙'}
+        {'LOGIN ⚙'}
       </Button>
     );
   }
 
-  if (isLoading) {
-    return <Button variant="ghost" loading />;
+  if (!user?.wallet?.address) {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant={'ghost'}>
+            ADD WALLET
+            <ChevronDown />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="max-w-[200px]">
+          <DropdownMenuLabel>
+            <p className="pt-2 font-normal leading-4">
+              Link a new wallet to your account.
+            </p>
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onClick={() => linkWallet()}
+            className="cursor-pointer"
+          >
+            Link Wallet
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => logout()} className="cursor-pointer">
+            Log Out
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
   }
 
   if (currentUserData === undefined) {
@@ -50,13 +76,13 @@ export function Wallet() {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant={'ghost'}>
-            {ensName || shortenAddress(address)}
+            {ensName || shortenAddress(user.wallet.address)}
             <ChevronDown />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="max-w-[200px]">
           <DropdownMenuLabel>
-            <p>{ensName || shortenAddress(address)}</p>
+            <p>{ensName || shortenAddress(user.wallet.address)}</p>
             <p className="pt-2 font-normal leading-4">
               No user data found, please contact support if issue persists.
             </p>
@@ -74,13 +100,13 @@ export function Wallet() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant={'ghost'}>
-          {ensName || shortenAddress(address)}
+          {ensName || shortenAddress(user.wallet.address)}
           <ChevronDown />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>
-          {ensName || shortenAddress(address)}
+          {ensName || shortenAddress(user.wallet.address)}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         {currentUserData?.bypasser && (

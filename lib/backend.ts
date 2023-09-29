@@ -212,31 +212,13 @@ export async function believeProject(
   return response.json();
 }
 
-export async function authenticateUser({
-  idToken,
-  isWalletLogin,
-  address,
-  appPubKey,
-}: {
-  idToken: string;
-  isWalletLogin: boolean;
-  address?: string;
-  appPubKey?: string;
-}) {
+export async function authenticateUser({ idToken }: { idToken: string }) {
   const response = await fetch(`${process.env.BACKEND_URL}/verify`, {
     method: 'POST',
     headers: {
-      'X-Auth-Method': isWalletLogin ? 'Wallet' : 'Social',
       'Content-Type': 'application/json',
       Authorization: `Bearer ${idToken}`,
     },
-    body: isWalletLogin
-      ? JSON.stringify({
-          public_address: address,
-        })
-      : JSON.stringify({
-          appPubKey,
-        }),
   });
   if (!response.ok) {
     console.error(response);
