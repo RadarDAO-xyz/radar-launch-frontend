@@ -34,7 +34,7 @@ export function VisionOfTheWeek(props: Project) {
       <div className="floating-weekly-featured full !bg-gray-600/30">
         {'✨ LAUNCH OF THE WEEK ✨'}
       </div>
-      <div {...props} className={cn('w-full')}>
+      <div className={cn('w-full')}>
         <ProjectVideoPlayer videoUrl={video_url} />
       </div>
       <div className="feature-project-div">
