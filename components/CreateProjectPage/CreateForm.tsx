@@ -9,11 +9,12 @@ import { useAuth } from '@/hooks/useAuth';
 import { useGetPools } from '@/hooks/useGetPools';
 import { createProject } from '@/lib/backend';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { usePrivy } from '@privy-io/react-auth';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { isAddress } from 'viem';
-import { useAccount, useMutation } from 'wagmi';
+import { useMutation } from 'wagmi';
 import * as z from 'zod';
 import { CrowdFundSection } from './CrowdFundSection';
 import { MilestoneSection } from './MilestoneSection';
@@ -83,7 +84,7 @@ export const createFormSchema = z.object({
 
 export function CreateForm() {
   const router = useRouter();
-  const { address } = useAccount();
+  const { user } = usePrivy();
   const { idToken } = useAuth();
   const { data: pools } = useGetPools();
 
@@ -111,7 +112,7 @@ export function CreateForm() {
       benefits: [],
       tags: '',
       description: '',
-      admin_address: address || '',
+      admin_address: user?.wallet?.address || '',
     },
   });
   const {

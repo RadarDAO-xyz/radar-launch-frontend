@@ -2,7 +2,7 @@ import { generateVideoEmbed } from '@/lib/generateVideoEmbed';
 import { isYoutubeOrVimeoVideoLink } from '@/lib/isYoutubeOrVimeoVideoLink';
 import { cn } from '@/lib/utils';
 import { Player } from '@livepeer/react';
-import { useAccount } from 'wagmi';
+import { usePrivy } from '@privy-io/react-auth';
 import { ProjectThumbnail } from './ProjectThumbnail';
 
 interface Props {
@@ -20,7 +20,7 @@ export function ProjectVideoPlayer({
   isThumbnail,
   title,
 }: Props) {
-  const { address } = useAccount();
+  const { user } = usePrivy();
 
   if (isYoutubeOrVimeoVideoLink(videoUrl)) {
     if (isThumbnail) {
@@ -68,7 +68,7 @@ export function ProjectVideoPlayer({
         playbackId={cid}
         muted={isThumbnail}
         objectFit="cover"
-        viewerId={address}
+        viewerId={user?.wallet?.address}
       />
     );
   }

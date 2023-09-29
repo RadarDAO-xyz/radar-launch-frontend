@@ -4,9 +4,10 @@ import {
   usePrepareRadarEditionsApproveEdition,
   useRadarEditionsApproveEdition,
 } from '@/lib/generated';
+import { usePrivy } from '@privy-io/react-auth';
+import type { Address } from 'viem';
 import { chains } from '../Providers/Web3Provider';
 import { useToast } from '../ui/use-toast';
-import { useAccount } from 'wagmi';
 
 interface Props {
   isOpen: boolean;
@@ -14,16 +15,16 @@ interface Props {
 }
 export function ApproveEditionButton({ isOpen, editionId }: Props) {
   const { toast } = useToast();
-  const { address } = useAccount();
+  const { user } = usePrivy();
   const { config } = usePrepareRadarEditionsApproveEdition({
-    account: address,
+    account: user?.wallet?.address as Address,
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
     enabled:
       Boolean(chains[0].id) &&
       isOpen &&
       editionId !== undefined &&
-      address !== undefined,
+      user?.wallet?.address !== undefined,
     args: [BigInt(+(editionId || 0)) || 0n],
   });
   const { writeAsync, isLoading: isApproveLoading } =

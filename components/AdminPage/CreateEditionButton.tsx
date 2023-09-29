@@ -1,17 +1,15 @@
 import { Button } from '@/components/ui/button';
 import { CONTRACT_ADDRESS } from '@/constants/address';
+import { useGetExchangeRate } from '@/hooks/useGetExchangeRate';
 import {
-  usePrepareRadarEditionsApproveEdition,
   usePrepareRadarEditionsCreateEdition,
-  useRadarEditionsApproveEdition,
-  useRadarEditionsCreateEdition,
+  useRadarEditionsCreateEdition
 } from '@/lib/generated';
+import { convertAddressToChecksum } from '@/lib/utils';
+import { usePrivy } from '@privy-io/react-auth';
+import { Address, parseEther } from 'viem';
 import { chains } from '../Providers/Web3Provider';
 import { useToast } from '../ui/use-toast';
-import { useGetExchangeRate } from '@/hooks/useGetExchangeRate';
-import { parseEther } from 'viem';
-import { useAccount } from 'wagmi';
-import { convertAddressToChecksum } from '@/lib/utils';
 
 interface Props {
   isOpen: boolean;
@@ -27,7 +25,7 @@ export function CreateEditionButton({
   address,
 }: Props) {
   const { toast } = useToast();
-  const { address: payerAddress } = useAccount();
+  const { user } = usePrivy();
   const { data: exchangeRateData } = useGetExchangeRate();
 
   const actualFee =
@@ -36,12 +34,12 @@ export function CreateEditionButton({
       : BigInt(fee);
   const { config } = usePrepareRadarEditionsCreateEdition({
     address: CONTRACT_ADDRESS,
-    account: payerAddress,
+    account: user?.wallet?.address as Address,
     chainId: chains[0].id,
     enabled:
       Boolean(chains[0].id) &&
       isOpen &&
-      payerAddress !== undefined &&
+      user?.wallet?.address !== undefined &&
       exchangeRateData?.ethereum?.usd !== undefined,
     args: [
       actualFee,

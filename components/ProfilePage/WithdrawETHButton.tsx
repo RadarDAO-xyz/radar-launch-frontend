@@ -12,10 +12,11 @@ import {
   useRadarEditionsWithdrawEditionBalance,
 } from '@/lib/generated';
 import { parseEther } from '@/lib/utils';
-import { ProjectWithChainData } from '@/types/web3';
 import { ProjectStatus } from '@/types/mongo';
+import { ProjectWithChainData } from '@/types/web3';
+import { usePrivy } from '@privy-io/react-auth';
 import { useEffect, useState } from 'react';
-import { useAccount, useWaitForTransaction } from 'wagmi';
+import { Address, useWaitForTransaction } from 'wagmi';
 import { chains } from '../Providers/Web3Provider';
 import { Button } from '../ui/button';
 import { DialogFooter, DialogHeader } from '../ui/dialog';
@@ -28,12 +29,12 @@ export function WithdrawETHButton({ status, editionId }: ProjectWithChainData) {
   const [isOpen, setIsOpen] = useState(false);
 
   const { toast } = useToast();
-  const { address } = useAccount();
+  const { user } = usePrivy();
   const { config } = usePrepareRadarEditionsWithdrawEditionBalance({
-    account: address,
+    account: user?.wallet?.address as Address,
     address: CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
-    enabled: Boolean(address) && editionId !== undefined,
+    enabled: user?.wallet?.address !== undefined && editionId !== undefined,
     args: [BigInt(editionId || 0), parseEther(amount.toString())],
   });
   const { writeAsync, data, error } =

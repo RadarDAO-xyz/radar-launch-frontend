@@ -18,10 +18,11 @@ import {
 } from '@/lib/generated';
 import { shortenAddress } from '@/lib/utils';
 import { ProjectStatus } from '@/types/mongo';
+import { usePrivy } from '@privy-io/react-auth';
 import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import {
-  useAccount,
+  Address,
   useBlockNumber,
   useQueryClient,
   useWaitForTransaction,
@@ -50,10 +51,10 @@ export function BelieveTabContent({
   const [hasToasted, setHasToasted] = useState(false);
 
   const { data: projectData } = useGetProject(_id);
-  const { login } = useAuth();
+  const { login, isLoggedIn } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
-  const { address, isConnected } = useAccount();
+  const { user } = usePrivy();
   const { data: blockNumber } = useBlockNumber();
   const { data: believerLogs, isLoading } = useGetBelieveEvents(
     _id,
@@ -62,10 +63,12 @@ export function BelieveTabContent({
   );
   const { config } = usePrepareRadarEditionsBelieveProject({
     address: CONTRACT_ADDRESS,
-    account: address,
+    account: user?.wallet?.address as Address,
     args: [BigInt(editionId || 0), tags],
     enabled:
-      address !== undefined && editionId !== undefined && tags.length > 0,
+      user?.wallet?.address !== undefined &&
+      editionId !== undefined &&
+      tags.length > 0,
   });
   const {
     data: believeProjectData,
@@ -100,7 +103,9 @@ export function BelieveTabContent({
   }, [isSuccess, believeProjectData?.hash]);
 
   const hasBelieved =
-    believerLogs?.find((log) => log.args?.believer === address) !== undefined;
+    believerLogs?.find(
+      (log) => log.args?.believer === user?.wallet?.address,
+    ) !== undefined;
 
   return (
     <div>
@@ -132,7 +137,7 @@ export function BelieveTabContent({
             <Button
               type="submit"
               onClick={async () => {
-                if (!isConnected) {
+                if (!isLoggedIn) {
                   login();
                   setIsOpen(false);
                   closeSheet?.();
@@ -142,7 +147,7 @@ export function BelieveTabContent({
               }}
               loading={isLoading || believeProjectIsLoading}
             >
-              {!isConnected ? 'LOGIN' : 'UPLOAD BELIEF SIGNATURE'}
+              {!isLoggedIn ? 'LOGIN' : 'UPLOAD BELIEF SIGNATURE'}
             </Button>
           </DialogFooter>
         </DialogContent>

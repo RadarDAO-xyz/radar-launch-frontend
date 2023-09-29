@@ -1,7 +1,7 @@
 import { generateVideoThumbnail } from '@/lib/generateVideoThumbnail';
 import { cn } from '@/lib/utils';
 import { Player } from '@livepeer/react';
-import { useAccount } from 'wagmi';
+import { usePrivy } from '@privy-io/react-auth';
 
 interface Props {
   thumbnail?: string;
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export function ProjectThumbnail({ thumbnail, videoUrl, title }: Props) {
-  const { address } = useAccount();
+  const { user } = usePrivy();
   if (videoUrl.startsWith('ipfs')) {
     const cid = videoUrl.slice('ipfs://'.length);
 
@@ -20,7 +20,7 @@ export function ProjectThumbnail({ thumbnail, videoUrl, title }: Props) {
         muted
         objectFit="cover"
         controls={{ hotkeys: false }}
-        viewerId={address}
+        viewerId={user?.wallet?.address}
       >
         {/* hide video player controls */}
         <div></div>

@@ -1,22 +1,25 @@
+import { VIDEO_CONTRACT_ADDRESS } from '@/constants/address';
 import {
   usePrepareRadarVideoNftMint,
   useRadarVideoNftMint,
 } from '@/lib/generated';
-import { Button } from '../ui/button';
-import { VIDEO_CONTRACT_ADDRESS } from '@/constants/address';
-import { chains } from '../Providers/Web3Provider';
-import { useAccount } from 'wagmi';
+import { usePrivy } from '@privy-io/react-auth';
 import { useEffect } from 'react';
+import type { Address } from 'viem';
+import { chains } from '../Providers/Web3Provider';
+import { Button } from '../ui/button';
 
 export function MintVideoNftButton({ videoId }: { videoId?: string }) {
-  const { address } = useAccount();
+  const { user } = usePrivy();
   const { config } = usePrepareRadarVideoNftMint({
-    account: address,
+    account: user?.wallet?.address as Address,
     address: VIDEO_CONTRACT_ADDRESS,
     chainId: chains[0].id,
     enabled:
-      Boolean(chains[0].id) && videoId !== undefined && address !== undefined,
-    args: [address!, videoId!],
+      Boolean(chains[0].id) &&
+      videoId !== undefined &&
+      user?.wallet?.address !== undefined,
+    args: [user?.wallet?.address as Address, videoId!],
   });
   const { data, write, error } = useRadarVideoNftMint(config);
 

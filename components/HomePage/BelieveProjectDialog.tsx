@@ -16,15 +16,12 @@ import {
 import { cn, shortenAddress } from '@/lib/utils';
 import { ProjectStatus } from '@/types/mongo';
 import { ProjectWithChainData } from '@/types/web3';
+import { usePrivy } from '@privy-io/react-auth';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import { RefAttributes, useEffect, useState } from 'react';
-import {
-  useAccount,
-  useBlockNumber,
-  useQueryClient,
-  useWaitForTransaction,
-} from 'wagmi';
+import type { Address } from 'viem';
+import { useBlockNumber, useQueryClient, useWaitForTransaction } from 'wagmi';
 import { HTMLParsedComponent } from '../Layout/HTMLParsedComponent';
 import { ProjectVideoPlayer } from '../Layout/ProjectVideoPlayer';
 import { Badge } from '../ui/badge';
@@ -57,9 +54,9 @@ export function BelieveProjectDialog({
   const [hasToasted, setHasToasted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  const { isConnected, address } = useAccount();
+  const { user } = usePrivy();
   const { toast } = useToast();
-  const { login } = useAuth();
+  const { login, isLoggedIn } = useAuth();
   const { data: blockNumber } = useBlockNumber();
 
   const { data: believerLogs, isLoading } = useGetBelieveEvents(
@@ -70,10 +67,10 @@ export function BelieveProjectDialog({
   const queryClient = useQueryClient();
   const { config } = usePrepareRadarEditionsBelieveProject({
     address: CONTRACT_ADDRESS,
-    account: address,
+    account: user?.wallet?.address as Address,
     args: [BigInt(editionId || 0), tags.join(',')],
     enabled:
-      address !== undefined &&
+      user?.wallet?.address !== undefined &&
       editionId !== undefined &&
       tags.length > 0 &&
       isOpen,
@@ -110,7 +107,9 @@ export function BelieveProjectDialog({
   }, [isSuccess, believeProjectData?.hash]);
 
   const hasBelieved =
-    believerLogs?.find((log) => log.args?.believer === address) !== undefined;
+    believerLogs?.find(
+      (log) => log.args?.believer === user?.wallet?.address,
+    ) !== undefined;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -158,7 +157,7 @@ export function BelieveProjectDialog({
               }
               onClick={async () => {
                 // here we use isConnected instead since web3 interaction
-                if (!isConnected) {
+                if (!isLoggedIn) {
                   login();
                   setIsOpen(false);
                 } else {
@@ -169,7 +168,7 @@ export function BelieveProjectDialog({
             >
               {editionId === undefined
                 ? 'Project not available for beliefs yet'
-                : !isConnected
+                : !isLoggedIn
                 ? 'Please login to believe in this project'
                 : hasBelieved
                 ? 'Thank you for believing in this project!'

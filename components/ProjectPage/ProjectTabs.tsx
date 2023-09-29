@@ -15,10 +15,11 @@ import {
 } from '@/lib/generated';
 import { cn } from '@/lib/utils';
 import { Project } from '@/types/mongo';
+import { usePrivy } from '@privy-io/react-auth';
 import { DotIcon, MinusIcon, MoveDown, PlusIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { useAccount, useQuery, useWaitForTransaction } from 'wagmi';
+import { Address, useQuery, useWaitForTransaction } from 'wagmi';
 import { convertWeiToUsdOrEth } from '../../lib/convertWeiToUsdOrEth';
 import { chains } from '../Providers/Web3Provider';
 import { Button } from '../ui/button';
@@ -33,8 +34,6 @@ import {
 import { Input } from '../ui/input';
 import { useToast } from '../ui/use-toast';
 import { BelieveTabContent } from './BelieveTabContent';
-import { ContributeForm } from './ContributeForm';
-import { SignUpForm } from './SignUpForm';
 
 async function getMintCheckoutLink(
   quantity: number,
@@ -105,7 +104,7 @@ export function ProjectTabs({
   const [hasToasted, setHasToasted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  const { address } = useAccount();
+  const { user } = usePrivy();
   const { login, isLoggedIn } = useAuth();
   const { data: onChainProjects } = useRadarEditionsGetEditions({
     address: CONTRACT_ADDRESS,
@@ -131,13 +130,13 @@ export function ProjectTabs({
     enabled: Boolean(chains[0]?.id) && editionId !== undefined,
   });
   const { config, error } = usePrepareRadarEditionsMintEdition({
-    account: address,
+    account: user?.wallet?.address as Address,
     address: CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
     args: [
       BigInt(editionId || 0),
       BigInt(quantity),
-      address!,
+      user?.wallet?.address as Address,
       '0x0000000000000000000000000000000000000000000000000000000000000000',
     ],
     value: BigInt((value || 0n) + (protocolFee || 0n)) * BigInt(quantity),
