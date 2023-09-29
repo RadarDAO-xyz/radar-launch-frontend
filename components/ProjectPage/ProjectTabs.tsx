@@ -143,7 +143,7 @@ export function ProjectTabs({
     enabled:
       value !== undefined &&
       editionId !== undefined &&
-      address !== undefined &&
+      user?.wallet?.address !== undefined &&
       isLoggedIn,
   });
   const {

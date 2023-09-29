@@ -30,12 +30,6 @@ export function SyncVideoNftButton({
     },
   });
 
-  useEffect(() => {
-    if (data) {
-      console.log('sync video', data);
-    }
-  }, [data]);
-
   return (
     <Button
       onClick={() => {

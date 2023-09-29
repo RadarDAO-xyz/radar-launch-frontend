@@ -38,7 +38,6 @@ export default function AdminPage() {
     enabled: Boolean(chains[0].id),
   });
 
-  console.log({ data, aasd: data?.bypasser });
   if (!data?.wallets?.[0].address || !isLoggedIn) {
     return (
       <Placeholder>
