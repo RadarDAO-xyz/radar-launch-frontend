@@ -2,6 +2,7 @@ import { generateVideoThumbnail } from '@/lib/generateVideoThumbnail';
 import { cn } from '@/lib/utils';
 import { Player } from '@livepeer/react';
 import { usePrivy } from '@privy-io/react-auth';
+import { useCallback, useState } from 'react';
 
 interface Props {
   thumbnail?: string;
@@ -11,6 +12,22 @@ interface Props {
 
 export function ProjectThumbnail({ thumbnail, videoUrl, title }: Props) {
   const { user } = usePrivy();
+  const [isPlaying, setIsPlaying] = useState(false);
+  const mediaElementRef = useCallback(
+    (ref: HTMLMediaElement) => {
+      ref.onclick = () => {
+        if (isPlaying) {
+          ref.pause();
+          setIsPlaying(false);
+          return;
+        }
+        setIsPlaying(true);
+        ref.play();
+      };
+    },
+    [isPlaying],
+  );
+
   if (videoUrl.startsWith('ipfs')) {
     const cid = videoUrl.slice('ipfs://'.length);
 
@@ -19,10 +36,10 @@ export function ProjectThumbnail({ thumbnail, videoUrl, title }: Props) {
         playbackId={cid}
         muted
         objectFit="cover"
-        controls={{ hotkeys: false }}
         viewerId={user?.wallet?.address}
+        mediaElementRef={mediaElementRef}
       >
-        {/* hide video player controls */}
+        {/* div below hides video player controls */}
         <div></div>
       </Player>
     );

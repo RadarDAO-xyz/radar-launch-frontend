@@ -85,7 +85,7 @@ export const createFormSchema = z.object({
 export function CreateForm() {
   const router = useRouter();
   const { user } = usePrivy();
-  const { idToken } = useAuth();
+  const { idToken, isLoggedIn } = useAuth();
   const { data: pools } = useGetPools();
 
   const form = useForm<z.infer<typeof createFormSchema>>({
@@ -239,10 +239,10 @@ export function CreateForm() {
           <Button
             type="submit"
             form="create-project"
-            disabled={idToken === '' || isLoading}
+            disabled={!isLoggedIn || isLoading}
             loading={isLoading}
           >
-            {idToken === '' ? 'Please Login' : 'Submit'}
+            {!isLoggedIn ? 'Please Login' : 'Submit'}
           </Button>
         </div>
       </form>
