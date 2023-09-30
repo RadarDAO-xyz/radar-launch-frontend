@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { CONTRACT_ADDRESS } from '@/constants/address';
 import {
-  usePrepareRadarEditionsApproveEdition,
-  useRadarEditionsApproveEdition,
+  usePrepareRadarEditionsStopEdition,
+  useRadarEditionsStopEdition,
 } from '@/lib/generated';
 import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 import type { Address } from 'viem';
@@ -16,14 +16,10 @@ interface Props {
   onChainStatus?: EditionStatus;
 }
 
-export function ApproveEditionButton({
-  isOpen,
-  editionId,
-  onChainStatus,
-}: Props) {
+export function StopEditionButton({ isOpen, editionId, onChainStatus }: Props) {
   const { toast } = useToast();
   const { wallet } = usePrivyWagmi();
-  const { config } = usePrepareRadarEditionsApproveEdition({
+  const { config } = usePrepareRadarEditionsStopEdition({
     account: wallet?.address as Address,
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
@@ -34,15 +30,14 @@ export function ApproveEditionButton({
       wallet?.address !== undefined,
     args: [BigInt(+(editionId || 0)) || 0n],
   });
-  const { writeAsync, isLoading: isApproveLoading } =
-    useRadarEditionsApproveEdition(config);
+  const { writeAsync, isLoading } = useRadarEditionsStopEdition(config);
 
-  const projectCanBeApproved =
-    onChainStatus !== undefined && onChainStatus === EditionStatus.CREATED;
+  const projectCanBeStopped =
+    onChainStatus !== undefined && onChainStatus === EditionStatus.LAUNCHED;
 
   return (
     <Button
-      loading={isApproveLoading}
+      loading={isLoading}
       onClick={() => {
         try {
           writeAsync?.();
@@ -55,11 +50,11 @@ export function ApproveEditionButton({
           });
         }
       }}
-      disabled={!projectCanBeApproved}
+      disabled={!projectCanBeStopped}
     >
-      {projectCanBeApproved
-        ? 'Approve Edition (on-chain)'
-        : 'Project already / cannot be approved'}
+      {projectCanBeStopped
+        ? 'Stop Edition (on-chain)'
+        : 'Edition already / cannot be stopped'}
     </Button>
   );
 }

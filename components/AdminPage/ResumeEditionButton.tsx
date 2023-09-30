@@ -1,9 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { CONTRACT_ADDRESS } from '@/constants/address';
 import {
-  usePrepareRadarEditionsStopEdition,
-  useRadarEditionsStopEdition,
+  usePrepareRadarEditionsResumeEdition,
+  useRadarEditionsResumeEdition
 } from '@/lib/generated';
+import { EditionStatus } from '@/types/web3';
 import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 import type { Address } from 'viem';
 import { chains } from '../../lib/wagmi';
@@ -12,12 +13,17 @@ import { useToast } from '../ui/use-toast';
 interface Props {
   isOpen: boolean;
   editionId?: number;
+  onChainStatus?: EditionStatus;
 }
 
-export function DisapproveEditionButton({ isOpen, editionId }: Props) {
+export function ResumeEditionButton({
+  isOpen,
+  editionId,
+  onChainStatus,
+}: Props) {
   const { toast } = useToast();
   const { wallet } = usePrivyWagmi();
-  const { config } = usePrepareRadarEditionsStopEdition({
+  const { config } = usePrepareRadarEditionsResumeEdition({
     account: wallet?.address as Address,
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
@@ -28,7 +34,11 @@ export function DisapproveEditionButton({ isOpen, editionId }: Props) {
       wallet?.address !== undefined,
     args: [BigInt(+(editionId || 0)) || 0n],
   });
-  const { writeAsync, isLoading } = useRadarEditionsStopEdition(config);
+  const { writeAsync, isLoading } = useRadarEditionsResumeEdition(config);
+
+  const projectCanBeResumed =
+    onChainStatus !== undefined && onChainStatus === EditionStatus.STOPPED;
+
   return (
     <Button
       loading={isLoading}
@@ -44,8 +54,11 @@ export function DisapproveEditionButton({ isOpen, editionId }: Props) {
           });
         }
       }}
+      disabled={!projectCanBeResumed}
     >
-      Stop Edition (on-chain)
+      {projectCanBeResumed
+        ? 'Resume Edition (on-chain)'
+        : 'Edition already / cannot be resumed'}
     </Button>
   );
 }

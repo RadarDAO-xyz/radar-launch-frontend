@@ -35,7 +35,8 @@ import { useToast } from '../ui/use-toast';
 import { ApproveEditionButton } from './ApproveEditionButton';
 import { CreateEditionButton } from './CreateEditionButton';
 import { DeleteProjectButton } from './DeleteProjectButton';
-import { DisapproveEditionButton } from './DisapproveEditionButton';
+import { StopEditionButton } from './StopEditionButton';
+import { ResumeEditionButton } from './ResumeEditionButton';
 
 export function ProjectSettingsDialog({
   _id,
@@ -45,6 +46,7 @@ export function ProjectSettingsDialog({
   edition_price,
   admin_address,
   pool,
+  onChainStatus,
 }: ProjectWithChainData) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -175,16 +177,30 @@ export function ProjectSettingsDialog({
             </PopoverContent>
           </Popover>
         </DialogDescription>
-        <DialogFooter className="flex !flex-col !space-x-0 space-y-4">
+        <DialogFooter className="grid grid-cols-2 gap-3 sm:space-x-0">
           <CreateEditionButton
             isOpen={isOpen}
             projectId={_id}
             fee={edition_price}
             address={admin_address}
             briefId={pool}
+            onChainStatus={onChainStatus}
           />
-          <ApproveEditionButton isOpen={isOpen} editionId={editionId} />
-          <DisapproveEditionButton isOpen={isOpen} editionId={editionId} />
+          <ApproveEditionButton
+            isOpen={isOpen}
+            editionId={editionId}
+            onChainStatus={onChainStatus}
+          />
+          <StopEditionButton
+            isOpen={isOpen}
+            editionId={editionId}
+            onChainStatus={onChainStatus}
+          />
+          <ResumeEditionButton
+            isOpen={isOpen}
+            editionId={editionId}
+            onChainStatus={onChainStatus}
+          />
           <Button
             onClick={() => {
               mutate();

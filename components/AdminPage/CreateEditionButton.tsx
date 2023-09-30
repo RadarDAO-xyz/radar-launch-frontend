@@ -6,6 +6,7 @@ import {
   useRadarEditionsCreateEdition,
 } from '@/lib/generated';
 import { convertAddressToChecksum } from '@/lib/utils';
+import { EditionStatus } from '@/types/web3';
 import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 import { Address, parseEther } from 'viem';
 import { chains } from '../../lib/wagmi';
@@ -17,6 +18,7 @@ interface Props {
   fee: number;
   address: string;
   briefId: string;
+  onChainStatus?: EditionStatus;
 }
 
 export function CreateEditionButton({
@@ -25,6 +27,7 @@ export function CreateEditionButton({
   fee,
   address,
   briefId,
+  onChainStatus,
 }: Props) {
   const { toast } = useToast();
   const { wallet } = usePrivyWagmi();
@@ -53,6 +56,9 @@ export function CreateEditionButton({
   });
   const { writeAsync, isLoading } = useRadarEditionsCreateEdition(config);
 
+  const projectAlreadyOnChain =
+    onChainStatus !== undefined && onChainStatus !== EditionStatus.NOT_CREATED;
+
   return (
     <Button
       loading={isLoading}
@@ -68,8 +74,11 @@ export function CreateEditionButton({
           });
         }
       }}
+      disabled={projectAlreadyOnChain}
     >
-      Create Edition (on-chain)
+      {projectAlreadyOnChain
+        ? 'Project already on chain'
+        : 'Create Edition (on-chain)'}
     </Button>
   );
 }

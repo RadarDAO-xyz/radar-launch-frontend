@@ -1,30 +1,29 @@
 import { ProjectActions } from '@/components/AdminPage/ProjectActions';
-import { chains } from '@/lib/wagmi';
+import { Placeholder } from '@/components/Layout/Placeholder';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { CONTRACT_ADDRESS } from '@/constants/address';
 import { useAuth } from '@/hooks/useAuth';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
+import { useGetPools } from '@/hooks/useGetPools';
 import { useGetProjects } from '@/hooks/useGetProjects';
+import { convertOnChainStatusName } from '@/lib/convertOnChainStatusName';
 import { convertProjectStatusName } from '@/lib/convertProjectStatusName';
 import { convertProjectStatusToColour } from '@/lib/convertProjectStatusToColour';
 import { useRadarEditionsGetEditions } from '@/lib/generated';
 import { cn } from '@/lib/utils';
+import { chains } from '@/lib/wagmi';
 import Link from 'next/link';
-import { OnChainProject } from '../../types/web3';
-import { Placeholder } from '@/components/Layout/Placeholder';
-import { convertOnChainStatusName } from '@/lib/convertOnChainStatusName';
-import { useGetPools } from '@/hooks/useGetPools';
-import { Button } from '@/components/ui/button';
 import { transformProjectsWithChainData } from '../../lib/transformProjectsWithChainData';
-import {
-  Table,
-  TableCaption,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-} from '@/components/ui/table';
+import { OnChainProject } from '../../types/web3';
 
 export default function AdminPage() {
   const { data } = useGetCurrentUser();
@@ -153,7 +152,11 @@ export default function AdminPage() {
                   />
                 </TableCell>
                 <TableCell>
-                  <p>{convertOnChainStatusName(project.onChainStatus)}</p>
+                  <p>
+                    {project.onChainStatus !== undefined
+                      ? convertOnChainStatusName(project.onChainStatus)
+                      : 'NA'}
+                  </p>
                 </TableCell>
                 <TableCell>{project.video_url}</TableCell>
                 <TableCell>{project.video_id || 'NA'}</TableCell>

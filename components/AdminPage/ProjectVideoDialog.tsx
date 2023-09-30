@@ -79,7 +79,7 @@ export function ProjectVideoDialog(props: ProjectWithChainData) {
           <Label>Video ID</Label>
           <Input defaultValue={video_id || ''} ref={videoIdRef} />
         </DialogDescription>
-        <DialogFooter className="flex !flex-col !space-x-0 space-y-4">
+        <DialogFooter className="grid grid-cols-2 sm:space-x-0 gap-4">
           <Button
             onClick={() => {
               mutate();
