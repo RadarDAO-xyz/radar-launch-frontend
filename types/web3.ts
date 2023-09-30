@@ -13,6 +13,7 @@ export interface OnChainProject {
   balance: bigint;
   owner: `0x${string}`;
   id: string;
+  briefId: string;
 }
 
 export interface ProjectIdWithBalance {
