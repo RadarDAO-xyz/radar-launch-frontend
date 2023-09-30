@@ -111,6 +111,7 @@ export function ProjectTabs({
     chainId: chains[0]?.id,
     enabled: Boolean(chains[0]?.id),
   });
+  console.log({ onChainProjects });
   const { data: protocolFee } = useRadarEditionsProtocolFee({
     address: CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
