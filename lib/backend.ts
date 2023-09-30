@@ -9,6 +9,7 @@ import {
   type User,
   type WalletResolvable,
 } from '@/types/mongo';
+import type { Metadata } from '@livepeer/react';
 import * as z from 'zod';
 
 export async function getPools(): Promise<Pool[]> {
@@ -472,6 +473,29 @@ export async function updatePool(
       },
       body: JSON.stringify(values),
     });
+    if (!response.ok) {
+      throw new Error('Error updating pool');
+    }
+    return response.json();
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export async function getEditionMetadata(
+  editionId?: number,
+): Promise<Metadata | undefined> {
+  if (editionId === undefined) {
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `${process.env.BACKEND_URL}/metadata/${editionId}`,
+      {
+        method: 'GET',
+      },
+    );
     if (!response.ok) {
       throw new Error('Error updating pool');
     }
