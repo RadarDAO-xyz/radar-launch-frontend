@@ -6,7 +6,7 @@ import {
   useRadarEditionsCreateEdition,
 } from '@/lib/generated';
 import { convertAddressToChecksum } from '@/lib/utils';
-import { usePrivy } from '@privy-io/react-auth';
+import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 import { Address, parseEther } from 'viem';
 import { chains } from '../../lib/wagmi';
 import { useToast } from '../ui/use-toast';
@@ -27,7 +27,7 @@ export function CreateEditionButton({
   briefId,
 }: Props) {
   const { toast } = useToast();
-  const { user } = usePrivy();
+  const { wallet } = usePrivyWagmi();
   const { data: exchangeRateData } = useGetExchangeRate();
 
   const actualFee =
@@ -36,12 +36,12 @@ export function CreateEditionButton({
       : BigInt(fee);
   const { config } = usePrepareRadarEditionsCreateEdition({
     address: CONTRACT_ADDRESS,
-    account: user?.wallet?.address as Address,
+    account: wallet?.address as Address,
     chainId: chains[0].id,
     enabled:
       Boolean(chains[0].id) &&
       isOpen &&
-      user?.wallet?.address !== undefined &&
+      wallet?.address !== undefined &&
       exchangeRateData?.ethereum?.usd !== undefined,
     args: [
       actualFee,

@@ -15,26 +15,26 @@ import {
 import { useAuth } from '@/hooks/useAuth';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 import { shortenAddress } from '@/lib/utils';
+import { chains } from '@/lib/wagmi';
 import { usePrivy } from '@privy-io/react-auth';
+import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 import { ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import { Address, mainnet, useEnsName, useNetwork } from 'wagmi';
 import { Button } from '../ui/button';
-import { chains } from '@/lib/wagmi';
-import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 
 export function Wallet() {
-  const { linkWallet, user } = usePrivy();
+  const { linkWallet } = usePrivy();
+  const { wallet } = usePrivyWagmi();
   const { login, logout, isLoggedIn, isLoading } = useAuth();
   const { chain } = useNetwork();
   const { data: ensName } = useEnsName({
-    address: user?.wallet?.address as Address,
+    address: wallet?.address as Address,
     chainId: mainnet.id,
-    enabled: user?.wallet?.address !== undefined,
+    enabled: wallet?.address !== undefined,
   });
   const { data: currentUserData, isLoading: isCurrentUserLoading } =
     useGetCurrentUser();
-  const { wallet } = usePrivyWagmi();
 
   if (!isLoggedIn) {
     return (
@@ -50,7 +50,7 @@ export function Wallet() {
     );
   }
 
-  if (!user?.wallet?.address) {
+  if (!wallet?.address) {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -79,9 +79,9 @@ export function Wallet() {
       </DropdownMenu>
     );
   }
-  const shortenedAddress = ensName || shortenAddress(user.wallet.address);
-  const address = ensName || user.wallet.address;
-  console.log({ chain });
+  const shortenedAddress = ensName || shortenAddress(wallet.address);
+  const address = ensName || wallet.address;
+
   if (chain !== undefined && chain.id !== chains[0].id) {
     return (
       <DropdownMenu>
@@ -135,6 +135,9 @@ export function Wallet() {
             </p>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
+          {/* <DropdownMenuItem className="cursor-pointer" asChild>
+            <Link href={`/settings`}>Settings</Link>
+          </DropdownMenuItem> */}
           <DropdownMenuItem onClick={() => logout()} className="cursor-pointer">
             Log Out
           </DropdownMenuItem>
@@ -178,6 +181,9 @@ export function Wallet() {
         <DropdownMenuItem className="cursor-pointer" asChild>
           <Link href={`/profile/edit`}>Edit Profile</Link>
         </DropdownMenuItem>
+        {/* <DropdownMenuItem className="cursor-pointer" asChild>
+          <Link href={`/settings`}>Settings</Link>
+        </DropdownMenuItem> */}
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => logout()} className="cursor-pointer">
           Log Out

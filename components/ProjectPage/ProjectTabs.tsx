@@ -15,7 +15,7 @@ import {
 } from '@/lib/generated';
 import { cn } from '@/lib/utils';
 import { Project } from '@/types/mongo';
-import { usePrivy } from '@privy-io/react-auth';
+import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 import { DotIcon, MinusIcon, MoveDown, PlusIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -104,7 +104,7 @@ export function ProjectTabs({
   const [hasToasted, setHasToasted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  const { user } = usePrivy();
+  const { wallet } = usePrivyWagmi();
   const { login, isLoggedIn } = useAuth();
   const { data: onChainProjects } = useRadarEditionsGetEditions({
     address: CONTRACT_ADDRESS,
@@ -130,20 +130,20 @@ export function ProjectTabs({
     enabled: Boolean(chains[0]?.id) && editionId !== undefined,
   });
   const { config, error } = usePrepareRadarEditionsMintEdition({
-    account: user?.wallet?.address as Address,
+    account: wallet?.address as Address,
     address: CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
     args: [
       BigInt(editionId || 0),
       BigInt(quantity),
-      user?.wallet?.address as Address,
+      wallet?.address as Address,
       '0x0000000000000000000000000000000000000000000000000000000000000000',
     ],
     value: BigInt((value || 0n) + (protocolFee || 0n)) * BigInt(quantity),
     enabled:
       value !== undefined &&
       editionId !== undefined &&
-      user?.wallet?.address !== undefined &&
+      wallet?.address !== undefined &&
       isLoggedIn,
   });
   const {

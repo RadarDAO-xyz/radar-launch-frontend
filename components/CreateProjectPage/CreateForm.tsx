@@ -9,7 +9,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useGetPools } from '@/hooks/useGetPools';
 import { createProject } from '@/lib/backend';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { usePrivy } from '@privy-io/react-auth';
+import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
@@ -84,7 +84,7 @@ export const createFormSchema = z.object({
 
 export function CreateForm() {
   const router = useRouter();
-  const { user } = usePrivy();
+  const { wallet } = usePrivyWagmi();
   const { idToken, isLoggedIn } = useAuth();
   const { data: pools } = useGetPools();
 
@@ -112,7 +112,7 @@ export function CreateForm() {
       benefits: [],
       tags: '',
       description: '',
-      admin_address: user?.wallet?.address || '',
+      admin_address: wallet?.address || '',
     },
   });
   const {

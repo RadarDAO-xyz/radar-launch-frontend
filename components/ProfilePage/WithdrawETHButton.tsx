@@ -14,7 +14,7 @@ import {
 import { parseEther } from '@/lib/utils';
 import { ProjectStatus } from '@/types/mongo';
 import { ProjectWithChainData } from '@/types/web3';
-import { usePrivy } from '@privy-io/react-auth';
+import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 import { useEffect, useState } from 'react';
 import { Address, useWaitForTransaction } from 'wagmi';
 import { chains } from '../../lib/wagmi';
@@ -29,12 +29,12 @@ export function WithdrawETHButton({ status, editionId }: ProjectWithChainData) {
   const [isOpen, setIsOpen] = useState(false);
 
   const { toast } = useToast();
-  const { user } = usePrivy();
+  const { wallet } = usePrivyWagmi();
   const { config } = usePrepareRadarEditionsWithdrawEditionBalance({
-    account: user?.wallet?.address as Address,
+    account: wallet?.address as Address,
     address: CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
-    enabled: user?.wallet?.address !== undefined && editionId !== undefined,
+    enabled: wallet?.address !== undefined && editionId !== undefined,
     args: [BigInt(editionId || 0), parseEther(amount.toString())],
   });
   const { writeAsync, data, error } =

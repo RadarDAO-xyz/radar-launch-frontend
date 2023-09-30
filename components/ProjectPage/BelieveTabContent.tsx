@@ -19,7 +19,7 @@ import {
 import { shortenAddress } from '@/lib/utils';
 import { chains } from '@/lib/wagmi';
 import { ProjectStatus } from '@/types/mongo';
-import { usePrivy } from '@privy-io/react-auth';
+import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import {
@@ -55,7 +55,7 @@ export function BelieveTabContent({
   const { login, isLoggedIn } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
-  const { user } = usePrivy();
+  const { wallet } = usePrivyWagmi();
   const { data: blockNumber } = useBlockNumber();
   const { data: believerLogs, isLoading } = useGetBelieveEvents(
     _id,
@@ -65,10 +65,10 @@ export function BelieveTabContent({
   const { config } = usePrepareRadarEditionsBelieveProject({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
-    account: user?.wallet?.address as Address,
+    account: wallet?.address as Address,
     args: [BigInt(editionId || 0), tags],
     enabled:
-      user?.wallet?.address !== undefined &&
+      wallet?.address !== undefined &&
       editionId !== undefined &&
       tags.length > 0,
   });
@@ -105,9 +105,8 @@ export function BelieveTabContent({
   }, [isSuccess, believeProjectData?.hash]);
 
   const hasBelieved =
-    believerLogs?.find(
-      (log) => log.args?.believer === user?.wallet?.address,
-    ) !== undefined;
+    believerLogs?.find((log) => log.args?.believer === wallet?.address) !==
+    undefined;
 
   return (
     <div>

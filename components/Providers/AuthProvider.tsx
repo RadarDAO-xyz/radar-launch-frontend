@@ -3,11 +3,7 @@ import { authenticateUser } from '@/lib/backend';
 import { usePrivy } from '@privy-io/react-auth';
 import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 import { ReactNode, createContext, useEffect, useState } from 'react';
-import {
-  useAccount,
-  useDisconnect,
-  useQuery
-} from 'wagmi';
+import { useAccount, useDisconnect, useQuery } from 'wagmi';
 
 interface AuthContextType {
   idToken: string;
@@ -40,7 +36,6 @@ export const AuthProvider = ({ children }: Props) => {
     ready,
     login: privyLogin,
     logout: privyLogout,
-    user,
     connectWallet,
   } = usePrivy();
   const { wallet } = usePrivyWagmi();
@@ -74,7 +69,7 @@ export const AuthProvider = ({ children }: Props) => {
       enabled:
         !isVerified &&
         idToken.length > 0 &&
-        user?.wallet?.address !== undefined &&
+        wallet?.address !== undefined &&
         authenticated,
     },
   );

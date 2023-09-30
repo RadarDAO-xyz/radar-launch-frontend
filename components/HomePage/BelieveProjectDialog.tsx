@@ -16,7 +16,7 @@ import {
 import { cn, shortenAddress } from '@/lib/utils';
 import { ProjectStatus } from '@/types/mongo';
 import { ProjectWithChainData } from '@/types/web3';
-import { usePrivy } from '@privy-io/react-auth';
+import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import { RefAttributes, useEffect, useState } from 'react';
@@ -54,7 +54,7 @@ export function BelieveProjectDialog({
   const [hasToasted, setHasToasted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  const { user } = usePrivy();
+  const { wallet } = usePrivyWagmi();
   const { toast } = useToast();
   const { login, isLoggedIn } = useAuth();
   const { data: blockNumber } = useBlockNumber();
@@ -67,10 +67,10 @@ export function BelieveProjectDialog({
   const queryClient = useQueryClient();
   const { config } = usePrepareRadarEditionsBelieveProject({
     address: CONTRACT_ADDRESS,
-    account: user?.wallet?.address as Address,
+    account: wallet?.address as Address,
     args: [BigInt(editionId || 0), tags.join(',')],
     enabled:
-      user?.wallet?.address !== undefined &&
+      wallet?.address !== undefined &&
       editionId !== undefined &&
       tags.length > 0 &&
       isOpen,
@@ -107,9 +107,8 @@ export function BelieveProjectDialog({
   }, [isSuccess, believeProjectData?.hash]);
 
   const hasBelieved =
-    believerLogs?.find(
-      (log) => log.args?.believer === user?.wallet?.address,
-    ) !== undefined;
+    believerLogs?.find((log) => log.args?.believer === wallet?.address) !==
+    undefined;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

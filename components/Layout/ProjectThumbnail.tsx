@@ -1,7 +1,7 @@
 import { generateVideoThumbnail } from '@/lib/generateVideoThumbnail';
 import { cn } from '@/lib/utils';
 import { Player } from '@livepeer/react';
-import { usePrivy } from '@privy-io/react-auth';
+import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 import { useCallback, useState } from 'react';
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 }
 
 export function ProjectThumbnail({ thumbnail, videoUrl, title }: Props) {
-  const { user } = usePrivy();
+  const { wallet } = usePrivyWagmi();
   const [isPlaying, setIsPlaying] = useState(false);
   const mediaElementRef = useCallback(
     (ref: HTMLMediaElement) => {
@@ -36,7 +36,7 @@ export function ProjectThumbnail({ thumbnail, videoUrl, title }: Props) {
         playbackId={cid}
         muted
         objectFit="cover"
-        viewerId={user?.wallet?.address}
+        viewerId={wallet?.address}
         mediaElementRef={mediaElementRef}
       >
         {/* div below hides video player controls */}
