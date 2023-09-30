@@ -107,8 +107,8 @@ export default function AdminPage() {
           <TableHeader>
             <TableRow>
               <TableHead>Title</TableHead>
-              <TableHead>ID (on-chain)</TableHead>
-              <TableHead>ID (database)</TableHead>
+              <TableHead>ID (on-chain / database)</TableHead>
+              <TableHead>Brief (+ database ID)</TableHead>
               <TableHead>Founder Address</TableHead>
               <TableHead>Status (on-chain)</TableHead>
               <TableHead>Status (database)</TableHead>
@@ -123,10 +123,15 @@ export default function AdminPage() {
             {projects.map((project) => (
               <TableRow key={project._id}>
                 <TableCell>{project.title}</TableCell>
-                <TableCell>{project.editionId ?? 'NA'}</TableCell>
                 <TableCell>
+                  {project.editionId ?? 'NA'} /{' '}
                   <Link href={`/project/${project._id}`} className="underline">
                     {project._id}
+                  </Link>
+                </TableCell>
+                <TableCell>
+                  <Link href={`/pool/${project.pool}`} className="underline">
+                    {project.brief} ({project.pool ?? 'NA'})
                   </Link>
                 </TableCell>
                 <TableCell>

@@ -22,8 +22,8 @@ import { MilestoneSection } from './MilestoneSection';
 export const createFormSchema = z.object({
   title: z.string().min(1, { message: 'Title is required' }),
   description: z.string().min(1, { message: 'Description is required' }),
-  video_url: z.string().min(1),
-  video_id: z.string().min(1),
+  video_url: z.string().min(1, { message: 'Video is required' }),
+  video_id: z.string().min(1, { message: 'Video is required' }),
   tldr: z.string().min(1, { message: 'Brief description is required' }),
   thumbnail: z.optional(z.instanceof(File)),
   brief: z.string().min(1, { message: 'Brief is required' }),
