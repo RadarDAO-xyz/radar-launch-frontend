@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
 import {
   Dialog,
   DialogContent,
@@ -8,35 +7,10 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { CacheKey } from '@/constants/react-query';
-import { useAuth } from '@/hooks/useAuth';
-import { updateProject } from '@/lib/backend';
-import { cn } from '@/lib/utils';
 import { ProjectWithChainData } from '@/types/web3';
-import { ProjectStatus } from '@/types/mongo';
-import { format } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
-import { useState } from 'react';
-import { useMutation, useQueryClient } from 'wagmi';
-import { DialogFooter } from '../ui/dialog';
-import { useToast } from '../ui/use-toast';
-import { ApproveEditionButton } from './ApproveEditionButton';
-import { CreateEditionButton } from './CreateEditionButton';
-import { DeleteProjectButton } from './DeleteProjectButton';
-import { DisapproveEditionButton } from './DisapproveEditionButton';
 import { useAsset } from '@livepeer/react';
+import { useState } from 'react';
+import { DialogFooter } from '../ui/dialog';
 import { MintVideoNftButton } from './MintVideoNftButton';
 import { SyncVideoNftButton } from './SyncVideoNftButton';
 

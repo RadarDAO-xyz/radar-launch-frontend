@@ -44,6 +44,7 @@ export function ProjectSettingsDialog({
   curation,
   edition_price,
   admin_address,
+  pool,
 }: ProjectWithChainData) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -180,6 +181,7 @@ export function ProjectSettingsDialog({
             projectId={_id}
             fee={edition_price}
             address={admin_address}
+            briefId={pool}
           />
           <ApproveEditionButton isOpen={isOpen} editionId={editionId} />
           <DisapproveEditionButton isOpen={isOpen} editionId={editionId} />

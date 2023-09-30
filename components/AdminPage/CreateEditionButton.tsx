@@ -16,6 +16,7 @@ interface Props {
   projectId: string;
   fee: number;
   address: string;
+  briefId: string;
 }
 
 export function CreateEditionButton({
@@ -23,6 +24,7 @@ export function CreateEditionButton({
   projectId,
   fee,
   address,
+  briefId,
 }: Props) {
   const { toast } = useToast();
   const { user } = usePrivy();
@@ -46,6 +48,7 @@ export function CreateEditionButton({
       convertAddressToChecksum(address)!,
       convertAddressToChecksum(address)!,
       projectId,
+      briefId,
     ],
   });
   const { writeAsync, isLoading } = useRadarEditionsCreateEdition(config);
