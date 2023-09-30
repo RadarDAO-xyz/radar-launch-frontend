@@ -108,14 +108,11 @@ export function ProjectTabs({
   const { login, isLoggedIn } = useAuth();
   const { data: onChainProjects } = useRadarEditionsGetEditions({
     address: CONTRACT_ADDRESS,
-    chainId: chains[0]?.id,
-    enabled: Boolean(chains[0]?.id),
+    chainId: chains[0].id,
   });
-  console.log({ onChainProjects, chains });
   const { data: protocolFee } = useRadarEditionsProtocolFee({
     address: CONTRACT_ADDRESS,
-    chainId: chains[0]?.id,
-    enabled: Boolean(chains[0]?.id),
+    chainId: chains[0].id,
   });
 
   const editionId: number | undefined = onChainProjects?.findLastIndex(
