@@ -50,8 +50,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         <Comp
           className={cn(buttonVariants({ variant, size, className }))}
           ref={ref}
-          disabled
           {...props}
+          disabled
         >
           <RotateCwIcon className="h-4 w-4 animate-spin" />
         </Comp>
