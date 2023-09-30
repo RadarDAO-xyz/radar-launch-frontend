@@ -50,7 +50,7 @@ export function NavBar() {
             </Link>
           </div>
           <NavigationMenu className="z-50 hidden lg:flex">
-            <NavigationMenuList className="space-x-0">
+            <NavigationMenuList className="space-x-1">
               <NavigationMenuItem>
                 <Link
                   href={`/pool/${A_MORE_PLAYFUL_FUTURE_POOL_ID}`}
