@@ -37,6 +37,9 @@ export function CreateEditionButton({
     exchangeRateData?.ethereum?.usd !== undefined
       ? parseEther(String(fee / exchangeRateData.ethereum.usd), 'wei')
       : BigInt(fee);
+  const projectCanBeCreated =
+    onChainStatus !== undefined && onChainStatus === EditionStatus.NOT_CREATED;
+
   const { config } = usePrepareRadarEditionsCreateEdition({
     address: CONTRACT_ADDRESS,
     account: wallet?.address as Address,
@@ -45,7 +48,8 @@ export function CreateEditionButton({
       Boolean(chains[0].id) &&
       isOpen &&
       wallet?.address !== undefined &&
-      exchangeRateData?.ethereum?.usd !== undefined,
+      exchangeRateData?.ethereum?.usd !== undefined &&
+      projectCanBeCreated,
     args: [
       actualFee,
       convertAddressToChecksum(address)!,
@@ -55,9 +59,6 @@ export function CreateEditionButton({
     ],
   });
   const { writeAsync, isLoading } = useRadarEditionsCreateEdition(config);
-
-  const projectAlreadyOnChain =
-    onChainStatus !== undefined && onChainStatus !== EditionStatus.NOT_CREATED;
 
   return (
     <Button
@@ -74,11 +75,11 @@ export function CreateEditionButton({
           });
         }
       }}
-      disabled={projectAlreadyOnChain}
+      disabled={!projectCanBeCreated}
     >
-      {projectAlreadyOnChain
-        ? 'Project already on chain'
-        : 'Create Edition (on-chain)'}
+      {!projectCanBeCreated
+        ? 'Create Edition (on-chain)'
+        : 'Project already / cannot be created'}
     </Button>
   );
 }

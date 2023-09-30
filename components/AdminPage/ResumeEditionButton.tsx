@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { CONTRACT_ADDRESS } from '@/constants/address';
 import {
   usePrepareRadarEditionsResumeEdition,
-  useRadarEditionsResumeEdition
+  useRadarEditionsResumeEdition,
 } from '@/lib/generated';
 import { EditionStatus } from '@/types/web3';
 import { usePrivyWagmi } from '@privy-io/wagmi-connector';
@@ -23,6 +23,10 @@ export function ResumeEditionButton({
 }: Props) {
   const { toast } = useToast();
   const { wallet } = usePrivyWagmi();
+
+  const projectCanBeResumed =
+    onChainStatus !== undefined && onChainStatus === EditionStatus.STOPPED;
+
   const { config } = usePrepareRadarEditionsResumeEdition({
     account: wallet?.address as Address,
     address: CONTRACT_ADDRESS,
@@ -31,13 +35,11 @@ export function ResumeEditionButton({
       Boolean(chains[0].id) &&
       isOpen &&
       editionId !== undefined &&
-      wallet?.address !== undefined,
+      wallet?.address !== undefined &&
+      projectCanBeResumed,
     args: [BigInt(+(editionId || 0)) || 0n],
   });
   const { writeAsync, isLoading } = useRadarEditionsResumeEdition(config);
-
-  const projectCanBeResumed =
-    onChainStatus !== undefined && onChainStatus === EditionStatus.STOPPED;
 
   return (
     <Button

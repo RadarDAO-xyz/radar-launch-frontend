@@ -23,6 +23,10 @@ export function ApproveEditionButton({
 }: Props) {
   const { toast } = useToast();
   const { wallet } = usePrivyWagmi();
+
+  const projectCanBeApproved =
+    onChainStatus !== undefined && onChainStatus === EditionStatus.CREATED;
+
   const { config } = usePrepareRadarEditionsApproveEdition({
     account: wallet?.address as Address,
     address: CONTRACT_ADDRESS,
@@ -31,14 +35,12 @@ export function ApproveEditionButton({
       Boolean(chains[0].id) &&
       isOpen &&
       editionId !== undefined &&
-      wallet?.address !== undefined,
+      wallet?.address !== undefined &&
+      projectCanBeApproved,
     args: [BigInt(+(editionId || 0)) || 0n],
   });
   const { writeAsync, isLoading: isApproveLoading } =
     useRadarEditionsApproveEdition(config);
-
-  const projectCanBeApproved =
-    onChainStatus !== undefined && onChainStatus === EditionStatus.CREATED;
 
   return (
     <Button

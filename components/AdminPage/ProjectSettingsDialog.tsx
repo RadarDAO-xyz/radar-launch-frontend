@@ -97,7 +97,7 @@ export function ProjectSettingsDialog({
         <Button>Settings</Button>
       </DialogTrigger>
       <DialogContent>
-        <DialogTitle>Actions panel</DialogTitle>
+        <DialogTitle>General Project Settings</DialogTitle>
         <DialogDescription className="space-y-4">
           <Label>New Database Project Status</Label>
           <Select

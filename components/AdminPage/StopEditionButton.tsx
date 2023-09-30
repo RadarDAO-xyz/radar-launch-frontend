@@ -19,6 +19,10 @@ interface Props {
 export function StopEditionButton({ isOpen, editionId, onChainStatus }: Props) {
   const { toast } = useToast();
   const { wallet } = usePrivyWagmi();
+
+  const projectCanBeStopped =
+    onChainStatus !== undefined && onChainStatus === EditionStatus.LAUNCHED;
+
   const { config } = usePrepareRadarEditionsStopEdition({
     account: wallet?.address as Address,
     address: CONTRACT_ADDRESS,
@@ -27,13 +31,11 @@ export function StopEditionButton({ isOpen, editionId, onChainStatus }: Props) {
       Boolean(chains[0].id) &&
       isOpen &&
       editionId !== undefined &&
-      wallet?.address !== undefined,
+      wallet?.address !== undefined &&
+      projectCanBeStopped,
     args: [BigInt(+(editionId || 0)) || 0n],
   });
   const { writeAsync, isLoading } = useRadarEditionsStopEdition(config);
-
-  const projectCanBeStopped =
-    onChainStatus !== undefined && onChainStatus === EditionStatus.LAUNCHED;
 
   return (
     <Button
