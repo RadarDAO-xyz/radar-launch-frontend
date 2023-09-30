@@ -23,7 +23,13 @@ import { cn } from '@/lib/utils';
 import { chains } from '@/lib/wagmi';
 import Link from 'next/link';
 import { transformProjectsWithChainData } from '../../lib/transformProjectsWithChainData';
-import { OnChainProject } from '../../types/web3';
+import { EditionStatus, OnChainProject } from '../../types/web3';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 export default function AdminPage() {
   const { data } = useGetCurrentUser();
@@ -109,8 +115,8 @@ export default function AdminPage() {
               <TableHead>ID (on-chain / database)</TableHead>
               <TableHead>Brief (+ database ID)</TableHead>
               <TableHead>Founder Address</TableHead>
-              <TableHead>Status (on-chain)</TableHead>
-              <TableHead>Status (database)</TableHead>
+              <TableHead>Status (on-chain / database)</TableHead>
+              <TableHead>Mint End Date</TableHead>
               <TableHead>Video URL</TableHead>
               <TableHead>Video ID</TableHead>
               <TableHead>Curation Start</TableHead>
@@ -119,64 +125,97 @@ export default function AdminPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {projects.map((project) => (
-              <TableRow key={project._id}>
-                <TableCell>{project.title}</TableCell>
-                <TableCell>
-                  {project.editionId ?? 'NA'} /{' '}
-                  <Link href={`/project/${project._id}`} className="underline">
-                    {project._id}
-                  </Link>
-                </TableCell>
-                <TableCell>
-                  <Link href={`/pool/${project.pool}`} className="underline">
-                    {project.brief} ({project.pool ?? 'NA'})
-                  </Link>
-                </TableCell>
-                <TableCell>
-                  <Link
-                    href={`/profile/${project.founder}`}
-                    className="underline"
-                  >
-                    {project.admin_address}
-                  </Link>
-                </TableCell>
-                <TableCell>
-                  {convertProjectStatusName(project.status)}{' '}
-                  <Badge
-                    variant="none"
-                    className={cn(
-                      convertProjectStatusToColour(project.status),
-                      'h-3 w-3 p-0',
-                    )}
-                  />
-                </TableCell>
-                <TableCell>
-                  <p>
-                    {project.onChainStatus !== undefined
-                      ? convertOnChainStatusName(project.onChainStatus)
-                      : 'NA'}
-                  </p>
-                </TableCell>
-                <TableCell>{project.video_url}</TableCell>
-                <TableCell>{project.video_id || 'NA'}</TableCell>
-                <TableCell>
-                  <p>
-                    {project.curation?.start
-                      ? new Date(project.curation.start).toLocaleDateString()
-                      : 'NA'}
-                  </p>
-                </TableCell>
-                <TableCell>
-                  <p>
-                    {project.curation?.end
-                      ? new Date(project.curation.end).toLocaleDateString()
-                      : 'NA'}
-                  </p>
-                </TableCell>
-                <ProjectActions {...project} />
-              </TableRow>
-            ))}
+            {projects.map((project) => {
+              const projectShouldBeStopped =
+                project.onChainStatus === EditionStatus.LAUNCHED &&
+                new Date(project.mint_end_date) < new Date();
+              return (
+                <TableRow
+                  key={project._id}
+                  className={cn(projectShouldBeStopped && 'bg-red-100')}
+                >
+                  <TableCell>
+                    <Link
+                      href={`/project/${project._id}`}
+                      className="underline"
+                    >
+                      {project.title}
+                    </Link>
+                  </TableCell>
+                  <TableCell>
+                    {project.editionId ?? 'NA'} / {project._id}
+                  </TableCell>
+                  <TableCell>
+                    <Link href={`/pool/${project.pool}`} className="underline">
+                      {project.brief} ({project.pool ?? 'no pool ID assigned'})
+                    </Link>
+                  </TableCell>
+                  <TableCell>
+                    <Link
+                      href={`/profile/${project.founder}`}
+                      className="underline"
+                    >
+                      {project.admin_address}
+                    </Link>
+                  </TableCell>
+                  <TableCell>
+                    <span>{convertProjectStatusName(project.status)} </span>
+                    <Badge
+                      variant="none"
+                      className={cn(
+                        convertProjectStatusToColour(project.status),
+                        'h-3 w-3 p-0',
+                      )}
+                    />{' '}
+                    /{' '}
+                    <span>
+                      {project.onChainStatus !== undefined
+                        ? convertOnChainStatusName(project.onChainStatus)
+                        : 'NA'}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <p
+                            className={cn(
+                              projectShouldBeStopped &&
+                                'font-bold text-red-700',
+                            )}
+                          >
+                            {new Date(
+                              project.mint_end_date,
+                            ).toLocaleDateString()}
+                          </p>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          Project needs to be stopped on-chain (via Actions) if
+                          minting is to be disabled
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </TableCell>
+                  <TableCell>{project.video_url}</TableCell>
+                  <TableCell>{project.video_id || 'NA'}</TableCell>
+                  <TableCell>
+                    <p>
+                      {project.curation?.start
+                        ? new Date(project.curation.start).toLocaleDateString()
+                        : 'NA'}
+                    </p>
+                  </TableCell>
+                  <TableCell>
+                    <p>
+                      {project.curation?.end
+                        ? new Date(project.curation.end).toLocaleDateString()
+                        : 'NA'}
+                    </p>
+                  </TableCell>
+                  <ProjectActions {...project} />
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </div>
@@ -197,11 +236,11 @@ export default function AdminPage() {
               <TableRow key={pool._id}>
                 <TableCell>
                   <Link href={`/pool/${pool._id}`} className="underline">
-                    {pool._id}
+                    {pool.title}
                   </Link>
                 </TableCell>
                 <TableCell>
-                  <p>{pool.title}</p>
+                  <p>{pool._id}</p>
                 </TableCell>
                 <TableCell>
                   <p>{pool.subtitle}</p>
