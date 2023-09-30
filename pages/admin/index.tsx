@@ -113,7 +113,8 @@ export default function AdminPage() {
             <TableRow>
               <TableHead>Title</TableHead>
               <TableHead>ID (on-chain / database)</TableHead>
-              <TableHead>Brief (+ database ID)</TableHead>
+              <TableHead>Brief</TableHead>
+              <TableHead>Assigned Brief ID (on-chain / database)</TableHead>
               <TableHead>Founder Address</TableHead>
               <TableHead>Status (on-chain / database)</TableHead>
               <TableHead>Mint End Date</TableHead>
@@ -147,8 +148,12 @@ export default function AdminPage() {
                   </TableCell>
                   <TableCell>
                     <Link href={`/pool/${project.pool}`} className="underline">
-                      {project.brief} ({project.pool ?? 'no pool ID assigned'})
+                      {project.brief}
                     </Link>
+                  </TableCell>
+                  <TableCell>
+                    {project.pool ?? 'no database ID assigned'} /{' '}
+                    {project.onChainBriefId || 'no on-chain ID assigned'}
                   </TableCell>
                   <TableCell>
                     <Link

@@ -25,6 +25,7 @@ export interface ProjectWithChainData extends Project {
   balance?: bigint;
   editionId?: number;
   onChainStatus?: EditionStatus;
+  onChainBriefId?: string;
 }
 
 export interface ProjectWithOwnedAmount extends Project {
