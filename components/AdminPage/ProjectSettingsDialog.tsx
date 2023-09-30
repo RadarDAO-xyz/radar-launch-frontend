@@ -189,7 +189,7 @@ export function ProjectSettingsDialog({
             onClick={() => {
               mutate();
             }}
-            disabled={isUpdateLoading}
+            loading={isUpdateLoading}
           >
             Update project (database)
           </Button>

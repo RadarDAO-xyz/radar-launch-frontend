@@ -1,21 +1,19 @@
 import { CONTRACT_ADDRESS } from '@/constants/address';
 import { useGetCountdown } from '@/hooks/useGetCountdown';
 import { useGetPools } from '@/hooks/useGetPools';
-import {
-  useRadarEditionsGetEditions,
-  useRadarEditionsTotalSupply,
-} from '@/lib/generated';
+import { useRadarEditionsTotalSupply } from '@/lib/generated';
 import { cn } from '@/lib/utils';
-import { Project, ProjectStatus } from '@/types/mongo';
+import { ProjectStatus } from '@/types/mongo';
+import { ProjectWithChainData } from '@/types/web3';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { BelieveProjectDialog } from '../HomePage/BelieveProjectDialog';
 import { chains } from '../../lib/wagmi';
+import { BelieveProjectDialog } from '../HomePage/BelieveProjectDialog';
 import { Button } from '../ui/button';
 import { ProjectVideoPlayer } from './ProjectVideoPlayer';
 
-interface Props extends Project {
+interface Props extends ProjectWithChainData {
   showDropDate?: boolean;
   showMintEndDate?: boolean;
   showPrice?: boolean;
@@ -41,18 +39,11 @@ export function ProjectBlock(props: Props) {
     tags,
     pool,
     showBelieveButton,
+    editionId,
   } = props;
   const { data: poolsData } = useGetPools();
   const router = useRouter();
 
-  const { data: onChainProjects } = useRadarEditionsGetEditions({
-    address: CONTRACT_ADDRESS,
-    chainId: chains[0].id,
-    enabled: Boolean(chains[0].id),
-  });
-  const editionId: number | undefined = onChainProjects?.findLastIndex(
-    (project) => project.id === _id,
-  );
   const { data: totalSupply } = useRadarEditionsTotalSupply({
     address: CONTRACT_ADDRESS,
     chainId: chains[0]?.id,

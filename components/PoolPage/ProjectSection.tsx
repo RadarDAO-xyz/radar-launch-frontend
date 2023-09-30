@@ -4,11 +4,24 @@ import Link from 'next/link';
 import { ProjectBlock } from '../Layout/ProjectBlock';
 import { Button } from '../ui/button';
 import { A_MORE_PLAYFUL_FUTURE_POOL_ID } from '@/constants/database';
+import { CONTRACT_ADDRESS } from '@/constants/address';
+import { useRadarEditionsGetEditions } from '@/lib/generated';
+import { chains } from '@/lib/wagmi';
+import { transformProjectsWithChainData } from '@/lib/transformProjectsWithChainData';
+import { OnChainProject } from '@/types/web3';
 
 export function ProjectSection({ _id, title }: Pool) {
   const { data } = useGetProjects();
+  const { data: onChainProjects } = useRadarEditionsGetEditions({
+    address: CONTRACT_ADDRESS,
+    chainId: chains[0].id,
+    enabled: Boolean(chains[0].id),
+  });
 
-  const liveProjects = data
+  const liveProjects = transformProjectsWithChainData(
+    data,
+    onChainProjects as OnChainProject[],
+  )
     ?.filter(
       (project) =>
         // All projects will be shown for this pool

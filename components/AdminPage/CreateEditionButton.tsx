@@ -55,7 +55,7 @@ export function CreateEditionButton({
 
   return (
     <Button
-      disabled={isLoading}
+      loading={isLoading}
       onClick={() => {
         try {
           writeAsync?.();

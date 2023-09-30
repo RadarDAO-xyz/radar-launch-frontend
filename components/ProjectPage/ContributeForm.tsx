@@ -132,7 +132,7 @@ export function ContributeForm({ id }: Props) {
                 </FormItem>
               )}
             />
-            <Button className="w-full" type="submit" disabled={isLoading}>
+            <Button className="w-full" type="submit" loading={isLoading}>
               APPLY
             </Button>
           </form>

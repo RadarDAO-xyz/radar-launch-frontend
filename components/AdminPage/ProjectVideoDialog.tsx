@@ -9,16 +9,58 @@ import {
 import { Label } from '@/components/ui/label';
 import { ProjectWithChainData } from '@/types/web3';
 import { useAsset } from '@livepeer/react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { DialogFooter } from '../ui/dialog';
 import { MintVideoNftButton } from './MintVideoNftButton';
 import { SyncVideoNftButton } from './SyncVideoNftButton';
+import { Input } from '../ui/input';
+import { CacheKey } from '@/constants/react-query';
+import { updateProject } from '@/lib/backend';
+import { useMutation, useQueryClient } from 'wagmi';
+import { useToast } from '../ui/use-toast';
+import { useAuth } from '@/hooks/useAuth';
 
 export function ProjectVideoDialog(props: ProjectWithChainData) {
-  const { video_id } = props;
+  const { video_id, video_url, _id } = props;
   const [isOpen, setIsOpen] = useState(false);
+  const videoUrlRef = useRef<HTMLInputElement>(null);
+  const videoIdRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
 
   const { data } = useAsset({ assetId: video_id });
+  const { idToken } = useAuth();
+  const queryClient = useQueryClient();
+
+  const { mutate, isLoading } = useMutation(
+    [
+      CacheKey.UDPATE_PROJECT_STATUS,
+      _id,
+      videoUrlRef.current?.value,
+      videoIdRef.current?.value,
+    ],
+    () =>
+      updateProject(
+        {
+          video_id: videoIdRef.current?.value,
+          video_url: videoUrlRef.current?.value,
+        },
+        _id,
+        idToken,
+      ),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries([CacheKey.PROJECTS]);
+      },
+      onError: (e) => {
+        console.error(e);
+        toast({
+          variant: 'destructive',
+          title: 'An unexpected error occured',
+          description: 'Check the console for more information',
+        });
+      },
+    },
+  );
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -28,10 +70,24 @@ export function ProjectVideoDialog(props: ProjectWithChainData) {
       <DialogContent>
         <DialogTitle>Video settings</DialogTitle>
         <DialogDescription className="space-y-4">
-          <Label>Data</Label>
-          <p>{JSON.stringify(data, null, 2)}</p>
+          <Label>Raw Video Data</Label>
+          <p className="whitespace-pre font-mono">
+            {JSON.stringify(data, null, 2)}
+          </p>
+          <Label>Video URL</Label>
+          <Input defaultValue={video_url} ref={videoUrlRef} />
+          <Label>Video ID</Label>
+          <Input defaultValue={video_id || ''} ref={videoIdRef} />
         </DialogDescription>
         <DialogFooter className="flex !flex-col !space-x-0 space-y-4">
+          <Button
+            onClick={() => {
+              mutate();
+            }}
+            loading={isLoading}
+          >
+            Update Video Links
+          </Button>
           <SyncVideoNftButton {...props} />
           <MintVideoNftButton videoId={video_id} />
         </DialogFooter>

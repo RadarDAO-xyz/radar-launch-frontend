@@ -31,7 +31,7 @@ export function DisapproveEditionButton({ isOpen, editionId }: Props) {
   const { writeAsync, isLoading } = useRadarEditionsStopEdition(config);
   return (
     <Button
-      disabled={isLoading}
+      loading={isLoading}
       onClick={() => {
         try {
           writeAsync?.();

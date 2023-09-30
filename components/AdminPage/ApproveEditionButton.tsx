@@ -34,7 +34,7 @@ export function ApproveEditionButton({ isOpen, editionId }: Props) {
 
   return (
     <Button
-      disabled={isApproveLoading}
+      loading={isApproveLoading}
       onClick={() => {
         try {
           writeAsync?.();

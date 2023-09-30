@@ -32,7 +32,7 @@ export function SyncVideoNftButton({
       }}
       disabled={mutate === undefined || video_id === undefined}
     >
-      Sync Project Metadata
+      Sync IPFS Metadata
     </Button>
   );
 }

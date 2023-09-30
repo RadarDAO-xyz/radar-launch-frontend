@@ -15,7 +15,7 @@ import { Placeholder } from '@/components/Layout/Placeholder';
 import { convertOnChainStatusName } from '@/lib/convertOnChainStatusName';
 import { useGetPools } from '@/hooks/useGetPools';
 import { Button } from '@/components/ui/button';
-import { transformProjects } from '../../lib/transformProjectsWithChainData';
+import { transformProjectsWithChainData } from '../../lib/transformProjectsWithChainData';
 import {
   Table,
   TableCaption,
@@ -54,7 +54,7 @@ export default function AdminPage() {
     );
   }
 
-  const projects = transformProjects(
+  const projects = transformProjectsWithChainData(
     databaseProjectData,
     onChainProjects as OnChainProject[],
   );

@@ -1,23 +1,23 @@
-import { CONTRACT_ADDRESS } from '@/constants/address';
 import { useGetCountdown } from '@/hooks/useGetCountdown';
-import { useRadarEditionsGetEditions } from '@/lib/generated';
 import { cn } from '@/lib/utils';
-import { Project, ProjectStatus } from '@/types/mongo';
+import { ProjectStatus } from '@/types/mongo';
+import { ProjectWithChainData } from '@/types/web3';
 import Link from 'next/link';
 import { HTMLParsedComponent } from '../Layout/HTMLParsedComponent';
 import { ProjectVideoPlayer } from '../Layout/ProjectVideoPlayer';
-import { chains } from '../../lib/wagmi';
 import { BelieveProjectDialog } from './BelieveProjectDialog';
 
-export function VisionOfTheWeek(props: Project) {
-  const { _id, mint_end_date, tags, video_url, title, description, status } =
-    props;
-  const { data: onChainProjects } = useRadarEditionsGetEditions({
-    address: CONTRACT_ADDRESS,
-    chainId: chains[0].id,
-    enabled: Boolean(chains[0].id),
-  });
-  const editionId = onChainProjects?.findIndex((project) => project.id === _id);
+export function VisionOfTheWeek(props: ProjectWithChainData) {
+  const {
+    _id,
+    mint_end_date,
+    tags,
+    video_url,
+    title,
+    description,
+    status,
+    editionId,
+  } = props;
   // const { data: totalSupply } = useRadarEditionsTotalSupply({
   //   address: CONTRACT_ADDRESS,
   //   chainId: chains[0]?.id,

@@ -31,7 +31,7 @@ export function DeleteProjectButton({ projectId }: { projectId: string }) {
   );
 
   return (
-    <Button variant="destructive" onClick={() => mutate()} disabled={isLoading}>
+    <Button variant="destructive" onClick={() => mutate()} loading={isLoading}>
       Delete Project (database)
     </Button>
   );
