@@ -94,6 +94,9 @@ export default function App({ Component, pageProps }: AppProps) {
               logo: '/logo.png',
               showWalletLoginFirst: true,
             },
+            embeddedWallets: {
+              createOnLogin: 'users-without-wallets',
+            },
           }}
         >
           <PrivyWagmiConnector wagmiChainsConfig={configureChainsConfig}>

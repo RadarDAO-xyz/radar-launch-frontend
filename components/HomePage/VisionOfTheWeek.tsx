@@ -14,8 +14,8 @@ export function VisionOfTheWeek(props: Project) {
     props;
   const { data: onChainProjects } = useRadarEditionsGetEditions({
     address: CONTRACT_ADDRESS,
-    chainId: chains[0]?.id,
-    enabled: Boolean(chains[0]?.id),
+    chainId: chains[0].id,
+    enabled: Boolean(chains[0].id),
   });
   const editionId = onChainProjects?.findIndex((project) => project.id === _id);
   // const { data: totalSupply } = useRadarEditionsTotalSupply({

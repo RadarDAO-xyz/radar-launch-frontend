@@ -17,8 +17,8 @@
   "dependencies": {
     "@hookform/resolvers": "^3.1.1",
     "@livepeer/react": "^2.8.6",
-    "@privy-io/react-auth": "^1.40.5",
-    "@privy-io/wagmi-connector": "^0.1.4",
+    "@privy-io/react-auth": "^1.30.2",
+    "@privy-io/wagmi-connector": "^0.1.0",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.4",
     "@radix-ui/react-avatar": "^1.0.3",

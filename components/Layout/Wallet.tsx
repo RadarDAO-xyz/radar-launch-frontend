@@ -6,19 +6,27 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { useAuth } from '@/hooks/useAuth';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 import { shortenAddress } from '@/lib/utils';
 import { usePrivy } from '@privy-io/react-auth';
 import { ChevronDown } from 'lucide-react';
 import Link from 'next/link';
-import { Address, mainnet, useEnsName } from 'wagmi';
+import { Address, mainnet, useEnsName, useNetwork } from 'wagmi';
 import { Button } from '../ui/button';
+import { chains } from '@/lib/wagmi';
+import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 
 export function Wallet() {
   const { linkWallet, user } = usePrivy();
   const { login, logout, isLoggedIn, isLoading } = useAuth();
-
+  const { chain } = useNetwork();
   const { data: ensName } = useEnsName({
     address: user?.wallet?.address as Address,
     chainId: mainnet.id,
@@ -26,6 +34,7 @@ export function Wallet() {
   });
   const { data: currentUserData, isLoading: isCurrentUserLoading } =
     useGetCurrentUser();
+  const { wallet } = usePrivyWagmi();
 
   if (!isLoggedIn) {
     return (
@@ -70,19 +79,57 @@ export function Wallet() {
       </DropdownMenu>
     );
   }
+  const shortenedAddress = ensName || shortenAddress(user.wallet.address);
+  const address = ensName || user.wallet.address;
+  console.log({ chain });
+  if (chain !== undefined && chain.id !== chains[0].id) {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant={'ghost'}>
+            WRONG CHAIN
+            <ChevronDown />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="max-w-[200px]">
+          <DropdownMenuLabel>
+            Please switch your network to {chains[0].name} to continue RADAR
+            Launch.
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onClick={() => wallet?.switchChain(chains[0].id)}
+            className="cursor-pointer"
+          >
+            Switch Network
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => logout()} className="cursor-pointer">
+            Log Out
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  }
 
   if (currentUserData === undefined) {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant={'ghost'}>
-            {ensName || shortenAddress(user.wallet.address)}
+            {shortenedAddress}
             <ChevronDown />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="max-w-[200px]">
           <DropdownMenuLabel>
-            <p>{ensName || shortenAddress(user.wallet.address)}</p>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <p>{shortenedAddress}</p>
+                </TooltipTrigger>
+                <TooltipContent>{address}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <p className="pt-2 font-normal leading-4">
               No user data found, please contact support if issue persists.
             </p>
@@ -100,13 +147,18 @@ export function Wallet() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant={'ghost'}>
-          {ensName || shortenAddress(user.wallet.address)}
+          {shortenedAddress}
           <ChevronDown />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>
-          {ensName || shortenAddress(user.wallet.address)}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>{shortenedAddress}</TooltipTrigger>
+              <TooltipContent>{address}</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         {currentUserData?.bypasser && (

@@ -17,6 +17,7 @@ import {
   useRadarEditionsBelieveProject,
 } from '@/lib/generated';
 import { shortenAddress } from '@/lib/utils';
+import { chains } from '@/lib/wagmi';
 import { ProjectStatus } from '@/types/mongo';
 import { usePrivy } from '@privy-io/react-auth';
 import { format } from 'date-fns';
@@ -63,6 +64,7 @@ export function BelieveTabContent({
   );
   const { config } = usePrepareRadarEditionsBelieveProject({
     address: CONTRACT_ADDRESS,
+    chainId: chains[0].id,
     account: user?.wallet?.address as Address,
     args: [BigInt(editionId || 0), tags],
     enabled:
@@ -145,9 +147,10 @@ export function BelieveTabContent({
                   believeProjectWriteAsync?.();
                 }
               }}
+              disabled={isLoggedIn && believeProjectWriteAsync === undefined}
               loading={isLoading || believeProjectIsLoading}
             >
-              {!isLoggedIn ? 'LOGIN' : 'UPLOAD BELIEF SIGNATURE'}
+              {!isLoggedIn ? 'Login' : 'I believe in this project'}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -867,10 +867,10 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.23.tgz#498e41218ab3b6a1419c735e5c6ae2c5ed609b6c"
   integrity sha512-C16M+IYz0rgRhWZdCmK+h58JMv8vijAA61gmz2rspCSwKwzBebpdcsiUmwrtJRdphuY30i6BSLEOP8ppbNLyLg==
 
-"@privy-io/react-auth@^1.40.5":
-  version "1.40.5"
-  resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.40.5.tgz#8957096956dfb53d734132410b9963ac3e715156"
-  integrity sha512-aSxM5uynhGC7onnubV+/bgWcuh/VrPw7SivVZz74Tqm9/Z4WrgafyyGlxklUoVAZ5UQBsZmryNVc+mup1gIk0Q==
+"@privy-io/react-auth@^1.30.2":
+  version "1.41.0"
+  resolved "https://registry.yarnpkg.com/@privy-io/react-auth/-/react-auth-1.41.0.tgz#5f4aa5df294f8fff965a186fa1390668bba38fd5"
+  integrity sha512-ehrIPgkZ2sH8GvS9zII8AoXQodT2n44DohFI8KHLjDFKLjSJR3tQwG9Wkna2OwGZkUM3dMVoOaEHtKBJDLRVOg==
   dependencies:
     "@coinbase/wallet-sdk" "^3.8.0-beta.3"
     "@ethersproject/abstract-signer" "^5.7.0"
@@ -910,7 +910,7 @@
     web3-core-helpers "^1.8.0"
     wicg-inert "^3.1.2"
 
-"@privy-io/wagmi-connector@^0.1.4":
+"@privy-io/wagmi-connector@^0.1.0":
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/@privy-io/wagmi-connector/-/wagmi-connector-0.1.4.tgz#38106505190fa0973d48de1e33dfed6783c8b752"
   integrity sha512-0UNLfFw6Py6oSxsil4k9HJ/fMq4n3GP1mI2TP3zTBZnTIA8y029PYvvq8n0g54jdRtZxX9MtzYDtOEMslOuKug==

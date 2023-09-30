@@ -228,6 +228,10 @@ export function ProjectTabs({
     }
   }, [isSuccess, mintEditionData?.hash]);
 
+  const projectClosed = mint_end_date
+    ? new Date(mint_end_date) < new Date()
+    : false;
+
   return (
     <Tabs
       defaultValue={Tab.BELIEVE}
@@ -348,13 +352,8 @@ export function ProjectTabs({
             </div>
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
               <DialogTrigger asChild>
-                <Button
-                  className="w-full"
-                  disabled={
-                    mint_end_date ? new Date(mint_end_date) < new Date() : false
-                  }
-                >
-                  COLLECT
+                <Button className="w-full" disabled={projectClosed}>
+                  {projectClosed ? 'MINT CLOSED' : 'COLLECT'}
                 </Button>
               </DialogTrigger>
               <DialogContent>

@@ -153,7 +153,8 @@ export function BelieveProjectDialog({
               disabled={
                 status !== ProjectStatus.LIVE ||
                 hasBelieved ||
-                editionId === undefined
+                editionId === undefined ||
+                (isLoggedIn && believeProjectWriteAsync === undefined)
               }
               onClick={async () => {
                 // here we use isConnected instead since web3 interaction

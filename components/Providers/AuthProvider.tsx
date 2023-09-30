@@ -3,7 +3,11 @@ import { authenticateUser } from '@/lib/backend';
 import { usePrivy } from '@privy-io/react-auth';
 import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 import { ReactNode, createContext, useEffect, useState } from 'react';
-import { useQuery } from 'wagmi';
+import {
+  useAccount,
+  useDisconnect,
+  useQuery
+} from 'wagmi';
 
 interface AuthContextType {
   idToken: string;
@@ -37,8 +41,11 @@ export const AuthProvider = ({ children }: Props) => {
     login: privyLogin,
     logout: privyLogout,
     user,
+    connectWallet,
   } = usePrivy();
   const { wallet } = usePrivyWagmi();
+  const { isConnected } = useAccount();
+  const { disconnect } = useDisconnect();
 
   const [idToken, setIdToken] = useState('');
 
@@ -74,9 +81,12 @@ export const AuthProvider = ({ children }: Props) => {
 
   // retrieve jwt from storage on page load
   useEffect(() => {
-    const jwtToken = localStorage.getItem(JWT_LOCAL_STORAGE_KEY);
-    if (jwtToken !== null) {
-      setIdToken(jwtToken);
+    if (idToken === '') {
+      const jwtToken = localStorage.getItem(JWT_LOCAL_STORAGE_KEY);
+      if (jwtToken !== null) {
+        console.log('setting id token from storage');
+        setIdToken(jwtToken);
+      }
     }
   }, []);
 
@@ -85,11 +95,17 @@ export const AuthProvider = ({ children }: Props) => {
     if (authenticated && idToken === '') {
       getAccessToken().then((token) => {
         if (token !== null) {
+          console.log('setting id token authenticated');
           setIdToken(token);
         }
       });
     }
   }, [authenticated, getAccessToken, idToken]);
+
+  useEffect(() => {
+    if (!isConnected && wallet !== undefined) {
+    }
+  }, [connectWallet, isConnected, wallet]);
 
   async function login() {
     privyLogin();
@@ -98,6 +114,7 @@ export const AuthProvider = ({ children }: Props) => {
   async function logout() {
     await privyLogout();
     wallet?.disconnect();
+    disconnect();
     setIdToken('');
     setIsVerified(false);
   }
