@@ -30,6 +30,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { InfoIcon } from 'lucide-react';
 
 export default function AdminPage() {
   const { data } = useGetCurrentUser();
@@ -113,10 +114,24 @@ export default function AdminPage() {
             <TableRow>
               <TableHead>Title</TableHead>
               <TableHead>ID (on-chain / database)</TableHead>
-              <TableHead>Brief</TableHead>
-              <TableHead>Assigned Brief ID (on-chain / database)</TableHead>
-              <TableHead>Founder Address</TableHead>
               <TableHead>Status (on-chain / database)</TableHead>
+              <TableHead>Brief</TableHead>
+              <TableHead>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <p>
+                        Assigned Brief ID (on-chain / database){' '}
+                        <InfoIcon className="inline" width={14} height={14} />
+                      </p>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      Brief ID needs to be the same on-chain and in the database
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </TableHead>
+              <TableHead>Founder Address</TableHead>
               <TableHead>Mint End Date</TableHead>
               <TableHead>Video URL</TableHead>
               <TableHead>Video ID</TableHead>
@@ -147,6 +162,22 @@ export default function AdminPage() {
                     {project.editionId ?? 'NA'} / {project._id}
                   </TableCell>
                   <TableCell>
+                    <span>{convertProjectStatusName(project.status)} </span>
+                    <Badge
+                      variant="none"
+                      className={cn(
+                        convertProjectStatusToColour(project.status),
+                        'h-3 w-3 p-0',
+                      )}
+                    />{' '}
+                    /{' '}
+                    <span>
+                      {project.onChainStatus !== undefined
+                        ? convertOnChainStatusName(project.onChainStatus)
+                        : 'NA'}
+                    </span>
+                  </TableCell>
+                  <TableCell>
                     <Link href={`/pool/${project.pool}`} className="underline">
                       {project.brief}
                     </Link>
@@ -164,22 +195,6 @@ export default function AdminPage() {
                     </Link>
                   </TableCell>
                   <TableCell>
-                    <span>{convertProjectStatusName(project.status)} </span>
-                    <Badge
-                      variant="none"
-                      className={cn(
-                        convertProjectStatusToColour(project.status),
-                        'h-3 w-3 p-0',
-                      )}
-                    />{' '}
-                    /{' '}
-                    <span>
-                      {project.onChainStatus !== undefined
-                        ? convertOnChainStatusName(project.onChainStatus)
-                        : 'NA'}
-                    </span>
-                  </TableCell>
-                  <TableCell>
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
@@ -192,6 +207,13 @@ export default function AdminPage() {
                             {new Date(
                               project.mint_end_date,
                             ).toLocaleDateString()}
+                            {projectShouldBeStopped && (
+                              <InfoIcon
+                                className="inline"
+                                width={14}
+                                height={14}
+                              />
+                            )}
                           </p>
                         </TooltipTrigger>
                         <TooltipContent>
