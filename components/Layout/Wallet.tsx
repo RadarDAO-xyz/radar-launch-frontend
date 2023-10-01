@@ -172,6 +172,9 @@ export function Wallet() {
             <DropdownMenuItem className="cursor-pointer" asChild>
               <Link href="/pool/create">Create Pool</Link>
             </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer" asChild>
+              <Link href={`/settings`}>Settings</Link>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
           </>
         )}
@@ -181,9 +184,6 @@ export function Wallet() {
         <DropdownMenuItem className="cursor-pointer" asChild>
           <Link href={`/profile/edit`}>Edit Profile</Link>
         </DropdownMenuItem>
-        {/* <DropdownMenuItem className="cursor-pointer" asChild>
-          <Link href={`/settings`}>Settings</Link>
-        </DropdownMenuItem> */}
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => logout()} className="cursor-pointer">
           Log Out
