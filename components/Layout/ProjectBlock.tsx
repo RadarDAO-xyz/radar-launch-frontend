@@ -117,8 +117,8 @@ export function ProjectBlock(props: Props) {
           </div>
         )}
       </div>
-      <div className="bottom-half-of-content">
-        <div className="collect-wrapper flex-row">
+      <div className="flex justify-end flex-col h-full">
+        <div className="flex-row justify-end">
           <div className="flex w-full items-center justify-between gap-4 border-t border-t-[var(--line-83d2b2f6)] pt-3">
             <div className="flex-1">
               {status === ProjectStatus.LIVE ? (
