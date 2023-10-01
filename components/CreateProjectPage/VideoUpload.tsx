@@ -47,7 +47,12 @@ export const VideoUpload = () => {
     if (error?.message) {
       setError('video_url', error);
     }
-  }, [error, setError]);
+    if (video?.type !== 'video/mp4') {
+      setError('video_url', {
+        message: 'Only .mp4 files are supported',
+      });
+    }
+  }, [error, setError, video?.type]);
 
   useEffect(() => {
     if (data?.[0].storage?.ipfs?.cid && data?.[0].id) {
@@ -69,6 +74,7 @@ export const VideoUpload = () => {
     },
     maxFiles: 1,
     onDrop,
+    disabled: Boolean(data?.[0]?.id),
   });
 
   const progressFormatted = useMemo(
@@ -95,15 +101,14 @@ export const VideoUpload = () => {
             <div
               {...getRootProps()}
               className={cn(
-                'flex w-full flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 py-6',
+                'flex w-full flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 py-8',
                 isDragActive && 'border-gray-400 bg-slate-100',
                 video && 'bg-slate-100/50',
               )}
             >
-              <Input type="file" {...getInputProps()} />
               {video ? (
                 <div className="text-center">
-                  <h4>{video.name}</h4>
+                  <h4 className="pb-2">{video.name}</h4>
                   {data?.[0].id ? (
                     <p className="mt-2 text-sm text-muted-foreground">
                       Video successfully uploaded to IPFS! 🎉
@@ -121,6 +126,7 @@ export const VideoUpload = () => {
                 </div>
               ) : (
                 <>
+                  <Input type="file" accept=".mp4" {...getInputProps()} />
                   <FileUpIcon width={30} height={30} className="mb-2" />
                   <h4 className="text-xl font-semibold">Upload Video</h4>
                   <p className="mt-2 text-sm text-muted-foreground">
