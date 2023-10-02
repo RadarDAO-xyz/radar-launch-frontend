@@ -179,7 +179,7 @@ export function Wallet() {
           </>
         )}
         <DropdownMenuItem className="cursor-pointer" asChild>
-          <Link href={`/profile/${currentUserData._id}`}>Profile</Link>
+          <Link href={`/profile/${wallet.address}`}>Profile</Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="cursor-pointer" asChild>
           <Link href={`/profile/edit`}>Edit Profile</Link>

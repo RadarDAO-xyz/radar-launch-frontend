@@ -161,7 +161,7 @@ export default function IndividualProjectPage() {
             <div className="flex items-center">
               {userData !== undefined ? (
                 <Link
-                  href={'/profile/' + userData._id}
+                  href={'/profile/' + userData.wallets[0]}
                   className="text-[16px] hover:underline"
                 >
                   {userData?.name}

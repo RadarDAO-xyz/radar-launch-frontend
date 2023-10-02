@@ -101,7 +101,7 @@ export default function AdminPage() {
             to press inside Actions)
           </li>
           <li>
-            User launches project (in /profile/:id page via Launch Project
+            User launches project (in /profile/:address page via Launch Project
             button)
           </li>
           <li>Project is live!</li>
@@ -188,7 +188,7 @@ export default function AdminPage() {
                   </TableCell>
                   <TableCell>
                     <Link
-                      href={`/profile/${project.founder}`}
+                      href={`/profile/${project.admin_address}`}
                       className="underline"
                     >
                       {project.admin_address}
@@ -239,7 +239,9 @@ export default function AdminPage() {
                         : 'NA'}
                     </p>
                   </TableCell>
-                  <ProjectActions {...project} />
+                  <TableCell>
+                    <ProjectActions {...project} />
+                  </TableCell>
                 </TableRow>
               );
             })}

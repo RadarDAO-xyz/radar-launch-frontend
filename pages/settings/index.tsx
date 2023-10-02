@@ -51,8 +51,13 @@ export default function SettingsPage() {
               <Button disabled onClick={() => wallet.fund()}>
                 Fund
               </Button>
-              <Button onClick={() => unlinkWallet(wallet.address)}>
-                Unlink
+              <Button
+                onClick={() => unlinkWallet(wallet.address)}
+                disabled={wallet.connectorType === 'embedded'}
+              >
+                {wallet.connectorType === 'embedded'
+                  ? 'Cannot be unlinked'
+                  : 'Unlink'}
               </Button>
             </div>
           </div>

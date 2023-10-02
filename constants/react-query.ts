@@ -4,6 +4,7 @@ export enum CacheKey {
   LOGIN = 'login',
   USERS = 'users',
   USER = 'user',
+  USER_BY_ADDRESS = 'user-by-address',
   EXCHANGE_RATE = 'exchange-rate',
   POOLS = 'pools',
   POOL = 'pool',

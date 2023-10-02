@@ -1,15 +1,16 @@
-import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
-import { ProjectWithChainData } from '@/types/web3';
 import { ProjectStatus } from '@/types/mongo';
-import { VisionCard } from './VisionCard';
+import { ProjectWithChainData } from '@/types/web3';
+import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 import { ProjectBlock } from '../Layout/ProjectBlock';
+import { VisionCard } from './VisionCard';
 
 interface Props {
   projects: ProjectWithChainData[];
 }
 
 export function YourVisions({ projects }: Props) {
-  const { data: currentUserData } = useGetCurrentUser();
+  const { wallet } = usePrivyWagmi();
+
   return (
     <div>
       <div className="mb-6 rounded-lg border p-8">
@@ -24,7 +25,7 @@ export function YourVisions({ projects }: Props) {
             .map((project) => {
               if (
                 project.admin_address.toUpperCase() ===
-                currentUserData?.wallets?.[0].address?.toUpperCase()
+                wallet?.address.toUpperCase()
               ) {
                 return <VisionCard key={project._id} {...project} />;
               }
@@ -48,7 +49,7 @@ export function YourVisions({ projects }: Props) {
             .map((project) => {
               if (
                 project.admin_address.toUpperCase() ===
-                currentUserData?.wallets?.[0].address?.toUpperCase()
+                wallet?.address.toUpperCase()
               ) {
                 return <VisionCard key={project._id} {...project} />;
               }

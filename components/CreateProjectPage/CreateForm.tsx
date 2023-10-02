@@ -23,7 +23,7 @@ export const createFormSchema = z.object({
   title: z.string().min(1, { message: 'Title is required' }),
   description: z.string().min(1, { message: 'Description is required' }),
   video_url: z.string().min(1, { message: 'Video is required' }),
-  video_id: z.string().min(1, { message: 'Video is required' }),
+  video_id: z.string(),
   tldr: z.string().min(1, { message: 'Brief description is required' }),
   thumbnail: z.optional(z.instanceof(File)),
   brief: z.string().min(1, { message: 'Brief is required' }),
@@ -164,7 +164,7 @@ export function CreateForm() {
             'Your project is now under review. Redirecting you to your profile page...',
         });
         setTimeout(() => {
-          router.push('/profile/' + data.founder);
+          router.push('/profile/' + data.admin_address);
         }, 2000);
       },
     },

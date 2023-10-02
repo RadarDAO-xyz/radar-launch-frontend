@@ -22,6 +22,7 @@ import {
   ProjectIdWithBalance,
   ProjectWithOwnedAmount,
 } from '../../../types/web3';
+import { useGetUserByAddress } from '@/hooks/useGetUserByAddress';
 
 function transformYourVisionsProjects(
   userId?: string,
@@ -83,17 +84,9 @@ function transformCollectionVisionsProject(
 
 export default function AdminPage() {
   const router = useRouter();
-  const { id } = router.query;
+  const { address } = router.query;
 
-  const { data: userData } = useGetUser(id?.toString());
-  // wallet object here is string from GET /user/:id, but WalletResolvable from GET /user/@me
-  const address =
-    typeof userData?.wallets[0] === 'string'
-      ? userData.wallets[0]
-      : typeof userData?.wallets[0] === 'object' &&
-        'address' in userData?.wallets[0]
-      ? (userData.wallets[0] as WalletResolvable).address
-      : '';
+  const { data: userData } = useGetUserByAddress(address?.toString());
   const { data: onChainProjects } = useRadarEditionsGetEditions({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
@@ -102,12 +95,12 @@ export default function AdminPage() {
   const { data: ownedOnChainProjects } = useRadarEditionsGetBalances({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
-    args: [convertAddressToChecksum(address) as Address],
+    args: [convertAddressToChecksum(address?.toString()) as Address],
     enabled: Boolean(chains[0].id) && Boolean(address),
   });
   const { data: databaseProjects } = useGetProjects();
 
-  if (userData === undefined) {
+  if (userData === undefined || address === undefined) {
     return (
       <Placeholder>
         <h1>No user data found</h1>
@@ -116,11 +109,12 @@ export default function AdminPage() {
   }
 
   const yourVisionsProjects = transformYourVisionsProjects(
-    id?.toString(),
+    userData._id,
     databaseProjects,
     onChainProjects as OnChainProject[],
   ).filter(
-    (project) => project.admin_address.toUpperCase() === address?.toUpperCase(),
+    (project) =>
+      project.admin_address.toUpperCase() === address.toString().toUpperCase(),
   );
   const collectedVisionsProjects = transformCollectionVisionsProject(
     databaseProjects,

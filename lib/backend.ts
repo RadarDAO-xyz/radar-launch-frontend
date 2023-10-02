@@ -82,8 +82,21 @@ export async function getProjectBelievers(
   return response.json();
 }
 
-export async function getUser(userId: string): Promise<User> {
+export async function getUser(
+  userId: string,
+): Promise<Omit<User, 'wallets'> & { wallets: string[] }> {
   const response = await fetch(`${process.env.BACKEND_URL}/users/${userId}`);
+  if (!response.ok) {
+    console.error(response);
+    throw new Error('Failed to fetch user');
+  }
+  return response.json();
+}
+
+export async function getUserByAddress(
+  address: string,
+): Promise<Omit<User, 'wallets'> & { wallets: string[] }> {
+  const response = await fetch(`${process.env.BACKEND_URL}/users/address/${address}`);
   if (!response.ok) {
     console.error(response);
     throw new Error('Failed to fetch user');

@@ -45,20 +45,21 @@ export const VideoUpload = () => {
 
   useEffect(() => {
     if (error?.message) {
-      setError('video_url', error);
-    }
-    if (video?.type !== 'video/mp4') {
+      setError('video_url', {
+        message: error.message,
+      });
+    } else if (video && video?.type !== 'video/mp4') {
       setError('video_url', {
         message: 'Only .mp4 files are supported',
       });
     }
-  }, [error, setError, video?.type]);
+  }, [error, setError, video]);
 
   useEffect(() => {
     if (data?.[0].storage?.ipfs?.cid && data?.[0].id) {
       console.log('File uploaded', data[0]);
-      setValue('video_url', `ipfs://${data?.[0].storage?.ipfs?.cid}`);
-      setValue('video_id', data?.[0].id);
+      setValue('video_url', `ipfs://${data[0].storage?.ipfs?.cid}`);
+      setValue('video_id', data[0].id);
     }
   }, [data, setValue]);
 
