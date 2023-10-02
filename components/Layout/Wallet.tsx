@@ -18,10 +18,11 @@ import { shortenAddress } from '@/lib/utils';
 import { chains } from '@/lib/wagmi';
 import { usePrivy } from '@privy-io/react-auth';
 import { usePrivyWagmi } from '@privy-io/wagmi-connector';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, ClipboardIcon } from 'lucide-react';
 import Link from 'next/link';
 import { Address, mainnet, useEnsName, useNetwork } from 'wagmi';
 import { Button } from '../ui/button';
+import { useToast } from '../ui/use-toast';
 
 export function Wallet() {
   const { linkWallet } = usePrivy();
@@ -35,6 +36,7 @@ export function Wallet() {
   });
   const { data: currentUserData, isLoading: isCurrentUserLoading } =
     useGetCurrentUser();
+  const { toast } = useToast();
 
   if (!isLoggedIn) {
     return (
@@ -124,8 +126,19 @@ export function Wallet() {
           <DropdownMenuLabel>
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger asChild>
-                  <p>{shortenedAddress}</p>
+                <TooltipTrigger>
+                  <p
+                    onClick={() => {
+                      navigator.clipboard.writeText(ensName || wallet.address);
+                      toast({
+                        title: 'Copied to clipboard',
+                        description:
+                          'Your wallet address has been copied to your clipboard.',
+                      });
+                    }}
+                  >
+                    {shortenedAddress}
+                  </p>
                 </TooltipTrigger>
                 <TooltipContent>{address}</TooltipContent>
               </Tooltip>
@@ -158,7 +171,20 @@ export function Wallet() {
         <DropdownMenuLabel>
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger>{shortenedAddress}</TooltipTrigger>
+              <TooltipTrigger>
+                <p
+                  onClick={() => {
+                    navigator.clipboard.writeText(ensName || wallet.address);
+                    toast({
+                      title: 'Copied to clipboard',
+                      description:
+                        'Your wallet address has been copied to your clipboard.',
+                    });
+                  }}
+                >
+                  {shortenedAddress}
+                </p>
+              </TooltipTrigger>
               <TooltipContent>{address}</TooltipContent>
             </Tooltip>
           </TooltipProvider>
