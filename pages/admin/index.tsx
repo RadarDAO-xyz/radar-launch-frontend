@@ -64,6 +64,7 @@ export default function AdminPage() {
     databaseProjectData,
     onChainProjects as OnChainProject[],
   );
+
   return (
     <section className="mx-auto mt-24 max-w-screen-lg">
       <div>

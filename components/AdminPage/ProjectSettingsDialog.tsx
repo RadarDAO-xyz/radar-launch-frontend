@@ -38,6 +38,7 @@ import { DeleteProjectButton } from './DeleteProjectButton';
 import { StopEditionButton } from './StopEditionButton';
 import { ResumeEditionButton } from './ResumeEditionButton';
 import { Input } from '../ui/input';
+import { UpdateEditionButton } from './UpdateEditionButton';
 
 export function ProjectSettingsDialog({
   _id,
@@ -207,6 +208,13 @@ export function ProjectSettingsDialog({
           <ResumeEditionButton
             isOpen={isOpen}
             editionId={editionId}
+            onChainStatus={onChainStatus}
+          />
+          <UpdateEditionButton
+            isOpen={isOpen}
+            editionId={editionId}
+            briefId={pool}
+            projectId={_id}
             onChainStatus={onChainStatus}
           />
           <Button
