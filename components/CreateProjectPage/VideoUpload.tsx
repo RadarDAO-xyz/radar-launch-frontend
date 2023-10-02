@@ -45,6 +45,7 @@ export const VideoUpload = () => {
 
   useEffect(() => {
     if (error?.message) {
+      console.log('error with video', { error });
       setError('video_url', {
         message: error.message,
       });
