@@ -37,6 +37,7 @@ import { CreateEditionButton } from './CreateEditionButton';
 import { DeleteProjectButton } from './DeleteProjectButton';
 import { StopEditionButton } from './StopEditionButton';
 import { ResumeEditionButton } from './ResumeEditionButton';
+import { Input } from '../ui/input';
 
 export function ProjectSettingsDialog({
   _id,
@@ -58,6 +59,7 @@ export function ProjectSettingsDialog({
   const [curationEnd, setCurationEnd] = useState<Date | undefined>(
     curation?.end ? new Date(curation.end) : undefined,
   );
+  const [poolId, setPoolId] = useState(pool);
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -72,6 +74,7 @@ export function ProjectSettingsDialog({
             start: curationStart?.toISOString(),
             end: curationEnd?.toISOString(),
           },
+          pool: poolId,
         },
         _id,
         idToken,
@@ -149,7 +152,6 @@ export function ProjectSettingsDialog({
             </PopoverContent>
           </Popover>
           <Label>Curation End</Label>
-
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -176,6 +178,12 @@ export function ProjectSettingsDialog({
               />
             </PopoverContent>
           </Popover>
+          <Label>Brief ID</Label>
+          <Input
+            type="text"
+            value={poolId}
+            onChange={(e) => setPoolId(e.target.value)}
+          />
         </DialogDescription>
         <DialogFooter className="grid grid-cols-2 gap-3 sm:space-x-0">
           <CreateEditionButton
