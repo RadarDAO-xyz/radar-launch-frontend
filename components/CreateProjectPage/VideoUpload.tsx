@@ -80,9 +80,9 @@ export const VideoUpload = () => {
     }
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     accept: {
-      'video/*': ['*.mp4'],
+      'video/*': ['.mp4'],
     },
     maxFiles: 1,
     onDrop,
@@ -111,12 +111,12 @@ export const VideoUpload = () => {
         <FormItem className="pb-4">
           <FormControl>
             <div
-              {...getRootProps()}
               className={cn(
                 'flex w-full flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 py-8',
                 isDragActive && 'border-gray-400 bg-slate-100',
                 video && 'bg-slate-100/50',
               )}
+              {...getRootProps()}
             >
               {video ? (
                 <div className="text-center">
@@ -141,7 +141,7 @@ export const VideoUpload = () => {
                 </div>
               ) : (
                 <>
-                  <Input type="file" accept=".mp4" {...getInputProps()} />
+                  <input {...getInputProps()} />
                   <FileUpIcon width={30} height={30} className="mb-2" />
                   <h4 className="text-xl font-semibold">Upload Video</h4>
                   <p className="mt-2 text-sm text-muted-foreground">

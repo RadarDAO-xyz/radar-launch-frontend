@@ -45,7 +45,7 @@ export function ProjectSection({ isEdit, thumbnail }: Props) {
   );
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
-      'image/*': ['*.jpg', '*.jpeg', '*.png'],
+      'image/*': ['.jpg', '.jpeg', '.png'],
     },
     maxFiles: 1,
     onDrop,
@@ -216,7 +216,7 @@ export function ProjectSection({ isEdit, thumbnail }: Props) {
                             Upload Image
                           </h4>
                           <p className="mt-2 text-sm text-muted-foreground">
-                            Only .jpg/.jpeg/.png images are supported
+                            Only .jpg, .jpeg, .png images are supported
                           </p>
                         </>
                       )}
