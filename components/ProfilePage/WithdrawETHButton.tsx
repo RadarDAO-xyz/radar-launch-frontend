@@ -12,11 +12,12 @@ import {
   useRadarEditionsWithdrawEditionBalance,
 } from '@/lib/generated';
 import { parseEther } from '@/lib/utils';
-import { ProjectWithChainData } from '@/types/web3';
 import { ProjectStatus } from '@/types/mongo';
+import { ProjectWithChainData } from '@/types/web3';
+import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 import { useEffect, useState } from 'react';
-import { useAccount, useWaitForTransaction } from 'wagmi';
-import { chains } from '../Providers/Web3Provider';
+import { Address, useWaitForTransaction } from 'wagmi';
+import { chains } from '../../lib/wagmi';
 import { Button } from '../ui/button';
 import { DialogFooter, DialogHeader } from '../ui/dialog';
 import { Input } from '../ui/input';
@@ -28,12 +29,12 @@ export function WithdrawETHButton({ status, editionId }: ProjectWithChainData) {
   const [isOpen, setIsOpen] = useState(false);
 
   const { toast } = useToast();
-  const { address } = useAccount();
+  const { wallet } = usePrivyWagmi();
   const { config } = usePrepareRadarEditionsWithdrawEditionBalance({
-    account: address,
+    account: wallet?.address as Address,
     address: CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
-    enabled: Boolean(address) && editionId !== undefined,
+    enabled: wallet?.address !== undefined && editionId !== undefined,
     args: [BigInt(editionId || 0), parseEther(amount.toString())],
   });
   const { writeAsync, data, error } =

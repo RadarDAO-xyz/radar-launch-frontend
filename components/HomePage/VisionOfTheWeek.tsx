@@ -1,23 +1,23 @@
-import { CONTRACT_ADDRESS } from '@/constants/address';
 import { useGetCountdown } from '@/hooks/useGetCountdown';
-import { useRadarEditionsGetEditions } from '@/lib/generated';
 import { cn } from '@/lib/utils';
-import { Project, ProjectStatus } from '@/types/mongo';
+import { ProjectStatus } from '@/types/mongo';
+import { ProjectWithChainData } from '@/types/web3';
 import Link from 'next/link';
 import { HTMLParsedComponent } from '../Layout/HTMLParsedComponent';
-import { chains } from '../Providers/Web3Provider';
+import { ProjectVideoPlayer } from '../Layout/ProjectVideoPlayer';
 import { BelieveProjectDialog } from './BelieveProjectDialog';
-import { ProjectVideo } from './ProjectVideo';
 
-export function VisionOfTheWeek(props: Project) {
-  const { _id, mint_end_date, tags, video_url, title, description, status } =
-    props;
-  const { data: onChainProjects } = useRadarEditionsGetEditions({
-    address: CONTRACT_ADDRESS,
-    chainId: chains[0]?.id,
-    enabled: Boolean(chains[0]?.id),
-  });
-  const editionId = onChainProjects?.findIndex((project) => project.id === _id);
+export function VisionOfTheWeek(props: ProjectWithChainData) {
+  const {
+    _id,
+    mint_end_date,
+    tags,
+    video_url,
+    title,
+    description,
+    status,
+    editionId,
+  } = props;
   // const { data: totalSupply } = useRadarEditionsTotalSupply({
   //   address: CONTRACT_ADDRESS,
   //   chainId: chains[0]?.id,
@@ -34,7 +34,9 @@ export function VisionOfTheWeek(props: Project) {
       <div className="floating-weekly-featured full !bg-gray-600/30">
         {'✨ LAUNCH OF THE WEEK ✨'}
       </div>
-      <ProjectVideo videoUrl={video_url} />
+      <div className={cn('w-full')}>
+        <ProjectVideoPlayer videoUrl={video_url} />
+      </div>
       <div className="feature-project-div">
         <div className="text-x flex justify-end gap-2 divide-x-2 overflow-x-auto pt-3 scrollbar-hide">
           {tags.map((tag) => (
@@ -57,12 +59,12 @@ export function VisionOfTheWeek(props: Project) {
         <div>
           {description && (
             <HTMLParsedComponent
-              className="text-xs text-gray-700 pb-4"
+              className="pb-4 text-xs text-gray-700"
               text={description}
             />
           )}
           <div className="_10px-div" />
-          <div className="collect-wrapper main bottom-1 w-full md:bottom-[5%] gap-4">
+          <div className="collect-wrapper main bottom-1 w-full gap-4 md:bottom-[5%]">
             <div className="flex-1">
               {status === ProjectStatus.LIVE ? (
                 <BelieveProjectDialog

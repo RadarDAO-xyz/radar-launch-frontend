@@ -1,59 +1,68 @@
 import { Button } from '@/components/ui/button';
 import { CONTRACT_ADDRESS } from '@/constants/address';
+import { useGetExchangeRate } from '@/hooks/useGetExchangeRate';
 import {
-  usePrepareRadarEditionsApproveEdition,
   usePrepareRadarEditionsCreateEdition,
-  useRadarEditionsApproveEdition,
   useRadarEditionsCreateEdition,
 } from '@/lib/generated';
-import { chains } from '../Providers/Web3Provider';
-import { useToast } from '../ui/use-toast';
-import { useGetExchangeRate } from '@/hooks/useGetExchangeRate';
-import { parseEther } from 'viem';
-import { useAccount } from 'wagmi';
 import { convertAddressToChecksum } from '@/lib/utils';
+import { EditionStatus } from '@/types/web3';
+import { usePrivyWagmi } from '@privy-io/wagmi-connector';
+import { Address, parseEther } from 'viem';
+import { chains } from '../../lib/wagmi';
+import { useToast } from '../ui/use-toast';
 
 interface Props {
   isOpen: boolean;
   projectId: string;
   fee: number;
   address: string;
+  briefId: string;
+  onChainStatus?: EditionStatus;
 }
+
 export function CreateEditionButton({
   isOpen,
   projectId,
   fee,
   address,
+  briefId,
+  onChainStatus,
 }: Props) {
   const { toast } = useToast();
-  const { address: payerAddress } = useAccount();
+  const { wallet } = usePrivyWagmi();
   const { data: exchangeRateData } = useGetExchangeRate();
 
   const actualFee =
     exchangeRateData?.ethereum?.usd !== undefined
       ? parseEther(String(fee / exchangeRateData.ethereum.usd), 'wei')
       : BigInt(fee);
+  const projectCanBeCreated =
+    onChainStatus !== undefined && onChainStatus === EditionStatus.NOT_CREATED;
+
   const { config } = usePrepareRadarEditionsCreateEdition({
     address: CONTRACT_ADDRESS,
-    account: payerAddress,
+    account: wallet?.address as Address,
     chainId: chains[0].id,
     enabled:
       Boolean(chains[0].id) &&
       isOpen &&
-      payerAddress !== undefined &&
-      exchangeRateData?.ethereum?.usd !== undefined,
+      wallet?.address !== undefined &&
+      exchangeRateData?.ethereum?.usd !== undefined &&
+      projectCanBeCreated,
     args: [
       actualFee,
       convertAddressToChecksum(address)!,
       convertAddressToChecksum(address)!,
       projectId,
+      briefId,
     ],
   });
   const { writeAsync, isLoading } = useRadarEditionsCreateEdition(config);
 
   return (
     <Button
-      disabled={isLoading}
+      loading={isLoading}
       onClick={() => {
         try {
           writeAsync?.();
@@ -66,8 +75,11 @@ export function CreateEditionButton({
           });
         }
       }}
+      disabled={!projectCanBeCreated}
     >
-      Create Edition (on-chain)
+      {!projectCanBeCreated
+        ? 'Create Edition (on-chain)'
+        : 'Project already / cannot be created'}
     </Button>
   );
 }

@@ -16,6 +16,7 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useToast } from '../ui/use-toast';
 import { useMutation, useQueryClient } from 'wagmi';
+import { useAuth } from '@/hooks/useAuth';
 
 async function updateUser(
   values: z.infer<typeof schema>,
@@ -57,7 +58,7 @@ const schema = z.object({
 
 export function UpdateForm() {
   const { data } = useGetCurrentUser();
-  const { idToken } = useContext(AuthContext);
+  const { idToken, isLoggedIn } = useAuth();
   const form = useForm<z.infer<typeof schema>>({
     mode: 'onBlur',
     defaultValues: {
@@ -194,9 +195,10 @@ export function UpdateForm() {
           <Button
             className="rounded bg-black px-5 leading-10 text-white"
             type="submit"
-            disabled={data === undefined || idToken === '' || isLoading}
+            disabled={data === undefined || !isLoggedIn}
+            loading={isLoading}
           >
-            {data === undefined || idToken === ''
+            {data === undefined || !isLoggedIn
               ? 'Please Sign In'
               : 'Update Your Bio'}
           </Button>

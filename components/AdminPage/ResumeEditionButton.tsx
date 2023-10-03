@@ -1,14 +1,14 @@
 import { Button } from '@/components/ui/button';
 import { CONTRACT_ADDRESS } from '@/constants/address';
 import {
-  usePrepareRadarEditionsApproveEdition,
-  useRadarEditionsApproveEdition,
+  usePrepareRadarEditionsResumeEdition,
+  useRadarEditionsResumeEdition,
 } from '@/lib/generated';
+import { EditionStatus } from '@/types/web3';
 import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 import type { Address } from 'viem';
 import { chains } from '../../lib/wagmi';
 import { useToast } from '../ui/use-toast';
-import { EditionStatus } from '@/types/web3';
 
 interface Props {
   isOpen: boolean;
@@ -16,7 +16,7 @@ interface Props {
   onChainStatus?: EditionStatus;
 }
 
-export function ApproveEditionButton({
+export function ResumeEditionButton({
   isOpen,
   editionId,
   onChainStatus,
@@ -24,10 +24,10 @@ export function ApproveEditionButton({
   const { toast } = useToast();
   const { wallet } = usePrivyWagmi();
 
-  const projectCanBeApproved =
-    onChainStatus !== undefined && onChainStatus === EditionStatus.CREATED;
+  const projectCanBeResumed =
+    onChainStatus !== undefined && onChainStatus === EditionStatus.STOPPED;
 
-  const { config } = usePrepareRadarEditionsApproveEdition({
+  const { config } = usePrepareRadarEditionsResumeEdition({
     account: wallet?.address as Address,
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
@@ -36,15 +36,14 @@ export function ApproveEditionButton({
       isOpen &&
       editionId !== undefined &&
       wallet?.address !== undefined &&
-      projectCanBeApproved,
+      projectCanBeResumed,
     args: [BigInt(+(editionId || 0)) || 0n],
   });
-  const { writeAsync, isLoading: isApproveLoading } =
-    useRadarEditionsApproveEdition(config);
+  const { writeAsync, isLoading } = useRadarEditionsResumeEdition(config);
 
   return (
     <Button
-      loading={isApproveLoading}
+      loading={isLoading}
       onClick={() => {
         try {
           writeAsync?.();
@@ -57,11 +56,11 @@ export function ApproveEditionButton({
           });
         }
       }}
-      disabled={!projectCanBeApproved}
+      disabled={!projectCanBeResumed}
     >
-      {projectCanBeApproved
-        ? 'Approve Edition (on-chain)'
-        : 'Project already / cannot be approved'}
+      {projectCanBeResumed
+        ? 'Resume Edition (on-chain)'
+        : 'Edition already / cannot be resumed'}
     </Button>
   );
 }

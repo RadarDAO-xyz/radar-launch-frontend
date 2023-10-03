@@ -1,18 +1,25 @@
 import { Project } from '@/types/mongo';
-import { OnChainProject } from '@/types/web3';
+import { OnChainProject, ProjectWithChainData } from '@/types/web3';
 
-export function transformProjects(
+export function transformProjectsWithChainData(
   databaseProjects?: Project[],
   chainProjects?: OnChainProject[],
-) {
+): ProjectWithChainData[] {
   if (!databaseProjects || !chainProjects) {
     return [];
   }
 
   const projectIdToEditionId = chainProjects.reduce<
-    Record<string, { index: number; onChainStatus: number }>
+    Record<
+      string,
+      { index: number; onChainStatus: number; onChainBriefId: string }
+    >
   >((acc, project, index) => {
-    acc[project.id] = { index, onChainStatus: project.status };
+    acc[project.id] = {
+      index,
+      onChainStatus: project.status,
+      onChainBriefId: project.briefId,
+    };
     return acc;
   }, {});
 
@@ -20,5 +27,6 @@ export function transformProjects(
     ...project,
     editionId: projectIdToEditionId[project._id]?.index,
     onChainStatus: projectIdToEditionId[project._id]?.onChainStatus,
+    onChainBriefId: projectIdToEditionId[project._id]?.onChainBriefId,
   }));
 }

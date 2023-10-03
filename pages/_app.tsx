@@ -6,12 +6,25 @@ import CookieConsent from '@/components/Layout/CookieConsent';
 import { NavBar } from '@/components/Layout/NavBar';
 import { AuthProvider } from '@/components/Providers/AuthProvider';
 import { ThemeProvider } from '@/components/Providers/ThemeProvider';
-import { Web3Provider } from '@/components/Providers/Web3Provider';
+import { configureChainsConfig } from '@/lib/wagmi';
 import { Toaster } from '@/components/ui/toaster';
+import {
+  LivepeerConfig,
+  createReactClient,
+  studioProvider,
+} from '@livepeer/react';
+import { PrivyProvider } from '@privy-io/react-auth';
+import { PrivyWagmiConnector } from '@privy-io/wagmi-connector';
+import { DefaultSeo } from 'next-seo';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import Script from 'next/script';
-import { DefaultSeo, NextSeo } from 'next-seo';
+
+const livepeerClient = createReactClient({
+  provider: studioProvider({
+    apiKey: process.env.LIVEPEER_API_KEY!,
+  }),
+});
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -63,22 +76,41 @@ export default function App({ Component, pageProps }: AppProps) {
           content="width=device-width, initial-scale=1.0"
         />
         <meta name="robots" content="index,follow" />
-        {process.env.NODE_ENV === 'production' && (
+        {/* {process.env.NODE_ENV === 'production' && (
           <base href="https://radarlaunch.app" />
-        )}
+        )} */}
 
         <link rel="icon" href="/favicon.png" sizes="any" />
       </Head>
       <ThemeProvider attribute="class" defaultTheme="light" themes={['light']}>
-        <Web3Provider>
-          <AuthProvider>
-            <NavBar />
-            <Component {...pageProps} />
-            <Footer />
-            <Toaster />
-            <CookieConsent />
-          </AuthProvider>
-        </Web3Provider>
+        <PrivyProvider
+          appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID!}
+          onSuccess={console.log}
+          config={{
+            loginMethods: ['email', 'wallet'],
+            appearance: {
+              theme: 'light',
+              accentColor: '#676FFF',
+              logo: '/logo.png',
+              showWalletLoginFirst: true,
+            },
+            embeddedWallets: {
+              createOnLogin: 'users-without-wallets',
+            },
+          }}
+        >
+          <PrivyWagmiConnector wagmiChainsConfig={configureChainsConfig}>
+            <AuthProvider>
+              <LivepeerConfig client={livepeerClient}>
+                <NavBar />
+                <Component {...pageProps} />
+                <Footer />
+                <Toaster />
+                <CookieConsent />
+              </LivepeerConfig>
+            </AuthProvider>
+          </PrivyWagmiConnector>
+        </PrivyProvider>
       </ThemeProvider>
     </>
   );

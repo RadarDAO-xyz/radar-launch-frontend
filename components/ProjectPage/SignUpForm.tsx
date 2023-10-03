@@ -86,7 +86,7 @@ export function SignUpForm({ id }: Props) {
                 </FormItem>
               )}
             />
-            <Button className="w-full" type="submit" disabled={isLoading}>
+            <Button className="w-full" type="submit" loading={isLoading}>
               SIGN UP
             </Button>
           </form>

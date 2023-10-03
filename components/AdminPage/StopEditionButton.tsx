@@ -4,33 +4,42 @@ import {
   usePrepareRadarEditionsStopEdition,
   useRadarEditionsStopEdition,
 } from '@/lib/generated';
-import { chains } from '../Providers/Web3Provider';
+import { usePrivyWagmi } from '@privy-io/wagmi-connector';
+import type { Address } from 'viem';
+import { chains } from '../../lib/wagmi';
 import { useToast } from '../ui/use-toast';
-import { useAccount } from 'wagmi';
+import { EditionStatus } from '@/types/web3';
 
 interface Props {
   isOpen: boolean;
   editionId?: number;
+  onChainStatus?: EditionStatus;
 }
-export function DisapproveEditionButton({ isOpen, editionId }: Props) {
+
+export function StopEditionButton({ isOpen, editionId, onChainStatus }: Props) {
   const { toast } = useToast();
-  const { address } = useAccount();
+  const { wallet } = usePrivyWagmi();
+
+  const projectCanBeStopped =
+    onChainStatus !== undefined && onChainStatus === EditionStatus.LAUNCHED;
 
   const { config } = usePrepareRadarEditionsStopEdition({
-    account: address,
+    account: wallet?.address as Address,
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
     enabled:
       Boolean(chains[0].id) &&
       isOpen &&
       editionId !== undefined &&
-      address !== undefined,
+      wallet?.address !== undefined &&
+      projectCanBeStopped,
     args: [BigInt(+(editionId || 0)) || 0n],
   });
   const { writeAsync, isLoading } = useRadarEditionsStopEdition(config);
+
   return (
     <Button
-      disabled={isLoading}
+      loading={isLoading}
       onClick={() => {
         try {
           writeAsync?.();
@@ -43,8 +52,11 @@ export function DisapproveEditionButton({ isOpen, editionId }: Props) {
           });
         }
       }}
+      disabled={!projectCanBeStopped}
     >
-      Stop Edition (on-chain)
+      {projectCanBeStopped
+        ? 'Stop Edition (on-chain)'
+        : 'Edition already / cannot be stopped'}
     </Button>
   );
 }

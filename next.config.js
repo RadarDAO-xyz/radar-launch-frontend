@@ -12,6 +12,7 @@ const nextConfig = {
     WHITELISTED_ADDRESSES: process.env.WHITELISTED_ADDRESSES,
     TINYMCE_API_KEY: process.env.TINYMCE_API_KEY,
     FEATURED_PROJECT_ID: process.env.FEATURED_PROJECT_ID,
+    LIVEPEER_API_KEY: process.env.LIVEPEER_API_KEY,
   },
   // see https://github.com/vercel/next.js/pull/53483/files
   // modularizeImports: {

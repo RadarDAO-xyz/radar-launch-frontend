@@ -15,12 +15,13 @@ import {
 } from '@/lib/generated';
 import { cn } from '@/lib/utils';
 import { Project } from '@/types/mongo';
+import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 import { DotIcon, MinusIcon, MoveDown, PlusIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { useAccount, useQuery, useWaitForTransaction } from 'wagmi';
+import { Address, useQuery, useWaitForTransaction } from 'wagmi';
 import { convertWeiToUsdOrEth } from '../../lib/convertWeiToUsdOrEth';
-import { chains } from '../Providers/Web3Provider';
+import { chains } from '../../lib/wagmi';
 import { Button } from '../ui/button';
 import {
   Dialog,
@@ -33,8 +34,6 @@ import {
 import { Input } from '../ui/input';
 import { useToast } from '../ui/use-toast';
 import { BelieveTabContent } from './BelieveTabContent';
-import { ContributeForm } from './ContributeForm';
-import { SignUpForm } from './SignUpForm';
 
 async function getMintCheckoutLink(
   quantity: number,
@@ -105,17 +104,15 @@ export function ProjectTabs({
   const [hasToasted, setHasToasted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  const { address } = useAccount();
+  const { wallet } = usePrivyWagmi();
   const { login, isLoggedIn } = useAuth();
   const { data: onChainProjects } = useRadarEditionsGetEditions({
     address: CONTRACT_ADDRESS,
-    chainId: chains[0]?.id,
-    enabled: Boolean(chains[0]?.id),
+    chainId: chains[0].id,
   });
   const { data: protocolFee } = useRadarEditionsProtocolFee({
     address: CONTRACT_ADDRESS,
-    chainId: chains[0]?.id,
-    enabled: Boolean(chains[0]?.id),
+    chainId: chains[0].id,
   });
 
   const editionId: number | undefined = onChainProjects?.findLastIndex(
@@ -131,20 +128,20 @@ export function ProjectTabs({
     enabled: Boolean(chains[0]?.id) && editionId !== undefined,
   });
   const { config, error } = usePrepareRadarEditionsMintEdition({
-    account: address,
+    account: wallet?.address as Address,
     address: CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
     args: [
       BigInt(editionId || 0),
       BigInt(quantity),
-      address!,
+      wallet?.address as Address,
       '0x0000000000000000000000000000000000000000000000000000000000000000',
     ],
     value: BigInt((value || 0n) + (protocolFee || 0n)) * BigInt(quantity),
     enabled:
       value !== undefined &&
       editionId !== undefined &&
-      address !== undefined &&
+      wallet?.address !== undefined &&
       isLoggedIn,
   });
   const {
@@ -228,6 +225,10 @@ export function ProjectTabs({
       setHasToasted(true);
     }
   }, [isSuccess, mintEditionData?.hash]);
+
+  const projectClosed = mint_end_date
+    ? new Date(mint_end_date) < new Date()
+    : false;
 
   return (
     <Tabs
@@ -349,13 +350,8 @@ export function ProjectTabs({
             </div>
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
               <DialogTrigger asChild>
-                <Button
-                  className="w-full"
-                  disabled={
-                    mint_end_date ? new Date(mint_end_date) < new Date() : false
-                  }
-                >
-                  COLLECT
+                <Button className="w-full" disabled={projectClosed}>
+                  {projectClosed ? 'MINT CLOSED' : 'COLLECT'}
                 </Button>
               </DialogTrigger>
               <DialogContent>

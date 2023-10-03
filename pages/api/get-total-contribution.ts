@@ -1,4 +1,4 @@
-import { chains } from '@/components/Providers/Web3Provider';
+import { chains } from '@/lib/wagmi';
 import { CONTRACT_ADDRESS } from '@/constants/address';
 import { ethers } from 'ethers';
 import { NextApiRequest, NextApiResponse } from 'next';

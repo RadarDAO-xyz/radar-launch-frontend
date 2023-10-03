@@ -1,15 +1,15 @@
-import { AuthContext } from '@/components/Providers/AuthProvider';
 import { CacheKey } from '@/constants/react-query';
 import { getCurrentUser } from '@/lib/backend';
-import { useContext } from 'react';
-import { useAccount, useQuery } from 'wagmi';
+import { usePrivyWagmi } from '@privy-io/wagmi-connector';
+import { useQuery } from 'wagmi';
+import { useAuth } from './useAuth';
 
 export function useGetCurrentUser() {
-  const { address } = useAccount();
-  const { idToken } = useContext(AuthContext);
+  const { wallet } = usePrivyWagmi();
+  const { idToken } = useAuth();
 
   return useQuery(
-    [CacheKey.CURRENT_USER, idToken, address],
+    [CacheKey.CURRENT_USER, idToken, wallet?.address],
     () => getCurrentUser(idToken),
     {
       enabled: idToken !== '',

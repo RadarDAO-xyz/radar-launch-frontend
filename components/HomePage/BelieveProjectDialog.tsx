@@ -8,25 +8,23 @@ import {
 import { CONTRACT_ADDRESS } from '@/constants/address';
 import { CacheKey } from '@/constants/react-query';
 import { useAuth } from '@/hooks/useAuth';
+import { useGetBelieveEvents } from '@/hooks/useGetBelieveEvents';
 import {
   usePrepareRadarEditionsBelieveProject,
   useRadarEditionsBelieveProject,
 } from '@/lib/generated';
 import { cn, shortenAddress } from '@/lib/utils';
-import { ProjectWithChainData } from '@/types/web3';
 import { ProjectStatus } from '@/types/mongo';
+import { ProjectWithChainData } from '@/types/web3';
+import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import { RefAttributes, useEffect, useState } from 'react';
-import {
-  useAccount,
-  useBlockNumber,
-  usePublicClient,
-  useQuery,
-  useQueryClient,
-  useWaitForTransaction,
-} from 'wagmi';
+import type { Address } from 'viem';
+import { useBlockNumber, useQueryClient, useWaitForTransaction } from 'wagmi';
 import { HTMLParsedComponent } from '../Layout/HTMLParsedComponent';
+import { ProjectVideoPlayer } from '../Layout/ProjectVideoPlayer';
+import { Badge } from '../ui/badge';
 import {
   Dialog,
   DialogContent,
@@ -35,9 +33,6 @@ import {
   DialogTrigger,
 } from '../ui/dialog';
 import { useToast } from '../ui/use-toast';
-import { ProjectVideo } from './ProjectVideo';
-import { useGetBelieveEvents } from '@/hooks/useGetBelieveEvents';
-import { Badge } from '../ui/badge';
 
 const START_BLOCK_FOR_BELIEVE = 108947105n;
 const BLOCK_TIME_IN_SECONDS = 2;
@@ -59,9 +54,9 @@ export function BelieveProjectDialog({
   const [hasToasted, setHasToasted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  const { isConnected, address } = useAccount();
+  const { wallet } = usePrivyWagmi();
   const { toast } = useToast();
-  const { login } = useAuth();
+  const { login, isLoggedIn } = useAuth();
   const { data: blockNumber } = useBlockNumber();
 
   const { data: believerLogs, isLoading } = useGetBelieveEvents(
@@ -72,10 +67,10 @@ export function BelieveProjectDialog({
   const queryClient = useQueryClient();
   const { config } = usePrepareRadarEditionsBelieveProject({
     address: CONTRACT_ADDRESS,
-    account: address,
+    account: wallet?.address as Address,
     args: [BigInt(editionId || 0), tags.join(',')],
     enabled:
-      address !== undefined &&
+      wallet?.address !== undefined &&
       editionId !== undefined &&
       tags.length > 0 &&
       isOpen,
@@ -112,7 +107,8 @@ export function BelieveProjectDialog({
   }, [isSuccess, believeProjectData?.hash]);
 
   const hasBelieved =
-    believerLogs?.find((log) => log.args?.believer === address) !== undefined;
+    believerLogs?.find((log) => log.args?.believer === wallet?.address) !==
+    undefined;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -127,11 +123,12 @@ export function BelieveProjectDialog({
       </DialogTrigger>
       <DialogContent className="max-h-screen w-full overflow-y-auto p-10 scrollbar-hide lg:max-w-3xl">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
-          <ProjectVideo
-            videoUrl={video_url}
-            className="col-span-2 pt-2 lg:pt-0"
-            videoClassName="rounded-lg"
-          />
+          <div className={cn('col-span-2 w-full pt-2 lg:pt-0')}>
+            <ProjectVideoPlayer
+              videoUrl={video_url}
+              videoClassName="rounded-lg"
+            />
+          </div>
           <div className="col-span-2">
             <DialogTitle className="text-2xl uppercase">{title}</DialogTitle>
             <HTMLParsedComponent className="text-gray-700" text={description} />
@@ -155,11 +152,12 @@ export function BelieveProjectDialog({
               disabled={
                 status !== ProjectStatus.LIVE ||
                 hasBelieved ||
-                editionId === undefined
+                editionId === undefined ||
+                (isLoggedIn && believeProjectWriteAsync === undefined)
               }
               onClick={async () => {
                 // here we use isConnected instead since web3 interaction
-                if (!isConnected) {
+                if (!isLoggedIn) {
                   login();
                   setIsOpen(false);
                 } else {
@@ -170,7 +168,7 @@ export function BelieveProjectDialog({
             >
               {editionId === undefined
                 ? 'Project not available for beliefs yet'
-                : !isConnected
+                : !isLoggedIn
                 ? 'Please login to believe in this project'
                 : hasBelieved
                 ? 'Thank you for believing in this project!'

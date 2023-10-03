@@ -6,43 +6,111 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { useAuth } from '@/hooks/useAuth';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 import { shortenAddress } from '@/lib/utils';
-import { ChevronDown } from 'lucide-react';
+import { chains } from '@/lib/wagmi';
+import { usePrivy } from '@privy-io/react-auth';
+import { usePrivyWagmi } from '@privy-io/wagmi-connector';
+import { ChevronDown, ClipboardIcon } from 'lucide-react';
 import Link from 'next/link';
-import { mainnet, useAccount, useEnsName } from 'wagmi';
+import { Address, mainnet, useEnsName, useNetwork } from 'wagmi';
 import { Button } from '../ui/button';
+import { useToast } from '../ui/use-toast';
 
 export function Wallet() {
-  const { login, logout, isVerified, verify: authenticate } = useAuth();
-  const { address } = useAccount();
+  const { linkWallet } = usePrivy();
+  const { wallet } = usePrivyWagmi();
+  const { login, logout, isLoggedIn, isLoading } = useAuth();
+  const { chain } = useNetwork();
   const { data: ensName } = useEnsName({
-    address,
+    address: wallet?.address as Address,
     chainId: mainnet.id,
-    enabled: address !== undefined,
+    enabled: wallet?.address !== undefined,
   });
-  const { data: currentUserData, isLoading } = useGetCurrentUser();
+  const { data: currentUserData, isLoading: isCurrentUserLoading } =
+    useGetCurrentUser();
+  const { toast } = useToast();
 
-  if (address === undefined) {
+  if (!isLoggedIn) {
     return (
       <Button
         onClick={() => {
-          if (address === undefined) {
-            login();
-          } else {
-            authenticate();
-          }
+          login();
         }}
         variant={'ghost'}
+        loading={isLoading || isCurrentUserLoading}
       >
-        {address === undefined ? 'LOGIN ⚙' : 'SIGN WALLET ⚙'}
+        {'LOGIN ⚙'}
       </Button>
     );
   }
 
-  if (isLoading) {
-    return <Button variant="ghost" loading />;
+  if (!wallet?.address) {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant={'ghost'}>
+            ADD WALLET
+            <ChevronDown />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="max-w-[200px]">
+          <DropdownMenuLabel>
+            <p className="pt-2 font-normal leading-4">
+              Link a new wallet to your account.
+            </p>
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onClick={() => linkWallet()}
+            className="cursor-pointer"
+          >
+            Link Wallet
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => logout()} className="cursor-pointer">
+            Log Out
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  }
+  const shortenedAddress = ensName || shortenAddress(wallet.address);
+  const address = ensName || wallet.address;
+
+  if (chain !== undefined && chain.id !== chains[0].id) {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant={'ghost'}>
+            WRONG CHAIN
+            <ChevronDown />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="max-w-[200px]">
+          <DropdownMenuLabel>
+            Please switch your network to {chains[0].name} to continue RADAR
+            Launch.
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onClick={() => wallet?.switchChain(chains[0].id)}
+            className="cursor-pointer"
+          >
+            Switch Network
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => logout()} className="cursor-pointer">
+            Log Out
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
   }
 
   if (currentUserData === undefined) {
@@ -50,18 +118,39 @@ export function Wallet() {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant={'ghost'}>
-            {ensName || shortenAddress(address)}
+            {shortenedAddress}
             <ChevronDown />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="max-w-[200px]">
           <DropdownMenuLabel>
-            <p>{ensName || shortenAddress(address)}</p>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <p
+                    onClick={() => {
+                      navigator.clipboard.writeText(ensName || wallet.address);
+                      toast({
+                        title: 'Copied to clipboard',
+                        description:
+                          'Your wallet address has been copied to your clipboard.',
+                      });
+                    }}
+                  >
+                    {shortenedAddress}
+                  </p>
+                </TooltipTrigger>
+                <TooltipContent>{address}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <p className="pt-2 font-normal leading-4">
               No user data found, please contact support if issue persists.
             </p>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
+          {/* <DropdownMenuItem className="cursor-pointer" asChild>
+            <Link href={`/settings`}>Settings</Link>
+          </DropdownMenuItem> */}
           <DropdownMenuItem onClick={() => logout()} className="cursor-pointer">
             Log Out
           </DropdownMenuItem>
@@ -74,13 +163,31 @@ export function Wallet() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant={'ghost'}>
-          {ensName || shortenAddress(address)}
+          {shortenedAddress}
           <ChevronDown />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>
-          {ensName || shortenAddress(address)}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <p
+                  onClick={() => {
+                    navigator.clipboard.writeText(ensName || wallet.address);
+                    toast({
+                      title: 'Copied to clipboard',
+                      description:
+                        'Your wallet address has been copied to your clipboard.',
+                    });
+                  }}
+                >
+                  {shortenedAddress}
+                </p>
+              </TooltipTrigger>
+              <TooltipContent>{address}</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         {currentUserData?.bypasser && (
@@ -91,11 +198,14 @@ export function Wallet() {
             <DropdownMenuItem className="cursor-pointer" asChild>
               <Link href="/pool/create">Create Pool</Link>
             </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer" asChild>
+              <Link href={`/settings`}>Settings</Link>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
           </>
         )}
         <DropdownMenuItem className="cursor-pointer" asChild>
-          <Link href={`/profile/${currentUserData._id}`}>Profile</Link>
+          <Link href={`/profile/${wallet.address}`}>Profile</Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="cursor-pointer" asChild>
           <Link href={`/profile/edit`}>Edit Profile</Link>

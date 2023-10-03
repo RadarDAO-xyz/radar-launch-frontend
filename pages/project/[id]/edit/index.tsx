@@ -3,11 +3,11 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useAuth } from '@/hooks/useAuth';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 import { useGetProject } from '@/hooks/useGetProject';
+import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 import { HelpCircleIcon } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useAccount } from 'wagmi';
 
 const EditFormNoSSR = dynamic(
   () =>
@@ -18,7 +18,7 @@ const EditFormNoSSR = dynamic(
 export default function EditProjectPage() {
   const { data: userData } = useGetCurrentUser();
   const { idToken } = useAuth();
-  const { address } = useAccount();
+  const { wallet } = usePrivyWagmi();
   const router = useRouter();
   const { id } = router.query;
 
@@ -41,7 +41,7 @@ export default function EditProjectPage() {
   }
 
   if (
-    data?.admin_address.toUpperCase() !== address?.toUpperCase() &&
+    data?.admin_address.toUpperCase() !== wallet?.address?.toUpperCase() &&
     !userData.bypasser
   ) {
     return (

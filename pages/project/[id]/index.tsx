@@ -1,5 +1,6 @@
 import { HTMLParsedComponent } from '@/components/Layout/HTMLParsedComponent';
 import { Placeholder } from '@/components/Layout/Placeholder';
+import { ProjectVideoPlayer } from '@/components/Layout/ProjectVideoPlayer';
 import { ContributeForm } from '@/components/ProjectPage/ContributeForm';
 import { ProjectDescription } from '@/components/ProjectPage/ProjectDescription';
 import { ProjectTabs } from '@/components/ProjectPage/ProjectTabs';
@@ -19,7 +20,7 @@ import { DEFAULT_AVATAR_IMAGE } from '@/constants/links';
 import { useGetProject } from '@/hooks/useGetProject';
 import { useGetUser } from '@/hooks/useGetUser';
 import { generateVideoEmbed } from '@/lib/generateVideoEmbed';
-import { isValidVideoLink } from '@/lib/isValidVideoLink';
+import { isYoutubeOrVimeoVideoLink } from '@/lib/isYoutubeOrVimeoVideoLink';
 import { NextSeo } from 'next-seo';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -73,7 +74,7 @@ export default function IndividualProjectPage() {
           key="twitter:player"
           property="twitter:player"
           content={
-            isValidVideoLink(data.video_url || '')
+            isYoutubeOrVimeoVideoLink(data.video_url || '')
               ? generateVideoEmbed(
                   data.video_url,
                   data.video_url.includes('youtube')
@@ -97,25 +98,7 @@ export default function IndividualProjectPage() {
       <div className="grid grid-cols-1 bg-white px-[5%] md:grid-cols-6">
         <div className="col-span-1 md:col-span-4 md:max-h-screen md:overflow-y-scroll md:pr-10">
           <div>
-            {isValidVideoLink(data.video_url || '') ? (
-              <iframe
-                width={'100%'}
-                className="aspect-video"
-                frameBorder={0}
-                src={generateVideoEmbed(
-                  data.video_url,
-                  data.video_url.includes('youtube')
-                    ? '?controls=0&fs=0&loop=1&modestbranding=1&playsinline=1&iv_load_policy=3'
-                    : '',
-                )}
-                loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                title="Embedded Project Video"
-              />
-            ) : (
-              <div>Invalid project video submitted, {data.video_url}</div>
-            )}
+            <ProjectVideoPlayer videoUrl={data.video_url} title={data.title} />
           </div>
           <div className="pb-4 pt-10 text-normal text-gray-400">
             The Brief: <span className="font-semibold">{data.brief}</span>
@@ -178,7 +161,7 @@ export default function IndividualProjectPage() {
             <div className="flex items-center">
               {userData !== undefined ? (
                 <Link
-                  href={'/profile/' + userData._id}
+                  href={'/profile/' + userData.wallets[0]}
                   className="text-[16px] hover:underline"
                 >
                   {userData?.name}

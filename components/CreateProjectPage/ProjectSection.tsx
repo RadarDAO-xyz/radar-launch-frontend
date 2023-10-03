@@ -1,5 +1,8 @@
 import { useGetPools } from '@/hooks/useGetPools';
 import { cn } from '@/lib/utils';
+import { ImageIcon } from 'lucide-react';
+import { useCallback } from 'react';
+import { useDropzone } from 'react-dropzone';
 import { useFormContext } from 'react-hook-form';
 import * as z from 'zod';
 import { TinyMCE } from '../Layout/TinyMCE';
@@ -20,6 +23,7 @@ import {
   SelectValue,
 } from '../ui/select';
 import { createFormSchema } from './CreateForm';
+import { VideoUpload } from './VideoUpload';
 
 interface Props {
   isEdit?: boolean;
@@ -27,8 +31,27 @@ interface Props {
 }
 
 export function ProjectSection({ isEdit, thumbnail }: Props) {
-  const { control } = useFormContext<z.infer<typeof createFormSchema>>();
+  const { control, setValue, watch } =
+    useFormContext<z.infer<typeof createFormSchema>>();
   const { data } = useGetPools();
+
+  const onDrop = useCallback(
+    async (acceptedFiles: File[]) => {
+      if (acceptedFiles && acceptedFiles.length > 0 && acceptedFiles?.[0]) {
+        setValue('thumbnail', acceptedFiles[0]);
+      }
+    },
+    [setValue],
+  );
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    accept: {
+      'image/*': ['.jpg', '.jpeg', '.png'],
+    },
+    maxFiles: 1,
+    onDrop,
+  });
+
+  const currentThumbnail = watch('thumbnail');
 
   return (
     <div className="mb-10 rounded border border-slate-200 p-10">
@@ -115,22 +138,7 @@ export function ProjectSection({ isEdit, thumbnail }: Props) {
           </div>
         )}
         <div className="col-span-1">
-          <FormField
-            control={control}
-            name="video_url"
-            render={({ field }) => (
-              <FormItem className="pb-4">
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormDescription>
-                  Share a brief 3-minute video through a URL (e.g. Vimeo or
-                  YouTube) introducing your vision for a better future.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <VideoUpload />
           <FormField
             control={control}
             name="tldr"
@@ -181,21 +189,38 @@ export function ProjectSection({ isEdit, thumbnail }: Props) {
             control={control}
             name="thumbnail"
             render={({ field }) => {
-              const { value, onChange, ...rest } = field;
               return (
                 <FormItem className="h-full w-full">
                   <FormControl>
-                    <Input
-                      {...rest}
-                      type="file"
-                      onChange={(event) => {
-                        if (event.target.files) {
-                          onChange(event.target.files[0]);
-                        }
-                      }}
-                      placeholder="Upload Image"
-                      className="h-full w-full file:hidden"
-                    />
+                    <div
+                      {...getRootProps()}
+                      className={cn(
+                        'flex h-full w-full flex-col items-center justify-center rounded-lg border-2 border-dashed',
+                        isDragActive && 'border-gray-400 bg-slate-100',
+                        currentThumbnail && 'bg-slate-100/50',
+                      )}
+                    >
+                      {currentThumbnail ? (
+                        <div>
+                          <h4>{currentThumbnail.name}</h4>
+                        </div>
+                      ) : (
+                        <>
+                          <Input
+                            {...getInputProps()}
+                            type="file"
+                            className="hidden bg-transparent"
+                          />
+                          <ImageIcon width={30} height={30} className="mb-2" />
+                          <h4 className="text-xl font-semibold">
+                            Upload Image
+                          </h4>
+                          <p className="mt-2 text-sm text-muted-foreground">
+                            Only .jpg, .jpeg, .png images are supported
+                          </p>
+                        </>
+                      )}
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

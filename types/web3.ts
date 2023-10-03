@@ -1,4 +1,4 @@
-import { Project } from "./mongo";
+import { Project } from './mongo';
 
 export enum EditionStatus {
   NOT_CREATED,
@@ -13,6 +13,7 @@ export interface OnChainProject {
   balance: bigint;
   owner: `0x${string}`;
   id: string;
+  briefId: string;
 }
 
 export interface ProjectIdWithBalance {
@@ -23,6 +24,8 @@ export interface ProjectIdWithBalance {
 export interface ProjectWithChainData extends Project {
   balance?: bigint;
   editionId?: number;
+  onChainStatus?: EditionStatus;
+  onChainBriefId?: string;
 }
 
 export interface ProjectWithOwnedAmount extends Project {

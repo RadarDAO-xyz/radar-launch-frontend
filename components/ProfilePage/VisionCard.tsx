@@ -1,25 +1,33 @@
 import { CONTRACT_ADDRESS } from '@/constants/address';
-import { generateVideoThumbnail } from '@/lib/generateVideoThumbnail';
+import { convertProjectStatusName } from '@/lib/convertProjectStatusName';
+import { convertProjectStatusToColour } from '@/lib/convertProjectStatusToColour';
 import { useRadarEditionsTotalSupply } from '@/lib/generated';
 import { cn } from '@/lib/utils';
 import { ProjectWithChainData } from '@/types/web3';
 import Link from 'next/link';
 import { formatEther } from 'viem';
-import { chains } from '../Providers/Web3Provider';
+import { ProjectThumbnail } from '../Layout/ProjectThumbnail';
+import { chains } from '../../lib/wagmi';
 import { Badge } from '../ui/badge';
-import { VisionCardActions } from './VisionCardActions';
-import { convertProjectStatusName } from '@/lib/convertProjectStatusName';
-import { convertProjectStatusToColour } from '@/lib/convertProjectStatusToColour';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '../ui/tooltip';
+import { VisionCardActions } from './VisionCardActions';
 
 export function VisionCard(props: ProjectWithChainData) {
-  const { _id, status, video_url, title, supporter_count, balance, editionId } =
-    props;
+  const {
+    _id,
+    status,
+    video_url,
+    title,
+    supporter_count,
+    balance,
+    editionId,
+    thumbnail,
+  } = props;
   const { data: totalSupply } = useRadarEditionsTotalSupply({
     address: CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
@@ -36,10 +44,10 @@ export function VisionCard(props: ProjectWithChainData) {
           className={cn(convertProjectStatusToColour(status), 'h-3 w-3 p-0')}
         />
       </div>
-      <img
-        src={generateVideoThumbnail(video_url)}
-        alt={title + ' thumbnail'}
-        className="aspect-video w-full object-cover"
+      <ProjectThumbnail
+        thumbnail={thumbnail}
+        videoUrl={video_url}
+        title={title}
       />
       <div className="my-4">
         <Link

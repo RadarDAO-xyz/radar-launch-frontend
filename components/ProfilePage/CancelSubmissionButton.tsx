@@ -18,7 +18,7 @@ export function CancelSubmissionButton({ projectId }: { projectId: string }) {
   const { toast } = useToast();
   const { idToken } = useAuth();
   const queryClient = useQueryClient();
-  const { mutate } = useMutation(
+  const { mutate, isLoading } = useMutation(
     [CacheKey.DELETE_PROJECT, projectId, idToken],
     () => deleteProject(projectId, idToken),
     {
@@ -55,8 +55,10 @@ export function CancelSubmissionButton({ projectId }: { projectId: string }) {
             onClick={() => {
               mutate();
             }}
+            variant={'destructive'}
+            loading={isLoading}
           >
-            CANCEL
+            REMOVE
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -4,6 +4,7 @@ export enum CacheKey {
   LOGIN = 'login',
   USERS = 'users',
   USER = 'user',
+  USER_BY_ADDRESS = 'user-by-address',
   EXCHANGE_RATE = 'exchange-rate',
   POOLS = 'pools',
   POOL = 'pool',
@@ -18,6 +19,7 @@ export enum CacheKey {
   CHECKOUT_MINT_LINK = 'checkout-mint-link',
   TOTAL_CONTRIBUTION = 'total-contribution',
   BELIEVER_LOGS = 'believer-logs',
+  METADATA = 'metadata',
   // mutation
   DOWNLOAD_PROJECT_SUPPORTERS = 'download-project-supporters',
   BELIEVE_PROJECT = 'believe-project',

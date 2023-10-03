@@ -1,23 +1,19 @@
 import { CONTRACT_ADDRESS } from '@/constants/address';
 import { useGetCountdown } from '@/hooks/useGetCountdown';
 import { useGetPools } from '@/hooks/useGetPools';
-import { generateVideoEmbed } from '@/lib/generateVideoEmbed';
-import { generateVideoThumbnail } from '@/lib/generateVideoThumbnail';
-import {
-  useRadarEditionsGetEditions,
-  useRadarEditionsTotalSupply,
-} from '@/lib/generated';
-import { isValidVideoLink } from '@/lib/isValidVideoLink';
+import { useRadarEditionsTotalSupply } from '@/lib/generated';
 import { cn } from '@/lib/utils';
-import { Project, ProjectStatus } from '@/types/mongo';
+import { ProjectStatus } from '@/types/mongo';
+import { ProjectWithChainData } from '@/types/web3';
 import { format } from 'date-fns';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { chains } from '../Providers/Web3Provider';
-import { Button } from '../ui/button';
+import { chains } from '../../lib/wagmi';
 import { BelieveProjectDialog } from '../HomePage/BelieveProjectDialog';
+import { Button } from '../ui/button';
+import { ProjectVideoPlayer } from './ProjectVideoPlayer';
 
-interface Props extends Project {
+interface Props extends ProjectWithChainData {
   showDropDate?: boolean;
   showMintEndDate?: boolean;
   showPrice?: boolean;
@@ -43,18 +39,11 @@ export function ProjectBlock(props: Props) {
     tags,
     pool,
     showBelieveButton,
+    editionId,
   } = props;
   const { data: poolsData } = useGetPools();
   const router = useRouter();
 
-  const { data: onChainProjects } = useRadarEditionsGetEditions({
-    address: CONTRACT_ADDRESS,
-    chainId: chains[0].id,
-    enabled: Boolean(chains[0].id),
-  });
-  const editionId: number | undefined = onChainProjects?.findLastIndex(
-    (project) => project.id === _id,
-  );
   const { data: totalSupply } = useRadarEditionsTotalSupply({
     address: CONTRACT_ADDRESS,
     chainId: chains[0]?.id,
@@ -91,33 +80,11 @@ export function ProjectBlock(props: Props) {
         </div>
         <div className="_10px-div" />
         <div className="project-image w-full">
-          {isValidVideoLink(video_url) ? (
-            <iframe
-              frameBorder={0}
-              src={generateVideoEmbed(
-                video_url,
-                video_url.startsWith('https://www.youtube')
-                  ? '?controls=0&fs=0&loop=1&modestbranding=1&playsinline=1&iv_load_policy=3'
-                  : '?title=0&byline=0&portrait=0&sidedock=0&loop=1',
-              )}
-              className="aspect-video w-full bg-gray-100 object-cover"
-              allow="autoplay; fullscreen; picture-in-picture"
-              loading="lazy"
-            />
-          ) : (
-            <img
-              src={thumbnail || generateVideoThumbnail(video_url)}
-              className="aspect-video w-full bg-gray-100 object-cover"
-              alt="Project image"
-              loading="lazy"
-            />
-            // <HoverVideoPlayer
-            //   focused
-            //   loop
-            //   videoSrc={generateHoverVideoLink(video_url)}
-            //   className="!hidden md:!inline-block"
-            // />
-          )}
+          <ProjectVideoPlayer
+            videoUrl={video_url}
+            thumbnail={thumbnail}
+            isThumbnail
+          />
         </div>
         <div className="_20px-div" />
         <Link
@@ -150,8 +117,8 @@ export function ProjectBlock(props: Props) {
           </div>
         )}
       </div>
-      <div className="bottom-half-of-content">
-        <div className="collect-wrapper flex-row">
+      <div className="flex justify-end flex-col h-full">
+        <div className="flex-row justify-end">
           <div className="flex w-full items-center justify-between gap-4 border-t border-t-[var(--line-83d2b2f6)] pt-3">
             <div className="flex-1">
               {status === ProjectStatus.LIVE ? (

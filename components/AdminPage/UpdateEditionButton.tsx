@@ -1,33 +1,37 @@
 import { Button } from '@/components/ui/button';
 import { CONTRACT_ADDRESS } from '@/constants/address';
 import {
-  usePrepareRadarEditionsApproveEdition,
-  useRadarEditionsApproveEdition,
+  usePrepareRadarEditionsUpdateEdition,
+  useRadarEditionsUpdateEdition,
 } from '@/lib/generated';
+import { EditionStatus } from '@/types/web3';
 import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 import type { Address } from 'viem';
 import { chains } from '../../lib/wagmi';
 import { useToast } from '../ui/use-toast';
-import { EditionStatus } from '@/types/web3';
 
 interface Props {
   isOpen: boolean;
   editionId?: number;
+  projectId: string;
+  briefId: string;
   onChainStatus?: EditionStatus;
 }
 
-export function ApproveEditionButton({
+export function UpdateEditionButton({
   isOpen,
   editionId,
+  projectId,
+  briefId,
   onChainStatus,
 }: Props) {
   const { toast } = useToast();
   const { wallet } = usePrivyWagmi();
 
-  const projectCanBeApproved =
-    onChainStatus !== undefined && onChainStatus === EditionStatus.CREATED;
+  const projectCanBeUpdated =
+    onChainStatus !== undefined && onChainStatus !== EditionStatus.NOT_CREATED;
 
-  const { config } = usePrepareRadarEditionsApproveEdition({
+  const { config } = usePrepareRadarEditionsUpdateEdition({
     account: wallet?.address as Address,
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
@@ -36,15 +40,16 @@ export function ApproveEditionButton({
       isOpen &&
       editionId !== undefined &&
       wallet?.address !== undefined &&
-      projectCanBeApproved,
-    args: [BigInt(+(editionId || 0)) || 0n],
+      projectCanBeUpdated,
+    args: [BigInt(+(editionId || 0)) || 0n, projectId, briefId],
   });
-  const { writeAsync, isLoading: isApproveLoading } =
-    useRadarEditionsApproveEdition(config);
+  const { writeAsync, isLoading } = useRadarEditionsUpdateEdition(config);
+
+  console.log({ editionId, projectId, briefId });
 
   return (
     <Button
-      loading={isApproveLoading}
+      loading={isLoading}
       onClick={() => {
         try {
           writeAsync?.();
@@ -57,11 +62,11 @@ export function ApproveEditionButton({
           });
         }
       }}
-      disabled={!projectCanBeApproved}
+      disabled={!projectCanBeUpdated}
     >
-      {projectCanBeApproved
-        ? 'Approve Edition (on-chain)'
-        : 'Project already / cannot be approved'}
+      {projectCanBeUpdated
+        ? 'Sync Brief (on-chain)'
+        : 'Edition cannot be synced'}
     </Button>
   );
 }

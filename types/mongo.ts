@@ -13,7 +13,10 @@ export type Project = {
   pool: string;
   founder: string;
   description: string;
+  /* will eventually transition all into ipfs:// links */
   video_url: string;
+  /* refers to livepeer video IDs, make required in the future */
+  video_id?: string;
   tldr: string;
   /* @deprecated use pool instead */
   brief: string;

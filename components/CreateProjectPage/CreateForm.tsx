@@ -9,11 +9,12 @@ import { useAuth } from '@/hooks/useAuth';
 import { useGetPools } from '@/hooks/useGetPools';
 import { createProject } from '@/lib/backend';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { isAddress } from 'viem';
-import { useAccount, useMutation } from 'wagmi';
+import { useMutation } from 'wagmi';
 import * as z from 'zod';
 import { CrowdFundSection } from './CrowdFundSection';
 import { MilestoneSection } from './MilestoneSection';
@@ -21,10 +22,8 @@ import { MilestoneSection } from './MilestoneSection';
 export const createFormSchema = z.object({
   title: z.string().min(1, { message: 'Title is required' }),
   description: z.string().min(1, { message: 'Description is required' }),
-  video_url: z
-    .string()
-    .url({ message: 'Please enter a valid URL' })
-    .min(1, { message: 'Video URL is required' }),
+  video_url: z.string().min(1, { message: 'Video is required' }),
+  video_id: z.string(),
   tldr: z.string().min(1, { message: 'Brief description is required' }),
   thumbnail: z.optional(z.instanceof(File)),
   brief: z.string().min(1, { message: 'Brief is required' }),
@@ -85,8 +84,8 @@ export const createFormSchema = z.object({
 
 export function CreateForm() {
   const router = useRouter();
-  const { address } = useAccount();
-  const { idToken } = useAuth();
+  const { wallet } = usePrivyWagmi();
+  const { idToken, isLoggedIn } = useAuth();
   const { data: pools } = useGetPools();
 
   const form = useForm<z.infer<typeof createFormSchema>>({
@@ -113,7 +112,7 @@ export function CreateForm() {
       benefits: [],
       tags: '',
       description: '',
-      admin_address: address || '',
+      admin_address: wallet?.address || '',
     },
   });
   const {
@@ -141,6 +140,7 @@ export function CreateForm() {
           text: '<ul><li><p>Become an onchain patron of my journey</p></li></ul>',
         });
       }
+      // swap brief and pool fields
       const newValues = {
         ...values,
         pool: values.brief,
@@ -164,7 +164,7 @@ export function CreateForm() {
             'Your project is now under review. Redirecting you to your profile page...',
         });
         setTimeout(() => {
-          router.push('/profile/' + data.founder);
+          router.push('/profile/' + data.admin_address);
         }, 2000);
       },
     },
@@ -239,10 +239,10 @@ export function CreateForm() {
           <Button
             type="submit"
             form="create-project"
-            disabled={idToken === '' || isLoading}
+            disabled={!isLoggedIn || isLoading}
             loading={isLoading}
           >
-            {idToken === '' ? 'Please Login' : 'Submit'}
+            {!isLoggedIn ? 'Please Login' : 'Submit'}
           </Button>
         </div>
       </form>

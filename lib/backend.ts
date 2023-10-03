@@ -9,6 +9,7 @@ import {
   type User,
   type WalletResolvable,
 } from '@/types/mongo';
+import type { Metadata } from '@livepeer/react';
 import * as z from 'zod';
 
 export async function getPools(): Promise<Pool[]> {
@@ -81,8 +82,21 @@ export async function getProjectBelievers(
   return response.json();
 }
 
-export async function getUser(userId: string): Promise<User> {
+export async function getUser(
+  userId: string,
+): Promise<Omit<User, 'wallets'> & { wallets: string[] }> {
   const response = await fetch(`${process.env.BACKEND_URL}/users/${userId}`);
+  if (!response.ok) {
+    console.error(response);
+    throw new Error('Failed to fetch user');
+  }
+  return response.json();
+}
+
+export async function getUserByAddress(
+  address: string,
+): Promise<Omit<User, 'wallets'> & { wallets: string[] }> {
+  const response = await fetch(`${process.env.BACKEND_URL}/users/address/${address}`);
   if (!response.ok) {
     console.error(response);
     throw new Error('Failed to fetch user');
@@ -212,31 +226,13 @@ export async function believeProject(
   return response.json();
 }
 
-export async function authenticateUser({
-  idToken,
-  isWalletLogin,
-  address,
-  appPubKey,
-}: {
-  idToken: string;
-  isWalletLogin: boolean;
-  address?: string;
-  appPubKey?: string;
-}) {
+export async function authenticateUser({ idToken }: { idToken: string }) {
   const response = await fetch(`${process.env.BACKEND_URL}/verify`, {
     method: 'POST',
     headers: {
-      'X-Auth-Method': isWalletLogin ? 'Wallet' : 'Social',
       'Content-Type': 'application/json',
       Authorization: `Bearer ${idToken}`,
     },
-    body: isWalletLogin
-      ? JSON.stringify({
-          public_address: address,
-        })
-      : JSON.stringify({
-          appPubKey,
-        }),
   });
   if (!response.ok) {
     console.error(response);
@@ -490,6 +486,29 @@ export async function updatePool(
       },
       body: JSON.stringify(values),
     });
+    if (!response.ok) {
+      throw new Error('Error updating pool');
+    }
+    return response.json();
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export async function getEditionMetadata(
+  editionId?: number,
+): Promise<Metadata | undefined> {
+  if (editionId === undefined) {
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `${process.env.BACKEND_URL}/metadata/${editionId}`,
+      {
+        method: 'GET',
+      },
+    );
     if (!response.ok) {
       throw new Error('Error updating pool');
     }

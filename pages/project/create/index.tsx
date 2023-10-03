@@ -5,7 +5,7 @@ import { HelpCircleIcon } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 
-const CreateFormNoSSR = dynamic(
+const CreateForm = dynamic(
   () =>
     import('@/components/CreateProjectPage/CreateForm').then(
       (mod) => mod.CreateForm,
@@ -39,7 +39,7 @@ export default function CreateProjectPage() {
           for support.
         </AlertDescription>
       </Alert>
-      <CreateFormNoSSR />
+      <CreateForm />
     </div>
   );
 }

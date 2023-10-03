@@ -1,9 +1,8 @@
 import { CONTRACT_ADDRESS } from '@/constants/address';
 import { CacheKey } from '@/constants/react-query';
-import { useBlockNumber, usePublicClient, useQuery } from 'wagmi';
+import { usePublicClient, useQuery } from 'wagmi';
 
 const START_BLOCK_FOR_BELIEVE = 108947105n;
-const BLOCK_TIME_IN_SECONDS = 2;
 
 export function useGetBelieveEvents(
   _id: string,
@@ -11,7 +10,6 @@ export function useGetBelieveEvents(
   isDisabled?: boolean,
 ) {
   const { getLogs } = usePublicClient();
-  const { data: blockNumber } = useBlockNumber();
   return useQuery(
     [CacheKey.BELIEVER_LOGS, editionId, _id],
     () => {
