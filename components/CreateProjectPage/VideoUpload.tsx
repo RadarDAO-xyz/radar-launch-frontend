@@ -114,9 +114,12 @@ export const VideoUpload = () => {
                 <div className="text-center">
                   <h4 className="pb-2">{video.name}</h4>
                   {data?.[0].id ? (
-                    <p className="mt-2 text-sm text-muted-foreground">
-                      Video successfully uploaded to IPFS! 🎉
-                    </p>
+                    <div className="mt-2 text-sm text-muted-foreground">
+                      <p>Video successfully uploaded to IPFS! 🎉</p>
+                      {data[0].storage?.ipfs?.cid && (
+                        <p>ipfs://{data[0].storage.ipfs.cid}</p>
+                      )}
+                    </div>
                   ) : (
                     <Button
                       onClick={() => {
