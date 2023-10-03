@@ -17,8 +17,11 @@ import { Input } from '../ui/input';
 import { createFormSchema } from './CreateForm';
 
 export const VideoUpload = () => {
-  const { control, setError, setValue, clearErrors } =
+  const { control, setError, setValue, clearErrors, watch } =
     useFormContext<z.infer<typeof createFormSchema>>();
+
+  const video_url = watch('video_url');
+  const video_id = watch('video_id');
 
   const [video, setVideo] = useState<File | undefined>();
   const {
@@ -59,12 +62,17 @@ export const VideoUpload = () => {
   }, [clearErrors, error, setError, video]);
 
   useEffect(() => {
-    if (data?.[0].storage?.ipfs?.cid && data?.[0].id) {
+    if (
+      data?.[0].storage?.ipfs?.cid &&
+      data?.[0].id &&
+      !video_url &&
+      !video_id
+    ) {
       console.log('File uploaded', data[0]);
       setValue('video_url', `ipfs://${data[0].storage?.ipfs?.cid}`);
       setValue('video_id', data[0].id);
     }
-  }, [data, setValue]);
+  }, [data, setValue, video_id, video_url]);
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (acceptedFiles && acceptedFiles.length > 0 && acceptedFiles?.[0]) {
