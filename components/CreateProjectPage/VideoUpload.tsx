@@ -17,7 +17,7 @@ import { Input } from '../ui/input';
 import { createFormSchema } from './CreateForm';
 
 export const VideoUpload = () => {
-  const { control, setError, setValue } =
+  const { control, setError, setValue, clearErrors } =
     useFormContext<z.infer<typeof createFormSchema>>();
 
   const [video, setVideo] = useState<File | undefined>();
@@ -53,8 +53,10 @@ export const VideoUpload = () => {
       setError('video_url', {
         message: 'Only .mp4 files are supported',
       });
+    } else {
+      clearErrors('video_url');
     }
-  }, [error, setError, video]);
+  }, [clearErrors, error, setError, video]);
 
   useEffect(() => {
     if (data?.[0].storage?.ipfs?.cid && data?.[0].id) {
