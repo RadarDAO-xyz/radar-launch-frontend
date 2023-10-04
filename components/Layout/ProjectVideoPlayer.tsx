@@ -68,6 +68,7 @@ export function ProjectVideoPlayer({
         playbackId={cid}
         muted={isThumbnail}
         objectFit="cover"
+        poster={thumbnail}
         viewerId={wallet?.address}
       />
     );
