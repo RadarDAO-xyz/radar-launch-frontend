@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 import dynamic from 'next/dynamic';
 
-const UpdateFormNoSSR = dynamic(
+const UpdateForm = dynamic(
   () =>
     import('@/components/ProfilePage/UpdateForm').then((mod) => mod.UpdateForm),
   { ssr: false },
@@ -23,9 +23,9 @@ export default function ProfilePage() {
   }
 
   return (
-    <section className="mx-auto mt-[80px] max-w-screen-lg px-[5%]">
+    <section className="container mt-[80px] max-w-7xl pb-12 md:pt-6">
       <AdminNav isUpdateProfile user={data} />
-      <UpdateFormNoSSR />
+      <UpdateForm />
     </section>
   );
 }

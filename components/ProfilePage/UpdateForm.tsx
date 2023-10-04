@@ -102,7 +102,7 @@ export function UpdateForm() {
     <Form {...form}>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="mx-auto mt-24 max-w-screen-lg"
+        className="mx-auto mt-12"
       >
         <div className="mb-10 rounded border border-slate-200 p-10">
           <div className="flex gap-4">

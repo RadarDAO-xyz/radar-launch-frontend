@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { HTMLParsedComponent } from './HTMLParsedComponent';
 import { DEFAULT_AVATAR_IMAGE } from '@/constants/links';
+import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 
 interface Props {
   isUpdateProfile?: boolean;
@@ -14,6 +15,7 @@ interface Props {
 
 export function AdminNav({ isUpdateProfile = false, user }: Props) {
   const { data } = useGetCurrentUser();
+  const { wallet } = usePrivyWagmi();
 
   if (data !== undefined && data._id === user?._id) {
     return (
@@ -29,6 +31,8 @@ export function AdminNav({ isUpdateProfile = false, user }: Props) {
               <p className="font-mono text-gray-600">
                 {typeof user.wallets?.[0] === 'string'
                   ? shortenAddress(user.wallets[0] || '')
+                  : isUpdateProfile && wallet
+                  ? shortenAddress(wallet.address)
                   : ''}
               </p>
             </div>
