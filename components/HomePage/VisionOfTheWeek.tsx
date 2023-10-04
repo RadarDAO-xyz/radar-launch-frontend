@@ -17,6 +17,7 @@ export function VisionOfTheWeek(props: ProjectWithChainData) {
     description,
     status,
     editionId,
+    thumbnail,
   } = props;
   // const { data: totalSupply } = useRadarEditionsTotalSupply({
   //   address: CONTRACT_ADDRESS,
@@ -35,7 +36,7 @@ export function VisionOfTheWeek(props: ProjectWithChainData) {
         {'✨ LAUNCH OF THE WEEK ✨'}
       </div>
       <div className={cn('w-full')}>
-        <ProjectVideoPlayer videoUrl={video_url} />
+        <ProjectVideoPlayer videoUrl={video_url} thumbnail={thumbnail} />
       </div>
       <div className="feature-project-div">
         <div className="text-x flex justify-end gap-2 divide-x-2 overflow-x-auto pt-3 scrollbar-hide">
