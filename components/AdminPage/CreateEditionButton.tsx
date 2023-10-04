@@ -38,7 +38,7 @@ export function CreateEditionButton({
       ? parseEther(String(fee / exchangeRateData.ethereum.usd), 'wei')
       : BigInt(fee);
   const projectCanBeCreated =
-    onChainStatus !== undefined && onChainStatus === EditionStatus.NOT_CREATED;
+    onChainStatus === undefined || onChainStatus === EditionStatus.NOT_CREATED;
 
   const { config } = usePrepareRadarEditionsCreateEdition({
     address: CONTRACT_ADDRESS,
@@ -77,7 +77,7 @@ export function CreateEditionButton({
       }}
       disabled={!projectCanBeCreated}
     >
-      {!projectCanBeCreated
+      {projectCanBeCreated
         ? 'Create Edition (on-chain)'
         : 'Project already / cannot be created'}
     </Button>
