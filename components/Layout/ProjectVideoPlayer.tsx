@@ -68,7 +68,7 @@ export function ProjectVideoPlayer({
         playbackId={cid}
         muted={isThumbnail}
         objectFit="cover"
-        poster={thumbnail}
+        poster={thumbnail?.startsWith('https') ? thumbnail : undefined}
         viewerId={wallet?.address}
       />
     );
