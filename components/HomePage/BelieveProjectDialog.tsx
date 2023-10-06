@@ -193,7 +193,7 @@ export function BelieveProjectDialog({
                   futureFundFee !== undefined &&
                   balance?.value < futureFundFee
                 ? 'Not enough funds'
-                : 'I believe in this project'}
+                : 'Believe in this project: 1 USD'}
             </Button>
             <Button asChild variant="ghost">
               <Link href={`/project/${_id}`}>Read More</Link>

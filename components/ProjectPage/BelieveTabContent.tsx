@@ -133,7 +133,7 @@ export function BelieveTabContent({
           >
             {hasBelieved
               ? 'Thank you for believing in this project!'
-              : 'I believe in this project'}
+              : 'Believe in this project: 1 USD'}
           </Button>
         </DialogTrigger>
         <DialogContent>
@@ -165,7 +165,7 @@ export function BelieveTabContent({
                   futureFundFee !== undefined &&
                   balance?.value < futureFundFee
                 ? 'Not enough funds'
-                : 'I believe in this project'}
+                : 'Believe in this project: 1 USD'}
             </Button>
           </DialogFooter>
         </DialogContent>
