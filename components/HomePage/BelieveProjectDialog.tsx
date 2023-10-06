@@ -12,6 +12,7 @@ import { useGetBelieveEvents } from '@/hooks/useGetBelieveEvents';
 import {
   usePrepareRadarEditionsBelieveProject,
   useRadarEditionsBelieveProject,
+  useRadarEditionsFutureFundFee,
 } from '@/lib/generated';
 import { cn, shortenAddress } from '@/lib/utils';
 import { ProjectStatus } from '@/types/mongo';
@@ -64,6 +65,7 @@ export function BelieveProjectDialog({
     editionId,
     !isOpen,
   );
+  const { data: futureFundFee } = useRadarEditionsFutureFundFee();
   const queryClient = useQueryClient();
   const { config } = usePrepareRadarEditionsBelieveProject({
     address: CONTRACT_ADDRESS,
@@ -73,7 +75,9 @@ export function BelieveProjectDialog({
       wallet?.address !== undefined &&
       editionId !== undefined &&
       tags.length > 0 &&
-      isOpen,
+      isOpen &&
+      futureFundFee !== undefined,
+    value: futureFundFee,
   });
   const {
     data: believeProjectData,

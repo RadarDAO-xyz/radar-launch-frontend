@@ -15,6 +15,7 @@ import { useGetProject } from '@/hooks/useGetProject';
 import {
   usePrepareRadarEditionsBelieveProject,
   useRadarEditionsBelieveProject,
+  useRadarEditionsFutureFundFee,
 } from '@/lib/generated';
 import { shortenAddress } from '@/lib/utils';
 import { chains } from '@/lib/wagmi';
@@ -62,6 +63,7 @@ export function BelieveTabContent({
     editionId,
     !isSelected,
   );
+  const { data: futureFundFee } = useRadarEditionsFutureFundFee();
   const { config } = usePrepareRadarEditionsBelieveProject({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
@@ -70,7 +72,9 @@ export function BelieveTabContent({
     enabled:
       wallet?.address !== undefined &&
       editionId !== undefined &&
-      tags.length > 0,
+      tags.length > 0 &&
+      futureFundFee !== undefined,
+    value: futureFundFee,
   });
   const {
     data: believeProjectData,
