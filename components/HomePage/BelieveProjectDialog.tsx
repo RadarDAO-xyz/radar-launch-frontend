@@ -22,7 +22,12 @@ import { format } from 'date-fns';
 import Link from 'next/link';
 import { RefAttributes, useEffect, useState } from 'react';
 import type { Address } from 'viem';
-import { useBlockNumber, useQueryClient, useWaitForTransaction } from 'wagmi';
+import {
+  useBalance,
+  useBlockNumber,
+  useQueryClient,
+  useWaitForTransaction,
+} from 'wagmi';
 import { HTMLParsedComponent } from '../Layout/HTMLParsedComponent';
 import { ProjectVideoPlayer } from '../Layout/ProjectVideoPlayer';
 import { Badge } from '../ui/badge';
@@ -66,6 +71,7 @@ export function BelieveProjectDialog({
     editionId,
     !isOpen,
   );
+  const { data: balance } = useBalance();
   const { data: futureFundFee } = useRadarEditionsFutureFundFee({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
@@ -96,16 +102,6 @@ export function BelieveProjectDialog({
       hash: believeProjectData?.hash,
       enabled: believeProjectData?.hash !== undefined,
     });
-
-  console.log({
-    a,
-    error,
-    believeProjectWriteAsync,
-    config,
-    tags,
-    isOpen,
-    futureFundFee,
-  });
 
   useEffect(() => {
     if (believeProjectTxIsLoading && believeProjectData?.hash) {
@@ -193,6 +189,10 @@ export function BelieveProjectDialog({
                 ? 'Please login to believe in this project'
                 : hasBelieved
                 ? 'Thank you for believing in this project!'
+                : balance !== undefined &&
+                  futureFundFee !== undefined &&
+                  balance?.value < futureFundFee
+                ? 'Not enough funds'
                 : 'I believe in this project'}
             </Button>
             <Button asChild variant="ghost">

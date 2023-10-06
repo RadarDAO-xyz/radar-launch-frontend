@@ -25,6 +25,7 @@ import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import {
   Address,
+  useBalance,
   useBlockNumber,
   useQueryClient,
   useWaitForTransaction,
@@ -68,6 +69,7 @@ export function BelieveTabContent({
     chainId: chains[0].id,
     enabled: isOpen,
   });
+  const { data: balance } = useBalance();
   const { config } = usePrepareRadarEditionsBelieveProject({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
@@ -157,7 +159,13 @@ export function BelieveTabContent({
               disabled={isLoggedIn && believeProjectWriteAsync === undefined}
               loading={isLoading || believeProjectIsLoading}
             >
-              {!isLoggedIn ? 'Login' : 'I believe in this project'}
+              {!isLoggedIn
+                ? 'Login'
+                : balance !== undefined &&
+                  futureFundFee !== undefined &&
+                  balance?.value < futureFundFee
+                ? 'Not enough funds'
+                : 'I believe in this project'}
             </Button>
           </DialogFooter>
         </DialogContent>
