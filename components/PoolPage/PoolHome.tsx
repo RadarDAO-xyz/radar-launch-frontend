@@ -5,10 +5,12 @@ import { Button } from '../ui/button';
 import { PoolCard } from './PoolCard';
 
 const FEATURED_POOL_TWO_ID = '64ee74a442d2582b74e47f83';
+const FEATURED_POOL_THREE_ID = '651d789e6f9cf9ad89552101'
 
 export function PoolHome() {
   const { data: featuredPoolOneData } = useGetPool(THE_NEW_PLAYERS_POOL_ID);
   const { data: featuredPoolTwoData } = useGetPool(FEATURED_POOL_TWO_ID);
+  const { data: featuredPoolThreeData } = useGetPool(FEATURED_POOL_THREE_ID);
 
   return (
     <div className="mx-auto px-[5%] py-20 md:px-0">
@@ -37,6 +39,7 @@ export function PoolHome() {
       <div className="mx-auto grid w-[80%] grid-cols-1 gap-10 lg:grid-cols-2">
         {featuredPoolOneData && <PoolCard {...featuredPoolOneData} />}
         {featuredPoolTwoData && <PoolCard {...featuredPoolTwoData} />}
+        {featuredPoolThreeData && <PoolCard {...featuredPoolThreeData} />}
       </div>
     </div>
   );
