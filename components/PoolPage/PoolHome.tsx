@@ -37,9 +37,9 @@ export function PoolHome() {
       </div>
       <div className="_20px-div" />
       <div className="mx-auto grid w-[80%] grid-cols-1 gap-10 lg:grid-cols-2">
+        {featuredPoolThreeData && <PoolCard {...featuredPoolThreeData} />}
         {featuredPoolOneData && <PoolCard {...featuredPoolOneData} />}
         {featuredPoolTwoData && <PoolCard {...featuredPoolTwoData} />}
-        {featuredPoolThreeData && <PoolCard {...featuredPoolThreeData} />}
       </div>
     </div>
   );
