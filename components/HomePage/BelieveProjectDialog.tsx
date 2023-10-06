@@ -34,6 +34,7 @@ import {
   DialogTrigger,
 } from '../ui/dialog';
 import { useToast } from '../ui/use-toast';
+import { chains } from '@/lib/wagmi';
 
 const START_BLOCK_FOR_BELIEVE = 108947105n;
 const BLOCK_TIME_IN_SECONDS = 2;
@@ -65,11 +66,16 @@ export function BelieveProjectDialog({
     editionId,
     !isOpen,
   );
-  const { data: futureFundFee } = useRadarEditionsFutureFundFee();
+  const { data: futureFundFee } = useRadarEditionsFutureFundFee({
+    address: CONTRACT_ADDRESS,
+    chainId: chains[0].id,
+    enabled: isOpen,
+  });
   const queryClient = useQueryClient();
-  const { config } = usePrepareRadarEditionsBelieveProject({
+  const { config, error } = usePrepareRadarEditionsBelieveProject({
     address: CONTRACT_ADDRESS,
     account: wallet?.address as Address,
+    chainId: chains[0].id,
     args: [BigInt(editionId || 0), tags.join(',')],
     enabled:
       wallet?.address !== undefined &&
@@ -83,12 +89,23 @@ export function BelieveProjectDialog({
     data: believeProjectData,
     writeAsync: believeProjectWriteAsync,
     isLoading: believeProjectIsLoading,
+    error: a,
   } = useRadarEditionsBelieveProject(config);
   const { isLoading: believeProjectTxIsLoading, isSuccess } =
     useWaitForTransaction({
       hash: believeProjectData?.hash,
       enabled: believeProjectData?.hash !== undefined,
     });
+
+  console.log({
+    a,
+    error,
+    believeProjectWriteAsync,
+    config,
+    tags,
+    isOpen,
+    futureFundFee,
+  });
 
   useEffect(() => {
     if (believeProjectTxIsLoading && believeProjectData?.hash) {

@@ -63,7 +63,11 @@ export function BelieveTabContent({
     editionId,
     !isSelected,
   );
-  const { data: futureFundFee } = useRadarEditionsFutureFundFee();
+  const { data: futureFundFee } = useRadarEditionsFutureFundFee({
+    address: CONTRACT_ADDRESS,
+    chainId: chains[0].id,
+    enabled: isOpen,
+  });
   const { config } = usePrepareRadarEditionsBelieveProject({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
