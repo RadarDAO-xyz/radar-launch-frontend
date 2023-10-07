@@ -119,13 +119,15 @@ export const VideoUpload = () => {
               {...getRootProps()}
             >
               {video ? (
-                <div className="text-center">
+                <div className="text-center px-4">
                   <h4 className="pb-2">{video.name}</h4>
                   {data?.[0].id ? (
                     <div className="mt-2 text-sm text-muted-foreground">
                       <p>Video successfully uploaded to IPFS! 🎉</p>
                       {data[0].storage?.ipfs?.cid && (
-                        <p>ipfs://{data[0].storage.ipfs.cid}</p>
+                        <p className="break-all">
+                          ipfs://{data[0].storage.ipfs.cid}
+                        </p>
                       )}
                     </div>
                   ) : (
