@@ -1,4 +1,5 @@
-import { ChevronRight } from 'lucide-react';
+import { ChevronRightIcon } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export function Footer() {
@@ -6,14 +7,25 @@ export function Footer() {
     <footer className="footer">
       <div>
         <div className="w-[100px]">
-          <img
-            className="image-5 invert"
+          <Image
+            className="invert"
             loading="lazy"
-            width={'auth'}
-            height={'auto'}
+            width={'100'}
+            height={'40'}
+            alt="RADAR Logo"
             src="/logo.png"
           />
         </div>
+      </div>
+      <div className="mt-4 flex items-center">
+        <span className="pr-2 text-lg text-white">{'Powered by '}</span>
+        <Image
+          src="/livepeer.png"
+          className="inline"
+          height={36}
+          width={100}
+          alt="Livepeer Logo"
+        />
       </div>
       <div className="_20px-div" />
       <div className="div-block-107">
@@ -55,7 +67,7 @@ export function Footer() {
             >
               {'Submit a project'}
             </Link>
-            <ChevronRight className="ml-1 h-4 w-4 text-white" />
+            <ChevronRightIcon className="ml-1 h-4 w-4 text-white" />
           </li>
           <li className="footer-list-item right">
             <Link
@@ -65,7 +77,7 @@ export function Footer() {
             >
               {'Sponsor a brief'}
             </Link>{' '}
-            <ChevronRight className="ml-1 h-4 w-4 text-white" />
+            <ChevronRightIcon className="ml-1 h-4 w-4 text-white" />
           </li>
           <li className="footer-list-item right">
             <Link
@@ -75,7 +87,7 @@ export function Footer() {
             >
               {'Apply to join a community'}
             </Link>{' '}
-            <ChevronRight className="ml-1 h-4 w-4 text-white" />
+            <ChevronRightIcon className="ml-1 h-4 w-4 text-white" />
           </li>
           <li className="footer-list-item right">
             <Link
@@ -84,14 +96,14 @@ export function Footer() {
             >
               {'Contact us'}
             </Link>{' '}
-            <ChevronRight className="ml-1 h-4 w-4 text-white" />
+            <ChevronRightIcon className="ml-1 h-4 w-4 text-white" />
           </li>
         </ul>
       </div>
       <div className="_20px-div" />
       <div className="div-block-16 space-y-2 sm:space-y-0">
         <p className="body-text white">
-          {'© 2023 RADAR Community Labs. All rights reserved'}
+          {'© 2023 RADAR Community Labs. All rights reserved.'}
         </p>
         <Link
           className="body-text white text-right hover:underline"
