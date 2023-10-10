@@ -18,12 +18,12 @@ export function Footer() {
         </div>
       </div>
       <div className="mt-4 flex items-center">
-        <span className="pr-2 text-lg text-white">{'Powered by '}</span>
+        <span className="pr-2 text-sm text-white">{'Videos powered by '}</span>
         <Image
           src="/livepeer.png"
           className="inline"
-          height={36}
-          width={100}
+          height={28}
+          width={80}
           alt="Livepeer Logo"
         />
       </div>
