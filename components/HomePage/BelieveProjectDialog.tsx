@@ -71,14 +71,16 @@ export function BelieveProjectDialog({
     editionId,
     !isOpen,
   );
-  const { data: balance } = useBalance();
+  const { data: balance } = useBalance({
+    address: wallet?.address as Address,
+  });;
   const { data: futureFundFee } = useRadarEditionsFutureFundFee({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
     enabled: isOpen,
   });
   const queryClient = useQueryClient();
-  const { config, error } = usePrepareRadarEditionsBelieveProject({
+  const { config } = usePrepareRadarEditionsBelieveProject({
     address: CONTRACT_ADDRESS,
     account: wallet?.address as Address,
     chainId: chains[0].id,

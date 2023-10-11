@@ -8,10 +8,12 @@ import { CONTRACT_ADDRESS } from '@/constants/address';
 import { useGetProjects } from '@/hooks/useGetProjects';
 import { useGetUser } from '@/hooks/useGetUser';
 import {
+  useRadarEditionsBalances,
   useRadarEditionsGetBalances,
   useRadarEditionsGetEditions,
+  useRadarEditionsGetUserBeliefs,
 } from '@/lib/generated';
-import { convertAddressToChecksum } from '@/lib/utils';
+import { convertAddressToChecksum, formatEther } from '@/lib/utils';
 import { Project, WalletResolvable } from '@/types/mongo';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -23,11 +25,13 @@ import {
   ProjectWithOwnedAmount,
 } from '../../../types/web3';
 import { useGetUserByAddress } from '@/hooks/useGetUserByAddress';
+import { BuilderRewards } from '@/components/ProfilePage/BuilderRewards';
+import { BelieverRewards } from '@/components/ProfilePage/BelieverRewards';
 
 function transformYourVisionsProjects(
   userId?: string,
   databaseProjects?: Project[],
-  chainProjects?: OnChainProject[],
+  chainProjects?: readonly OnChainProject[],
 ): ProjectWithChainData[] {
   if (!databaseProjects || !chainProjects) {
     return [];
@@ -56,7 +60,7 @@ function transformYourVisionsProjects(
 
 function transformCollectionVisionsProject(
   databaseProjects?: Project[],
-  chainBalances?: ProjectIdWithBalance[],
+  chainBalances?: readonly ProjectIdWithBalance[],
 ): ProjectWithOwnedAmount[] {
   if (!databaseProjects || !chainBalances) {
     return [];
@@ -82,21 +86,68 @@ function transformCollectionVisionsProject(
     }));
 }
 
-export default function AdminPage() {
+function transformBelievedProjects(
+  databaseProjects?: Project[],
+  chainProjects?: readonly OnChainProject[],
+  believedProjects?: readonly boolean[],
+) {
+  if (
+    !chainProjects ||
+    !believedProjects ||
+    !databaseProjects ||
+    chainProjects.length !== believedProjects.length
+  ) {
+    return [];
+  }
+  const projectBalances: Record<string, bigint> = {};
+  chainProjects.forEach((project) => {
+    projectBalances[project.id] = project.balance;
+  });
+  const projectIdToEdition = chainProjects.reduce<
+    Record<string, { editionId: number; isBelieved: boolean }>
+  >((acc, project, editionId) => {
+    acc[project.id] = {
+      editionId,
+      isBelieved: believedProjects[editionId],
+    };
+    return acc;
+  }, {});
+  return databaseProjects
+    ?.map((project) => ({
+      ...project,
+      ...projectIdToEdition[project._id],
+      balance: projectBalances[project._id],
+    }))
+    .filter((project) => project.isBelieved);
+}
+
+export default function ProfilePage() {
   const router = useRouter();
-  const { address } = router.query;
+  const { address: addressQuery } = router.query;
+  const address = addressQuery?.toString();
 
   const { data: userData } = useGetUserByAddress(address?.toString());
   const { data: onChainProjects } = useRadarEditionsGetEditions({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
-    enabled: Boolean(chains[0].id),
   });
   const { data: ownedOnChainProjects } = useRadarEditionsGetBalances({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
-    args: [convertAddressToChecksum(address?.toString()) as Address],
-    enabled: Boolean(chains[0].id) && Boolean(address),
+    args: [convertAddressToChecksum(address) as Address],
+    enabled: Boolean(address),
+  });
+  const { data: userBeliefs } = useRadarEditionsGetUserBeliefs({
+    address: CONTRACT_ADDRESS,
+    chainId: chains[0].id,
+    args: [convertAddressToChecksum(address) as Address],
+    enabled: Boolean(address),
+  });
+  const { data: userBalance } = useRadarEditionsBalances({
+    address: CONTRACT_ADDRESS,
+    chainId: chains[0].id,
+    args: [convertAddressToChecksum(address) as Address],
+    enabled: Boolean(address),
   });
   const { data: databaseProjects } = useGetProjects();
 
@@ -111,20 +162,41 @@ export default function AdminPage() {
   const yourVisionsProjects = transformYourVisionsProjects(
     userData._id,
     databaseProjects,
-    onChainProjects as OnChainProject[],
+    onChainProjects,
   ).filter(
     (project) =>
       project.admin_address.toUpperCase() === address.toString().toUpperCase(),
   );
   const collectedVisionsProjects = transformCollectionVisionsProject(
     databaseProjects,
-    ownedOnChainProjects as ProjectIdWithBalance[],
+    ownedOnChainProjects,
+  );
+  const believedProjects = transformBelievedProjects(
+    databaseProjects,
+    onChainProjects,
+    userBeliefs,
   );
 
   return (
     <div className="container mt-[80px] max-w-7xl pb-12 md:pt-6">
       <AdminNav user={userData} />
-
+      <div className="rounded-lg border p-8">
+        <h3 className="text-xl">Rewards</h3>
+        <Link
+          href="https://radarxyz.notion.site/Launch-Rewards-Coming-October-2023-254e8ff30f4e405780c4cbf4b954aaa6?pvs=4"
+          target="_blank"
+          className="text-muted-foreground hover:underline"
+        >
+          Read more about earning rewards ↗
+        </Link>
+        <div className="grid grid-cols-2 gap-4 pt-6">
+          <BuilderRewards projects={yourVisionsProjects} />
+          <BelieverRewards
+            projects={believedProjects}
+            amount={userBalance || 0n}
+          />
+        </div>
+      </div>
       <div className="mt-8">
         <Tabs defaultValue="your-visions">
           <TabsList className="mx-auto mb-6 w-full justify-start gap-4">

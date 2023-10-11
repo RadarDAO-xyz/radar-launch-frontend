@@ -1,7 +1,7 @@
 import isTestnet from '@/lib/isTestnet';
 
 export const GOERLI_CONTRACT_ADDRESS =
-  '0x2d22716eeb1f85cf79c5531b405517c07441e84b';
+  '0xEd4295091C232A000B6fF2A546b78Fd90Ae8Db4E';
 export const MAINNET_CONTRACT_ADDRESS =
   '0xdbed288027cCbE7F6746bB62c989E7C09C7c8059';
 

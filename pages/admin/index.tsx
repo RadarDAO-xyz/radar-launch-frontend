@@ -41,7 +41,6 @@ export default function AdminPage() {
   const { data: onChainProjects } = useRadarEditionsGetEditions({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
-    enabled: Boolean(chains[0].id),
   });
 
   if (!data?.wallets?.[0].address || !isLoggedIn) {

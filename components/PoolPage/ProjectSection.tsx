@@ -15,7 +15,6 @@ export function ProjectSection({ _id, title }: Pool) {
   const { data: onChainProjects } = useRadarEditionsGetEditions({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
-    enabled: Boolean(chains[0].id),
   });
 
   const liveProjects = transformProjectsWithChainData(

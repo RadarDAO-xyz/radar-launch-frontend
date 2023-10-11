@@ -47,7 +47,6 @@ export default function HomePage() {
   const { data: onChainProjects } = useRadarEditionsGetEditions({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
-    enabled: Boolean(chains[0].id),
   });
 
   const projects = transformProjectsWithChainData(

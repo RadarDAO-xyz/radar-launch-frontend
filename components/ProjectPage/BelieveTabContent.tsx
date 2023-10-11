@@ -69,7 +69,9 @@ export function BelieveTabContent({
     chainId: chains[0].id,
     enabled: isOpen,
   });
-  const { data: balance } = useBalance();
+  const { data: balance } = useBalance({
+    address: wallet?.address as Address,
+  });
   const { config } = usePrepareRadarEditionsBelieveProject({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
@@ -82,6 +84,7 @@ export function BelieveTabContent({
       futureFundFee !== undefined,
     value: futureFundFee,
   });
+
   const {
     data: believeProjectData,
     writeAsync: believeProjectWriteAsync,
@@ -92,6 +95,7 @@ export function BelieveTabContent({
       hash: believeProjectData?.hash,
       enabled: believeProjectData?.hash !== undefined,
     });
+  console.log({ believeProjectWriteAsync, config });
 
   useEffect(() => {
     if (believeProjectTxIsLoading && believeProjectData?.hash) {
@@ -161,9 +165,8 @@ export function BelieveTabContent({
             >
               {!isLoggedIn
                 ? 'Login'
-                : balance !== undefined &&
-                  futureFundFee !== undefined &&
-                  balance?.value < futureFundFee
+                : balance === undefined ||
+                  (futureFundFee !== undefined && balance.value < futureFundFee)
                 ? 'Not enough funds'
                 : 'Believe in this project: 1 USD'}
             </Button>
