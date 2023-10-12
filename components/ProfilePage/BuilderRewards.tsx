@@ -58,7 +58,7 @@ export function BuilderRewards({ projects }: Props) {
     <RewardsContainer
       projects={projects.map((project) => (
         <div key={project._id} className="py-2">
-          <Link href={`/project/${project._id}`} className='hover:underline'>
+          <Link href={`/project/${project._id}`} className="hover:underline">
             {project.title}: {formatEther(project.balance ?? 0n).slice(0, 9)}{' '}
             ETH
           </Link>
@@ -67,9 +67,11 @@ export function BuilderRewards({ projects }: Props) {
       title={'BUILDER REWARDS'}
       amount={
         <span>
-          {projects
-            .map((project) => project.balance || 0n)
-            .reduce((acc, balance) => acc + balance, 0n)
+          {formatEther(
+            projects
+              .map((project) => project.balance || 0n)
+              .reduce((acc, balance) => acc + balance, 0n),
+          )
             .toString()
             .slice(0, 9)}{' '}
           ETH

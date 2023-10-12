@@ -12,6 +12,7 @@ import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
 import { RewardsContainer } from './RewardsContainer';
 import Link from 'next/link';
+import { formatEther } from '@/lib/utils';
 
 interface Props {
   projects: ProjectWithChainData[];
@@ -63,7 +64,7 @@ export function BelieverRewards({ amount, projects }: Props) {
         </div>
       ))}
       title={'BELIEVER REWARDS'}
-      amount={<span>{amount.toString().slice(0, 9)} ETH</span>}
+      amount={<span>{formatEther(amount).toString().slice(0, 9)} ETH</span>}
       button={
         <Button
           loading={isLoading}
