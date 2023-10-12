@@ -17,7 +17,7 @@ export function SyncVideoNftButton({
       enabled: editionId !== undefined,
     },
   );
-  const { mutate } = useUpdateAsset({
+  const { mutate, isLoading } = useUpdateAsset({
     assetId: video_id!,
     name: title,
     storage: {
@@ -30,6 +30,7 @@ export function SyncVideoNftButton({
       onClick={() => {
         mutate?.();
       }}
+      loading={isLoading}
       disabled={mutate === undefined || video_id === undefined}
     >
       Sync IPFS Metadata

@@ -1,38 +1,36 @@
 import { VIDEO_CONTRACT_ADDRESS } from '@/constants/address';
 import {
-  usePrepareRadarVideoNftMint,
-  useRadarVideoNftMint,
+  usePrepareRadarVideoNftSetTokenUri,
+  useRadarVideoNftSetTokenUri,
 } from '@/lib/generated';
 import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 import { useEffect } from 'react';
 import type { Address } from 'viem';
 import { chains } from '../../lib/wagmi';
 import { Button } from '../ui/button';
-import { useAsset } from '@livepeer/react';
 
 interface Props {
-  videoId?: string;
+  videoId?: number;
+  tokenUri?: string;
 }
 
-export function MintVideoNftButton({ videoId }: Props) {
+export function UpdateVideoNftButton({ videoId, tokenUri }: Props) {
   const { wallet } = usePrivyWagmi();
-  const { data: asset } = useAsset({ assetId: videoId });
-  const { config } = usePrepareRadarVideoNftMint({
+  const { config } = usePrepareRadarVideoNftSetTokenUri({
     account: wallet?.address as Address,
     address: VIDEO_CONTRACT_ADDRESS,
     chainId: chains[0].id,
     enabled:
-      Boolean(chains[0].id) &&
-      videoId !== undefined &&
       wallet?.address !== undefined &&
-      asset?.storage?.ipfs?.nftMetadata?.url !== undefined,
-    args: [wallet?.address as Address, asset?.storage?.ipfs?.nftMetadata?.url!],
+      tokenUri !== undefined &&
+      videoId !== undefined,
+    args: [BigInt(videoId || 0), tokenUri!],
   });
-  const { data, write, error, isLoading } = useRadarVideoNftMint(config);
+  const { data, write, error, isLoading } = useRadarVideoNftSetTokenUri(config);
 
   useEffect(() => {
     if (data || error) {
-      console.log('mint video', data, error);
+      console.log('update video token uri', data, error);
     }
   }, [data, error]);
 
@@ -44,7 +42,7 @@ export function MintVideoNftButton({ videoId }: Props) {
       loading={isLoading}
       disabled={write === undefined || videoId === undefined}
     >
-      Mint Video
+      Update Video tokenURI
     </Button>
   );
 }

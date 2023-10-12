@@ -19,12 +19,23 @@ import { updateProject } from '@/lib/backend';
 import { useMutation, useQueryClient } from 'wagmi';
 import { useToast } from '../ui/use-toast';
 import { useAuth } from '@/hooks/useAuth';
+import { useRadarVideoNftTokenUri } from '@/lib/generated';
+import { VIDEO_CONTRACT_ADDRESS } from '@/constants/address';
+import { chains } from '@/lib/wagmi';
+import { UpdateVideoNftButton } from './UpdateVideoNftButton';
 
 export function ProjectVideoDialog(props: ProjectWithChainData) {
-  const { video_id, video_url, _id } = props;
+  const { video_id, video_url, _id, editionId } = props;
   const [isOpen, setIsOpen] = useState(false);
   const videoUrlRef = useRef<HTMLInputElement>(null);
   const videoIdRef = useRef<HTMLInputElement>(null);
+  const { data: tokenURI } = useRadarVideoNftTokenUri({
+    enabled: isOpen && editionId !== undefined,
+    address: VIDEO_CONTRACT_ADDRESS,
+    chainId: chains[0].id,
+    args: [BigInt(editionId || 0)],
+  });
+  const [videoTokenUri, setVideoTokenUri] = useState(tokenURI || '');
   const { toast } = useToast();
 
   const { data } = useAsset({ assetId: video_id });
@@ -67,19 +78,24 @@ export function ProjectVideoDialog(props: ProjectWithChainData) {
       <DialogTrigger asChild>
         <Button>Video Settings</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-h-screen overflow-y-auto">
         <DialogTitle>Video settings</DialogTitle>
         <DialogDescription className="space-y-4">
           <Label>Raw Video Data</Label>
-          <p className="whitespace-pre font-mono">
+          <p className="max-h-[200px] max-w-md overflow-auto whitespace-pre font-mono">
             {JSON.stringify(data, null, 2)}
           </p>
           <Label>Video URL</Label>
           <Input defaultValue={video_url} ref={videoUrlRef} />
           <Label>Video ID</Label>
           <Input defaultValue={video_id || ''} ref={videoIdRef} />
+          <Label>On chain video ID</Label>
+          <Input
+            value={videoTokenUri}
+            onChange={(e) => setVideoTokenUri(e.target.value)}
+          />
         </DialogDescription>
-        <DialogFooter className="grid grid-cols-2 sm:space-x-0 gap-4">
+        <DialogFooter className="grid grid-cols-2 gap-4 sm:space-x-0">
           <Button
             onClick={() => {
               mutate();
@@ -90,6 +106,7 @@ export function ProjectVideoDialog(props: ProjectWithChainData) {
           </Button>
           <SyncVideoNftButton {...props} />
           <MintVideoNftButton videoId={video_id} />
+          <UpdateVideoNftButton videoId={editionId} tokenUri={tokenURI} />
         </DialogFooter>
       </DialogContent>
     </Dialog>
