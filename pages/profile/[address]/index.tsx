@@ -27,6 +27,7 @@ import {
 import { useGetUserByAddress } from '@/hooks/useGetUserByAddress';
 import { BuilderRewards } from '@/components/ProfilePage/BuilderRewards';
 import { BelieverRewards } from '@/components/ProfilePage/BelieverRewards';
+import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 
 function transformYourVisionsProjects(
   userId?: string,
@@ -150,6 +151,7 @@ export default function ProfilePage() {
     enabled: Boolean(address),
   });
   const { data: databaseProjects } = useGetProjects();
+  const { data: currentUser } = useGetCurrentUser();
 
   if (userData === undefined || address === undefined) {
     return (
@@ -189,13 +191,15 @@ export default function ProfilePage() {
         >
           Read more about earning rewards ↗
         </Link>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-6">
-          <BuilderRewards projects={yourVisionsProjects} />
-          <BelieverRewards
-            projects={believedProjects}
-            amount={userBalance || 0n}
-          />
-        </div>
+        {userData._id === currentUser?._id && (
+          <div className="grid grid-cols-1 gap-4 pt-6 md:grid-cols-2">
+            <BuilderRewards projects={yourVisionsProjects} />
+            <BelieverRewards
+              projects={believedProjects}
+              amount={userBalance || 0n}
+            />
+          </div>
+        )}
       </div>
       <div className="mt-8">
         <Tabs defaultValue="your-visions">
