@@ -182,16 +182,16 @@ export default function ProfilePage() {
   return (
     <div className="container mt-[80px] max-w-7xl pb-12 md:pt-6">
       <AdminNav user={userData} />
-      <div className="rounded-lg border p-8">
-        <h3 className="text-xl">Rewards</h3>
-        <Link
-          href="https://radarxyz.notion.site/Launch-Rewards-Coming-October-2023-254e8ff30f4e405780c4cbf4b954aaa6?pvs=4"
-          target="_blank"
-          className="text-muted-foreground hover:underline"
-        >
-          Read more about earning rewards ↗
-        </Link>
-        {userData._id === currentUser?._id && (
+      {userData._id === currentUser?._id && (
+        <div className="rounded-lg border p-8">
+          <h3 className="text-xl">Rewards</h3>
+          <Link
+            href="https://radarxyz.notion.site/Launch-Rewards-Coming-October-2023-254e8ff30f4e405780c4cbf4b954aaa6?pvs=4"
+            target="_blank"
+            className="text-muted-foreground hover:underline"
+          >
+            Read more about earning rewards ↗
+          </Link>
           <div className="grid grid-cols-1 gap-4 pt-6 md:grid-cols-2">
             <BuilderRewards projects={yourVisionsProjects} />
             <BelieverRewards
@@ -199,8 +199,8 @@ export default function ProfilePage() {
               amount={userBalance || 0n}
             />
           </div>
-        )}
-      </div>
+        </div>
+      )}
       <div className="mt-8">
         <Tabs defaultValue="your-visions">
           <TabsList className="mx-auto mb-6 w-full justify-start gap-4">
