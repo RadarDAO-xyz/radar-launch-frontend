@@ -28,6 +28,8 @@ import { useGetUserByAddress } from '@/hooks/useGetUserByAddress';
 import { BuilderRewards } from '@/components/ProfilePage/BuilderRewards';
 import { BelieverRewards } from '@/components/ProfilePage/BelieverRewards';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
+import { isWhitelistedAddress } from '@/lib/isWhitelistedAddress';
+import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 
 function transformYourVisionsProjects(
   userId?: string,
@@ -126,6 +128,7 @@ export default function ProfilePage() {
   const router = useRouter();
   const { address: addressQuery } = router.query;
   const address = addressQuery?.toString();
+  const { wallet } = usePrivyWagmi();
 
   const { data: userData } = useGetUserByAddress(address?.toString());
   const { data: onChainProjects } = useRadarEditionsGetEditions({
@@ -182,7 +185,8 @@ export default function ProfilePage() {
   return (
     <div className="container mt-[80px] max-w-7xl pb-12 md:pt-6">
       <AdminNav user={userData} />
-      {userData._id === currentUser?._id && (
+      {(userData._id === currentUser?._id ||
+        isWhitelistedAddress(wallet?.address)) && (
         <div className="rounded-lg border p-8">
           <h3 className="text-xl">Rewards</h3>
           <Link
