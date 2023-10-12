@@ -74,7 +74,17 @@ export function Wallet() {
           >
             Link Wallet
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => logout()} className="cursor-pointer">
+          <DropdownMenuItem
+            onClick={() => {
+              logout();
+              toast({
+                title: 'You have been logged out',
+                description:
+                  "If you're using MetaMask, you may need to log out manually from there too",
+              });
+            }}
+            className="cursor-pointer"
+          >
             Log Out
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -105,7 +115,17 @@ export function Wallet() {
           >
             Switch Network
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => logout()} className="cursor-pointer">
+          <DropdownMenuItem
+            onClick={() => {
+              logout();
+              toast({
+                title: 'You have been logged out',
+                description:
+                  "If you're using MetaMask, you may need to log out manually from there too",
+              });
+            }}
+            className="cursor-pointer"
+          >
             Log Out
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -151,7 +171,17 @@ export function Wallet() {
           {/* <DropdownMenuItem className="cursor-pointer" asChild>
             <Link href={`/settings`}>Settings</Link>
           </DropdownMenuItem> */}
-          <DropdownMenuItem onClick={() => logout()} className="cursor-pointer">
+          <DropdownMenuItem
+            onClick={() => {
+              logout();
+              toast({
+                title: 'You have been logged out',
+                description:
+                  "If you're using MetaMask, you may need to log out manually from there too",
+              });
+            }}
+            className="cursor-pointer"
+          >
             Log Out
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -211,7 +241,17 @@ export function Wallet() {
           <Link href={`/profile/edit`}>Edit Profile</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => logout()} className="cursor-pointer">
+        <DropdownMenuItem
+          onClick={() => {
+            logout();
+            toast({
+              title: 'You have been logged out',
+              description:
+                "If you're using MetaMask, you may need to log out manually from there too",
+            });
+          }}
+          className="cursor-pointer"
+        >
           Log Out
         </DropdownMenuItem>
       </DropdownMenuContent>
