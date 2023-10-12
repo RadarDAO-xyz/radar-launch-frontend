@@ -106,7 +106,7 @@ export function ProjectVideoDialog(props: ProjectWithChainData) {
           </Button>
           <SyncVideoNftButton {...props} />
           <MintVideoNftButton videoId={video_id} />
-          <UpdateVideoNftButton videoId={editionId} tokenUri={tokenURI} />
+          <UpdateVideoNftButton videoId={editionId} tokenUri={videoTokenUri} />
         </DialogFooter>
       </DialogContent>
     </Dialog>
