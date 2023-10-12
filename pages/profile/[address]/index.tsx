@@ -189,7 +189,7 @@ export default function ProfilePage() {
         >
           Read more about earning rewards ↗
         </Link>
-        <div className="grid grid-cols-2 gap-4 pt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-6">
           <BuilderRewards projects={yourVisionsProjects} />
           <BelieverRewards
             projects={believedProjects}

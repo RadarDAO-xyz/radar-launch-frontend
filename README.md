@@ -13,6 +13,8 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## TODO
 
-- Tidy up layout
+- Tidy up file structure
 - Remove devlink global.css
-- Make components more atomic, less reliant on user-related hooks
+- Refactoring work
+  - toast contract behaviour
+  - Make components more atomic, less reliant on user-related hooks
