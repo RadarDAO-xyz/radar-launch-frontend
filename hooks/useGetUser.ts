@@ -6,6 +6,6 @@ export function useGetUser(userId?: string, initialData?: Awaited<ReturnType<typ
   return useQuery([CacheKey.USER, userId], () => getUser(userId!), {
     enabled: Boolean(userId),
     initialData,
-    staleTime: 1000
+    staleTime: 1
   });
 }
