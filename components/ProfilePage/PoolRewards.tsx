@@ -1,9 +1,8 @@
 import { CONTRACT_ADDRESS } from '@/constants/address';
 import {
-  usePrepareRadarEditionsWithdrawFromAllEditionBalance,
-  useRadarEditionsWithdrawFromAllEditionBalance,
+  usePrepareRadarEditionsRetrieveBalance,
+  useRadarEditionsRetrieveBalance,
 } from '@/lib/generated';
-import { formatEther } from '@/lib/utils';
 import { chains } from '@/lib/wagmi';
 import { ProjectWithChainData } from '@/types/web3';
 import { usePrivyWagmi } from '@privy-io/wagmi-connector';
@@ -13,20 +12,23 @@ import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
 import { RewardsContainer } from './RewardsContainer';
 import Link from 'next/link';
+import { formatEther } from '@/lib/utils';
 
 interface Props {
   projects: ProjectWithChainData[];
+  amount: bigint;
 }
 
-export function BuilderRewards({ projects }: Props) {
+export function PoolRewards({ amount, projects }: Props) {
   const { wallet } = usePrivyWagmi();
-  const { config } = usePrepareRadarEditionsWithdrawFromAllEditionBalance({
+  const { config } = usePrepareRadarEditionsRetrieveBalance({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
-    enabled: Boolean(wallet?.address),
+    args: [amount],
+    enabled: Boolean(wallet?.address) && amount > 0n,
   });
   const { data, writeAsync, isLoading } =
-    useRadarEditionsWithdrawFromAllEditionBalance(config);
+    useRadarEditionsRetrieveBalance(config);
   const { toast } = useToast();
   const [hasToasted, setHasToasted] = useState(false);
 
@@ -59,24 +61,12 @@ export function BuilderRewards({ projects }: Props) {
       projects={projects.map((project) => (
         <div key={project._id} className="py-2">
           <Link href={`/project/${project._id}`} className="hover:underline">
-            {project.title}: {formatEther(project.balance ?? 0n).slice(0, 9)}{' '}
-            ETH
+            {project.title}
           </Link>
         </div>
       ))}
-      title={'BUILDER REWARDS'}
-      amount={
-        <span>
-          {formatEther(
-            projects
-              .map((project) => project.balance || 0n)
-              .reduce((acc, balance) => acc + balance, 0n),
-          )
-            .toString()
-            .slice(0, 9)}{' '}
-          ETH
-        </span>
-      }
+      title={'POOL REWARDS'}
+      amount={<span>{formatEther(amount).toString().slice(0, 9)} ETH</span>}
       button={
         <Button
           loading={isLoading}
@@ -85,7 +75,7 @@ export function BuilderRewards({ projects }: Props) {
             writeAsync?.();
           }}
         >
-          Withdraw Builder Rewards
+          Withdraw Pool Rewards
         </Button>
       }
     />

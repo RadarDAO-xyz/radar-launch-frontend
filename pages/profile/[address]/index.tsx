@@ -25,8 +25,8 @@ import {
   ProjectWithOwnedAmount,
 } from '../../../types/web3';
 import { useGetUserByAddress } from '@/hooks/useGetUserByAddress';
-import { BuilderRewards } from '@/components/ProfilePage/BuilderRewards';
-import { BelieverRewards } from '@/components/ProfilePage/BelieverRewards';
+import { ProjectRewards } from '@/components/ProfilePage/ProjectRewards';
+import { PoolRewards } from '@/components/ProfilePage/PoolRewards';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 import { isWhitelistedAddress } from '@/lib/isWhitelistedAddress';
 import { usePrivyWagmi } from '@privy-io/wagmi-connector';
@@ -197,8 +197,8 @@ export default function ProfilePage() {
             Read more about earning rewards ↗
           </Link>
           <div className="grid grid-cols-1 gap-4 pt-6 md:grid-cols-2">
-            <BuilderRewards projects={yourVisionsProjects} />
-            <BelieverRewards
+            <ProjectRewards projects={yourVisionsProjects} />
+            <PoolRewards
               projects={believedProjects}
               amount={userBalance || 0n}
             />

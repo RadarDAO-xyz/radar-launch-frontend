@@ -1,8 +1,9 @@
 import { CONTRACT_ADDRESS } from '@/constants/address';
 import {
-  usePrepareRadarEditionsRetrieveBalance,
-  useRadarEditionsRetrieveBalance,
+  usePrepareRadarEditionsWithdrawFromAllEditionBalance,
+  useRadarEditionsWithdrawFromAllEditionBalance,
 } from '@/lib/generated';
+import { formatEther } from '@/lib/utils';
 import { chains } from '@/lib/wagmi';
 import { ProjectWithChainData } from '@/types/web3';
 import { usePrivyWagmi } from '@privy-io/wagmi-connector';
@@ -12,23 +13,20 @@ import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
 import { RewardsContainer } from './RewardsContainer';
 import Link from 'next/link';
-import { formatEther } from '@/lib/utils';
 
 interface Props {
   projects: ProjectWithChainData[];
-  amount: bigint;
 }
 
-export function BelieverRewards({ amount, projects }: Props) {
+export function ProjectRewards({ projects }: Props) {
   const { wallet } = usePrivyWagmi();
-  const { config } = usePrepareRadarEditionsRetrieveBalance({
+  const { config } = usePrepareRadarEditionsWithdrawFromAllEditionBalance({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
-    args: [amount],
-    enabled: Boolean(wallet?.address) && amount > 0n,
+    enabled: Boolean(wallet?.address),
   });
   const { data, writeAsync, isLoading } =
-    useRadarEditionsRetrieveBalance(config);
+    useRadarEditionsWithdrawFromAllEditionBalance(config);
   const { toast } = useToast();
   const [hasToasted, setHasToasted] = useState(false);
 
@@ -60,11 +58,25 @@ export function BelieverRewards({ amount, projects }: Props) {
     <RewardsContainer
       projects={projects.map((project) => (
         <div key={project._id} className="py-2">
-          <Link href={`/project/${project._id}`} className='hover:underline'>{project.title}</Link>
+          <Link href={`/project/${project._id}`} className="hover:underline">
+            {project.title}: {formatEther(project.balance ?? 0n).slice(0, 9)}{' '}
+            ETH
+          </Link>
         </div>
       ))}
-      title={'BELIEVER REWARDS'}
-      amount={<span>{formatEther(amount).toString().slice(0, 9)} ETH</span>}
+      title={'PROJECT REWARDS'}
+      amount={
+        <span>
+          {formatEther(
+            projects
+              .map((project) => project.balance || 0n)
+              .reduce((acc, balance) => acc + balance, 0n),
+          )
+            .toString()
+            .slice(0, 9)}{' '}
+          ETH
+        </span>
+      }
       button={
         <Button
           loading={isLoading}
@@ -73,7 +85,7 @@ export function BelieverRewards({ amount, projects }: Props) {
             writeAsync?.();
           }}
         >
-          Withdraw Believer Rewards
+          Withdraw Project Rewards
         </Button>
       }
     />
