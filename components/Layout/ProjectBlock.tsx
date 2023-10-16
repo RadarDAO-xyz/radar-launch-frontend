@@ -46,10 +46,9 @@ export function ProjectBlock(props: Props) {
 
   const { data: totalSupply } = useRadarEditionsTotalSupply({
     address: CONTRACT_ADDRESS,
-    chainId: chains[0]?.id,
-    args: [BigInt(Math.max(editionId! || 0, 0))],
-    enabled:
-      Boolean(chains[0]?.id) && editionId !== undefined && showSupporters,
+    chainId: chains[0].id,
+    args: [BigInt(editionId || 0)],
+    enabled: editionId !== undefined && editionId > 0 && showSupporters,
   });
   const countdown = useGetCountdown(new Date(mint_end_date), showMintEndDate);
 
@@ -117,7 +116,7 @@ export function ProjectBlock(props: Props) {
           </div>
         )}
       </div>
-      <div className="flex justify-end flex-col h-full">
+      <div className="flex h-full flex-col justify-end">
         <div className="flex-row justify-end">
           <div className="flex w-full items-center justify-between gap-4 border-t border-t-[var(--line-83d2b2f6)] pt-3">
             <div className="flex-1">

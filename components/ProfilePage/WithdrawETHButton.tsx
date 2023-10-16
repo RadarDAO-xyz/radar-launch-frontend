@@ -33,8 +33,9 @@ export function WithdrawETHButton({ status, editionId }: ProjectWithChainData) {
   const { config } = usePrepareRadarEditionsWithdrawEditionBalance({
     account: wallet?.address as Address,
     address: CONTRACT_ADDRESS,
-    chainId: chains[0]?.id,
-    enabled: wallet?.address !== undefined && editionId !== undefined,
+    chainId: chains[0].id,
+    enabled:
+      wallet?.address !== undefined && editionId !== undefined && editionId > 0,
     args: [BigInt(editionId || 0), parseEther(amount.toString())],
   });
   const { writeAsync, data, error } =

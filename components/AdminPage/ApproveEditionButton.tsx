@@ -35,9 +35,10 @@ export function ApproveEditionButton({
       Boolean(chains[0].id) &&
       isOpen &&
       editionId !== undefined &&
+      editionId > 0 &&
       wallet?.address !== undefined &&
       projectCanBeApproved,
-    args: [BigInt(+(editionId || 0)) || 0n],
+    args: [BigInt(editionId || 0)],
   });
   const { writeAsync, isLoading: isApproveLoading } =
     useRadarEditionsApproveEdition(config);

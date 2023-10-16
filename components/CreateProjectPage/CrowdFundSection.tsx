@@ -91,22 +91,24 @@ export function CrowdFundSection({ isEdit }: Props) {
           </div>
         )}
         <div className="col-span-1">
-          <FormField
-            control={control}
-            name="edition_price"
-            render={({ field }) => (
-              <FormItem className="pb-4">
-                <FormLabel>Edition Price</FormLabel>
-                <div className="flex items-center space-x-2">
-                  <FormControl>
-                    <Input type="number" placeholder="0-20" {...field} />
-                  </FormControl>
-                  <p>$USD</p>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {!isEdit && (
+            <FormField
+              control={control}
+              name="edition_price"
+              render={({ field }) => (
+                <FormItem className="pb-4">
+                  <FormLabel>Edition Price</FormLabel>
+                  <div className="flex items-center space-x-2">
+                    <FormControl>
+                      <Input type="number" placeholder="0-20" {...field} />
+                    </FormControl>
+                    <p>$USD</p>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
           <FormField
             control={control}
             name="mint_end_date"

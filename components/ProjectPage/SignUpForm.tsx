@@ -61,6 +61,7 @@ export function SignUpForm({ id }: Props) {
     }
     mutate();
   }
+
   return (
     <div>
       <h2 className="pb-6 pt-4 text-center font-base text-xl">
@@ -68,8 +69,7 @@ export function SignUpForm({ id }: Props) {
       </h2>
       {!isSuccess ? (
         <Form {...form}>
-          {/* @ts-expect-error Netlify form submission */}
-          <form netlify={'true'} onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <FormField
               control={control}
               name="email"

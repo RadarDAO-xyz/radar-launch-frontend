@@ -94,8 +94,6 @@ export function EditForm(props: Project) {
     mutate();
   }
 
-  console.log({ asd: form.getValues() });
-
   return (
     <Form {...form}>
       <form

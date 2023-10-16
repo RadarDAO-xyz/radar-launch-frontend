@@ -30,9 +30,9 @@ export function VisionCard(props: ProjectWithChainData) {
   } = props;
   const { data: totalSupply } = useRadarEditionsTotalSupply({
     address: CONTRACT_ADDRESS,
-    chainId: chains[0]?.id,
-    args: [BigInt(Math.max(editionId! || 0, 0))],
-    enabled: Boolean(chains[0]?.id) && editionId !== undefined,
+    chainId: chains[0].id,
+    args: [BigInt(editionId || 0)],
+    enabled: editionId !== undefined && editionId > 0,
   });
 
   return (

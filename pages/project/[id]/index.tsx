@@ -19,16 +19,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DEFAULT_AVATAR_IMAGE } from '@/constants/links';
 import { useGetProject } from '@/hooks/useGetProject';
 import { useGetUser } from '@/hooks/useGetUser';
+import { getProject, getUser } from '@/lib/backend';
 import { generateVideoEmbed } from '@/lib/generateVideoEmbed';
 import { isYoutubeOrVimeoVideoLink } from '@/lib/isYoutubeOrVimeoVideoLink';
+import { Project, User } from '@/types/mongo';
+import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { NextSeo } from 'next-seo';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { getProject, getUser } from '@/lib/backend';
-import { Project, User } from '@/types/mongo';
-import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 
 export const getServerSideProps: GetServerSideProps<{
   project?: Project;

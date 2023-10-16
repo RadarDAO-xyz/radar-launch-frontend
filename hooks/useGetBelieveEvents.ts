@@ -46,6 +46,12 @@ export function useGetBelieveEvents(
         fromBlock: START_BLOCK_FOR_BELIEVE,
       });
     },
-    { enabled: editionId !== undefined && _id !== undefined && !isDisabled },
+    {
+      enabled:
+        editionId !== undefined &&
+        editionId > 0 &&
+        _id !== undefined &&
+        !isDisabled,
+    },
   );
 }

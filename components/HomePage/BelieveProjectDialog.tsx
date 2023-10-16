@@ -73,7 +73,7 @@ export function BelieveProjectDialog({
   );
   const { data: balance } = useBalance({
     address: wallet?.address as Address,
-  });;
+  });
   const { data: futureFundFee } = useRadarEditionsFutureFundFee({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
@@ -88,6 +88,7 @@ export function BelieveProjectDialog({
     enabled:
       wallet?.address !== undefined &&
       editionId !== undefined &&
+      editionId > 0 &&
       tags.length > 0 &&
       isOpen &&
       futureFundFee !== undefined,

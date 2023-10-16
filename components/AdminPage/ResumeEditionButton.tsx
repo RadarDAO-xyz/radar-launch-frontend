@@ -35,9 +35,10 @@ export function ResumeEditionButton({
       Boolean(chains[0].id) &&
       isOpen &&
       editionId !== undefined &&
+      editionId > 0 &&
       wallet?.address !== undefined &&
       projectCanBeResumed,
-    args: [BigInt(+(editionId || 0)) || 0n],
+    args: [BigInt(editionId || 0)],
   });
   const { writeAsync, isLoading } = useRadarEditionsResumeEdition(config);
 

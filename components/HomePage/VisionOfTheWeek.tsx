@@ -21,9 +21,9 @@ export function VisionOfTheWeek(props: ProjectWithChainData) {
   } = props;
   // const { data: totalSupply } = useRadarEditionsTotalSupply({
   //   address: CONTRACT_ADDRESS,
-  //   chainId: chains[0]?.id,
+  //   chainId: chains[0].id,
   //   args: [BigInt(Math.max(editionId || 0, 0))],
-  //   enabled: Boolean(chains[0]?.id) && editionId !== undefined,
+  //   enabled: editionId !== undefined,
   // });
   const countdown = useGetCountdown(
     mint_end_date ? new Date(mint_end_date) : undefined,
@@ -70,7 +70,7 @@ export function VisionOfTheWeek(props: ProjectWithChainData) {
               {status === ProjectStatus.LIVE ? (
                 <BelieveProjectDialog
                   {...props}
-                  editionId={editionId !== -1 ? editionId : undefined}
+                  editionId={editionId}
                   buttonProps={{
                     className: 'text-lg',
                   }}
