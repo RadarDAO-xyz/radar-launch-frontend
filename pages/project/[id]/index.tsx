@@ -26,20 +26,22 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-
-import type { InferGetServerSidePropsType, GetServerSideProps } from 'next';
-import { Project } from '@/types/mongo';
 import { getProject, getUser } from '@/lib/backend';
+import { Project, User } from '@/types/mongo';
+import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 
-export const getServerSideProps = (async (context) => {
-  const id = context.params?.id as string;
-  const project_data = await getProject(id!);
-  const user_data = await getUser(project_data.founder!);
-  return { props: { project: project_data, user: user_data } };
-}) satisfies GetServerSideProps<{
-  project: Project | undefined;
-  user: Awaited<ReturnType<typeof getUser>>;
-}>;
+export const getServerSideProps: GetServerSideProps<{
+  project?: Project;
+  user?: User;
+}> = async (context) => {
+  const { id } = context.params ?? {};
+  if (!id) {
+    return { props: { project: undefined, user: undefined } };
+  }
+  const project = await getProject(id.toString());
+  const user = await getUser(project.founder);
+  return { props: { project, user } };
+};
 
 enum Tab {
   DETAILS = 'ONE',

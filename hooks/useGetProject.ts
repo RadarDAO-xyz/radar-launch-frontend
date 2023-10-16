@@ -1,6 +1,6 @@
 import { CacheKey } from '@/constants/react-query';
 import { getProject } from '@/lib/backend';
-import { Project } from '@/types/mongo';
+import type { Project } from '@/types/mongo';
 import { useQuery } from 'wagmi';
 
 export function useGetProject(id?: string, initialData?: Project) {
