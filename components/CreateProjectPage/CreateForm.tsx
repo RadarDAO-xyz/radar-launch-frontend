@@ -22,7 +22,14 @@ import { MilestoneSection } from './MilestoneSection';
 export const createFormSchema = z.object({
   title: z.string().min(1, { message: 'Title is required' }),
   description: z.string().min(1, { message: 'Description is required' }),
-  video_url: z.string().min(1, { message: 'Video is required' }),
+  video_url: z
+    .string()
+    .refine((value) => value.startsWith('ipfs://'), {
+      message: 'IPFS URL must start with ipfs://',
+    })
+    .refine((value) => value.length === 66, {
+      message: 'Invalid IPFS URL',
+    }),
   video_id: z.string(),
   tldr: z.string().min(1, { message: 'Brief description is required' }),
   thumbnail: z.optional(z.instanceof(File)),

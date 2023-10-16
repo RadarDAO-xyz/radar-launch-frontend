@@ -11,6 +11,7 @@ import {
   FormDescription,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
@@ -46,6 +47,7 @@ export const VideoUpload = () => {
       : null,
   );
 
+  // if error occured will uploading, set form error
   useEffect(() => {
     if (error?.message) {
       console.log('error with video', { error });
@@ -61,6 +63,7 @@ export const VideoUpload = () => {
     }
   }, [clearErrors, error, setError, video]);
 
+  // if file uploaded, update form data
   useEffect(() => {
     if (
       data?.[0].storage?.ipfs?.cid &&
@@ -73,6 +76,14 @@ export const VideoUpload = () => {
       setValue('video_id', data[0].id);
     }
   }, [data, setValue, video_id, video_url]);
+
+  // if video_url is set manually, update the video id as well
+  useEffect(() => {
+    if (video_url && video_url.startsWith('ipfs://')) {
+      const cid = video_url.replace('ipfs://', '');
+      setValue('video_id', cid);
+    }
+  }, [setValue, video_url]);
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (acceptedFiles && acceptedFiles.length > 0 && acceptedFiles?.[0]) {
@@ -110,47 +121,56 @@ export const VideoUpload = () => {
       render={({ field }) => (
         <FormItem className="pb-4">
           <FormControl>
-            <div
-              className={cn(
-                'flex w-full flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 py-8',
-                isDragActive && 'border-gray-400 bg-slate-100',
-                video && 'bg-slate-100/50',
-              )}
-              {...getRootProps()}
-            >
-              {video ? (
-                <div className="text-center px-4">
-                  <h4 className="pb-2">{video.name}</h4>
-                  {data?.[0].id ? (
-                    <div className="mt-2 text-sm text-muted-foreground">
-                      <p>Video successfully uploaded to IPFS! 🎉</p>
-                      {data[0].storage?.ipfs?.cid && (
-                        <p className="break-all">
-                          ipfs://{data[0].storage.ipfs.cid}
-                        </p>
-                      )}
-                    </div>
-                  ) : (
-                    <Button
-                      onClick={() => {
-                        createAsset?.();
-                      }}
-                      disabled={!createAsset || status === 'loading'}
-                    >
-                      {progressFormatted ? progressFormatted : 'Upload to IPFS'}
-                    </Button>
-                  )}
-                </div>
-              ) : (
-                <>
-                  <input {...getInputProps()} />
-                  <FileUpIcon width={30} height={30} className="mb-2" />
-                  <h4 className="text-xl font-semibold">Upload Video</h4>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    Only .mp4 files are supported
-                  </p>
-                </>
-              )}
+            <div>
+              <div
+                className={cn(
+                  'flex w-full flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 py-8',
+                  isDragActive && 'border-gray-400 bg-slate-100',
+                  video && 'bg-slate-100/50',
+                )}
+                {...getRootProps()}
+              >
+                {video ? (
+                  <div className="px-4 text-center">
+                    <h4 className="pb-2">{video.name}</h4>
+                    {data?.[0].id ? (
+                      <div className="mt-2 text-sm text-muted-foreground">
+                        <p>Video successfully uploaded to IPFS! 🎉</p>
+                      </div>
+                    ) : (
+                      <Button
+                        onClick={() => {
+                          createAsset?.();
+                        }}
+                        disabled={!createAsset || status === 'loading'}
+                      >
+                        {progressFormatted
+                          ? progressFormatted
+                          : 'Upload to IPFS'}
+                      </Button>
+                    )}
+                  </div>
+                ) : (
+                  <>
+                    <input {...getInputProps()} />
+                    <FileUpIcon width={30} height={30} className="mb-2" />
+                    <h4 className="text-xl font-semibold">Upload Video</h4>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      Only .mp4 files are supported
+                    </p>
+                  </>
+                )}
+              </div>
+              <FormLabel className="pb-2 pt-4">
+                ...or enter an IPFS link for your video
+              </FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  disabled={Boolean(data?.[0].id)}
+                  placeholder="Video link should start with ipfs://"
+                />
+              </FormControl>
             </div>
           </FormControl>
           <FormDescription>

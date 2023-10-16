@@ -195,7 +195,7 @@ export function ProjectSection({ isEdit, thumbnail }: Props) {
                     <div
                       {...getRootProps()}
                       className={cn(
-                        'flex h-full w-full flex-col items-center justify-center rounded-lg border-2 border-dashed',
+                        'flex h-full w-full flex-col items-center justify-center rounded-lg border-2 border-dashed py-6',
                         isDragActive && 'border-gray-400 bg-slate-100',
                         currentThumbnail && 'bg-slate-100/50',
                       )}
