@@ -26,6 +26,22 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { getProject, getUser } from '@/lib/backend';
+import { Project, User } from '@/types/mongo';
+import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+
+export const getServerSideProps: GetServerSideProps<{
+  project?: Project;
+  user?: User;
+}> = async (context) => {
+  const { id } = context.params ?? {};
+  if (!id) {
+    return { props: { project: undefined, user: undefined } };
+  }
+  const project = await getProject(id.toString());
+  const user = await getUser(project.founder);
+  return { props: { project, user } };
+};
 
 enum Tab {
   DETAILS = 'ONE',
@@ -33,15 +49,22 @@ enum Tab {
   SIGNUP_AND_CONTRIBUTE = 'THREE',
 }
 
-export default function IndividualProjectPage() {
+export default function IndividualProjectPage({
+  project: _project,
+  user: _user,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
   const { id } = router.query;
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const { data, isLoading: isProjectLoading } = useGetProject(id?.toString());
+  const { data, isLoading: isProjectLoading } = useGetProject(
+    id?.toString(),
+    _project,
+  );
   const { data: userData, isLoading: isUserLoading } = useGetUser(
     data?.founder,
+    _user,
   );
 
   if (isProjectLoading || isUserLoading) {
@@ -65,6 +88,9 @@ export default function IndividualProjectPage() {
       <NextSeo
         openGraph={{
           type: 'video',
+          images: [{ url: data.thumbnail ?? '' }],
+          title: data.title + ' | RADAR Launch',
+          description: data.description,
         }}
         twitter={{}}
         title={data.title + ' | RADAR Launch'}
