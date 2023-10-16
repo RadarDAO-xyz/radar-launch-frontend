@@ -134,7 +134,7 @@ export function CreateForm() {
   // });
   const { mutate, isLoading } = useMutation(
     [CacheKey.CREATE_PROJECT],
-    () => {
+    async () => {
       const values = form.getValues();
       // resolve ENS address
       // if (admin_address.endsWith('.eth')) {
@@ -153,9 +153,15 @@ export function CreateForm() {
         pool: values.brief,
         brief: pools?.find((pool) => pool._id === values.brief)!.title!,
       };
-      return createProject(idToken, newValues);
+      const project = await createProject(idToken, newValues);
+      if (!project) {
+        throw new Error('Error creating project');
+      }
+
+      return project;
     },
     {
+      // TODO: refactor to not use react-query's callbacks
       onError: (e) => {
         console.log(e);
         toast({
