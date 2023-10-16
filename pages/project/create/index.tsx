@@ -1,4 +1,4 @@
-import { Placeholder } from '@/components/Layout/Placeholder';
+import { Placeholder } from '@/components/common/Placeholder';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useAuth } from '@/hooks/useAuth';
 import { HelpCircleIcon } from 'lucide-react';

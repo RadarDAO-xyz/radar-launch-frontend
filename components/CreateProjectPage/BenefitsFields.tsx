@@ -1,7 +1,7 @@
 import { Input } from '@/components/ui/input';
 import { ReactNode } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import { TinyMCE } from '../Layout/TinyMCE';
+import { TinyMCE } from '../common/TinyMCE';
 import { Button } from '../ui/button';
 import {
   FormControl,

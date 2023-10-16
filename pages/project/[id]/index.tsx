@@ -1,6 +1,6 @@
-import { HTMLParsedComponent } from '@/components/Layout/HTMLParsedComponent';
-import { Placeholder } from '@/components/Layout/Placeholder';
-import { ProjectVideoPlayer } from '@/components/Layout/ProjectVideoPlayer';
+import { HTMLParsedComponent } from '@/components/common/HTMLParsedComponent';
+import { Placeholder } from '@/components/common/Placeholder';
+import { ProjectVideoPlayer } from '@/components/common/ProjectVideoPlayer';
 import { ContributeForm } from '@/components/ProjectPage/ContributeForm';
 import { ProjectDescription } from '@/components/ProjectPage/ProjectDescription';
 import { ProjectTabs } from '@/components/ProjectPage/ProjectTabs';

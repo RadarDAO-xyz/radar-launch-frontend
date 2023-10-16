@@ -1,6 +1,6 @@
 import { Pool } from '@/types/mongo';
 import Link from 'next/link';
-import { HTMLParsedComponent } from '../Layout/HTMLParsedComponent';
+import { HTMLParsedComponent } from '../common/HTMLParsedComponent';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
 

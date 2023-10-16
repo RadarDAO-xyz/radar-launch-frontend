@@ -3,8 +3,8 @@ import { cn } from '@/lib/utils';
 import { ProjectStatus } from '@/types/mongo';
 import { ProjectWithChainData } from '@/types/web3';
 import Link from 'next/link';
-import { HTMLParsedComponent } from '../Layout/HTMLParsedComponent';
-import { ProjectVideoPlayer } from '../Layout/ProjectVideoPlayer';
+import { HTMLParsedComponent } from '../common/HTMLParsedComponent';
+import { ProjectVideoPlayer } from '../common/ProjectVideoPlayer';
 import { BelieveProjectDialog } from './BelieveProjectDialog';
 
 export function VisionOfTheWeek(props: ProjectWithChainData) {

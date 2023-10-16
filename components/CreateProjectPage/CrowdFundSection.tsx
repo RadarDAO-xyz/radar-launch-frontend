@@ -19,6 +19,7 @@ import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
+import { Checkbox } from '../ui/checkbox';
 
 interface Props {
   isEdit?: boolean;
@@ -35,7 +36,7 @@ export function CrowdFundSection({ isEdit }: Props) {
         support you?
       </p>
       <hr className="border-b-1 my-8 border-slate-200" />
-      {/* <div className="grid grid-cols-2 gap-10">
+      <div className="grid grid-cols-2 gap-10">
         <div className="col-span-1 pr-4">
           <h2 className="font-base text-xl">Crowdfunding</h2>
           <p>
@@ -66,7 +67,7 @@ export function CrowdFundSection({ isEdit }: Props) {
           />
         </div>
       </div>
-      <hr className="border-b-1 my-8 border-slate-200" /> */}
+      <hr className="border-b-1 my-8 border-slate-200" />
       <div
         className={cn('grid gap-10', isEdit ? 'grid-cols-1' : 'grid-cols-2')}
       >

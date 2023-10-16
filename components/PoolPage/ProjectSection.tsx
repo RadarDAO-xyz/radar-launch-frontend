@@ -6,7 +6,7 @@ import { transformProjectsWithChainData } from '@/lib/transformProjectsWithChain
 import { chains } from '@/lib/wagmi';
 import { Pool, ProjectStatus } from '@/types/mongo';
 import Link from 'next/link';
-import { ProjectBlock } from '../Layout/ProjectBlock';
+import { ProjectBlock } from '../common/ProjectBlock';
 import { Button } from '../ui/button';
 
 export function ProjectSection({ _id, title }: Pool) {

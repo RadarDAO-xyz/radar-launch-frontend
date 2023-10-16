@@ -1,6 +1,6 @@
 import { TrashIcon } from 'lucide-react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import { TinyMCE } from '../Layout/TinyMCE';
+import { TinyMCE } from '../common/TinyMCE';
 import { Button } from '../ui/button';
 import { FormControl, FormField, FormItem, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';

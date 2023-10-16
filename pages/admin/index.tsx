@@ -1,5 +1,5 @@
 import { ProjectActions } from '@/components/AdminPage/ProjectActions';
-import { Placeholder } from '@/components/Layout/Placeholder';
+import { Placeholder } from '@/components/common/Placeholder';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {

@@ -5,7 +5,7 @@ import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useFormContext } from 'react-hook-form';
 import * as z from 'zod';
-import { TinyMCE } from '../Layout/TinyMCE';
+import { TinyMCE } from '../common/TinyMCE';
 import {
   FormControl,
   FormDescription,

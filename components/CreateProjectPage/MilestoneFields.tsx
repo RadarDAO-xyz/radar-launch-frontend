@@ -1,6 +1,6 @@
 import { TrashIcon } from 'lucide-react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import { TinyMCE } from '../Layout/TinyMCE';
+import { TinyMCE } from '../common/TinyMCE';
 import { Button } from '../ui/button';
 import { FormControl, FormField, FormItem, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
@@ -15,16 +15,13 @@ export const MilestoneFields = () => {
   return (
     <fieldset>
       {fields.map((field, index) => (
-        <div
-          key={field.id}
-          className="mb-6"
-        >
+        <div key={field.id} className="mb-6">
           <div className="flex justify-between gap-4">
             <FormField
               key={field.id + 'amount'}
               name={`milestones.${index}.amount`}
               render={({ field }) => (
-                <FormItem className="pb-4 w-full">
+                <FormItem className="w-full pb-4">
                   <FormControl>
                     <Input {...field} placeholder="$" />
                   </FormControl>

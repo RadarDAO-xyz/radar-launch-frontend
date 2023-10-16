@@ -1,4 +1,4 @@
-import { Placeholder } from '@/components/Layout/Placeholder';
+import { Placeholder } from '@/components/common/Placeholder';
 import { PoolProjectHeader } from '@/components/PoolPage/PoolProjectHeader';
 import { ProjectSection } from '@/components/PoolPage/ProjectSection';
 import { ReadyToLaunchComponent } from '@/components/PoolPage/ReadyToLaunchComponent';

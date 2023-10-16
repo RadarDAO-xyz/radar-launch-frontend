@@ -1,5 +1,5 @@
-import { AdminNav } from '@/components/Layout/AdminNav';
-import { Placeholder } from '@/components/Layout/Placeholder';
+import { AdminNav } from '@/components/common/AdminNav';
+import { Placeholder } from '@/components/common/Placeholder';
 import { useAuth } from '@/hooks/useAuth';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 import dynamic from 'next/dynamic';

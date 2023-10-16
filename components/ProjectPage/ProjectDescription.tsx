@@ -1,5 +1,5 @@
 import { Project } from '@/types/mongo';
-import { HTMLParsedComponent } from '../Layout/HTMLParsedComponent';
+import { HTMLParsedComponent } from '../common/HTMLParsedComponent';
 import { Table, TableBody, TableCell, TableRow } from '../ui/table';
 
 export function ProjectDescription({

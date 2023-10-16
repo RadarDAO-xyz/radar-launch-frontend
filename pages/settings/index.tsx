@@ -1,4 +1,4 @@
-import { Placeholder } from '@/components/Layout/Placeholder';
+import { Placeholder } from '@/components/common/Placeholder';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { usePrivy, useWallets } from '@privy-io/react-auth';

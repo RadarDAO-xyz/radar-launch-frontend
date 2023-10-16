@@ -1,4 +1,4 @@
-import { TinyMCE } from '@/components/Layout/TinyMCE';
+import { TinyMCE } from '@/components/common/TinyMCE';
 import { Button } from '@/components/ui/button';
 import {
   Form,

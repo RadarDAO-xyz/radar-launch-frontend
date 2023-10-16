@@ -1,9 +1,9 @@
 import { generateVideoThumbnail } from '@/lib/generateVideoThumbnail';
 import { ProjectWithOwnedAmount } from '@/types/web3';
 import Link from 'next/link';
-import { HTMLParsedComponent } from '../Layout/HTMLParsedComponent';
+import { HTMLParsedComponent } from '../common/HTMLParsedComponent';
 import { Button } from '../ui/button';
-import { ProjectThumbnail } from '../Layout/ProjectThumbnail';
+import { ProjectThumbnail } from '../common/ProjectThumbnail';
 
 export function CollectedVision({
   brief,

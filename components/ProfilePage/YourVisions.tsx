@@ -1,7 +1,7 @@
 import { ProjectStatus } from '@/types/mongo';
 import { ProjectWithChainData } from '@/types/web3';
 import { usePrivyWagmi } from '@privy-io/wagmi-connector';
-import { ProjectBlock } from '../Layout/ProjectBlock';
+import { ProjectBlock } from '../common/ProjectBlock';
 import { VisionCard } from './VisionCard';
 
 interface Props {

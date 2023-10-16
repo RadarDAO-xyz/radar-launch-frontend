@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import { ProjectWithChainData } from '@/types/web3';
 import Link from 'next/link';
 import { formatEther } from 'viem';
-import { ProjectThumbnail } from '../Layout/ProjectThumbnail';
+import { ProjectThumbnail } from '../common/ProjectThumbnail';
 import { chains } from '../../lib/wagmi';
 import { Badge } from '../ui/badge';
 import {

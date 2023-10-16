@@ -10,7 +10,7 @@ import {
 import { Textarea } from '../ui/textarea';
 import { createFormSchema } from './CreateForm';
 import * as z from 'zod';
-import { TinyMCE } from '../Layout/TinyMCE';
+import { TinyMCE } from '../common/TinyMCE';
 import { cn } from '@/lib/utils';
 
 interface Props {

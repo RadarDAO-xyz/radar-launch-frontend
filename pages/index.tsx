@@ -21,7 +21,7 @@ import Link from 'next/link';
 
 const ProjectBlock = dynamic(
   () =>
-    import('@/components/Layout/ProjectBlock').then((res) => res.ProjectBlock),
+    import('@/components/common/ProjectBlock').then((res) => res.ProjectBlock),
   {
     ssr: false,
   },

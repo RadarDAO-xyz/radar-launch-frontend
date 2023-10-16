@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { Player } from '@livepeer/react';
 import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 import { ProjectThumbnail } from './ProjectThumbnail';
+import { useCallback } from 'react';
 
 interface Props {
   videoUrl: string;
@@ -21,6 +22,17 @@ export function ProjectVideoPlayer({
   title,
 }: Props) {
   const { wallet } = usePrivyWagmi();
+  const mediaElementRef = useCallback((ref: HTMLMediaElement) => {
+    ref.onmouseenter = () => {
+      console.log('mouse enter');
+    };
+
+    // when mouse is hovered over the media element, console log hover
+    ref.onmouseover = (e) => {
+      console.log(e);
+      console.log('hover');
+    };
+  }, []);
 
   if (isYoutubeOrVimeoVideoLink(videoUrl)) {
     if (isThumbnail) {
@@ -70,6 +82,7 @@ export function ProjectVideoPlayer({
         objectFit="cover"
         poster={thumbnail?.startsWith('https') ? thumbnail : undefined}
         viewerId={wallet?.address}
+        mediaElementRef={mediaElementRef}
       />
     );
   }

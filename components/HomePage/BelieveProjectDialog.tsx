@@ -28,8 +28,8 @@ import {
   useQueryClient,
   useWaitForTransaction,
 } from 'wagmi';
-import { HTMLParsedComponent } from '../Layout/HTMLParsedComponent';
-import { ProjectVideoPlayer } from '../Layout/ProjectVideoPlayer';
+import { HTMLParsedComponent } from '../common/HTMLParsedComponent';
+import { ProjectVideoPlayer } from '../common/ProjectVideoPlayer';
 import { Badge } from '../ui/badge';
 import {
   Dialog,

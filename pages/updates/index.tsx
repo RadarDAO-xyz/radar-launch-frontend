@@ -1,4 +1,4 @@
-import { AdminNav } from '@/components/Layout/AdminNav';
+import { AdminNav } from '@/components/common/AdminNav';
 import { AuthContext } from '@/components/Providers/AuthProvider';
 import {
   Accordion,

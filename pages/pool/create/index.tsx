@@ -1,5 +1,5 @@
 import { CreatePoolForm } from '@/components/CreatePoolPage/CreatePoolForm';
-import { Placeholder } from '@/components/Layout/Placeholder';
+import { Placeholder } from '@/components/common/Placeholder';
 import { useAuth } from '@/hooks/useAuth';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 export default function CreatePoolPage() {

@@ -1,5 +1,5 @@
 import { AuthContext } from '@/components/Providers/AuthProvider';
-import { TinyMCE } from '@/components/Layout/TinyMCE';
+import { TinyMCE } from '@/components/common/TinyMCE';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -100,10 +100,7 @@ export function UpdateForm() {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="mx-auto mt-12"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="mx-auto mt-12">
         <div className="mb-10 rounded border border-slate-200 p-10">
           <div className="flex gap-4">
             <div>

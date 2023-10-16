@@ -1,5 +1,5 @@
-import { AdminNav } from '@/components/Layout/AdminNav';
-import { Placeholder } from '@/components/Layout/Placeholder';
+import { AdminNav } from '@/components/common/AdminNav';
+import { Placeholder } from '@/components/common/Placeholder';
 import { CollectedVisions } from '@/components/ProfilePage/CollectedVisions';
 import { YourVisions } from '@/components/ProfilePage/YourVisions';
 import { chains } from '@/lib/wagmi';
