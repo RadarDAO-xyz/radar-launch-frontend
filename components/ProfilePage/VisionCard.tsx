@@ -28,11 +28,12 @@ export function VisionCard(props: ProjectWithChainData) {
     editionId,
     thumbnail,
   } = props;
+  const isValidEditionId = editionId !== undefined && editionId > 0;
   const { data: totalSupply } = useRadarEditionsTotalSupply({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
     args: [BigInt(editionId || 0)],
-    enabled: editionId !== undefined && editionId > 0,
+    enabled: isValidEditionId,
   });
 
   return (
@@ -56,7 +57,7 @@ export function VisionCard(props: ProjectWithChainData) {
         >
           {title}
         </Link>
-        {editionId && (
+        {isValidEditionId && (
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -81,7 +82,9 @@ export function VisionCard(props: ProjectWithChainData) {
             NFTs Sold
           </div>
           <div className="rounded-lg rounded-l-none border border-l-0 p-3">
-            {totalSupply?.toString() || 0}
+            {isValidEditionId && totalSupply !== undefined
+              ? totalSupply.toString()
+              : 0}
           </div>
         </div>
         <div className="grid grid-cols-2">
