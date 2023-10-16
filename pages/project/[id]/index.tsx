@@ -31,15 +31,22 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 export const getServerSideProps: GetServerSideProps<{
-  project?: Project;
-  user?: User;
+  project: Project | null;
+  user: User | null;
 }> = async (context) => {
   const { id } = context.params ?? {};
   if (!id) {
-    return { props: { project: undefined, user: undefined } };
+    return { props: { project: null, user: null } };
   }
-  const project = await getProject(id.toString());
-  const user = await getUser(project.founder);
+  let project: Project | null = null;
+  let user: User | null = null;
+  try {
+    project = await getProject(id.toString());
+    user = await getUser(project.founder);
+  } catch (e) {
+    console.error(e);
+  }
+
   return { props: { project, user } };
 };
 
@@ -185,7 +192,7 @@ export default function IndividualProjectPage({
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <div className="flex items-center">
-              {userData !== undefined ? (
+              {userData ? (
                 <Link
                   href={'/profile/' + userData.wallets[0]}
                   className="text-[16px] hover:underline"

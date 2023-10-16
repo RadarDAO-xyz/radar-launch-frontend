@@ -3,7 +3,7 @@ import { getUser } from '@/lib/backend';
 import type { User } from '@/types/mongo';
 import { useQuery } from 'wagmi';
 
-export function useGetUser(userId?: string, initialData?: User) {
+export function useGetUser(userId?: string, initialData?: User | null) {
   return useQuery([CacheKey.USER, userId], () => getUser(userId!), {
     enabled: Boolean(userId),
     initialData,

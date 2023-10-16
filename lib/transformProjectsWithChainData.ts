@@ -3,7 +3,7 @@ import { OnChainProject, ProjectWithChainData } from '@/types/web3';
 
 export function transformProjectsWithChainData(
   databaseProjects?: Project[],
-  chainProjects?: OnChainProject[],
+  chainProjects?: readonly OnChainProject[],
 ): ProjectWithChainData[] {
   if (!databaseProjects || !chainProjects) {
     return [];

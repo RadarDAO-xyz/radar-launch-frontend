@@ -6,8 +6,8 @@ import CookieConsent from '@/components/Layout/CookieConsent';
 import { NavBar } from '@/components/Layout/NavBar';
 import { AuthProvider } from '@/components/Providers/AuthProvider';
 import { ThemeProvider } from '@/components/Providers/ThemeProvider';
-import { configureChainsConfig } from '@/lib/wagmi';
 import { Toaster } from '@/components/ui/toaster';
+import { configureChainsConfig } from '@/lib/wagmi';
 import {
   LivepeerConfig,
   createReactClient,
@@ -15,10 +15,9 @@ import {
 } from '@livepeer/react';
 import { PrivyProvider } from '@privy-io/react-auth';
 import { PrivyWagmiConnector } from '@privy-io/wagmi-connector';
-import { DefaultSeo } from 'next-seo';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
-import Script from 'next/script';
+import { DefaultSeo } from 'next-seo';
 
 const livepeerClient = createReactClient({
   provider: studioProvider({
@@ -29,23 +28,16 @@ const livepeerClient = createReactClient({
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      <Script
-        async
-        src="https://www.googletagmanager.com/gtag/js?id=G-RXHTNDF4RP%22%3E"
-      />
-      <Script id="google-analytics">
-        {`
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-RXHTNDF4RP');
-        `}
-      </Script>
       <Head>
+        <meta
+          key="viewport"
+          name="viewport"
+          content="width=device-width, initial-scale=1.0"
+        />
         <DefaultSeo
           canonical="https://radarlaunch.app"
           title="RADAR Launch"
+          defaultTitle="RADAR Launch"
           openGraph={{
             title: 'RADAR Launch',
             url: 'https://radarlaunch.app',
@@ -67,20 +59,6 @@ export default function App({ Component, pageProps }: AppProps) {
             handle: '@Radarxyz',
           }}
         />
-        <meta key="keywords" name="keywords" content="radar, nft, launch" />
-        <meta key="author" name="author" content="RADAR Launch" />
-        <meta charSet="utf-8" />
-        <meta
-          key="viewport"
-          name="viewport"
-          content="width=device-width, initial-scale=1.0"
-        />
-        <meta name="robots" content="index,follow" />
-        {/* {process.env.NODE_ENV === 'production' && (
-          <base href="https://radarlaunch.app" />
-        )} */}
-
-        <link rel="icon" href="/favicon.png" sizes="any" />
       </Head>
       <ThemeProvider attribute="class" defaultTheme="light" themes={['light']}>
         <PrivyProvider

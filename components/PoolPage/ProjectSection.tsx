@@ -1,14 +1,13 @@
+import { CONTRACT_ADDRESS } from '@/constants/address';
+import { A_MORE_PLAYFUL_FUTURE_POOL_ID } from '@/constants/database';
 import { useGetProjects } from '@/hooks/useGetProjects';
+import { useRadarEditionsGetEditions } from '@/lib/generated';
+import { transformProjectsWithChainData } from '@/lib/transformProjectsWithChainData';
+import { chains } from '@/lib/wagmi';
 import { Pool, ProjectStatus } from '@/types/mongo';
 import Link from 'next/link';
 import { ProjectBlock } from '../Layout/ProjectBlock';
 import { Button } from '../ui/button';
-import { A_MORE_PLAYFUL_FUTURE_POOL_ID } from '@/constants/database';
-import { CONTRACT_ADDRESS } from '@/constants/address';
-import { useRadarEditionsGetEditions } from '@/lib/generated';
-import { chains } from '@/lib/wagmi';
-import { transformProjectsWithChainData } from '@/lib/transformProjectsWithChainData';
-import { OnChainProject } from '@/types/web3';
 
 export function ProjectSection({ _id, title }: Pool) {
   const { data } = useGetProjects();
@@ -17,10 +16,7 @@ export function ProjectSection({ _id, title }: Pool) {
     chainId: chains[0].id,
   });
 
-  const liveProjects = transformProjectsWithChainData(
-    data,
-    onChainProjects as OnChainProject[],
-  )
+  const liveProjects = transformProjectsWithChainData(data, onChainProjects)
     ?.filter(
       (project) =>
         // All projects will be shown for this pool

@@ -95,7 +95,6 @@ export function BelieveTabContent({
       hash: believeProjectData?.hash,
       enabled: believeProjectData?.hash !== undefined,
     });
-  console.log({ believeProjectWriteAsync, config });
 
   useEffect(() => {
     if (believeProjectTxIsLoading && believeProjectData?.hash) {

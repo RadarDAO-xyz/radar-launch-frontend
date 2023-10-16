@@ -61,7 +61,7 @@ export default function AdminPage() {
 
   const projects = transformProjectsWithChainData(
     databaseProjectData,
-    onChainProjects as OnChainProject[],
+    onChainProjects,
   );
 
   return (

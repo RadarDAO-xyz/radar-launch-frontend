@@ -3,10 +3,10 @@ import { getProject } from '@/lib/backend';
 import type { Project } from '@/types/mongo';
 import { useQuery } from 'wagmi';
 
-export function useGetProject(id?: string, initialData?: Project) {
+export function useGetProject(id?: string, initialData?: Project | null) {
   return useQuery([CacheKey.PROJECT, id], () => getProject(id!), {
     enabled: Boolean(id),
     initialData,
-    staleTime: 1000
+    staleTime: 1000,
   });
 }

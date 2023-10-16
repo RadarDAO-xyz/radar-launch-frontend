@@ -1,7 +1,7 @@
 import RadarEditions from '@/abi/RadarEditions.sol/RadarEditions.json';
 import RadarVideoNFT from '@/abi/RadarVideoNFT.sol/RadarVideoNFT.json';
 import { defineConfig } from '@wagmi/cli';
-import { react } from '@wagmi/cli/plugins';
+import { react, actions } from '@wagmi/cli/plugins';
 import type { Abi } from 'viem';
 
 export default defineConfig({
@@ -10,5 +10,5 @@ export default defineConfig({
     { name: 'RadarEditions', abi: RadarEditions.abi as Abi },
     { name: 'RadarVideoNFT', abi: RadarVideoNFT.abi as Abi },
   ],
-  plugins: [react()],
+  plugins: [react(), actions()],
 });
