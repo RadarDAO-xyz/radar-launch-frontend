@@ -130,7 +130,7 @@ export async function getProject(id: string): Promise<Project> {
 }
 
 export async function getProjects(): Promise<Project[]> {
-  const response = await fetch(`${process.env.BACKEND_URL}/projects?all`);
+  const response = await fetch(`${process.env.BACKEND_URL}/projects?all&limit=200`);
   if (!response.ok) {
     console.error(response);
     throw new Error('Failed to fetch projects');
