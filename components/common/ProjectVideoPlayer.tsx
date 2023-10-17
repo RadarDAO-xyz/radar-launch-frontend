@@ -3,8 +3,8 @@ import { isYoutubeOrVimeoVideoLink } from '@/lib/isYoutubeOrVimeoVideoLink';
 import { cn } from '@/lib/utils';
 import { Player } from '@livepeer/react';
 import { usePrivyWagmi } from '@privy-io/wagmi-connector';
+import { useState } from 'react';
 import { ProjectThumbnail } from './ProjectThumbnail';
-import { useCallback } from 'react';
 
 interface Props {
   videoUrl: string;
@@ -22,17 +22,9 @@ export function ProjectVideoPlayer({
   title,
 }: Props) {
   const { wallet } = usePrivyWagmi();
-  const mediaElementRef = useCallback((ref: HTMLMediaElement) => {
-    ref.onmouseenter = () => {
-      console.log('mouse enter');
-    };
-
-    // when mouse is hovered over the media element, console log hover
-    ref.onmouseover = (e) => {
-      console.log(e);
-      console.log('hover');
-    };
-  }, []);
+  const [DummyControls, setDummyControls] = useState<JSX.Element | null>(() => (
+    <div />
+  ));
 
   if (isYoutubeOrVimeoVideoLink(videoUrl)) {
     if (isThumbnail) {
@@ -75,15 +67,38 @@ export function ProjectVideoPlayer({
 
   if (videoUrl.startsWith('ipfs')) {
     const cid = videoUrl.slice('ipfs://'.length);
+
     return (
-      <Player
-        playbackId={cid}
-        muted={isThumbnail}
-        objectFit="cover"
-        poster={thumbnail?.startsWith('https') ? thumbnail : undefined}
-        viewerId={wallet?.address}
-        mediaElementRef={mediaElementRef}
-      />
+      <div
+        onMouseEnter={() => {
+          setDummyControls(null);
+        }}
+        onMouseLeave={() => {
+          setDummyControls(() => <div />);
+        }}
+      >
+        <Player
+          playbackId={cid}
+          muted={isThumbnail}
+          objectFit="cover"
+          poster={thumbnail?.startsWith('https') ? thumbnail : undefined}
+          viewerId={wallet?.address}
+          theme={{
+            colors: {
+              accent: '#fff',
+            },
+            sizes: {
+              thumb: '10px',
+              thumbActive: '12px',
+              trackActive: '4px',
+              trackInactive: '4px',
+              iconButtonSize: '36px',
+            },
+          }}
+        >
+          {DummyControls}
+        </Player>
+      </div>
     );
   }
 
