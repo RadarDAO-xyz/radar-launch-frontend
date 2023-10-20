@@ -17,14 +17,14 @@ const EditFormNoSSR = dynamic(
 
 export default function EditProjectPage() {
   const { data: userData } = useGetCurrentUser();
-  const { idToken } = useAuth();
+  const { isLoggedIn } = useAuth();
   const { wallet } = usePrivyWagmi();
   const router = useRouter();
   const { id } = router.query;
 
   const { data } = useGetProject(id?.toString());
 
-  if (idToken === '' || userData === undefined) {
+  if (!isLoggedIn) {
     return (
       <Placeholder>
         <h1>Please login</h1>
@@ -32,7 +32,15 @@ export default function EditProjectPage() {
     );
   }
 
-  if (!id || data === undefined) {
+  if (!userData) {
+    return (
+      <Placeholder>
+        <h1>No profile found</h1>
+      </Placeholder>
+    );
+  }
+
+  if (!id || !data) {
     return (
       <Placeholder>
         <h1>No project found</h1>
