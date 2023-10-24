@@ -97,6 +97,7 @@ export function ProjectTabs({
   mint_end_date,
   title,
   video_url,
+  waitlist,
   closeSheet,
 }: Props) {
   const [currentTab, setCurrentTab] = useState(Tab.BELIEVE);
@@ -125,7 +126,7 @@ export function ProjectTabs({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
     args: [BigInt(editionId || 0)],
-    enabled: editionId !== undefined && editionId > 0,
+    enabled: editionId !== undefined && editionId >= 0,
   });
   const { config, error } = usePrepareRadarEditionsMintEdition({
     account: wallet?.address as Address,
@@ -141,7 +142,7 @@ export function ProjectTabs({
     enabled:
       value !== undefined &&
       editionId !== undefined &&
-      editionId > 0 &&
+      editionId >= 0 &&
       wallet?.address !== undefined &&
       isLoggedIn,
   });
@@ -245,14 +246,16 @@ export function ProjectTabs({
             Believe <MoveDown className="ml-1 h-3 w-3" />
           </Button>
         </TabsTrigger>
-        <TabsTrigger value={Tab.COLLECT} asChild>
-          <Button
-            className="col-span-1 w-full border-b-0 !bg-gray-100 p-2 px-4 no-underline hover:!bg-gray-200 data-[state=active]:!bg-gray-300"
-            variant={'ghost'}
-          >
-            Collect <MoveDown className="ml-1 h-3 w-3" />
-          </Button>
-        </TabsTrigger>
+        {waitlist && (
+          <TabsTrigger value={Tab.COLLECT} asChild>
+            <Button
+              className="col-span-1 w-full border-b-0 !bg-gray-100 p-2 px-4 no-underline hover:!bg-gray-200 data-[state=active]:!bg-gray-300"
+              variant={'ghost'}
+            >
+              Collect <MoveDown className="ml-1 h-3 w-3" />
+            </Button>
+          </TabsTrigger>
+        )}
       </TabsList>
       <TabsContent
         value={Tab.BELIEVE}
