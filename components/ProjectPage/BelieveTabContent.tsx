@@ -180,7 +180,7 @@ export function BelieveTabContent({
           ?.reverse()
           .slice(0, 20)
           .map((believer) => {
-            const date = new Date(Date.now() - believer.blockTimestamp);
+            const date = new Date(parseInt(believer.blockTimestamp, 10) * 1000);
             return (
               <div
                 key={believer.id}

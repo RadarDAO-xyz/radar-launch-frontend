@@ -3,7 +3,7 @@ interface BelieveEvent {
   editionId: string;
   believer: string;
   tags: string;
-  blockTimestamp: number;
+  blockTimestamp: string;
 }
 
 export async function fetchBelieveEvents(
