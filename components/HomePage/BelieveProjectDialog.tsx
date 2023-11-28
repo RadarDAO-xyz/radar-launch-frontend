@@ -88,7 +88,7 @@ export function BelieveProjectDialog({
     enabled:
       wallet?.address !== undefined &&
       editionId !== undefined &&
-      editionId > 0 &&
+      editionId >= 0 &&
       tags.length > 0 &&
       isOpen &&
       futureFundFee !== undefined,

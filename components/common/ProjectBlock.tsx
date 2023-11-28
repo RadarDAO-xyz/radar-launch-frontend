@@ -48,7 +48,7 @@ export function ProjectBlock(props: Props) {
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
     args: [BigInt(editionId || 0)],
-    enabled: editionId !== undefined && editionId > 0 && showSupporters,
+    enabled: editionId !== undefined && editionId >= 0 && showSupporters,
   });
   const countdown = useGetCountdown(new Date(mint_end_date), showMintEndDate);
 

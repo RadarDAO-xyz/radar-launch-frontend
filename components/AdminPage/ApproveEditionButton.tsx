@@ -35,7 +35,7 @@ export function ApproveEditionButton({
       Boolean(chains[0].id) &&
       isOpen &&
       editionId !== undefined &&
-      editionId > 0 &&
+      editionId >= 0 &&
       wallet?.address !== undefined &&
       projectCanBeApproved,
     args: [BigInt(editionId || 0)],

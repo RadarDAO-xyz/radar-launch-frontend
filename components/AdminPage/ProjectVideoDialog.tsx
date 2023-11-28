@@ -30,7 +30,7 @@ export function ProjectVideoDialog(props: ProjectWithChainData) {
   const videoUrlRef = useRef<HTMLInputElement>(null);
   const videoIdRef = useRef<HTMLInputElement>(null);
   const { data: tokenURI } = useRadarVideoNftTokenUri({
-    enabled: isOpen && editionId !== undefined && editionId > 0,
+    enabled: isOpen && editionId !== undefined && editionId >= 0,
     address: VIDEO_CONTRACT_ADDRESS,
     chainId: chains[0].id,
     args: [BigInt(editionId || 0)],

@@ -14,7 +14,7 @@ export function SyncVideoNftButton({
     [CacheKey.METADATA],
     () => getEditionMetadata(editionId),
     {
-      enabled: editionId !== undefined && editionId > 0,
+      enabled: editionId !== undefined && editionId >= 0,
     },
   );
   const { mutate, isLoading } = useUpdateAsset({

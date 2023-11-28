@@ -28,7 +28,7 @@ export function VisionCard(props: ProjectWithChainData) {
     editionId,
     thumbnail,
   } = props;
-  const isValidEditionId = editionId !== undefined && editionId > 0;
+  const isValidEditionId = editionId !== undefined && editionId >= 0;
   const { data: totalSupply } = useRadarEditionsTotalSupply({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,

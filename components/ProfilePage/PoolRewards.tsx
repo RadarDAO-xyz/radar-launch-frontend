@@ -3,19 +3,19 @@ import {
   usePrepareRadarEditionsRetrieveBalance,
   useRadarEditionsRetrieveBalance,
 } from '@/lib/generated';
+import { formatEther } from '@/lib/utils';
 import { chains } from '@/lib/wagmi';
-import { ProjectWithChainData } from '@/types/web3';
+import type { Project } from '@/types/mongo';
 import { usePrivyWagmi } from '@privy-io/wagmi-connector';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useWaitForTransaction } from 'wagmi';
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
 import { RewardsContainer } from './RewardsContainer';
-import Link from 'next/link';
-import { formatEther } from '@/lib/utils';
 
 interface Props {
-  projects: ProjectWithChainData[];
+  projects: Project[];
   amount: bigint;
 }
 

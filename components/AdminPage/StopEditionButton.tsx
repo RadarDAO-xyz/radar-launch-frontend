@@ -31,7 +31,7 @@ export function StopEditionButton({ isOpen, editionId, onChainStatus }: Props) {
       Boolean(chains[0].id) &&
       isOpen &&
       editionId !== undefined &&
-      editionId > 0 &&
+      editionId >= 0 &&
       wallet?.address !== undefined &&
       projectCanBeStopped,
     args: [BigInt(editionId || 0)],

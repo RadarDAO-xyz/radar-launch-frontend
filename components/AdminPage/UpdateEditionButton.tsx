@@ -39,7 +39,7 @@ export function UpdateEditionButton({
       Boolean(chains[0].id) &&
       isOpen &&
       editionId !== undefined &&
-      editionId > 0 &&
+      editionId >= 0 &&
       wallet?.address !== undefined &&
       projectCanBeUpdated,
     args: [BigInt(editionId || 0), projectId, briefId],
