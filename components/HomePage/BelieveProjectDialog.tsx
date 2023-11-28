@@ -15,6 +15,7 @@ import {
   useRadarEditionsFutureFundFee,
 } from '@/lib/generated';
 import { cn, shortenAddress } from '@/lib/utils';
+import { chains } from '@/lib/wagmi';
 import { ProjectStatus } from '@/types/mongo';
 import { ProjectWithChainData } from '@/types/web3';
 import { usePrivyWagmi } from '@privy-io/wagmi-connector';
@@ -39,9 +40,7 @@ import {
   DialogTrigger,
 } from '../ui/dialog';
 import { useToast } from '../ui/use-toast';
-import { chains } from '@/lib/wagmi';
 
-const START_BLOCK_FOR_BELIEVE = 108947105n;
 const BLOCK_TIME_IN_SECONDS = 2;
 
 interface Props extends ProjectWithChainData {
@@ -67,7 +66,6 @@ export function BelieveProjectDialog({
   const { data: blockNumber } = useBlockNumber();
 
   const { data: believerLogs, isLoading } = useGetBelieveEvents(
-    _id,
     editionId,
     !isOpen,
   );
@@ -127,8 +125,9 @@ export function BelieveProjectDialog({
   }, [isSuccess, believeProjectData?.hash]);
 
   const hasBelieved =
-    believerLogs?.find((log) => log.args?.believer === wallet?.address) !==
-    undefined;
+    believerLogs?.find(
+      (log) => log.believer.toLowerCase() === wallet?.address.toLowerCase(),
+    ) !== undefined;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -211,32 +210,21 @@ export function BelieveProjectDialog({
               ?.reverse()
               .slice(0, 20)
               .filter(
-                (log) =>
-                  log.args?.believer !== undefined &&
-                  log.args?.tags !== undefined,
+                (log) => log.believer !== undefined && log.tags !== undefined,
               )
               .map((believer) => {
-                const timeDifferenceInSeconds =
-                  BigInt(blockNumber || 0) - believer.blockNumber;
-                const date = new Date(
-                  Date.now() -
-                    Number(timeDifferenceInSeconds) *
-                      BLOCK_TIME_IN_SECONDS *
-                      1000,
-                );
+                const date = new Date(Date.now() - believer.blockTimestamp);
                 return (
                   <div
-                    key={believer.transactionHash}
+                    key={believer.id}
                     className="flex justify-between border-y pb-2 pt-2 text-xs"
                   >
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <p>{shortenAddress(believer.args.believer!)}</p>
+                          <p>{shortenAddress(believer.believer)}</p>
                         </TooltipTrigger>
-                        <TooltipContent>
-                          {believer.args.believer}
-                        </TooltipContent>
+                        <TooltipContent>{believer.believer}</TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
                     <div className="text-right text-muted-foreground">

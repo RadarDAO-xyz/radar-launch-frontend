@@ -60,7 +60,6 @@ export function BelieveTabContent({
   const { wallet } = usePrivyWagmi();
   const { data: blockNumber } = useBlockNumber();
   const { data: believerLogs, isLoading } = useGetBelieveEvents(
-    _id,
     editionId,
     !isSelected,
   );
@@ -118,8 +117,9 @@ export function BelieveTabContent({
   }, [isSuccess, believeProjectData?.hash]);
 
   const hasBelieved =
-    believerLogs?.find((log) => log.args?.believer === wallet?.address) !==
-    undefined;
+    believerLogs?.find(
+      (log) => log.believer.toLowerCase() === wallet?.address.toLowerCase(),
+    ) !== undefined;
 
   return (
     <div>
@@ -179,23 +179,14 @@ export function BelieveTabContent({
         {believerLogs
           ?.reverse()
           .slice(0, 20)
-          .filter(
-            (log) =>
-              log.args?.believer !== undefined && log.args?.tags !== undefined,
-          )
           .map((believer) => {
-            const timeDifferenceInSeconds =
-              BigInt(blockNumber || 0) - believer.blockNumber;
-            const date = new Date(
-              Date.now() -
-                Number(timeDifferenceInSeconds) * BLOCK_TIME_IN_SECONDS * 1000,
-            );
+            const date = new Date(Date.now() - believer.blockTimestamp);
             return (
               <div
-                key={believer.transactionHash}
+                key={believer.id}
                 className="flex justify-between border-y pb-2 pt-2 text-xs"
               >
-                <p>{shortenAddress(believer.args.believer!)}</p>
+                <p>{shortenAddress(believer.believer)}</p>
                 <div className="text-right text-muted-foreground">
                   <p>{format(date, 'do MMMM yyyy')}</p>
                   <p>{format(date, 'hh:mm a')}</p>{' '}

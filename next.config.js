@@ -13,6 +13,7 @@ const nextConfig = {
     TINYMCE_API_KEY: process.env.TINYMCE_API_KEY,
     FEATURED_PROJECT_ID: process.env.FEATURED_PROJECT_ID,
     LIVEPEER_API_KEY: process.env.LIVEPEER_API_KEY,
+    GRAPHQL_ENDPOINT: process.env.GRAPHQL_ENDPOINT,
   },
   // see https://github.com/vercel/next.js/pull/53483/files
   // modularizeImports: {

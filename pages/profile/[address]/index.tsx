@@ -1,35 +1,34 @@
+import { CollectedVisions } from '@/components/ProfilePage/CollectedVisions';
+import { PoolRewards } from '@/components/ProfilePage/PoolRewards';
+import { ProjectRewards } from '@/components/ProfilePage/ProjectRewards';
+import { YourVisions } from '@/components/ProfilePage/YourVisions';
 import { AdminNav } from '@/components/common/AdminNav';
 import { Placeholder } from '@/components/common/Placeholder';
-import { CollectedVisions } from '@/components/ProfilePage/CollectedVisions';
-import { YourVisions } from '@/components/ProfilePage/YourVisions';
-import { chains } from '@/lib/wagmi';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CONTRACT_ADDRESS } from '@/constants/address';
+import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
 import { useGetProjects } from '@/hooks/useGetProjects';
-import { useGetUser } from '@/hooks/useGetUser';
+import { useGetUserByAddress } from '@/hooks/useGetUserByAddress';
 import {
   useRadarEditionsBalances,
   useRadarEditionsGetBalances,
   useRadarEditionsGetEditions,
-  useRadarEditionsGetUserBeliefs,
 } from '@/lib/generated';
-import { convertAddressToChecksum, formatEther } from '@/lib/utils';
-import { Project, WalletResolvable } from '@/types/mongo';
+import { isWhitelistedAddress } from '@/lib/isWhitelistedAddress';
+import { convertAddressToChecksum } from '@/lib/utils';
+import { chains } from '@/lib/wagmi';
+import { Project } from '@/types/mongo';
+import { usePrivyWagmi } from '@privy-io/wagmi-connector';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Address } from 'wagmi';
 import {
   OnChainProject,
-  ProjectWithChainData,
   ProjectIdWithBalance,
+  ProjectWithChainData,
   ProjectWithOwnedAmount,
 } from '../../../types/web3';
-import { useGetUserByAddress } from '@/hooks/useGetUserByAddress';
-import { ProjectRewards } from '@/components/ProfilePage/ProjectRewards';
-import { PoolRewards } from '@/components/ProfilePage/PoolRewards';
-import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
-import { isWhitelistedAddress } from '@/lib/isWhitelistedAddress';
-import { usePrivyWagmi } from '@privy-io/wagmi-connector';
+import { useGetBelieveEvents } from '@/hooks/useGetBelieveEvents';
 
 function transformYourVisionsProjects(
   userId?: string,
@@ -89,39 +88,46 @@ function transformCollectionVisionsProject(
     }));
 }
 
-function transformBelievedProjects(
+function transformPoolProjects(
+  owner: Address,
   databaseProjects?: Project[],
   chainProjects?: readonly OnChainProject[],
-  believedProjects?: readonly boolean[],
+  believerLogs?: ReturnType<typeof useGetBelieveEvents>['data'],
 ) {
-  if (
-    !chainProjects ||
-    !believedProjects ||
-    !databaseProjects ||
-    chainProjects.length !== believedProjects.length
-  ) {
+  if (!databaseProjects || !believerLogs || !chainProjects) {
     return [];
   }
-  const projectBalances: Record<string, bigint> = {};
-  chainProjects.forEach((project) => {
-    projectBalances[project.id] = project.balance;
-  });
-  const projectIdToEdition = chainProjects.reduce<
-    Record<string, { editionId: number; isBelieved: boolean }>
-  >((acc, project, editionId) => {
-    acc[project.id] = {
-      editionId,
-      isBelieved: believedProjects[editionId],
+
+  const projectIdToProject = chainProjects.reduce<
+    Record<number, { databaseProject?: Project }>
+  >((acc, project, index) => {
+    const databaseProject = databaseProjects.find(
+      (databaseProject) => databaseProject._id === project.id,
+    );
+    acc[index] = {
+      databaseProject,
     };
     return acc;
   }, {});
-  return databaseProjects
-    ?.map((project) => ({
-      ...project,
-      ...projectIdToEdition[project._id],
-      balance: projectBalances[project._id],
-    }))
-    .filter((project) => project.isBelieved);
+
+  const seenPoolProjectIds = new Set<string>();
+  const poolProjects: Project[] = [];
+
+  believerLogs.forEach((log) => {
+    const projectId = log.editionId;
+    if (projectId !== undefined) {
+      const { databaseProject } = projectIdToProject[parseInt(projectId, 10)];
+      if (databaseProject !== undefined) {
+        if (seenPoolProjectIds.has(databaseProject._id)) {
+          return;
+        }
+        seenPoolProjectIds.add(databaseProject._id);
+        poolProjects.push(databaseProject);
+      }
+    }
+  });
+
+  return poolProjects;
 }
 
 export default function ProfilePage() {
@@ -141,12 +147,6 @@ export default function ProfilePage() {
     args: [convertAddressToChecksum(address) as Address],
     enabled: Boolean(address),
   });
-  const { data: userBeliefs } = useRadarEditionsGetUserBeliefs({
-    address: CONTRACT_ADDRESS,
-    chainId: chains[0].id,
-    args: [convertAddressToChecksum(address) as Address],
-    enabled: Boolean(address),
-  });
   const { data: userBalance } = useRadarEditionsBalances({
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
@@ -155,6 +155,7 @@ export default function ProfilePage() {
   });
   const { data: databaseProjects } = useGetProjects();
   const { data: currentUser } = useGetCurrentUser();
+  const { data: believerLogs } = useGetBelieveEvents();
 
   if (userData === undefined || address === undefined) {
     return (
@@ -176,10 +177,11 @@ export default function ProfilePage() {
     databaseProjects,
     ownedOnChainProjects,
   );
-  const believedProjects = transformBelievedProjects(
+  const poolProjects = transformPoolProjects(
+    address as Address,
     databaseProjects,
     onChainProjects,
-    userBeliefs,
+    believerLogs,
   );
 
   return (
@@ -198,10 +200,7 @@ export default function ProfilePage() {
           </Link>
           <div className="grid grid-cols-1 gap-4 pt-6 md:grid-cols-2">
             <ProjectRewards projects={yourVisionsProjects} />
-            <PoolRewards
-              projects={believedProjects}
-              amount={userBalance || 0n}
-            />
+            <PoolRewards projects={poolProjects} amount={userBalance || 0n} />
           </div>
         </div>
       )}
