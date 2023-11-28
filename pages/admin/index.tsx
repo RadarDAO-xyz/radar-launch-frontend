@@ -10,6 +10,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { CONTRACT_ADDRESS } from '@/constants/address';
 import { useAuth } from '@/hooks/useAuth';
 import { useGetCurrentUser } from '@/hooks/useGetCurrentUser';
@@ -21,16 +27,11 @@ import { convertProjectStatusToColour } from '@/lib/convertProjectStatusToColour
 import { useRadarEditionsGetEditions } from '@/lib/generated';
 import { cn } from '@/lib/utils';
 import { chains } from '@/lib/wagmi';
+import { InfoIcon } from 'lucide-react';
 import Link from 'next/link';
 import { transformProjectsWithChainData } from '../../lib/transformProjectsWithChainData';
-import { EditionStatus, OnChainProject } from '../../types/web3';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { InfoIcon } from 'lucide-react';
+import { EditionStatus } from '../../types/web3';
+import { WithdrawFundsDialog } from '@/components/AdminPage/WithdrawFundsDialog';
 
 export default function AdminPage() {
   const { data } = useGetCurrentUser();
@@ -107,6 +108,7 @@ export default function AdminPage() {
           <li>Project is live!</li>
         </ul>
       </div>
+      <WithdrawFundsDialog />
       <h2 className="py-4 text-3xl font-bold">Projects</h2>
       <div className="">
         <Table>
