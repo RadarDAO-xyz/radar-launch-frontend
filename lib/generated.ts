@@ -4734,6 +4734,7 @@ export function watchRadarEditionsEvent<
   callback: WatchContractEventCallback<TAbi, TEventName>,
 ) {
   return watchContractEvent(
+    // @ts-ignore
     { abi: radarEditionsABI, ...config } as WatchContractEventConfig<
       TAbi,
       TEventName
@@ -4806,6 +4807,7 @@ export function watchRadarVideoNftEvent<
   callback: WatchContractEventCallback<TAbi, TEventName>,
 ) {
   return watchContractEvent(
+    // @ts-ignore
     { abi: radarVideoNftABI, ...config } as WatchContractEventConfig<
       TAbi,
       TEventName
