@@ -34,6 +34,11 @@ export const getServerSideProps: GetServerSideProps<{
   project: Project | null;
   user: User | null;
 }> = async (context) => {
+  context.res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=60, stale-while-revalidate=240',
+  );
+
   const { id } = context.params ?? {};
   if (!id) {
     return { props: { project: null, user: null } };
