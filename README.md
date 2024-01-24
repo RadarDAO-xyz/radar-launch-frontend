@@ -1,7 +1,5 @@
 # RADAR Launch frontend
 
-Built with Next.js, Privy, tailwindcss, and wagmi
-
 ## Getting Started
 
 1. Install dependencies
@@ -39,6 +37,30 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 | ALCHEMY_API_KEY | Alchemy API key for querying Alchemy | |
 | PAPER_API_KEY | Paper API key used for fiat / crypto checkouts | |
 | DEVLINK_AUTH_TOKEN | Devlink Auth token used to convert Webflow components | |
+
+## Architecture
+
+```sh
+root
+├───abi           # contains ABI files of contracts
+├───components
+│   ├───XXXPage   # contains components used in XXXPage
+│   ├───Layout    # contains components used in overall layout of the site
+│   ├───Providers # contains React providers used in the site
+│   └───ui        # contains reusable UI components
+├───constants     # contains constants used in the site
+├───devlink       # contains devlink components converted from Webflow, should be removed in the future
+├───hooks         # contains custom hooks used in the site
+├───lib           # contains general functions used in the site
+├───pages
+│   ├───api       # contains API endpoints
+│   └───XXX       # contains XXX page
+├───public        # contains public assets
+├───styles        # contains global styles
+└───types         # contains types used in the site
+```
+
+Built with Next.js, Privy, tailwindcss, and wagmi
 
 ## TODO
 
