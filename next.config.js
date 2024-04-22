@@ -14,6 +14,14 @@ const nextConfig = {
     LIVEPEER_API_KEY: process.env.LIVEPEER_API_KEY,
     GRAPHQL_ENDPOINT: process.env.GRAPHQL_ENDPOINT,
   },
+  redirects: async () => [
+    {
+      source: '/',
+      destination: 'https://www.radardao.xyz/launch',
+      permanent: false,
+      basePath: false,
+    },
+  ],
   // see https://github.com/vercel/next.js/pull/53483/files
   // modularizeImports: {
   //   "lucide-react": {
