@@ -18,6 +18,8 @@ import { OnChainProject } from '@/types/web3';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 const ProjectBlock = dynamic(
   () =>
@@ -48,6 +50,11 @@ export default function HomePage() {
     address: CONTRACT_ADDRESS,
     chainId: chains[0].id,
   });
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace('https://www.radardao.xyz/launch');
+  }, [router]);
 
   const projects = transformProjectsWithChainData(
     data,
@@ -113,7 +120,7 @@ export default function HomePage() {
                 {'SEE ALL'}
               </Link>
             </Button>
-            <Button className="font-bolded font-bold" variant={'ghost'} asChild>
+            <Button className="font-bold font-bolded" variant={'ghost'} asChild>
               <Link
                 href="https://radarxyz.notion.site/CALL-TO-BUILD-Kernel-x-BuidlGuidl-Monthly-Grant-Pool-Launch-a81e0de4301149f3ae333865cc9bae04?pvs=4"
                 target="_blank"
@@ -177,7 +184,7 @@ export default function HomePage() {
       <ProjectCollection
         projectSectionTitle="THE NEW PLAYERS"
         projectSectionButton={
-          <Button className="font-bolded font-bold" variant={'ghost'} asChild>
+          <Button className="font-bold font-bolded" variant={'ghost'} asChild>
             <Link href={`/pool/${THE_NEW_PLAYERS_POOL_ID}`} target="_blank">
               {'SEE MORE'}
             </Link>
@@ -195,7 +202,7 @@ export default function HomePage() {
         projectSectionTitle="OUR CENTAUR FUTURE"
         projectSectionDescription="Support over 10 weeks of collective discovery, exploration and innovation in Cycle #3"
         projectSectionButton={
-          <Button className="font-bolded font-bold" variant={'ghost'} asChild>
+          <Button className="font-bold font-bolded" variant={'ghost'} asChild>
             <Link href="https://www.radardao.xyz/patron" target="_blank">
               {'READ MORE'}
             </Link>
